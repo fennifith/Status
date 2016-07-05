@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:orientation="horizontal"
+        android:background="@android:color/black"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:gravity="center_vertical"
+        android:layout_gravity="top">
+
+        <android.support.v7.widget.ListViewCompat
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:id="@+id/notifications"/>
+
+        <com.james.status.views.SquareImageView
+            android:layout_width="24dp"
+            android:layout_height="wrap_content"
+            android:tint="@android:color/white"
+            android:tintMode="src_in"
+            android:padding="2dp"
+            android:id="@+id/alarm"
+            android:visibility="gone" />
+
+        <com.james.status.views.SquareImageView
+            android:layout_width="24dp"
+            android:layout_height="wrap_content"
+            android:tint="@android:color/white"
+            android:tintMode="src_in"
+            android:padding="2dp"
+            android:id="@+id/airplane"
+            android:visibility="gone" />
+
+        <com.james.status.views.SquareImageView
+            android:layout_width="22dp"
+            android:layout_height="wrap_content"
+            android:tint="@android:color/white"
+            android:tintMode="src_in"
+            android:padding="2dp"
+            android:id="@+id/wifi" />
+
+        <com.james.status.views.SquareImageView
+            android:layout_width="22dp"
+            android:layout_height="wrap_content"
+            android:tint="@android:color/white"
+            android:tintMode="src_in"
+            android:padding="2dp"
+            android:id="@+id/signal" />
+
+        <com.james.status.views.SquareImageView
+            android:layout_width="22dp"
+            android:layout_height="wrap_content"
+            android:tint="@android:color/white"
+            android:tintMode="src_in"
+            android:padding="2dp"
+            android:id="@+id/battery" />
+
+        <TextClock
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            tools:ignore="NewApi"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:id="@+id/clock" />
+
+    </LinearLayout>
+
+</FrameLayout>

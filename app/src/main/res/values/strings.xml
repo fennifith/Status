@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Status</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="service_name">Status Service</string>
+    <string name="service_desc">This service needs to be enabled in order to detect window changes so that the app can override other app-specific settings.</string>
+</resources>
