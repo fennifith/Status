@@ -2,55 +2,82 @@ package com.james.status.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
+import android.view.View;
 
 import com.james.status.R;
 import com.james.status.services.StatusService;
+import com.james.status.utils.ImageUtils;
+import com.james.status.utils.PreferenceUtils;
+import com.james.status.utils.StaticUtils;
 
 public class MainActivity extends AppCompatActivity {
 
+    AppBarLayout appbar;
+    AppCompatButton service;
+    FloatingActionButton fab;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
+        if (!StaticUtils.isAccessibilityGranted(this) || !StaticUtils.isNotificationGranted(this) || !StaticUtils.isPermissionsGranted(this))
+            startActivity(new Intent(this, StartActivity.class));
+
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+
+        appbar = (AppBarLayout) findViewById(R.id.appbar);
+        service = (AppCompatButton) findViewById(R.id.service);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+
+        fab.setImageDrawable(ImageUtils.getVectorDrawable(this, R.drawable.ic_expand));
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                appbar.setExpanded(false, true);
+            }
+        });
+
+        service.setText(StaticUtils.isStatusServiceRunning(this) ? R.string.service_stop : R.string.service_start);
+        service.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(StatusService.ACTION_START);
                 intent.setClass(MainActivity.this, StatusService.class);
-                startService(intent);
+                if (StaticUtils.isStatusServiceRunning(MainActivity.this)) {
+                    PreferenceUtils.putPreference(MainActivity.this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED, false);
+                    service.setText(R.string.service_start);
+                } else {
+                    PreferenceUtils.putPreference(MainActivity.this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED, true);
+                    startService(intent);
+                    service.setText(R.string.service_stop);
+                }
             }
         });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+        menu.findItem(R.id.action_setup).setIcon(ImageUtils.getVectorDrawable(this, R.drawable.ic_setup));
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            case R.id.action_setup:
+                startActivity(new Intent(this, StartActivity.class));
+                break;
         }
-
         return super.onOptionsItemSelected(item);
     }
 }

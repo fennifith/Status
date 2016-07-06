@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.media.ThumbnailUtils;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.view.animation.Animation;
@@ -29,7 +30,7 @@ public class CustomImageView extends AppCompatImageView {
         super(context, attrs, defStyle);
     }
 
-    public void transition(final Bitmap second) {
+    public void transition(@Nullable final Bitmap second) {
         if (second == null || second.getWidth() < 1 || second.getHeight() < 1) {
             Animation exitAnim = AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_out);
             exitAnim.setDuration(150);
@@ -59,7 +60,7 @@ public class CustomImageView extends AppCompatImageView {
                 final Bitmap image;
                 try {
                     image = ThumbnailUtils.extractThumbnail(second, size, size);
-                } catch (OutOfMemoryError e) {
+                } catch (OutOfMemoryError | IllegalArgumentException e) {
                     e.printStackTrace();
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                         @Override
@@ -100,7 +101,8 @@ public class CustomImageView extends AppCompatImageView {
         }.start();
     }
 
-    public void transition(Drawable second) {
-        transition(ImageUtils.drawableToBitmap(second));
+    public void transition(@Nullable Drawable second) {
+        if (second != null) transition(ImageUtils.drawableToBitmap(second));
+        else transition((Bitmap) null);
     }
 }

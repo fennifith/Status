@@ -9,6 +9,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.graphics.drawable.VectorDrawableCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
+import android.util.Log;
 
 public class ImageUtils {
 
@@ -21,10 +23,14 @@ public class ImageUtils {
             return new ColorDrawable(Color.TRANSPARENT);
         }
 
-        if (drawable != null)
-            return drawable.getCurrent();
-        else
+        if (drawable != null) {
+            Drawable icon = drawable.getCurrent();
+            DrawableCompat.setTint(icon, Color.WHITE);
+            return icon;
+        } else {
+            Log.e(context.getClass().getName(), "Can't get a vector drawable.");
             return new ColorDrawable(Color.TRANSPARENT);
+        }
     }
 
     public static int darkColor(int color) {

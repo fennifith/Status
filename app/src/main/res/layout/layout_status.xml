@@ -13,7 +13,8 @@
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
         android:gravity="center_vertical"
-        android:layout_gravity="top">
+        android:layout_gravity="top"
+        android:id="@+id/status">
 
         <android.support.v7.widget.ListViewCompat
             android:layout_width="0dp"
