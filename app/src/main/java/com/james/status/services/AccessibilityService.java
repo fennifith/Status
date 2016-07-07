@@ -3,10 +3,13 @@ package com.james.status.services;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.app.WallpaperManager;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.v4.content.ContextCompat;
@@ -45,46 +48,75 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                 Palette.from(ImageUtils.drawableToBitmap(WallpaperManager.getInstance(this).getFastDrawable())).generate(new Palette.PaletteAsyncListener() {
                     @Override
                     public void onGenerated(Palette palette) {
-                        setStatusBarColor(palette.getDarkVibrantColor(Color.BLACK));
+                        setStatusBarColor(palette.getDarkVibrantColor(palette.getVibrantColor(Color.BLACK)));
                     }
                 });
-            } else {
-                PackageInfo packageInfo = null;
-                try {
-                    packageInfo = getPackageManager().getPackageInfo(packageName, PackageManager.GET_META_DATA);
-                } catch (PackageManager.NameNotFoundException e) {
-                    e.printStackTrace();
+
+                return;
+            }
+
+            PackageInfo packageInfo = null;
+            Resources resources = null;
+            try {
+                packageInfo = getPackageManager().getPackageInfo(packageName, PackageManager.GET_META_DATA);
+                resources = getPackageManager().getResourcesForApplication(packageInfo.applicationInfo);
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            if (packageInfo != null && resources != null) {
+                Resources.Theme theme = resources.newTheme();
+                theme.applyStyle(packageInfo.applicationInfo.theme, false);
+
+                if (setStatusBarTheme(packageInfo.packageName, resources, theme)) return;
+
+                if (packageInfo.activities != null) {
+                    for (ActivityInfo activityInfo : packageInfo.activities) {
+                        Resources.Theme activityTheme = resources.newTheme();
+                        activityTheme.applyStyle(activityInfo.theme, false);
+                        if (setStatusBarTheme(packageInfo.packageName, resources, activityTheme)) return;
+                    }
                 }
 
-                if (packageInfo != null) {
-                    TypedArray typedColorPrimaryDark = getTheme().obtainStyledAttributes(packageInfo.applicationInfo.theme, new int[]{android.R.attr.colorPrimaryDark});
-                    int statusBarColor = typedColorPrimaryDark.getResourceId(0, 0);
-                    typedColorPrimaryDark.recycle();
-
-                    if (statusBarColor != 0) {
-                        setStatusBarColor(ContextCompat.getColor(this, statusBarColor));
-                    } else {
-                        TypedArray typedStatusBarColor = getTheme().obtainStyledAttributes(packageInfo.applicationInfo.theme, new int[]{android.R.attr.statusBarColor});
-                        statusBarColor = typedStatusBarColor.getResourceId(0, 0);
-                        typedStatusBarColor.recycle();
-
-                        if (statusBarColor != 0) {
-                            setStatusBarColor(ContextCompat.getColor(this, statusBarColor));
-                        } else {
-                            TypedArray typedColorPrimary = getTheme().obtainStyledAttributes(packageInfo.applicationInfo.theme, new int[]{android.R.attr.colorPrimary});
-                            statusBarColor = ImageUtils.darkColor(typedColorPrimary.getResourceId(0, 0));
-                            typedColorPrimary.recycle();
-
-                            if (statusBarColor != 0) {
-                                setStatusBarColor(ContextCompat.getColor(this, statusBarColor));
-                            }
-                        }
+                Palette.from(ImageUtils.drawableToBitmap(getPackageManager().getApplicationIcon(packageInfo.applicationInfo))).generate(new Palette.PaletteAsyncListener() {
+                    @Override
+                    public void onGenerated(Palette palette) {
+                        setStatusBarColor(palette.getDarkVibrantColor(palette.getVibrantColor(Color.BLACK)));
                     }
-                } else {
-                    setStatusBarColor(Color.BLACK);
+                });
+
+                return;
+            }
+
+            setStatusBarColor(Color.BLACK);
+        }
+    }
+
+    private boolean setStatusBarTheme(String packageName, Resources resources, Resources.Theme theme) {
+        int[] attrs = new int[] {
+                android.R.attr.colorPrimaryDark,
+                android.R.attr.statusBarColor,
+                android.R.attr.navigationBarColor,
+                resources.getIdentifier("colorPrimaryDark", "attr", packageName),
+                resources.getIdentifier("colorPrimaryDark", "color", packageName),
+                android.R.attr.colorPrimary,
+                resources.getIdentifier("colorPrimary", "attr", packageName),
+                resources.getIdentifier("colorPrimary", "color", packageName)
+        };
+
+        TypedArray typedArray = theme.obtainStyledAttributes(attrs);
+        for (int i = 0; i < typedArray.length(); i++) {
+            int statusBarRes = typedArray.getResourceId(i, 0);
+            if (statusBarRes != 0) {
+                try {
+                    setStatusBarColor(ContextCompat.getColor(this, statusBarRes));
+                    return true;
+                } catch (Resources.NotFoundException ignored) {
                 }
             }
         }
+
+        return false;
     }
 
     private void setStatusBarColor(@ColorInt int color) {

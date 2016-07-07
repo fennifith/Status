@@ -31,7 +31,7 @@ public class ViewService extends Service {
 
     public void addView(@NonNull View view, @Nullable WindowManager.LayoutParams params) {
         if (params == null) params = new WindowManager.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-        params.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
+        params.flags = WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
         params.type = WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY;
         params.format = PixelFormat.TRANSLUCENT;
 

@@ -8,6 +8,8 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
 import android.preference.PreferenceManager;
@@ -104,7 +106,7 @@ public class StatusService extends ViewService implements SharedPreferences.OnSh
     private class BatteryReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            statusView.setBattery(intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0), intent.getIntExtra(BatteryManager.EXTRA_SCALE, 0), intent.getIntExtra(BatteryManager.EXTRA_STATUS, -1));
+            statusView.setBattery(intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0), intent.getIntExtra(BatteryManager.EXTRA_STATUS, 0));
         }
     }
 
@@ -112,13 +114,16 @@ public class StatusService extends ViewService implements SharedPreferences.OnSh
         @Override
         public void onSignalStrengthsChanged(SignalStrength signalStrength) {
             super.onSignalStrengthsChanged(signalStrength);
-            statusView.setSignalStrength((int) (signalStrength.getGsmSignalStrength() / 7.75));
+            statusView.setSignalStrength(signalStrength.getGsmSignalStrength());
         }
     }
 
     private class WifiReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
+
+            SupplicantState state = wifiManager.getConnectionInfo().getSupplicantState();
+            statusView.setWifiConnected(state != SupplicantState.DISCONNECTED && state != SupplicantState.DORMANT && state != SupplicantState.UNINITIALIZED);
             statusView.setWifiStrength(WifiManager.calculateSignalLevel(wifiManager.getConnectionInfo().getRssi(), 4));
         }
     }

@@ -8,9 +8,11 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.BatteryManager;
 import android.support.annotation.ColorInt;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.graphics.Palette;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -30,6 +32,8 @@ public class StatusView extends FrameLayout {
 
     @ColorInt
     private int color = 0;
+
+    private boolean isWifiConnected;
 
     public StatusView(Context context) {
         super(context);
@@ -64,11 +68,27 @@ public class StatusView extends FrameLayout {
         airplane = (CustomImageView) status.findViewById(R.id.airplane);
         alarm = (CustomImageView) status.findViewById(R.id.alarm);
 
-        battery.setImageDrawable(ImageUtils.getVectorDrawable(getContext(), R.drawable.ic_battery_alert));
-        signal.setImageDrawable(ImageUtils.getVectorDrawable(getContext(), R.drawable.ic_signal_0));
-        wifi.setImageDrawable(ImageUtils.getVectorDrawable(getContext(), R.drawable.ic_wifi_0));
-        airplane.setImageDrawable(ImageUtils.getVectorDrawable(getContext(), R.drawable.ic_airplane));
-        alarm.setImageDrawable(ImageUtils.getVectorDrawable(getContext(), R.drawable.ic_alarm));
+        battery.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_battery_alert));
+        signal.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_signal_0));
+        wifi.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_wifi_0));
+        airplane.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_airplane));
+        alarm.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_alarm));
+
+        status.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        status.animate().alpha(0f).setDuration(150).start();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_CANCEL:
+                        status.animate().alpha(1f).setDuration(150).start();
+                        break;
+                }
+                return false;
+            }
+        });
 
         addView(v);
 
@@ -97,7 +117,7 @@ public class StatusView extends FrameLayout {
             Palette.from(ImageUtils.drawableToBitmap(WallpaperManager.getInstance(getContext()).getFastDrawable())).generate(new Palette.PaletteAsyncListener() {
                 @Override
                 public void onGenerated(Palette palette) {
-                    setColor(palette.getDarkVibrantColor(Color.BLACK));
+                    setColor(palette.getDarkVibrantColor(palette.getVibrantColor(Color.BLACK)));
                 }
             });
         }
@@ -106,32 +126,39 @@ public class StatusView extends FrameLayout {
     public void setAirplaneMode(boolean isAirplaneMode) {
         if (isAirplaneMode) {
             signal.transition((Bitmap) null);
-            airplane.transition(ImageUtils.getVectorDrawable(getContext(), R.drawable.ic_airplane));
+            airplane.transition(ContextCompat.getDrawable(getContext(), R.drawable.ic_airplane));
         } else {
             airplane.transition((Bitmap) null);
         }
     }
 
     public void setAlarm(boolean isAlarm) {
-        if (alarm != null) alarm.transition(isAlarm ? ImageUtils.getVectorDrawable(getContext(), R.drawable.ic_alarm) : null);
+        if (alarm != null) alarm.transition(isAlarm ? ContextCompat.getDrawable(getContext(), R.drawable.ic_alarm) : null);
+    }
+
+    public void setWifiConnected(boolean isWifiConnected) {
+        if (this.isWifiConnected != isWifiConnected) {
+            wifi.transition(isWifiConnected ? ContextCompat.getDrawable(getContext(), R.drawable.ic_wifi_0) : null);
+            this.isWifiConnected = isWifiConnected;
+        }
     }
 
     public void setWifiStrength(int wifiStrength) {
         switch (wifiStrength) {
             case 1:
-                wifi.transition(ImageUtils.getVectorDrawable(getContext(), R.drawable.ic_wifi_1));
+                wifi.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_wifi_1));
                 break;
             case 2:
-                wifi.transition(ImageUtils.getVectorDrawable(getContext(), R.drawable.ic_wifi_2));
+                wifi.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_wifi_2));
                 break;
             case 3:
-                wifi.transition(ImageUtils.getVectorDrawable(getContext(), R.drawable.ic_wifi_3));
+                wifi.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_wifi_3));
                 break;
             case 4:
-                wifi.transition(ImageUtils.getVectorDrawable(getContext(), R.drawable.ic_wifi_4));
+                wifi.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_wifi_4));
                 break;
             default:
-                wifi.transition(ImageUtils.getVectorDrawable(getContext(), R.drawable.ic_wifi_0));
+                wifi.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_wifi_0));
                 break;
         }
     }
@@ -141,56 +168,56 @@ public class StatusView extends FrameLayout {
 
         switch (signalStrength) {
             case 1:
-                signal.transition(ImageUtils.getVectorDrawable(getContext(), R.drawable.ic_signal_1));
+                signal.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_signal_1));
                 break;
             case 2:
-                signal.transition(ImageUtils.getVectorDrawable(getContext(), R.drawable.ic_signal_2));
+                signal.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_signal_2));
                 break;
             case 3:
-                signal.transition(ImageUtils.getVectorDrawable(getContext(), R.drawable.ic_signal_3));
+                signal.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_signal_3));
                 break;
             case 4:
-                signal.transition(ImageUtils.getVectorDrawable(getContext(), R.drawable.ic_signal_4));
+                signal.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_signal_4));
                 break;
             default:
-                signal.transition(ImageUtils.getVectorDrawable(getContext(), R.drawable.ic_signal_0));
+                signal.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_signal_0));
                 break;
         }
     }
 
-    public void setBattery(int level, int scale, int status) {
+    public void setBattery(int level, int status) {
         if (battery == null) return;
 
         if (status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL) {
-            if (level / scale < 0.2)
-                battery.transition(ImageUtils.getVectorDrawable(getContext(), R.drawable.ic_battery_charging_20));
-            else if (level / scale < 0.35)
-                battery.transition(ImageUtils.getVectorDrawable(getContext(), R.drawable.ic_battery_charging_30));
-            else if (level / scale < 0.5)
-                battery.transition(ImageUtils.getVectorDrawable(getContext(), R.drawable.ic_battery_charging_50));
-            else if (level / scale < 0.65)
-                battery.transition(ImageUtils.getVectorDrawable(getContext(), R.drawable.ic_battery_charging_60));
-            else if (level / scale < 0.8)
-                battery.transition(ImageUtils.getVectorDrawable(getContext(), R.drawable.ic_battery_charging_80));
-            else if (level / scale < 0.95)
-                battery.transition(ImageUtils.getVectorDrawable(getContext(), R.drawable.ic_battery_charging_90));
+            if (level < 20)
+                battery.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_battery_charging_20));
+            else if (level < 35)
+                battery.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_battery_charging_30));
+            else if (level < 50)
+                battery.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_battery_charging_50));
+            else if (level < 65)
+                battery.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_battery_charging_60));
+            else if (level < 80)
+                battery.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_battery_charging_80));
+            else if (level < 95)
+                battery.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_battery_charging_90));
             else
-                battery.transition(ImageUtils.getVectorDrawable(getContext(), R.drawable.ic_battery_charging_full));
+                battery.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_battery_charging_full));
         } else {
-            if (level / scale < 0.2)
-                battery.transition(ImageUtils.getVectorDrawable(getContext(), R.drawable.ic_battery_20));
-            else if (level / scale < 0.35)
-                battery.transition(ImageUtils.getVectorDrawable(getContext(), R.drawable.ic_battery_30));
-            else if (level / scale < 0.5)
-                battery.transition(ImageUtils.getVectorDrawable(getContext(), R.drawable.ic_battery_50));
-            else if (level / scale < 0.65)
-                battery.transition(ImageUtils.getVectorDrawable(getContext(), R.drawable.ic_battery_60));
-            else if (level / scale < 0.8)
-                battery.transition(ImageUtils.getVectorDrawable(getContext(), R.drawable.ic_battery_80));
-            else if (level / scale < 0.95)
-                battery.transition(ImageUtils.getVectorDrawable(getContext(), R.drawable.ic_battery_90));
+            if (level < 20)
+                battery.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_battery_20));
+            else if (level < 35)
+                battery.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_battery_30));
+            else if (level < 50)
+                battery.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_battery_50));
+            else if (level < 65)
+                battery.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_battery_60));
+            else if (level < 80)
+                battery.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_battery_80));
+            else if (level < 95)
+                battery.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_battery_90));
             else
-                battery.transition(ImageUtils.getVectorDrawable(getContext(), R.drawable.ic_battery_full));
+                battery.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_battery_full));
         }
     }
 }
