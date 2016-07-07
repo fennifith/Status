@@ -54,14 +54,14 @@ public class MainActivity extends AppCompatActivity {
                     PreferenceUtils.putPreference(MainActivity.this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED, false);
                     service.setText(R.string.service_start);
 
-                    Intent intent = new Intent(StatusService.ACTION_START);
+                    Intent intent = new Intent(StatusService.ACTION_STOP);
                     intent.setClass(MainActivity.this, StatusService.class);
                     startService(intent);
                 } else {
                     PreferenceUtils.putPreference(MainActivity.this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED, true);
                     service.setText(R.string.service_stop);
 
-                    Intent intent = new Intent(StatusService.ACTION_STOP);
+                    Intent intent = new Intent(StatusService.ACTION_START);
                     intent.setClass(MainActivity.this, StatusService.class);
                     startService(intent);
                 }
