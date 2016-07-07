@@ -8,11 +8,11 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
-import android.net.Network;
-import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
+import android.os.Parcelable;
 import android.preference.PreferenceManager;
+import android.service.notification.StatusBarNotification;
 import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
@@ -24,11 +24,17 @@ import com.james.status.utils.PreferenceUtils;
 import com.james.status.utils.StaticUtils;
 import com.james.status.views.StatusView;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 public class StatusService extends ViewService implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     public static final String
             ACTION_START = "com.james.status.ACTION_START",
+            ACTION_STOP = "com.james.status.ACTION_STOP",
             ACTION_UPDATE = "com.james.status.ACTION_UPDATE",
+            ACTION_NOTIFICATION = "com.james.status.ACTION_NOTIFICATION",
+            EXTRA_NOTIFICATIONS = "com.james.status.EXTRA_NOTIFICATIONS",
             EXTRA_COLOR = "com.james.status.EXTRA_COLOR";
 
     StatusView statusView;
@@ -50,12 +56,6 @@ public class StatusService extends ViewService implements SharedPreferences.OnSh
 
         Boolean enabled = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED);
         if (enabled == null || !enabled) stopSelf();
-
-        if (statusView != null) removeView(statusView);
-        statusView = new StatusView(this);
-        WindowManager.LayoutParams params = new WindowManager.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, StaticUtils.getStatusBarMargin(this));
-        params.gravity = Gravity.TOP;
-        addView(statusView, params);
 
         keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
         connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -79,10 +79,30 @@ public class StatusService extends ViewService implements SharedPreferences.OnSh
         if (action == null) return START_STICKY;
         switch (action) {
             case ACTION_START:
+                if (statusView != null) removeView(statusView);
+                statusView = new StatusView(this);
+                WindowManager.LayoutParams params = new WindowManager.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, StaticUtils.getStatusBarMargin(this));
+                params.gravity = Gravity.TOP;
+                addView(statusView, params);
+                break;
+            case ACTION_STOP:
+                removeView(statusView);
+                statusView = null;
+                stopSelf();
                 break;
             case ACTION_UPDATE:
-                statusView.setLockscreen(keyguardManager.isKeyguardLocked());
-                statusView.setColor(intent.getIntExtra(EXTRA_COLOR, Color.BLACK));
+                if (statusView != null) {
+                    statusView.setLockscreen(keyguardManager.isKeyguardLocked());
+                    statusView.setColor(intent.getIntExtra(EXTRA_COLOR, Color.BLACK));
+                }
+                break;
+            case ACTION_NOTIFICATION:
+                ArrayList<StatusBarNotification> notifications = new ArrayList<>();
+                for (Parcelable parcelable : intent.getParcelableArrayListExtra(EXTRA_NOTIFICATIONS)) {
+                    notifications.add((StatusBarNotification) parcelable);
+                }
+
+                if (statusView != null) statusView.setNotifications(notifications);
                 break;
         }
         return START_STICKY;
@@ -106,7 +126,7 @@ public class StatusService extends ViewService implements SharedPreferences.OnSh
     private class BatteryReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            statusView.setBattery(intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0), intent.getIntExtra(BatteryManager.EXTRA_STATUS, 0));
+            if (statusView != null) statusView.setBattery(intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0), intent.getIntExtra(BatteryManager.EXTRA_STATUS, 0));
         }
     }
 
@@ -114,17 +134,18 @@ public class StatusService extends ViewService implements SharedPreferences.OnSh
         @Override
         public void onSignalStrengthsChanged(SignalStrength signalStrength) {
             super.onSignalStrengthsChanged(signalStrength);
-            statusView.setSignalStrength(signalStrength.getGsmSignalStrength());
+            if (statusView != null) statusView.setSignalStrength(signalStrength.getGsmSignalStrength());
         }
     }
 
     private class WifiReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-
-            SupplicantState state = wifiManager.getConnectionInfo().getSupplicantState();
-            statusView.setWifiConnected(state != SupplicantState.DISCONNECTED && state != SupplicantState.DORMANT && state != SupplicantState.UNINITIALIZED);
-            statusView.setWifiStrength(WifiManager.calculateSignalLevel(wifiManager.getConnectionInfo().getRssi(), 4));
+            if (statusView != null) {
+                int state = wifiManager.getWifiState();
+                statusView.setWifiConnected(state != WifiManager.WIFI_STATE_DISABLED && state != WifiManager.WIFI_STATE_DISABLING && state != WifiManager.WIFI_STATE_UNKNOWN);
+                statusView.setWifiStrength(WifiManager.calculateSignalLevel(wifiManager.getConnectionInfo().getRssi(), 4));
+            }
         }
     }
 }

@@ -11,7 +11,8 @@ import java.util.Set;
 public class PreferenceUtils {
 
     public enum PreferenceIdentifier {
-        STATUS_ENABLED
+        STATUS_ENABLED,
+        STATUS_LOCKSCREEN_EXPAND
     }
 
     @Nullable

@@ -50,15 +50,20 @@ public class MainActivity extends AppCompatActivity {
         service.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(StatusService.ACTION_START);
-                intent.setClass(MainActivity.this, StatusService.class);
                 if (StaticUtils.isStatusServiceRunning(MainActivity.this)) {
                     PreferenceUtils.putPreference(MainActivity.this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED, false);
                     service.setText(R.string.service_start);
+
+                    Intent intent = new Intent(StatusService.ACTION_START);
+                    intent.setClass(MainActivity.this, StatusService.class);
+                    startService(intent);
                 } else {
                     PreferenceUtils.putPreference(MainActivity.this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED, true);
-                    startService(intent);
                     service.setText(R.string.service_stop);
+
+                    Intent intent = new Intent(StatusService.ACTION_STOP);
+                    intent.setClass(MainActivity.this, StatusService.class);
+                    startService(intent);
                 }
             }
         });

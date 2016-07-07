@@ -7,6 +7,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.BatteryManager;
+import android.service.notification.StatusBarNotification;
 import android.support.annotation.ColorInt;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.graphics.Palette;
@@ -14,21 +15,26 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextClock;
 
 import com.james.status.R;
+import com.james.status.adapters.NotificationIconAdapter;
 import com.james.status.utils.ImageUtils;
+import com.james.status.utils.PreferenceUtils;
 import com.james.status.utils.StaticUtils;
+
+import java.util.ArrayList;
 
 public class StatusView extends FrameLayout {
 
     private View status;
     private TextClock clock;
     private CustomImageView battery, signal, wifi, airplane, alarm;
-    private ListView notifications;
+    private ListView notificationView;
+
+    private ArrayList<StatusBarNotification> notifications;
 
     @ColorInt
     private int color = 0;
@@ -68,6 +74,8 @@ public class StatusView extends FrameLayout {
         airplane = (CustomImageView) status.findViewById(R.id.airplane);
         alarm = (CustomImageView) status.findViewById(R.id.alarm);
 
+        notificationView = (ListView) status.findViewById(R.id.notifications);
+
         battery.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_battery_alert));
         signal.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_signal_0));
         wifi.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_wifi_0));
@@ -95,6 +103,11 @@ public class StatusView extends FrameLayout {
         if (color > 0) setColor(color);
     }
 
+    public void setNotifications(ArrayList<StatusBarNotification> notifications) {
+        this.notifications = notifications;
+        notificationView.setAdapter(new NotificationIconAdapter(getContext(), notifications));
+    }
+
     public void setColor(@ColorInt int color) {
         ValueAnimator animator = ValueAnimator.ofArgb(this.color, color);
         animator.setDuration(150);
@@ -111,7 +124,9 @@ public class StatusView extends FrameLayout {
     }
 
     public void setLockscreen(boolean lockscreen) {
-        status.getLayoutParams().height = StaticUtils.getStatusBarMargin(getContext()) * (lockscreen ? 3 : 1);
+        Boolean expand = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_LOCKSCREEN_EXPAND);
+        if (expand != null && expand)
+            status.getLayoutParams().height = StaticUtils.getStatusBarMargin(getContext()) * (lockscreen ? 3 : 1);
 
         if (lockscreen) {
             Palette.from(ImageUtils.drawableToBitmap(WallpaperManager.getInstance(getContext()).getFastDrawable())).generate(new Palette.PaletteAsyncListener() {
