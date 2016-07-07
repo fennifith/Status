@@ -4,23 +4,29 @@ import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.app.WallpaperManager;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.BatteryManager;
+import android.os.Build;
 import android.service.notification.StatusBarNotification;
 import android.support.annotation.ColorInt;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.graphics.Palette;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ListView;
+import android.widget.LinearLayout;
 import android.widget.TextClock;
 
 import com.james.status.R;
-import com.james.status.adapters.NotificationIconAdapter;
 import com.james.status.utils.ImageUtils;
 import com.james.status.utils.PreferenceUtils;
 import com.james.status.utils.StaticUtils;
@@ -32,9 +38,7 @@ public class StatusView extends FrameLayout {
     private View status;
     private TextClock clock;
     private CustomImageView battery, signal, wifi, airplane, alarm;
-    private ListView notificationView;
-
-    private ArrayList<StatusBarNotification> notifications;
+    private LinearLayout notificationIconLayout;
 
     @ColorInt
     private int color = 0;
@@ -74,7 +78,7 @@ public class StatusView extends FrameLayout {
         airplane = (CustomImageView) status.findViewById(R.id.airplane);
         alarm = (CustomImageView) status.findViewById(R.id.alarm);
 
-        notificationView = (ListView) status.findViewById(R.id.notifications);
+        notificationIconLayout = (LinearLayout) status.findViewById(R.id.notificationIcons);
 
         battery.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_battery_alert));
         signal.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_signal_0));
@@ -104,8 +108,49 @@ public class StatusView extends FrameLayout {
     }
 
     public void setNotifications(ArrayList<StatusBarNotification> notifications) {
-        this.notifications = notifications;
-        notificationView.setAdapter(new NotificationIconAdapter(getContext(), notifications));
+        if (notificationIconLayout != null) {
+            notificationIconLayout.removeAllViewsInLayout();
+            for (StatusBarNotification notification : notifications) {
+                View v = LayoutInflater.from(getContext()).inflate(R.layout.item_icon, null);
+                Drawable drawable = getNotificationIcon(notification);
+                if (drawable != null)
+                    ((CustomImageView) v.findViewById(R.id.icon)).setImageDrawable(drawable);
+                else continue;
+
+                notificationIconLayout.addView(v);
+            }
+        }
+    }
+
+    @Nullable
+    private Drawable getNotificationIcon(StatusBarNotification notification) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            Resources resources = null;
+            PackageInfo packageInfo = null;
+
+            try {
+                resources = getContext().getPackageManager().getResourcesForApplication(notification.getPackageName());
+                packageInfo = getContext().getPackageManager().getPackageInfo(notification.getPackageName(), PackageManager.GET_META_DATA);
+            } catch (PackageManager.NameNotFoundException ignored) {
+            }
+
+            if (resources != null && packageInfo != null) {
+                Resources.Theme theme = resources.newTheme();
+                theme.applyStyle(packageInfo.applicationInfo.theme, false);
+
+                Drawable drawable = null;
+                try {
+                    drawable = ResourcesCompat.getDrawable(resources, notification.getNotification().icon, theme);
+                } catch (Resources.NotFoundException ignored) {
+                }
+
+                return drawable;
+            }
+
+        } else
+            return notification.getNotification().getSmallIcon().loadDrawable(getContext());
+
+        return null;
     }
 
     public void setColor(@ColorInt int color) {
@@ -153,28 +198,30 @@ public class StatusView extends FrameLayout {
 
     public void setWifiConnected(boolean isWifiConnected) {
         if (this.isWifiConnected != isWifiConnected) {
-            wifi.transition(isWifiConnected ? ContextCompat.getDrawable(getContext(), R.drawable.ic_wifi_0) : null);
+            if (!isWifiConnected) wifi.transition((Bitmap) null);
             this.isWifiConnected = isWifiConnected;
         }
     }
 
     public void setWifiStrength(int wifiStrength) {
-        switch (wifiStrength) {
-            case 1:
-                wifi.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_wifi_1));
-                break;
-            case 2:
-                wifi.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_wifi_2));
-                break;
-            case 3:
-                wifi.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_wifi_3));
-                break;
-            case 4:
-                wifi.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_wifi_4));
-                break;
-            default:
-                wifi.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_wifi_0));
-                break;
+        if (isWifiConnected) {
+            switch (wifiStrength) {
+                case 1:
+                    wifi.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_wifi_1));
+                    break;
+                case 2:
+                    wifi.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_wifi_2));
+                    break;
+                case 3:
+                    wifi.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_wifi_3));
+                    break;
+                case 4:
+                    wifi.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_wifi_4));
+                    break;
+                default:
+                    wifi.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_wifi_0));
+                    break;
+            }
         }
     }
 

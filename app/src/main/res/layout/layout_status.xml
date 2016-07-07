@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:gravity="top">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,13 +16,14 @@
         android:layout_gravity="top"
         android:id="@+id/status">
 
-        <android.support.v7.widget.ListViewCompat
+        <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="24dp"
             android:layout_weight="1"
             android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:id="@+id/notifications"/>
+            android:layout_gravity="center_vertical"
+            android:nestedScrollingEnabled="false"
+            android:id="@+id/notificationIcons" />
 
         <com.james.status.views.SquareImageView
             android:layout_width="24dp"

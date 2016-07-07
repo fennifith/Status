@@ -9,10 +9,9 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.ColorInt;
-import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.graphics.Palette;
 import android.view.accessibility.AccessibilityEvent;
 
@@ -48,7 +47,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                 Palette.from(ImageUtils.drawableToBitmap(WallpaperManager.getInstance(this).getFastDrawable())).generate(new Palette.PaletteAsyncListener() {
                     @Override
                     public void onGenerated(Palette palette) {
-                        setStatusBarColor(palette.getDarkVibrantColor(palette.getVibrantColor(Color.BLACK)));
+                        setStatusBarColor(palette.getDarkVibrantColor(ImageUtils.darkColor(palette.getVibrantColor(Color.BLACK))));
                     }
                 });
 
@@ -81,7 +80,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                 Palette.from(ImageUtils.drawableToBitmap(getPackageManager().getApplicationIcon(packageInfo.applicationInfo))).generate(new Palette.PaletteAsyncListener() {
                     @Override
                     public void onGenerated(Palette palette) {
-                        setStatusBarColor(palette.getDarkVibrantColor(palette.getVibrantColor(Color.BLACK)));
+                        setStatusBarColor(palette.getDarkVibrantColor(ImageUtils.darkColor(palette.getVibrantColor(Color.BLACK))));
                     }
                 });
 
@@ -93,23 +92,36 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
     }
 
     private boolean setStatusBarTheme(String packageName, Resources resources, Resources.Theme theme) {
-        int[] attrs = new int[] {
+        TypedArray typedArray = theme.obtainStyledAttributes(new int[]{
                 android.R.attr.colorPrimaryDark,
                 android.R.attr.statusBarColor,
                 android.R.attr.navigationBarColor,
                 resources.getIdentifier("colorPrimaryDark", "attr", packageName),
                 resources.getIdentifier("colorPrimaryDark", "color", packageName),
-                android.R.attr.colorPrimary,
-                resources.getIdentifier("colorPrimary", "attr", packageName),
-                resources.getIdentifier("colorPrimary", "color", packageName)
-        };
+        });
 
-        TypedArray typedArray = theme.obtainStyledAttributes(attrs);
         for (int i = 0; i < typedArray.length(); i++) {
             int statusBarRes = typedArray.getResourceId(i, 0);
             if (statusBarRes != 0) {
                 try {
-                    setStatusBarColor(ContextCompat.getColor(this, statusBarRes));
+                    setStatusBarColor(ResourcesCompat.getColor(resources, statusBarRes, theme));
+                    return true;
+                } catch (Resources.NotFoundException ignored) {
+                }
+            }
+        }
+
+        typedArray = theme.obtainStyledAttributes(new int[]{
+                android.R.attr.colorPrimary,
+                resources.getIdentifier("colorPrimary", "attr", packageName),
+                resources.getIdentifier("colorPrimary", "color", packageName)
+        });
+
+        for (int i = 0; i < typedArray.length(); i++) {
+            int statusBarRes = typedArray.getResourceId(i, 0);
+            if (statusBarRes != 0) {
+                try {
+                    setStatusBarColor(ImageUtils.darkColor(ResourcesCompat.getColor(resources, statusBarRes, theme)));
                     return true;
                 } catch (Resources.NotFoundException ignored) {
                 }

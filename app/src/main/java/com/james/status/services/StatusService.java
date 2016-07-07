@@ -25,7 +25,6 @@ import com.james.status.utils.StaticUtils;
 import com.james.status.views.StatusView;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class StatusService extends ViewService implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -56,6 +55,13 @@ public class StatusService extends ViewService implements SharedPreferences.OnSh
 
         Boolean enabled = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED);
         if (enabled == null || !enabled) stopSelf();
+        else {
+            if (statusView != null) removeView(statusView);
+            statusView = new StatusView(this);
+            WindowManager.LayoutParams params = new WindowManager.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, StaticUtils.getStatusBarMargin(this));
+            params.gravity = Gravity.TOP;
+            addView(statusView, params);
+        }
 
         keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
         connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -142,9 +148,10 @@ public class StatusService extends ViewService implements SharedPreferences.OnSh
         @Override
         public void onReceive(Context context, Intent intent) {
             if (statusView != null) {
+                statusView.setWifiStrength(WifiManager.calculateSignalLevel(wifiManager.getConnectionInfo().getRssi(), 4));
+
                 int state = wifiManager.getWifiState();
                 statusView.setWifiConnected(state != WifiManager.WIFI_STATE_DISABLED && state != WifiManager.WIFI_STATE_DISABLING && state != WifiManager.WIFI_STATE_UNKNOWN);
-                statusView.setWifiStrength(WifiManager.calculateSignalLevel(wifiManager.getConnectionInfo().getRssi(), 4));
             }
         }
     }

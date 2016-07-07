@@ -3,7 +3,6 @@ package com.james.status.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.annotation.BoolRes;
 import android.support.annotation.Nullable;
 
 import java.util.Set;
@@ -12,7 +11,8 @@ public class PreferenceUtils {
 
     public enum PreferenceIdentifier {
         STATUS_ENABLED,
-        STATUS_LOCKSCREEN_EXPAND
+        STATUS_LOCKSCREEN_EXPAND,
+        STATUS_CLOCK_AMPM
     }
 
     @Nullable

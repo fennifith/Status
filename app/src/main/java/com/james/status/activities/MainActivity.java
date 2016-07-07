@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
                     Intent intent = new Intent(StatusService.ACTION_STOP);
                     intent.setClass(MainActivity.this, StatusService.class);
-                    startService(intent);
+                    stopService(intent);
                 } else {
                     PreferenceUtils.putPreference(MainActivity.this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED, true);
                     service.setText(R.string.service_stop);
