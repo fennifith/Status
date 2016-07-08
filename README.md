@@ -14,6 +14,9 @@ Permissions:
 - Location Services: finds if GPS is enabled.
 - Alarm: find if an alarm is set.
 
+
+## License
+
 ```
 Copyright 2016 James Fenn
 
