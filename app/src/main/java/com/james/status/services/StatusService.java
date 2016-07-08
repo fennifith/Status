@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
+import android.graphics.Point;
 import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
 import android.os.IBinder;
@@ -165,13 +166,12 @@ public class StatusService extends Service {
         windowManager.addView(fullscreenView, params);
 
         fullscreenView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            int height;
-
             @Override
             public void onGlobalLayout() {
                 if (statusView != null && fullscreenView != null) {
-                    statusView.setFullscreen(fullscreenView.getMeasuredHeight() > height);
-                    height = fullscreenView.getMeasuredHeight();
+                    Point size = new Point();
+                    windowManager.getDefaultDisplay().getSize(size);
+                    statusView.setFullscreen(fullscreenView.getMeasuredHeight() == size.y);
                 }
             }
         });
