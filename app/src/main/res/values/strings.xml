@@ -20,6 +20,8 @@
 
     <string name="preference_ampm">Show AM/PM in Clock</string>
     <string name="preference_ampm_desc">Choose whether to show the AM/PM in the clock. Only works if the system time is in a 12h format.</string>
+    <string name="preference_battery_percent">Display Battery Percent</string>
+    <string name="preference_battery_percent_desc">Shows the battery percentage next to the icon in the status bar.</string>
     <string name="preference_bar_color_auto">Status Bar Coloring</string>
     <string name="preference_bar_color_auto_desc">Picks the status bar color from the current application.</string>
     <string name="preference_bar_color_chooser">Status Bar Color</string>

@@ -12,6 +12,7 @@ public class PreferenceUtils {
     public enum PreferenceIdentifier {
         STATUS_ENABLED,
         STATUS_CLOCK_AMPM,
+        STATUS_BATTERY_PERCENT,
         STATUS_COLOR_AUTO,
         STATUS_COLOR,
         STATUS_DARK_ICONS,

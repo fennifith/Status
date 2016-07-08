@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     AppCompatButton service;
     FloatingActionButton fab;
 
-    SwitchCompat amPm, autoBarColor, darkIcons;
+    SwitchCompat amPm, batteryPercent, autoBarColor, darkIcons;
     View barColor;
     CustomImageView barColorView;
 
@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         fab = (FloatingActionButton) findViewById(R.id.fab);
 
         amPm = (SwitchCompat) findViewById(R.id.amPmEnabled);
+        batteryPercent = (SwitchCompat) findViewById(R.id.batteryPercent);
         autoBarColor = (SwitchCompat) findViewById(R.id.autoBarColorEnabled);
         barColor = findViewById(R.id.pickBarColor);
         barColorView = (CustomImageView) findViewById(R.id.pickBarColor_color);
@@ -91,6 +92,21 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 PreferenceUtils.putPreference(MainActivity.this, PreferenceUtils.PreferenceIdentifier.STATUS_CLOCK_AMPM, b);
+
+                if (StaticUtils.isStatusServiceRunning(MainActivity.this)) {
+                    Intent intent = new Intent(StatusService.ACTION_START);
+                    intent.setClass(MainActivity.this, StatusService.class);
+                    startService(intent);
+                }
+            }
+        });
+
+        Boolean isBatteryPercent = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_BATTERY_PERCENT);
+        batteryPercent.setChecked(isBatteryPercent != null && isBatteryPercent);
+        batteryPercent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                PreferenceUtils.putPreference(MainActivity.this, PreferenceUtils.PreferenceIdentifier.STATUS_BATTERY_PERCENT, b);
 
                 if (StaticUtils.isStatusServiceRunning(MainActivity.this)) {
                     Intent intent = new Intent(StatusService.ACTION_START);

@@ -24,76 +24,94 @@
             android:layout_gravity="center_vertical"
             android:id="@+id/notificationIcons" />
 
-        <com.james.status.views.SquareImageView
-            android:layout_width="24dp"
-            android:layout_height="wrap_content"
+        <com.james.status.views.CustomImageView
+            android:layout_width="18dp"
+            android:layout_height="22dp"
             android:tint="@android:color/white"
             android:tintMode="src_in"
-            android:padding="2dp"
             android:id="@+id/alarm"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="1dp" />
 
-        <com.james.status.views.SquareImageView
-            android:layout_width="24dp"
-            android:layout_height="wrap_content"
+        <com.james.status.views.CustomImageView
+            android:layout_width="18dp"
+            android:layout_height="22dp"
             android:tint="@android:color/white"
             android:tintMode="src_in"
-            android:padding="2dp"
             android:id="@+id/airplane"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="1dp" />
 
-        <com.james.status.views.SquareImageView
-            android:layout_width="22dp"
-            android:layout_height="wrap_content"
+        <com.james.status.views.CustomImageView
+            android:layout_width="18dp"
+            android:layout_height="22dp"
             android:tint="@android:color/white"
             android:tintMode="src_in"
-            android:padding="2dp"
             android:id="@+id/bluetooth"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="1dp" />
 
-        <com.james.status.views.SquareImageView
-            android:layout_width="22dp"
-            android:layout_height="wrap_content"
+        <com.james.status.views.CustomImageView
+            android:layout_width="18dp"
+            android:layout_height="22dp"
             android:tint="@android:color/white"
             android:tintMode="src_in"
-            android:padding="2dp"
             android:id="@+id/gps"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="1dp" />
 
-        <com.james.status.views.SquareImageView
-            android:layout_width="22dp"
-            android:layout_height="wrap_content"
+        <com.james.status.views.CustomImageView
+            android:layout_width="18dp"
+            android:layout_height="22dp"
             android:tint="@android:color/white"
             android:tintMode="src_in"
-            android:padding="2dp"
-            android:id="@+id/wifi" />
+            android:id="@+id/wifi"
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="1dp" />
 
-        <com.james.status.views.SquareImageView
-            android:layout_width="22dp"
-            android:layout_height="wrap_content"
+        <com.james.status.views.CustomImageView
+            android:layout_width="18dp"
+            android:layout_height="22dp"
             android:tint="@android:color/white"
             android:tintMode="src_in"
-            android:padding="2dp"
-            android:id="@+id/signal" />
+            android:id="@+id/signal"
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="1dp" />
 
-        <com.james.status.views.SquareImageView
-            android:layout_width="22dp"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:textSize="14sp"
+            android:textColor="@android:color/white"
+            android:id="@+id/batteryPercent"
+            android:visibility="gone"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp" />
+
+        <com.james.status.views.CustomImageView
+            android:layout_width="18dp"
+            android:layout_height="22dp"
             android:tint="@android:color/white"
             android:tintMode="src_in"
-            android:padding="2dp"
-            android:id="@+id/battery" />
+            android:id="@+id/battery"
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="1dp" />
 
         <TextClock
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical"
             tools:ignore="NewApi"
             android:textColor="@android:color/white"
             android:textSize="14sp"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp"
-            android:id="@+id/clock" />
+            android:id="@+id/clock"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp" />
 
     </LinearLayout>
 

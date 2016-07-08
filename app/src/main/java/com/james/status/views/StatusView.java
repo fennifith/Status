@@ -24,6 +24,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextClock;
+import android.widget.TextView;
 
 import com.james.status.R;
 import com.james.status.utils.ImageUtils;
@@ -36,6 +37,7 @@ public class StatusView extends FrameLayout {
 
     private View status;
     private TextClock clock;
+    private TextView batteryPercent;
     private CustomImageView alarm, airplane, bluetooth, gps, wifi, signal, battery;
     private LinearLayout notificationIconLayout;
 
@@ -69,16 +71,17 @@ public class StatusView extends FrameLayout {
         status = v.findViewById(R.id.status);
         status.getLayoutParams().height = StaticUtils.getStatusBarHeight(getContext());
 
-        clock = (TextClock) status.findViewById(R.id.clock);
-        battery = (CustomImageView) status.findViewById(R.id.battery);
-        signal = (CustomImageView) status.findViewById(R.id.signal);
-        wifi = (CustomImageView) status.findViewById(R.id.wifi);
-        gps = (CustomImageView) status.findViewById(R.id.gps);
-        bluetooth = (CustomImageView) status.findViewById(R.id.bluetooth);
-        airplane = (CustomImageView) status.findViewById(R.id.airplane);
-        alarm = (CustomImageView) status.findViewById(R.id.alarm);
+        clock = (TextClock) v.findViewById(R.id.clock);
+        battery = (CustomImageView) v.findViewById(R.id.battery);
+        batteryPercent = (TextView) v.findViewById(R.id.batteryPercent);
+        signal = (CustomImageView) v.findViewById(R.id.signal);
+        wifi = (CustomImageView) v.findViewById(R.id.wifi);
+        gps = (CustomImageView) v.findViewById(R.id.gps);
+        bluetooth = (CustomImageView) v.findViewById(R.id.bluetooth);
+        airplane = (CustomImageView) v.findViewById(R.id.airplane);
+        alarm = (CustomImageView) v.findViewById(R.id.alarm);
 
-        notificationIconLayout = (LinearLayout) status.findViewById(R.id.notificationIcons);
+        notificationIconLayout = (LinearLayout) v.findViewById(R.id.notificationIcons);
 
         battery.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_battery_alert));
         signal.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_signal_0));
@@ -91,6 +94,10 @@ public class StatusView extends FrameLayout {
         Boolean isAmPmEnabled = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_CLOCK_AMPM);
         String format = isAmPmEnabled == null || isAmPmEnabled ? "h:mm a" : "h:mm";
         clock.setFormat12Hour(format);
+
+        Boolean isBatteryPercent = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_BATTERY_PERCENT);
+        if (isBatteryPercent != null && isBatteryPercent)
+            batteryPercent.setVisibility(View.VISIBLE);
 
         addView(v);
 
@@ -189,10 +196,12 @@ public class StatusView extends FrameLayout {
                 wifi.setImageTintList(ColorStateList.valueOf(isDarkMode ? Color.BLACK : Color.WHITE));
             if (signal != null)
                 signal.setImageTintList(ColorStateList.valueOf(isDarkMode ? Color.BLACK : Color.WHITE));
+            if (batteryPercent != null)
+                batteryPercent.setTextColor(isDarkMode ? Color.BLACK : Color.WHITE);
             if (battery != null)
                 battery.setImageTintList(ColorStateList.valueOf(isDarkMode ? Color.BLACK : Color.WHITE));
-
-            if (clock != null) clock.setTextColor(isDarkMode ? Color.BLACK : Color.WHITE);
+            if (clock != null)
+                clock.setTextColor(isDarkMode ? Color.BLACK : Color.WHITE);
 
             this.isDarkMode = isDarkMode;
         }
@@ -325,5 +334,8 @@ public class StatusView extends FrameLayout {
             else
                 battery.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_battery_full));
         }
+
+        if (batteryPercent != null)
+            batteryPercent.setText(String.valueOf(level) + "%");
     }
 }
