@@ -4,10 +4,10 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.util.TypedValue;
 
 import com.james.status.services.StatusService;
@@ -33,8 +33,6 @@ public class StaticUtils {
     }
 
     public static boolean isPermissionsGranted(Context context) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return true;
-
         PackageInfo info;
         try {
             info = context.getPackageManager().getPackageInfo(context.getPackageName(), PackageManager.GET_PERMISSIONS);
@@ -45,7 +43,10 @@ public class StaticUtils {
 
         if (info.requestedPermissions != null) {
             for (String permission : info.requestedPermissions) {
-                if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) return false;
+                if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    Log.wtf("Permission", permission);
+                    return false;
+                }
             }
         }
         return true;
