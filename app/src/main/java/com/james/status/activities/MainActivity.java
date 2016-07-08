@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.CompoundButton;
 
 import com.james.status.R;
+import com.james.status.dialogs.ColorPickerDialog;
 import com.james.status.services.StatusService;
 import com.james.status.utils.ImageUtils;
 import com.james.status.utils.PreferenceUtils;
@@ -124,7 +125,20 @@ public class MainActivity extends AppCompatActivity {
         barColor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                new ColorPickerDialog(MainActivity.this, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR).setOnFinishedListener(new ColorPickerDialog.OnFinishedListener() {
+                    @Override
+                    public void onFinish() {
+                        if (StaticUtils.isStatusServiceRunning(MainActivity.this)) {
+                            Intent intent = new Intent(StatusService.ACTION_START);
+                            intent.setClass(MainActivity.this, StatusService.class);
+                            startService(intent);
+                        }
 
+                        Integer statusBarColor = PreferenceUtils.getIntegerPreference(MainActivity.this, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR);
+                        if (statusBarColor == null) statusBarColor = Color.BLACK;
+                        barColorView.transition(new ColorDrawable(statusBarColor));
+                    }
+                }).show();
             }
         });
 

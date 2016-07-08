@@ -18,6 +18,15 @@
         <item name="android:windowFullscreen">true</item>
     </style>
 
+    <style name="AppTheme.Dialog" parent="AppTheme">
+        <item name="android:windowAnimationStyle">@style/SlideAnimation</item>
+    </style>
+
+    <style name="SlideAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_up</item>
+        <item name="android:windowExitAnimation">@anim/slide_down</item>
+    </style>
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />

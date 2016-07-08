@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
-import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
 import android.os.IBinder;
@@ -41,9 +40,7 @@ public class StatusService extends Service {
 
     private AlarmManager alarmManager;
     private WifiManager wifiManager;
-    private ConnectivityManager connectivityManager;
     private TelephonyManager telephonyManager;
-    private BatteryManager batteryManager;
     private KeyguardManager keyguardManager;
     private WindowManager windowManager;
 
@@ -61,9 +58,7 @@ public class StatusService extends Service {
         keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
         alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-        connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        batteryManager = (BatteryManager) getSystemService(Context.BATTERY_SERVICE);
 
         alarmReceiver = new AlarmReceiver();
         registerReceiver(alarmReceiver, new IntentFilter(AlarmManager.ACTION_NEXT_ALARM_CLOCK_CHANGED));
@@ -82,9 +77,7 @@ public class StatusService extends Service {
 
         Boolean enabled = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED);
         if (enabled == null || !enabled) stopSelf();
-        else {
-            setUp();
-        }
+        else setUp();
     }
 
     @Nullable
@@ -110,7 +103,10 @@ public class StatusService extends Service {
             case ACTION_UPDATE:
                 if (statusView != null) {
                     statusView.setLockscreen(keyguardManager.isKeyguardLocked());
-                    statusView.setColor(intent.getIntExtra(EXTRA_COLOR, Color.BLACK));
+
+                    Boolean isStatusColorAuto = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_AUTO);
+                    if (isStatusColorAuto == null || isStatusColorAuto)
+                        statusView.setColor(intent.getIntExtra(EXTRA_COLOR, Color.BLACK));
                 }
                 break;
             case ACTION_NOTIFICATION:

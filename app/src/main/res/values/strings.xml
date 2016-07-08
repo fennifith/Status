@@ -19,7 +19,14 @@
     <string name="permissions_desc">This app needs a few additional permissions in order to access parts of the phone relevant to the status bar.</string>
 
     <string name="preference_ampm">Show AM/PM in Clock</string>
-    <string name="preference_bar_color_auto">Pick Status Bar Color from Current Application</string>
+    <string name="preference_ampm_desc">Choose whether to show the AM/PM in the clock. Only works if the system time is in a 12h format.</string>
+    <string name="preference_bar_color_auto">Status Bar Coloring</string>
+    <string name="preference_bar_color_auto_desc">Picks the status bar color from the current application.</string>
     <string name="preference_bar_color_chooser">Status Bar Color</string>
-    <string name="preference_dark_icons">Enable Dark Status Bar Icons</string>
+    <string name="preference_dark_icons">Dark Icons</string>
+    <string name="preference_dark_icons_desc">Darkens the status bar icons on light backgrounds.</string>
+
+    <string name="red">Red</string>
+    <string name="green">Green</string>
+    <string name="blue">Blue</string>
 </resources>

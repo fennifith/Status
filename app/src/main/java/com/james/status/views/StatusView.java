@@ -90,7 +90,11 @@ public class StatusView extends FrameLayout {
 
         addView(v);
 
-        if (color > 0) setColor(color);
+        Boolean isStatusColorAuto = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_AUTO);
+        if (isStatusColorAuto != null && !isStatusColorAuto) {
+            Integer statusBarColor = PreferenceUtils.getIntegerPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_COLOR);
+            if (statusBarColor != null) setColor(statusBarColor);
+        } else if (color > 0) setColor(color);
     }
 
     public void setNotifications(ArrayList<StatusBarNotification> notifications) {
@@ -195,7 +199,7 @@ public class StatusView extends FrameLayout {
             Palette.from(ImageUtils.drawableToBitmap(WallpaperManager.getInstance(getContext()).getFastDrawable())).generate(new Palette.PaletteAsyncListener() {
                 @Override
                 public void onGenerated(Palette palette) {
-                    setColor(palette.getDarkVibrantColor(palette.getVibrantColor(Color.BLACK)));
+                    setColor(palette.getDarkVibrantColor(ImageUtils.darkColor(palette.getVibrantColor(Color.BLACK))));
                 }
             });
         }

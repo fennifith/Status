@@ -9,7 +9,6 @@ import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.james.status.R;
@@ -38,8 +37,6 @@ public class StartActivity extends AppCompatActivity {
         accessibilityButton = (AppCompatButton) findViewById(R.id.accessibilityButton);
         notificationButton = (AppCompatButton) findViewById(R.id.notificationButton);
         permissionsButton = (AppCompatButton) findViewById(R.id.permissionsButton);
-
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
         accessibilityButton.setOnClickListener(new View.OnClickListener() {
             @Override
