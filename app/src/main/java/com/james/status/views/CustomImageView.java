@@ -2,8 +2,6 @@ package com.james.status.views;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.ThumbnailUtils;
 import android.os.Handler;
@@ -30,28 +28,8 @@ public class CustomImageView extends AppCompatImageView {
         super(context, attrs, defStyle);
     }
 
-    public void transition(@Nullable final Bitmap second) {
-        if (second == null || second.getWidth() < 1 || second.getHeight() < 1) {
-            Animation exitAnim = AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_out);
-            exitAnim.setDuration(150);
-            exitAnim.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    setImageDrawable(new ColorDrawable(Color.TRANSPARENT));
-                    setVisibility(GONE);
-                }
-            });
-            startAnimation(exitAnim);
-            return;
-        }
+    public void transition(final Bitmap second) {
+        if (second == null || second.getWidth() < 1 || second.getHeight() < 1) return;
 
         final int size = Math.min(getMeasuredWidth(), getMeasuredHeight());
         new Thread() {

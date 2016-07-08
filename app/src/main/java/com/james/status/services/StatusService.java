@@ -1,32 +1,33 @@
 package com.james.status.services;
 
+import android.app.AlarmManager;
 import android.app.KeyguardManager;
+import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.PixelFormat;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
+import android.os.IBinder;
 import android.os.Parcelable;
-import android.preference.PreferenceManager;
 import android.service.notification.StatusBarNotification;
+import android.support.annotation.Nullable;
 import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
 import android.view.Gravity;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 
 import com.james.status.utils.PreferenceUtils;
-import com.james.status.utils.StaticUtils;
 import com.james.status.views.StatusView;
 
 import java.util.ArrayList;
 
-public class StatusService extends ViewService implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class StatusService extends Service {
 
     public static final String
             ACTION_START = "com.james.status.ACTION_START",
@@ -36,46 +37,60 @@ public class StatusService extends ViewService implements SharedPreferences.OnSh
             EXTRA_NOTIFICATIONS = "com.james.status.EXTRA_NOTIFICATIONS",
             EXTRA_COLOR = "com.james.status.EXTRA_COLOR";
 
-    StatusView statusView;
+    private StatusView statusView;
 
-    ConnectivityManager connectivityManager;
-    TelephonyManager telephonyManager;
-    WifiManager wifiManager;
-    KeyguardManager keyguardManager;
+    private AlarmManager alarmManager;
+    private WifiManager wifiManager;
+    private ConnectivityManager connectivityManager;
+    private TelephonyManager telephonyManager;
+    private BatteryManager batteryManager;
+    private KeyguardManager keyguardManager;
+    private WindowManager windowManager;
 
-    BatteryReceiver batteryReceiver;
-    NetworkReceiver networkReceiver;
-    WifiReceiver wifiReceiver;
+    private AlarmReceiver alarmReceiver;
+    private AirplaneModeReceiver airplaneModeReceiver;
+    private NetworkReceiver networkReceiver;
+    private WifiReceiver wifiReceiver;
+    private BatteryReceiver batteryReceiver;
 
     @Override
     public void onCreate() {
         super.onCreate();
-
-        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(this);
-
-        Boolean enabled = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED);
-        if (enabled == null || !enabled) stopSelf();
-        else {
-            if (statusView != null) removeView(statusView);
-            statusView = new StatusView(this);
-            WindowManager.LayoutParams params = new WindowManager.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, StaticUtils.getStatusBarMargin(this));
-            params.gravity = Gravity.TOP;
-            addView(statusView, params);
-        }
+        windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
 
         keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
+        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
         connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+        batteryManager = (BatteryManager) getSystemService(Context.BATTERY_SERVICE);
 
-        batteryReceiver = new BatteryReceiver();
-        registerReceiver(batteryReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        alarmReceiver = new AlarmReceiver();
+        registerReceiver(alarmReceiver, new IntentFilter(AlarmManager.ACTION_NEXT_ALARM_CLOCK_CHANGED));
+
+        airplaneModeReceiver = new AirplaneModeReceiver();
+        registerReceiver(airplaneModeReceiver, new IntentFilter(Intent.ACTION_AIRPLANE_MODE_CHANGED));
 
         networkReceiver = new NetworkReceiver();
         telephonyManager.listen(networkReceiver, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
 
         wifiReceiver = new WifiReceiver();
         registerReceiver(wifiReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+
+        batteryReceiver = new BatteryReceiver();
+        registerReceiver(batteryReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+
+        Boolean enabled = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED);
+        if (enabled == null || !enabled) stopSelf();
+        else {
+            setUp();
+        }
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 
     @Override
@@ -85,14 +100,10 @@ public class StatusService extends ViewService implements SharedPreferences.OnSh
         if (action == null) return START_STICKY;
         switch (action) {
             case ACTION_START:
-                if (statusView != null) removeView(statusView);
-                statusView = new StatusView(this);
-                WindowManager.LayoutParams params = new WindowManager.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, StaticUtils.getStatusBarMargin(this));
-                params.gravity = Gravity.TOP;
-                addView(statusView, params);
+                setUp();
                 break;
             case ACTION_STOP:
-                removeView(statusView);
+                windowManager.removeView(statusView);
                 statusView = null;
                 stopSelf();
                 break;
@@ -114,25 +125,56 @@ public class StatusService extends ViewService implements SharedPreferences.OnSh
         return START_STICKY;
     }
 
+
+    public void setUp() {
+        if (statusView != null) windowManager.removeView(statusView);
+        statusView = new StatusView(this);
+
+        WindowManager.LayoutParams params = new WindowManager.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        params.gravity = Gravity.TOP;
+        params.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
+        params.type = WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY;
+        params.format = PixelFormat.TRANSLUCENT;
+
+        windowManager.addView(statusView, params);
+
+        statusView.setAlarm(alarmManager.getNextAlarmClock() != null);
+        statusView.setWifiStrength(WifiManager.calculateSignalLevel(wifiManager.getConnectionInfo().getRssi(), 4));
+        int state = wifiManager.getWifiState();
+        statusView.setWifiConnected(state != WifiManager.WIFI_STATE_DISABLED && state != WifiManager.WIFI_STATE_DISABLING && state != WifiManager.WIFI_STATE_UNKNOWN);
+
+        Intent intent = new Intent(NotificationService.ACTION_GET_NOTIFICATIONS);
+        intent.setClass(this, NotificationService.class);
+        startService(intent);
+    }
+
     @Override
     public void onDestroy() {
-        PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(this);
-
-        unregisterReceiver(batteryReceiver);
+        unregisterReceiver(alarmReceiver);
+        unregisterReceiver(airplaneModeReceiver);
         unregisterReceiver(wifiReceiver);
+        unregisterReceiver(batteryReceiver);
+
+        if (statusView != null) {
+            windowManager.removeView(statusView);
+            statusView = null;
+        }
+
         super.onDestroy();
     }
 
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-        Boolean enabled = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED);
-        if (enabled == null || !enabled) stopSelf();
-    }
-
-    private class BatteryReceiver extends BroadcastReceiver {
+    private class AlarmReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (statusView != null) statusView.setBattery(intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0), intent.getIntExtra(BatteryManager.EXTRA_STATUS, 0));
+            if (statusView != null) statusView.setAlarm(alarmManager.getNextAlarmClock() != null);
+        }
+    }
+
+    private class AirplaneModeReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (statusView != null)
+                statusView.setAirplaneMode(intent.getBooleanExtra(TelephonyManager.EXTRA_STATE, false));
         }
     }
 
@@ -153,6 +195,14 @@ public class StatusService extends ViewService implements SharedPreferences.OnSh
                 int state = wifiManager.getWifiState();
                 statusView.setWifiConnected(state != WifiManager.WIFI_STATE_DISABLED && state != WifiManager.WIFI_STATE_DISABLING && state != WifiManager.WIFI_STATE_UNKNOWN);
             }
+        }
+    }
+
+    private class BatteryReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (statusView != null)
+                statusView.setBattery(intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0), intent.getIntExtra(BatteryManager.EXTRA_STATUS, 0));
         }
     }
 }

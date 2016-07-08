@@ -11,8 +11,11 @@ public class PreferenceUtils {
 
     public enum PreferenceIdentifier {
         STATUS_ENABLED,
-        STATUS_LOCKSCREEN_EXPAND,
-        STATUS_CLOCK_AMPM
+        STATUS_CLOCK_AMPM,
+        STATUS_COLOR_AUTO,
+        STATUS_COLOR,
+        STATUS_DARK_ICONS,
+        STATUS_LOCKSCREEN_EXPAND
     }
 
     @Nullable

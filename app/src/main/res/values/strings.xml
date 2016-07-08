@@ -17,4 +17,9 @@
 
     <string name="permissions_name">Additional permissions</string>
     <string name="permissions_desc">This app needs a few additional permissions in order to access parts of the phone relevant to the status bar.</string>
+
+    <string name="preference_ampm">Show AM/PM in Clock</string>
+    <string name="preference_bar_color_auto">Pick Status Bar Color from Current Application</string>
+    <string name="preference_bar_color_chooser">Status Bar Color</string>
+    <string name="preference_dark_icons">Enable Dark Status Bar Icons</string>
 </resources>

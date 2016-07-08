@@ -6,8 +6,8 @@ import android.app.WallpaperManager;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.BatteryManager;
@@ -20,7 +20,6 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.graphics.Palette;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -37,13 +36,12 @@ public class StatusView extends FrameLayout {
 
     private View status;
     private TextClock clock;
-    private CustomImageView battery, signal, wifi, airplane, alarm;
+    private CustomImageView alarm, airplane, wifi, signal, battery;
     private LinearLayout notificationIconLayout;
 
     @ColorInt
     private int color = 0;
-
-    private boolean isWifiConnected;
+    private boolean isDarkMode, isWifiConnected;
 
     public StatusView(Context context) {
         super(context);
@@ -86,21 +84,9 @@ public class StatusView extends FrameLayout {
         airplane.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_airplane));
         alarm.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_alarm));
 
-        status.setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                switch (motionEvent.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        status.animate().alpha(0f).setDuration(150).start();
-                        break;
-                    case MotionEvent.ACTION_UP:
-                    case MotionEvent.ACTION_CANCEL:
-                        status.animate().alpha(1f).setDuration(150).start();
-                        break;
-                }
-                return false;
-            }
-        });
+        Boolean isAmPmEnabled = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_CLOCK_AMPM);
+        String format = isAmPmEnabled == null || isAmPmEnabled ? "h:mm a" : "h:mm";
+        clock.setFormat12Hour(format);
 
         addView(v);
 
@@ -113,10 +99,11 @@ public class StatusView extends FrameLayout {
             for (StatusBarNotification notification : notifications) {
                 View v = LayoutInflater.from(getContext()).inflate(R.layout.item_icon, null);
                 Drawable drawable = getNotificationIcon(notification);
-                if (drawable != null)
-                    ((CustomImageView) v.findViewById(R.id.icon)).setImageDrawable(drawable);
-                else continue;
+                if (drawable == null) continue;
 
+                CustomImageView icon = (CustomImageView) v.findViewById(R.id.icon);
+                icon.setImageDrawable(drawable);
+                if (isDarkMode) icon.setImageTintList(ColorStateList.valueOf(Color.BLACK));
                 notificationIconLayout.addView(v);
             }
         }
@@ -161,11 +148,42 @@ public class StatusView extends FrameLayout {
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 int color = (int) valueAnimator.getAnimatedValue();
                 if (status != null) status.setBackgroundColor(Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
+                setDarkMode(!ImageUtils.isColorDark(color));
             }
         });
         animator.start();
 
         this.color = color;
+    }
+
+    public void setDarkMode(boolean isDarkMode) {
+        Boolean isDarkModeEnabled = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_DARK_ICONS);
+
+        if (this.isDarkMode != isDarkMode && (isDarkModeEnabled == null || isDarkModeEnabled)) {
+            if (notificationIconLayout != null) {
+                for (int i = 0; i < notificationIconLayout.getChildCount(); i++) {
+                    View icon = notificationIconLayout.getChildAt(i).findViewById(R.id.icon);
+                    if (icon != null && icon instanceof CustomImageView) {
+                        ((CustomImageView) icon).setImageTintList(ColorStateList.valueOf(isDarkMode ? Color.BLACK : Color.WHITE));
+                    }
+                }
+            }
+
+            if (alarm != null)
+                alarm.setImageTintList(ColorStateList.valueOf(isDarkMode ? Color.BLACK : Color.WHITE));
+            if (airplane != null)
+                airplane.setImageTintList(ColorStateList.valueOf(isDarkMode ? Color.BLACK : Color.WHITE));
+            if (wifi != null)
+                wifi.setImageTintList(ColorStateList.valueOf(isDarkMode ? Color.BLACK : Color.WHITE));
+            if (signal != null)
+                signal.setImageTintList(ColorStateList.valueOf(isDarkMode ? Color.BLACK : Color.WHITE));
+            if (battery != null)
+                battery.setImageTintList(ColorStateList.valueOf(isDarkMode ? Color.BLACK : Color.WHITE));
+
+            if (clock != null) clock.setTextColor(isDarkMode ? Color.BLACK : Color.WHITE);
+
+            this.isDarkMode = isDarkMode;
+        }
     }
 
     public void setLockscreen(boolean lockscreen) {
@@ -185,43 +203,48 @@ public class StatusView extends FrameLayout {
 
     public void setAirplaneMode(boolean isAirplaneMode) {
         if (isAirplaneMode) {
-            signal.transition((Bitmap) null);
-            airplane.transition(ContextCompat.getDrawable(getContext(), R.drawable.ic_airplane));
+            signal.setVisibility(View.GONE);
+            wifi.setVisibility(View.GONE);
+            airplane.setVisibility(View.VISIBLE);
         } else {
-            airplane.transition((Bitmap) null);
+            signal.setVisibility(View.VISIBLE);
+            wifi.setVisibility(View.VISIBLE);
+            airplane.setVisibility(View.GONE);
         }
     }
 
     public void setAlarm(boolean isAlarm) {
-        if (alarm != null) alarm.transition(isAlarm ? ContextCompat.getDrawable(getContext(), R.drawable.ic_alarm) : null);
+        if (alarm != null)
+            alarm.setVisibility(isAlarm ? View.VISIBLE : View.GONE);
     }
 
     public void setWifiConnected(boolean isWifiConnected) {
         if (this.isWifiConnected != isWifiConnected) {
-            if (!isWifiConnected) wifi.transition((Bitmap) null);
+            if (!isWifiConnected) wifi.setVisibility(View.GONE);
+            else wifi.setVisibility(View.VISIBLE);
             this.isWifiConnected = isWifiConnected;
         }
     }
 
     public void setWifiStrength(int wifiStrength) {
-        if (isWifiConnected) {
-            switch (wifiStrength) {
-                case 1:
-                    wifi.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_wifi_1));
-                    break;
-                case 2:
-                    wifi.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_wifi_2));
-                    break;
-                case 3:
-                    wifi.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_wifi_3));
-                    break;
-                case 4:
-                    wifi.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_wifi_4));
-                    break;
-                default:
-                    wifi.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_wifi_0));
-                    break;
-            }
+        if (wifi == null) return;
+
+        switch (wifiStrength) {
+            case 1:
+                wifi.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_wifi_1));
+                break;
+            case 2:
+                wifi.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_wifi_2));
+                break;
+            case 3:
+                wifi.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_wifi_3));
+                break;
+            case 4:
+                wifi.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_wifi_4));
+                break;
+            default:
+                wifi.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_wifi_0));
+                break;
         }
     }
 

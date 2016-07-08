@@ -10,8 +10,8 @@
         android:layout_height="25dp"
         android:orientation="horizontal"
         android:background="@android:color/black"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
         android:gravity="center_vertical"
         android:layout_gravity="top"
         android:id="@+id/status">

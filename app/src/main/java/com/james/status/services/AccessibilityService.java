@@ -134,7 +134,11 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
     private void setStatusBarColor(@ColorInt int color) {
         Intent intent = new Intent(StatusService.ACTION_UPDATE);
         intent.setClass(this, StatusService.class);
-        intent.putExtra(StatusService.EXTRA_COLOR, color);
+
+        Boolean isStatusColorAuto = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_AUTO);
+        if (isStatusColorAuto == null || isStatusColorAuto)
+            intent.putExtra(StatusService.EXTRA_COLOR, color);
+
         startService(intent);
     }
 
