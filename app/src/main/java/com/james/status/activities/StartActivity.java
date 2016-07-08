@@ -88,4 +88,11 @@ public class StartActivity extends AppCompatActivity {
 
         prefs.edit().putBoolean("isResumed", true).apply();
     }
+
+    @Override
+    public void onBackPressed() {
+        if (!StaticUtils.isAccessibilityGranted(this) || !StaticUtils.isNotificationGranted(this) || !StaticUtils.isPermissionsGranted(this))
+            System.exit(0);
+        else super.onBackPressed();
+    }
 }
