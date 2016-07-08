@@ -67,7 +67,7 @@ public class StatusView extends FrameLayout {
     public void setUp() {
         View v = LayoutInflater.from(getContext()).inflate(R.layout.layout_status, null);
         status = v.findViewById(R.id.status);
-        status.getLayoutParams().height = StaticUtils.getStatusBarMargin(getContext());
+        status.getLayoutParams().height = StaticUtils.getStatusBarHeight(getContext());
 
         clock = (TextClock) status.findViewById(R.id.clock);
         battery = (CustomImageView) status.findViewById(R.id.battery);
@@ -148,6 +148,10 @@ public class StatusView extends FrameLayout {
         return null;
     }
 
+    public void setFullscreen(boolean isFullscreen) {
+        setVisibility(isFullscreen ? View.GONE : View.VISIBLE);
+    }
+
     public void setColor(@ColorInt int color) {
         ValueAnimator animator = ValueAnimator.ofArgb(this.color, color);
         animator.setDuration(150);
@@ -197,7 +201,7 @@ public class StatusView extends FrameLayout {
     public void setLockscreen(boolean lockscreen) {
         Boolean expand = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_LOCKSCREEN_EXPAND);
         if (expand != null && expand)
-            status.getLayoutParams().height = StaticUtils.getStatusBarMargin(getContext()) * (lockscreen ? 3 : 1);
+            status.getLayoutParams().height = StaticUtils.getStatusBarHeight(getContext()) * (lockscreen ? 3 : 1);
 
         if (lockscreen) {
             Palette.from(ImageUtils.drawableToBitmap(WallpaperManager.getInstance(getContext()).getFastDrawable())).generate(new Palette.PaletteAsyncListener() {

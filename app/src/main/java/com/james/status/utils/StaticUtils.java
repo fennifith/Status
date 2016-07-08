@@ -17,7 +17,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.util.TypedValue;
 
 import com.james.status.services.StatusService;
 
@@ -26,11 +25,16 @@ import java.util.List;
 
 public class StaticUtils {
 
-    public static int getStatusBarMargin(Context context) {
-        int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 25, context.getResources().getDisplayMetrics());
+    public static int getStatusBarHeight(Context context) {
         int resId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resId > 0) height = context.getResources().getDimensionPixelSize(resId);
-        return height;
+        if (resId > 0) return context.getResources().getDimensionPixelSize(resId);
+        else return 0;
+    }
+
+    public static int getNavigationBarHeight(Context context) {
+        int resId = context.getResources().getIdentifier("navigation_bar_height", "dimen", "android");
+        if (resId > 0) return context.getResources().getDimensionPixelSize(resId);
+        else return 0;
     }
 
     public static boolean isAccessibilityGranted(Context context) {

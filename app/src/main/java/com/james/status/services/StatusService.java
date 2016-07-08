@@ -20,6 +20,8 @@ import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
 import android.view.Gravity;
+import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 
 import com.james.status.utils.PreferenceUtils;
@@ -36,9 +38,11 @@ public class StatusService extends Service {
             ACTION_UPDATE = "com.james.status.ACTION_UPDATE",
             ACTION_NOTIFICATION = "com.james.status.ACTION_NOTIFICATION",
             EXTRA_NOTIFICATIONS = "com.james.status.EXTRA_NOTIFICATIONS",
-            EXTRA_COLOR = "com.james.status.EXTRA_COLOR";
+            EXTRA_COLOR = "com.james.status.EXTRA_COLOR",
+            EXTRA_FULLSCREEN = "com.james.status.EXTRA_FULLSCREEN";
 
     private StatusView statusView;
+    private View fullscreenView;
 
     private AlarmManager alarmManager;
     private WifiManager wifiManager;
@@ -113,6 +117,9 @@ public class StatusService extends Service {
                     Boolean isStatusColorAuto = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_AUTO);
                     if (isStatusColorAuto == null || isStatusColorAuto)
                         statusView.setColor(intent.getIntExtra(EXTRA_COLOR, Color.BLACK));
+
+                    boolean isFullscreen = intent.getBooleanExtra(EXTRA_FULLSCREEN, false);
+                    if (isFullscreen) statusView.setFullscreen(true);
                 }
                 break;
             case ACTION_NOTIFICATION:
@@ -132,11 +139,8 @@ public class StatusService extends Service {
         if (statusView != null) windowManager.removeView(statusView);
         statusView = new StatusView(this);
 
-        WindowManager.LayoutParams params = new WindowManager.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        WindowManager.LayoutParams params = new WindowManager.LayoutParams(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN, PixelFormat.TRANSLUCENT);
         params.gravity = Gravity.TOP;
-        params.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
-        params.type = WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY;
-        params.format = PixelFormat.TRANSLUCENT;
 
         windowManager.addView(statusView, params);
 
@@ -152,6 +156,26 @@ public class StatusService extends Service {
         Intent intent = new Intent(NotificationService.ACTION_GET_NOTIFICATIONS);
         intent.setClass(this, NotificationService.class);
         startService(intent);
+
+
+        params = new WindowManager.LayoutParams(1, WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, PixelFormat.TRANSPARENT);
+        params.gravity = Gravity.START | Gravity.TOP;
+        fullscreenView = new View(this);
+
+        windowManager.addView(fullscreenView, params);
+
+        fullscreenView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            int height;
+
+            @Override
+            public void onGlobalLayout() {
+                if (statusView != null && fullscreenView != null) {
+                    statusView.setFullscreen(fullscreenView.getMeasuredHeight() > height);
+                    height = fullscreenView.getMeasuredHeight();
+                }
+            }
+        });
+
     }
 
     @Override
@@ -161,6 +185,11 @@ public class StatusService extends Service {
         unregisterReceiver(bluetoothReceiver);
         unregisterReceiver(wifiReceiver);
         unregisterReceiver(batteryReceiver);
+
+        if (fullscreenView != null) {
+            windowManager.removeView(fullscreenView);
+            fullscreenView = null;
+        }
 
         if (statusView != null) {
             windowManager.removeView(statusView);
