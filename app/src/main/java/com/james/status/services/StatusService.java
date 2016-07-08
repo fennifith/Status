@@ -3,6 +3,7 @@ package com.james.status.services;
 import android.app.AlarmManager;
 import android.app.KeyguardManager;
 import android.app.Service;
+import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -46,6 +47,7 @@ public class StatusService extends Service {
 
     private AlarmReceiver alarmReceiver;
     private AirplaneModeReceiver airplaneModeReceiver;
+    private BluetoothReceiver bluetoothReceiver;
     private NetworkReceiver networkReceiver;
     private WifiReceiver wifiReceiver;
     private BatteryReceiver batteryReceiver;
@@ -65,6 +67,9 @@ public class StatusService extends Service {
 
         airplaneModeReceiver = new AirplaneModeReceiver();
         registerReceiver(airplaneModeReceiver, new IntentFilter(Intent.ACTION_AIRPLANE_MODE_CHANGED));
+
+        bluetoothReceiver = new BluetoothReceiver();
+        registerReceiver(bluetoothReceiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
 
         networkReceiver = new NetworkReceiver();
         telephonyManager.listen(networkReceiver, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
@@ -135,9 +140,13 @@ public class StatusService extends Service {
         windowManager.addView(statusView, params);
 
         statusView.setAlarm(alarmManager.getNextAlarmClock() != null);
+
+        int bluetoothState = BluetoothAdapter.getDefaultAdapter().getState();
+        statusView.setBluetooth(bluetoothState != BluetoothAdapter.STATE_OFF, bluetoothState == BluetoothAdapter.STATE_CONNECTED);
+
+        int wifiState = wifiManager.getWifiState();
+        statusView.setWifiConnected(wifiState != WifiManager.WIFI_STATE_DISABLED && wifiState != WifiManager.WIFI_STATE_DISABLING && wifiState != WifiManager.WIFI_STATE_UNKNOWN);
         statusView.setWifiStrength(WifiManager.calculateSignalLevel(wifiManager.getConnectionInfo().getRssi(), 4));
-        int state = wifiManager.getWifiState();
-        statusView.setWifiConnected(state != WifiManager.WIFI_STATE_DISABLED && state != WifiManager.WIFI_STATE_DISABLING && state != WifiManager.WIFI_STATE_UNKNOWN);
 
         Intent intent = new Intent(NotificationService.ACTION_GET_NOTIFICATIONS);
         intent.setClass(this, NotificationService.class);
@@ -148,6 +157,7 @@ public class StatusService extends Service {
     public void onDestroy() {
         unregisterReceiver(alarmReceiver);
         unregisterReceiver(airplaneModeReceiver);
+        unregisterReceiver(bluetoothReceiver);
         unregisterReceiver(wifiReceiver);
         unregisterReceiver(batteryReceiver);
 
@@ -174,11 +184,12 @@ public class StatusService extends Service {
         }
     }
 
-    private class NetworkReceiver extends PhoneStateListener {
+    private class BluetoothReceiver extends BroadcastReceiver {
         @Override
-        public void onSignalStrengthsChanged(SignalStrength signalStrength) {
-            super.onSignalStrengthsChanged(signalStrength);
-            if (statusView != null) statusView.setSignalStrength(signalStrength.getGsmSignalStrength());
+        public void onReceive(Context context, Intent intent) {
+            int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.STATE_OFF);
+            if (statusView != null)
+                statusView.setBluetooth(state != BluetoothAdapter.STATE_OFF, state == BluetoothAdapter.STATE_CONNECTED);
         }
     }
 
@@ -191,6 +202,15 @@ public class StatusService extends Service {
                 int state = wifiManager.getWifiState();
                 statusView.setWifiConnected(state != WifiManager.WIFI_STATE_DISABLED && state != WifiManager.WIFI_STATE_DISABLING && state != WifiManager.WIFI_STATE_UNKNOWN);
             }
+        }
+    }
+
+    private class NetworkReceiver extends PhoneStateListener {
+        @Override
+        public void onSignalStrengthsChanged(SignalStrength signalStrength) {
+            super.onSignalStrengthsChanged(signalStrength);
+            if (statusView != null)
+                statusView.setSignalStrength(signalStrength.getGsmSignalStrength());
         }
     }
 

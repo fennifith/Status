@@ -49,6 +49,24 @@
             android:tint="@android:color/white"
             android:tintMode="src_in"
             android:padding="2dp"
+            android:id="@+id/bluetooth"
+            android:visibility="gone" />
+
+        <com.james.status.views.SquareImageView
+            android:layout_width="22dp"
+            android:layout_height="wrap_content"
+            android:tint="@android:color/white"
+            android:tintMode="src_in"
+            android:padding="2dp"
+            android:id="@+id/gps"
+            android:visibility="gone" />
+
+        <com.james.status.views.SquareImageView
+            android:layout_width="22dp"
+            android:layout_height="wrap_content"
+            android:tint="@android:color/white"
+            android:tintMode="src_in"
+            android:padding="2dp"
             android:id="@+id/wifi" />
 
         <com.james.status.views.SquareImageView

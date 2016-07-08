@@ -36,7 +36,7 @@ public class StatusView extends FrameLayout {
 
     private View status;
     private TextClock clock;
-    private CustomImageView alarm, airplane, wifi, signal, battery;
+    private CustomImageView alarm, airplane, bluetooth, gps, wifi, signal, battery;
     private LinearLayout notificationIconLayout;
 
     @ColorInt
@@ -73,6 +73,8 @@ public class StatusView extends FrameLayout {
         battery = (CustomImageView) status.findViewById(R.id.battery);
         signal = (CustomImageView) status.findViewById(R.id.signal);
         wifi = (CustomImageView) status.findViewById(R.id.wifi);
+        gps = (CustomImageView) status.findViewById(R.id.gps);
+        bluetooth = (CustomImageView) status.findViewById(R.id.bluetooth);
         airplane = (CustomImageView) status.findViewById(R.id.airplane);
         alarm = (CustomImageView) status.findViewById(R.id.alarm);
 
@@ -81,6 +83,8 @@ public class StatusView extends FrameLayout {
         battery.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_battery_alert));
         signal.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_signal_0));
         wifi.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_wifi_0));
+        gps.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_gps_fixed));
+        bluetooth.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_bluetooth));
         airplane.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_airplane));
         alarm.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_alarm));
 
@@ -205,6 +209,11 @@ public class StatusView extends FrameLayout {
         }
     }
 
+    public void setAlarm(boolean isAlarm) {
+        if (alarm != null)
+            alarm.setVisibility(isAlarm ? View.VISIBLE : View.GONE);
+    }
+
     public void setAirplaneMode(boolean isAirplaneMode) {
         if (isAirplaneMode) {
             signal.setVisibility(View.GONE);
@@ -217,9 +226,13 @@ public class StatusView extends FrameLayout {
         }
     }
 
-    public void setAlarm(boolean isAlarm) {
-        if (alarm != null)
-            alarm.setVisibility(isAlarm ? View.VISIBLE : View.GONE);
+    public void setBluetooth(boolean isEnabled, boolean isConnected) {
+        bluetooth.setVisibility(isEnabled ? View.VISIBLE : View.GONE);
+        bluetooth.setImageDrawable(ContextCompat.getDrawable(getContext(), isConnected ? R.drawable.ic_bluetooth_connected : R.drawable.ic_bluetooth));
+    }
+
+    public void setGpsEnabled(boolean isEnabled) {
+        gps.setVisibility(isEnabled ? View.VISIBLE : View.GONE);
     }
 
     public void setWifiConnected(boolean isWifiConnected) {
