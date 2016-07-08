@@ -2,10 +2,10 @@ package com.james.status.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
@@ -56,9 +56,7 @@ public class StartActivity extends AppCompatActivity {
         permissionsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                intent.setData(Uri.parse("package:" + getPackageName()));
-                startActivity(intent);
+                StaticUtils.isPermissionsGranted(StartActivity.this, true);
             }
         });
 
@@ -94,5 +92,14 @@ public class StartActivity extends AppCompatActivity {
         if (!StaticUtils.isAccessibilityGranted(this) || !StaticUtils.isNotificationGranted(this) || !StaticUtils.isPermissionsGranted(this))
             System.exit(0);
         else super.onBackPressed();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        boolean isPermissionsGranted = StaticUtils.isPermissionsGranted(this);
+        findViewById(R.id.permissions).setVisibility(isPermissionsGranted ? View.GONE : View.VISIBLE);
+        if (StaticUtils.isAccessibilityGranted(this) && StaticUtils.isNotificationGranted(this) && isPermissionsGranted)
+            fab.show();
+        else fab.hide();
     }
 }

@@ -23,6 +23,7 @@ import android.view.Gravity;
 import android.view.WindowManager;
 
 import com.james.status.utils.PreferenceUtils;
+import com.james.status.utils.StaticUtils;
 import com.james.status.views.StatusView;
 
 import java.util.ArrayList;
@@ -141,7 +142,7 @@ public class StatusService extends Service {
 
         statusView.setAlarm(alarmManager.getNextAlarmClock() != null);
 
-        int bluetoothState = BluetoothAdapter.getDefaultAdapter().getState();
+        int bluetoothState = StaticUtils.getBluetoothState(this);
         statusView.setBluetooth(bluetoothState != BluetoothAdapter.STATE_OFF, bluetoothState == BluetoothAdapter.STATE_CONNECTED);
 
         int wifiState = wifiManager.getWifiState();
