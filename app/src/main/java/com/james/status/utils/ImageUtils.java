@@ -28,27 +28,9 @@ public class ImageUtils {
             DrawableCompat.setTint(icon, Color.WHITE);
             return icon;
         } else {
-            Log.e(context.getClass().getName(), "Can't get a vector drawable.");
+            Log.wtf(context.getClass().getName(), "Can't get a vector drawable.");
             return new ColorDrawable(Color.TRANSPARENT);
         }
-    }
-
-    public static boolean isColorDark(int color) {
-        return (0.299 * Color.red(color) + 0.587 * Color.green(color) + 0.114 * Color.blue(color)) / 255 < 0.5;
-    }
-
-    public static int darkColor(int color) {
-        float[] hsv = new float[3];
-        Color.colorToHSV(color, hsv);
-        hsv[2] *= 0.8f;
-        return Color.HSVToColor(hsv);
-    }
-
-    public static int lightColor(int color) {
-        float[] hsv = new float[3];
-        Color.colorToHSV(color, hsv);
-        hsv[2] /= 0.8f;
-        return Color.HSVToColor(hsv);
     }
 
     public static Bitmap drawableToBitmap(Drawable drawable) {

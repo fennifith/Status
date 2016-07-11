@@ -38,7 +38,10 @@ public class StatusService extends Service {
             ACTION_STOP = "com.james.status.ACTION_STOP",
             ACTION_UPDATE = "com.james.status.ACTION_UPDATE",
             ACTION_NOTIFICATION = "com.james.status.ACTION_NOTIFICATION",
+            ACTION_NOTIFICATION_ADDED = "com.james.status.ACTION_NOTIFICATION_ADDED",
+            ACTION_NOTIFICATION_REMOVED = "com.james.status.ACTION_NOTIFICATION_REMOVED",
             EXTRA_NOTIFICATIONS = "com.james.status.EXTRA_NOTIFICATIONS",
+            EXTRA_NOTIFICATION = "com.james.status.EXTRA_NOTIFICATION",
             EXTRA_COLOR = "com.james.status.EXTRA_COLOR",
             EXTRA_FULLSCREEN = "com.james.status.EXTRA_FULLSCREEN";
 
@@ -130,6 +133,12 @@ public class StatusService extends Service {
                 }
 
                 if (statusView != null) statusView.setNotifications(notifications);
+                break;
+            case ACTION_NOTIFICATION_ADDED:
+                statusView.addNotification((StatusBarNotification) intent.getParcelableExtra(EXTRA_NOTIFICATION));
+                break;
+            case ACTION_NOTIFICATION_REMOVED:
+                statusView.removeNotification((StatusBarNotification) intent.getParcelableExtra(EXTRA_NOTIFICATION));
                 break;
         }
         return START_STICKY;

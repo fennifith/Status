@@ -1,6 +1,7 @@
 package com.james.status.dialogs;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -11,26 +12,30 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.james.status.R;
-import com.james.status.utils.ImageUtils;
-import com.james.status.utils.PreferenceUtils;
+import com.james.status.utils.ColorUtils;
 import com.james.status.views.CustomImageView;
 
 public class ColorPickerDialog extends AppCompatDialog {
 
-    private PreferenceUtils.PreferenceIdentifier identifier;
-    private int color;
-    private OnFinishedListener onFinishedListener;
+    private int color = Color.BLACK;
+    private OnColorPickedListener onColorPickedListener;
 
     private CustomImageView colorImage;
     private TextView colorHex, redInt, greenInt, blueInt;
     private AppCompatSeekBar red, green, blue;
 
-    public ColorPickerDialog(Context context, PreferenceUtils.PreferenceIdentifier identifier) {
+    public ColorPickerDialog(Context context) {
         super(context, R.style.AppTheme_Dialog);
-        this.identifier = identifier;
-        Integer color = PreferenceUtils.getIntegerPreference(context, identifier);
-        if (color != null) this.color = color;
-        else this.color = Color.BLACK;
+    }
+
+    public ColorPickerDialog setColor(int color) {
+        this.color = color;
+        return this;
+    }
+
+    public ColorPickerDialog setOnColorPickedListener(OnColorPickedListener onColorPickedListener) {
+        this.onColorPickedListener = onColorPickedListener;
+        return this;
     }
 
     @Override
@@ -49,7 +54,7 @@ public class ColorPickerDialog extends AppCompatDialog {
 
         colorImage.setImageDrawable(new ColorDrawable(color));
         colorHex.setText(String.format("#%06X", (0xFFFFFF & color)));
-        colorHex.setTextColor(ImageUtils.isColorDark(color) ? Color.WHITE : Color.BLACK);
+        colorHex.setTextColor(ColorUtils.isColorDark(color) ? Color.WHITE : Color.BLACK);
         red.setProgress(Color.red(color));
         redInt.setText(String.valueOf(Color.red(color)));
         green.setProgress(Color.green(color));
@@ -63,7 +68,7 @@ public class ColorPickerDialog extends AppCompatDialog {
                 color = Color.argb(255, i, Color.green(color), Color.blue(color));
                 colorImage.setImageDrawable(new ColorDrawable(color));
                 colorHex.setText(String.format("#%06X", (0xFFFFFF & color)));
-                colorHex.setTextColor(ImageUtils.isColorDark(color) ? Color.WHITE : Color.BLACK);
+                colorHex.setTextColor(ColorUtils.isColorDark(color) ? Color.WHITE : Color.BLACK);
                 redInt.setText(String.valueOf(i));
             }
 
@@ -82,7 +87,7 @@ public class ColorPickerDialog extends AppCompatDialog {
                 color = Color.argb(255, Color.red(color), i, Color.blue(color));
                 colorImage.setImageDrawable(new ColorDrawable(color));
                 colorHex.setText(String.format("#%06X", (0xFFFFFF & color)));
-                colorHex.setTextColor(ImageUtils.isColorDark(color) ? Color.WHITE : Color.BLACK);
+                colorHex.setTextColor(ColorUtils.isColorDark(color) ? Color.WHITE : Color.BLACK);
                 greenInt.setText(String.valueOf(i));
             }
 
@@ -101,7 +106,7 @@ public class ColorPickerDialog extends AppCompatDialog {
                 color = Color.argb(255, Color.red(color), Color.green(color), i);
                 colorImage.setImageDrawable(new ColorDrawable(color));
                 colorHex.setText(String.format("#%06X", (0xFFFFFF & color)));
-                colorHex.setTextColor(ImageUtils.isColorDark(color) ? Color.WHITE : Color.BLACK);
+                colorHex.setTextColor(ColorUtils.isColorDark(color) ? Color.WHITE : Color.BLACK);
                 blueInt.setText(String.valueOf(i));
             }
 
@@ -114,9 +119,17 @@ public class ColorPickerDialog extends AppCompatDialog {
             }
         });
 
+        setOnDismissListener(new OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                if (onColorPickedListener != null) onColorPickedListener.onCancel();
+            }
+        });
+
         findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (onColorPickedListener != null) onColorPickedListener.onCancel();
                 if (isShowing()) dismiss();
             }
         });
@@ -124,19 +137,15 @@ public class ColorPickerDialog extends AppCompatDialog {
         findViewById(R.id.confirm).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PreferenceUtils.putPreference(getContext(), identifier, color);
-                if (onFinishedListener != null) onFinishedListener.onFinish();
+                if (onColorPickedListener != null) onColorPickedListener.onColorPicked(color);
                 if (isShowing()) dismiss();
             }
         });
     }
 
-    public ColorPickerDialog setOnFinishedListener(OnFinishedListener onFinishedListener) {
-        this.onFinishedListener = onFinishedListener;
-        return this;
-    }
+    public interface OnColorPickedListener {
+        void onColorPicked(int color);
 
-    public interface OnFinishedListener {
-        void onFinish();
+        void onCancel();
     }
 }

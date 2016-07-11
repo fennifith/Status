@@ -49,12 +49,24 @@ public class NotificationService extends NotificationListenerService {
 
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
-        sendNotifications();
+        Boolean enabled = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED);
+        if (enabled != null && enabled) {
+            Intent intent = new Intent(StatusService.ACTION_NOTIFICATION_ADDED);
+            intent.setClass(this, StatusService.class);
+            intent.putExtra(StatusService.EXTRA_NOTIFICATION, sbn);
+            startService(intent);
+        }
     }
 
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn) {
-        sendNotifications();
+        Boolean enabled = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED);
+        if (enabled != null && enabled) {
+            Intent intent = new Intent(StatusService.ACTION_NOTIFICATION_REMOVED);
+            intent.setClass(this, StatusService.class);
+            intent.putExtra(StatusService.EXTRA_NOTIFICATION, sbn);
+            startService(intent);
+        }
     }
 
     private ArrayList<StatusBarNotification> getNotifications() {

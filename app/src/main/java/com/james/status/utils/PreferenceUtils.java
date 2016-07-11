@@ -15,6 +15,7 @@ public class PreferenceUtils {
         STATUS_BATTERY_PERCENT,
         STATUS_COLOR_AUTO,
         STATUS_COLOR,
+        STATUS_COLOR_APPS,
         STATUS_DARK_ICONS,
         STATUS_LOCKSCREEN_EXPAND
     }

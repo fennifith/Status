@@ -4,6 +4,6 @@
     <item
         android:id="@+id/action_setup"
         android:title="@string/action_setup"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="never" />
 
 </menu>

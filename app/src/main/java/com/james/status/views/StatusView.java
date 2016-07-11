@@ -27,6 +27,7 @@ import android.widget.TextClock;
 import android.widget.TextView;
 
 import com.james.status.R;
+import com.james.status.utils.ColorUtils;
 import com.james.status.utils.ImageUtils;
 import com.james.status.utils.PreferenceUtils;
 import com.james.status.utils.StaticUtils;
@@ -44,6 +45,7 @@ public class StatusView extends FrameLayout {
     @ColorInt
     private int color = 0;
     private boolean isDarkMode, isWifiConnected;
+    private ArrayList<StatusBarNotification> notifications;
 
     public StatusView(Context context) {
         super(context);
@@ -109,6 +111,8 @@ public class StatusView extends FrameLayout {
     }
 
     public void setNotifications(ArrayList<StatusBarNotification> notifications) {
+        this.notifications = notifications;
+
         if (notificationIconLayout != null) {
             notificationIconLayout.removeAllViewsInLayout();
             for (StatusBarNotification notification : notifications) {
@@ -122,6 +126,23 @@ public class StatusView extends FrameLayout {
                 notificationIconLayout.addView(v);
             }
         }
+    }
+
+    public void addNotification(StatusBarNotification notification) {
+        for (StatusBarNotification notification2 : notifications) {
+            if (notification.getId() == notification2.getId()) return;
+        }
+        notifications.add(notification);
+        setNotifications(notifications);
+    }
+
+    public void removeNotification(StatusBarNotification notification) {
+        ArrayList<StatusBarNotification> notifications = new ArrayList<>();
+        for (StatusBarNotification notification2 : this.notifications) {
+            if (notification.getId() != notification2.getId()) notifications.add(notification2);
+        }
+
+        setNotifications(notifications);
     }
 
     @Nullable
@@ -156,7 +177,15 @@ public class StatusView extends FrameLayout {
     }
 
     public void setFullscreen(boolean isFullscreen) {
-        setVisibility(isFullscreen ? View.GONE : View.VISIBLE);
+        ValueAnimator animator = ValueAnimator.ofFloat(getY(), isFullscreen ? -StaticUtils.getStatusBarHeight(getContext()) : 0);
+        animator.setDuration(150);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                setY((float) valueAnimator.getAnimatedValue());
+            }
+        });
+        animator.start();
     }
 
     public void setColor(@ColorInt int color) {
@@ -167,7 +196,7 @@ public class StatusView extends FrameLayout {
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 int color = (int) valueAnimator.getAnimatedValue();
                 if (status != null) status.setBackgroundColor(Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
-                setDarkMode(!ImageUtils.isColorDark(color));
+                setDarkMode(!ColorUtils.isColorDark(color));
             }
         });
         animator.start();
@@ -216,7 +245,7 @@ public class StatusView extends FrameLayout {
             Palette.from(ImageUtils.drawableToBitmap(WallpaperManager.getInstance(getContext()).getFastDrawable())).generate(new Palette.PaletteAsyncListener() {
                 @Override
                 public void onGenerated(Palette palette) {
-                    setColor(palette.getDarkVibrantColor(ImageUtils.darkColor(palette.getVibrantColor(Color.BLACK))));
+                    setColor(palette.getDarkVibrantColor(ColorUtils.darkColor(palette.getVibrantColor(Color.BLACK))));
                 }
             });
         }

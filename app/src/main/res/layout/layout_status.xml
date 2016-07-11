@@ -91,7 +91,7 @@
             android:id="@+id/batteryPercent"
             android:visibility="gone"
             android:paddingLeft="4dp"
-            android:paddingRight="4dp" />
+            android:paddingStart="4dp" />
 
         <com.james.status.views.CustomImageView
             android:layout_width="18dp"
@@ -110,8 +110,8 @@
             android:textColor="@android:color/white"
             android:textSize="14sp"
             android:id="@+id/clock"
-            android:paddingLeft="4dp"
-            android:paddingRight="4dp" />
+            android:paddingRight="4dp"
+            android:paddingEnd="4dp" />
 
     </LinearLayout>
 
