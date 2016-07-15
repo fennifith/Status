@@ -17,6 +17,34 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:titleEnabled="false">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <com.james.status.views.CustomImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:scaleType="centerCrop"
+                    android:id="@+id/header" />
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/serviceEnabled"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="16dp"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp"
+                    android:paddingTop="16dp"
+                    android:text="@string/service_start_stop"
+                    android:textColor="?android:textColorSecondary"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:background="?android:colorBackground" />
+
+            </LinearLayout>
+
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
@@ -29,262 +57,10 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.widget.NestedScrollView
+    <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingTop="12dp"
-            android:paddingBottom="12dp">
-
-            <android.support.v7.widget.SwitchCompat
-                android:id="@+id/serviceEnabled"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="26dp"
-                android:paddingLeft="12dp"
-                android:paddingRight="12dp"
-                android:paddingTop="16dp"
-                android:text="@string/service_start_stop"
-                android:textColor="?android:textColorSecondary"
-                android:textStyle="bold"
-                android:textSize="16sp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="@android:color/white"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp"
-                android:elevation="2dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingBottom="16dp"
-                    android:paddingLeft="12dp"
-                    android:paddingRight="12dp"
-                    android:paddingTop="16dp">
-
-                    <android.support.v7.widget.SwitchCompat
-                        android:id="@+id/autoBarColorEnabled"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/preference_bar_color_auto"
-                        android:textColor="?android:textColorPrimary"
-                        android:textSize="16sp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/preference_bar_color_auto_desc"
-                        android:textSize="14sp"
-                        android:textColor="?android:textColorSecondary" />
-
-                </LinearLayout>
-
-                <FrameLayout
-                    android:id="@+id/pickBarColor"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="52dp"
-                        android:gravity="center_vertical|start"
-                        android:paddingLeft="12dp"
-                        android:paddingRight="12dp"
-                        android:text="@string/preference_bar_color_chooser"
-                        android:textColor="?android:textColorPrimary"
-                        android:textSize="16sp" />
-
-                    <com.james.status.views.CircleImageView
-                        android:id="@+id/pickBarColor_color"
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
-                        android:layout_gravity="center_vertical|end"
-                        android:layout_marginLeft="12dp"
-                        android:layout_marginRight="12dp"
-                        android:src="@android:color/black" />
-
-                </FrameLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/preference_app_colors"
-                        android:textColor="?android:textColorPrimary"
-                        android:textSize="16sp"
-                        android:paddingBottom="16dp"
-                        android:paddingLeft="12dp"
-                        android:paddingRight="12dp"
-                        android:paddingTop="16dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingBottom="16dp"
-                        android:paddingLeft="20dp"
-                        android:paddingRight="20dp"
-                        android:paddingTop="16dp"
-                        android:background="?attr/selectableItemBackground"
-                        android:text="@string/action_more"
-                        android:textAllCaps="true"
-                        android:textStyle="bold"
-                        android:textColor="?android:textColorPrimary"
-                        android:textSize="16sp"
-                        android:id="@+id/appColors" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:orientation="horizontal"
-                    android:paddingBottom="16dp"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
-                    android:paddingTop="16dp"
-                    android:background="?attr/selectableItemBackground"
-                    android:gravity="center_vertical"
-                    android:id="@+id/addAppColors"
-                    android:visibility="gone">
-
-                    <com.james.status.views.SquareImageView
-                        android:layout_width="24dp"
-                        android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/ic_add_circle"
-                        android:tint="@color/colorAccent"
-                        android:tintMode="src_in" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingBottom="16dp"
-                        android:paddingLeft="20dp"
-                        android:paddingRight="20dp"
-                        android:paddingTop="16dp"
-                        android:text="@string/action_add_apps"
-                        android:textAllCaps="true"
-                        android:textStyle="bold"
-                        android:textColor="@color/colorAccent"
-                        android:textSize="16sp" />
-
-                </LinearLayout>
-
-                <android.support.v7.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:nestedScrollingEnabled="false"
-                    android:id="@+id/appColorsRecycler" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="@android:color/white"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp"
-                android:elevation="2dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingBottom="16dp"
-                    android:paddingLeft="12dp"
-                    android:paddingRight="12dp"
-                    android:paddingTop="16dp">
-
-                    <android.support.v7.widget.SwitchCompat
-                        android:id="@+id/amPmEnabled"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/preference_ampm"
-                        android:textColor="?android:textColorPrimary"
-                        android:textSize="16sp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/preference_ampm_desc"
-                        android:textSize="14sp"
-                        android:textColor="?android:textColorSecondary" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingBottom="16dp"
-                    android:paddingLeft="12dp"
-                    android:paddingRight="12dp"
-                    android:paddingTop="16dp">
-
-                    <android.support.v7.widget.SwitchCompat
-                        android:id="@+id/batteryPercent"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/preference_battery_percent"
-                        android:textColor="?android:textColorPrimary"
-                        android:textSize="16sp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/preference_battery_percent_desc"
-                        android:textSize="14sp"
-                        android:textColor="?android:textColorSecondary" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingBottom="16dp"
-                    android:paddingLeft="12dp"
-                    android:paddingRight="12dp"
-                    android:paddingTop="16dp">
-
-                    <android.support.v7.widget.SwitchCompat
-                        android:id="@+id/darkIconsEnabled"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/preference_dark_icons"
-                        android:textColor="?android:textColorPrimary"
-                        android:textSize="16sp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/preference_dark_icons_desc"
-                        android:textSize="14sp"
-                        android:textColor="?android:textColorSecondary" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </android.support.v4.widget.NestedScrollView>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:id="@+id/recycler" />
 
 </android.support.design.widget.CoordinatorLayout>

@@ -6,7 +6,6 @@ import android.app.WallpaperManager;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -14,8 +13,9 @@ import android.os.BatteryManager;
 import android.os.Build;
 import android.service.notification.StatusBarNotification;
 import android.support.annotation.ColorInt;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
+import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.graphics.Palette;
 import android.util.AttributeSet;
@@ -44,7 +44,7 @@ public class StatusView extends FrameLayout {
 
     @ColorInt
     private int color = 0;
-    private boolean isDarkMode, isWifiConnected;
+    private boolean isDarkMode, isAirplaneMode, isSignalConnected, isWifiConnected, isFullscreen;
     private ArrayList<StatusBarNotification> notifications;
 
     public StatusView(Context context) {
@@ -85,17 +85,21 @@ public class StatusView extends FrameLayout {
 
         notificationIconLayout = (LinearLayout) v.findViewById(R.id.notificationIcons);
 
-        battery.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_battery_alert));
-        signal.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_signal_0));
-        wifi.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_wifi_0));
-        gps.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_gps_fixed));
-        bluetooth.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_bluetooth));
-        airplane.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_airplane));
-        alarm.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_alarm));
+        battery.setImageDrawable(getDrawable(R.drawable.ic_battery_alert));
+        signal.setImageDrawable(getDrawable(R.drawable.ic_signal_0));
+        wifi.setImageDrawable(getDrawable(R.drawable.ic_wifi_0));
+        gps.setImageDrawable(getDrawable(R.drawable.ic_gps_fixed));
+        bluetooth.setImageDrawable(getDrawable(R.drawable.ic_bluetooth));
+        airplane.setImageDrawable(getDrawable(R.drawable.ic_airplane));
+        alarm.setImageDrawable(getDrawable(R.drawable.ic_alarm));
+
+        VectorDrawableCompat.create(getResources(), R.drawable.ic_battery_alert, getContext().getTheme());
 
         Boolean isAmPmEnabled = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_CLOCK_AMPM);
         String format = isAmPmEnabled == null || isAmPmEnabled ? "h:mm a" : "h:mm";
-        clock.setFormat12Hour(format);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
+            clock.setFormat12Hour(format);
 
         Boolean isBatteryPercent = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_BATTERY_PERCENT);
         if (isBatteryPercent != null && isBatteryPercent)
@@ -122,15 +126,18 @@ public class StatusView extends FrameLayout {
 
                 CustomImageView icon = (CustomImageView) v.findViewById(R.id.icon);
                 icon.setImageDrawable(drawable);
-                if (isDarkMode) icon.setImageTintList(ColorStateList.valueOf(Color.BLACK));
+                if (isDarkMode) ImageUtils.setTint(icon, Color.BLACK);
                 notificationIconLayout.addView(v);
             }
         }
     }
 
     public void addNotification(StatusBarNotification notification) {
-        for (StatusBarNotification notification2 : notifications) {
-            if (notification.getId() == notification2.getId()) return;
+        if (notifications == null) notifications = new ArrayList<>();
+        else {
+            for (StatusBarNotification notification2 : notifications) {
+                if (notification.getId() == notification2.getId()) return;
+            }
         }
         notifications.add(notification);
         setNotifications(notifications);
@@ -138,8 +145,10 @@ public class StatusView extends FrameLayout {
 
     public void removeNotification(StatusBarNotification notification) {
         ArrayList<StatusBarNotification> notifications = new ArrayList<>();
-        for (StatusBarNotification notification2 : this.notifications) {
-            if (notification.getId() != notification2.getId()) notifications.add(notification2);
+        if (this.notifications != null) {
+            for (StatusBarNotification notification2 : this.notifications) {
+                if (notification.getId() != notification2.getId()) notifications.add(notification2);
+            }
         }
 
         setNotifications(notifications);
@@ -177,29 +186,42 @@ public class StatusView extends FrameLayout {
     }
 
     public void setFullscreen(boolean isFullscreen) {
-        ValueAnimator animator = ValueAnimator.ofFloat(getY(), isFullscreen ? -StaticUtils.getStatusBarHeight(getContext()) : 0);
-        animator.setDuration(150);
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                setY((float) valueAnimator.getAnimatedValue());
-            }
-        });
-        animator.start();
+        if (this.isFullscreen != isFullscreen) {
+            ValueAnimator animator = ValueAnimator.ofFloat(getAlpha(), isFullscreen ? 0f : 1f);
+            animator.setDuration(150);
+            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    float alpha = (float) valueAnimator.getAnimatedValue();
+                    setAlpha(alpha);
+                    setVisibility(alpha == 0f ? View.GONE : View.VISIBLE);
+                }
+            });
+            animator.start();
+
+            this.isFullscreen = isFullscreen;
+        }
     }
 
     public void setColor(@ColorInt int color) {
-        ValueAnimator animator = ValueAnimator.ofArgb(this.color, color);
-        animator.setDuration(150);
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                int color = (int) valueAnimator.getAnimatedValue();
-                if (status != null) status.setBackgroundColor(Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
-                setDarkMode(!ColorUtils.isColorDark(color));
-            }
-        });
-        animator.start();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ValueAnimator animator = ValueAnimator.ofArgb(this.color, color);
+            animator.setDuration(150);
+            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    int color = (int) valueAnimator.getAnimatedValue();
+                    if (status != null)
+                        status.setBackgroundColor(Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
+                    setDarkMode(!ColorUtils.isColorDark(color));
+                }
+            });
+            animator.start();
+        } else {
+            if (status != null)
+                status.setBackgroundColor(Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
+            setDarkMode(!ColorUtils.isColorDark(color));
+        }
 
         this.color = color;
     }
@@ -208,29 +230,31 @@ public class StatusView extends FrameLayout {
         Boolean isDarkModeEnabled = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_DARK_ICONS);
 
         if (this.isDarkMode != isDarkMode && (isDarkModeEnabled == null || isDarkModeEnabled)) {
+            int color = isDarkMode ? Color.BLACK : Color.WHITE;
+
             if (notificationIconLayout != null) {
                 for (int i = 0; i < notificationIconLayout.getChildCount(); i++) {
                     View icon = notificationIconLayout.getChildAt(i).findViewById(R.id.icon);
                     if (icon != null && icon instanceof CustomImageView) {
-                        ((CustomImageView) icon).setImageTintList(ColorStateList.valueOf(isDarkMode ? Color.BLACK : Color.WHITE));
+                        ImageUtils.setTint((CustomImageView) icon, color);
                     }
                 }
             }
 
             if (alarm != null)
-                alarm.setImageTintList(ColorStateList.valueOf(isDarkMode ? Color.BLACK : Color.WHITE));
+                ImageUtils.setTint(alarm, color);
             if (airplane != null)
-                airplane.setImageTintList(ColorStateList.valueOf(isDarkMode ? Color.BLACK : Color.WHITE));
+                ImageUtils.setTint(airplane, color);
             if (wifi != null)
-                wifi.setImageTintList(ColorStateList.valueOf(isDarkMode ? Color.BLACK : Color.WHITE));
+                ImageUtils.setTint(wifi, color);
             if (signal != null)
-                signal.setImageTintList(ColorStateList.valueOf(isDarkMode ? Color.BLACK : Color.WHITE));
+                ImageUtils.setTint(signal, color);
             if (batteryPercent != null)
-                batteryPercent.setTextColor(isDarkMode ? Color.BLACK : Color.WHITE);
+                batteryPercent.setTextColor(color);
             if (battery != null)
-                battery.setImageTintList(ColorStateList.valueOf(isDarkMode ? Color.BLACK : Color.WHITE));
+                ImageUtils.setTint(battery, color);
             if (clock != null)
-                clock.setTextColor(isDarkMode ? Color.BLACK : Color.WHITE);
+                clock.setTextColor(color);
 
             this.isDarkMode = isDarkMode;
         }
@@ -257,20 +281,21 @@ public class StatusView extends FrameLayout {
     }
 
     public void setAirplaneMode(boolean isAirplaneMode) {
-        if (isAirplaneMode) {
-            signal.setVisibility(View.GONE);
-            wifi.setVisibility(View.GONE);
-            airplane.setVisibility(View.VISIBLE);
-        } else {
-            signal.setVisibility(View.VISIBLE);
-            wifi.setVisibility(View.VISIBLE);
-            airplane.setVisibility(View.GONE);
+        if (this.isAirplaneMode != isAirplaneMode) {
+            if (isAirplaneMode) {
+                airplane.setVisibility(View.VISIBLE);
+                setSignalConnected(false);
+            } else {
+                airplane.setVisibility(View.GONE);
+                setSignalConnected(isSignalConnected);
+            }
+            this.isAirplaneMode = isAirplaneMode;
         }
     }
 
     public void setBluetooth(boolean isEnabled, boolean isConnected) {
         bluetooth.setVisibility(isEnabled ? View.VISIBLE : View.GONE);
-        bluetooth.setImageDrawable(ContextCompat.getDrawable(getContext(), isConnected ? R.drawable.ic_bluetooth_connected : R.drawable.ic_bluetooth));
+        bluetooth.setImageDrawable(getDrawable(isConnected ? R.drawable.ic_bluetooth_connected : R.drawable.ic_bluetooth));
     }
 
     public void setGpsEnabled(boolean isEnabled) {
@@ -278,9 +303,8 @@ public class StatusView extends FrameLayout {
     }
 
     public void setWifiConnected(boolean isWifiConnected) {
-        if (this.isWifiConnected != isWifiConnected) {
-            if (!isWifiConnected) wifi.setVisibility(View.GONE);
-            else wifi.setVisibility(View.VISIBLE);
+        if (wifi != null && this.isWifiConnected != isWifiConnected) {
+            wifi.setVisibility(isWifiConnected ? View.VISIBLE : View.GONE);
             this.isWifiConnected = isWifiConnected;
         }
     }
@@ -290,20 +314,28 @@ public class StatusView extends FrameLayout {
 
         switch (wifiStrength) {
             case 1:
-                wifi.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_wifi_1));
+                wifi.setImageDrawable(getDrawable(R.drawable.ic_wifi_1));
                 break;
             case 2:
-                wifi.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_wifi_2));
+                wifi.setImageDrawable(getDrawable(R.drawable.ic_wifi_2));
                 break;
             case 3:
-                wifi.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_wifi_3));
+                wifi.setImageDrawable(getDrawable(R.drawable.ic_wifi_3));
                 break;
             case 4:
-                wifi.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_wifi_4));
+                wifi.setImageDrawable(getDrawable(R.drawable.ic_wifi_4));
                 break;
             default:
-                wifi.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_wifi_0));
+                wifi.setImageDrawable(getDrawable(R.drawable.ic_wifi_0));
                 break;
+        }
+    }
+
+    public void setSignalConnected(boolean isSignalConnected) {
+        if (signal != null && this.isSignalConnected != isSignalConnected) {
+            if (!this.isAirplaneMode)
+                signal.setVisibility(isSignalConnected ? View.VISIBLE : View.GONE);
+            this.isSignalConnected = isSignalConnected;
         }
     }
 
@@ -312,19 +344,19 @@ public class StatusView extends FrameLayout {
 
         switch (signalStrength) {
             case 1:
-                signal.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_signal_1));
+                signal.setImageDrawable(getDrawable(R.drawable.ic_signal_1));
                 break;
             case 2:
-                signal.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_signal_2));
+                signal.setImageDrawable(getDrawable(R.drawable.ic_signal_2));
                 break;
             case 3:
-                signal.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_signal_3));
+                signal.setImageDrawable(getDrawable(R.drawable.ic_signal_3));
                 break;
             case 4:
-                signal.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_signal_4));
+                signal.setImageDrawable(getDrawable(R.drawable.ic_signal_4));
                 break;
             default:
-                signal.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_signal_0));
+                signal.setImageDrawable(getDrawable(R.drawable.ic_signal_0));
                 break;
         }
     }
@@ -334,37 +366,41 @@ public class StatusView extends FrameLayout {
 
         if (status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL) {
             if (level < 20)
-                battery.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_battery_charging_20));
+                battery.setImageDrawable(getDrawable(R.drawable.ic_battery_charging_20));
             else if (level < 35)
-                battery.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_battery_charging_30));
+                battery.setImageDrawable(getDrawable(R.drawable.ic_battery_charging_30));
             else if (level < 50)
-                battery.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_battery_charging_50));
+                battery.setImageDrawable(getDrawable(R.drawable.ic_battery_charging_50));
             else if (level < 65)
-                battery.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_battery_charging_60));
+                battery.setImageDrawable(getDrawable(R.drawable.ic_battery_charging_60));
             else if (level < 80)
-                battery.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_battery_charging_80));
+                battery.setImageDrawable(getDrawable(R.drawable.ic_battery_charging_80));
             else if (level < 95)
-                battery.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_battery_charging_90));
+                battery.setImageDrawable(getDrawable(R.drawable.ic_battery_charging_90));
             else
-                battery.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_battery_charging_full));
+                battery.setImageDrawable(getDrawable(R.drawable.ic_battery_charging_full));
         } else {
             if (level < 20)
-                battery.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_battery_20));
+                battery.setImageDrawable(getDrawable(R.drawable.ic_battery_20));
             else if (level < 35)
-                battery.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_battery_30));
+                battery.setImageDrawable(getDrawable(R.drawable.ic_battery_30));
             else if (level < 50)
-                battery.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_battery_50));
+                battery.setImageDrawable(getDrawable(R.drawable.ic_battery_50));
             else if (level < 65)
-                battery.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_battery_60));
+                battery.setImageDrawable(getDrawable(R.drawable.ic_battery_60));
             else if (level < 80)
-                battery.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_battery_80));
+                battery.setImageDrawable(getDrawable(R.drawable.ic_battery_80));
             else if (level < 95)
-                battery.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_battery_90));
+                battery.setImageDrawable(getDrawable(R.drawable.ic_battery_90));
             else
-                battery.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_battery_full));
+                battery.setImageDrawable(getDrawable(R.drawable.ic_battery_full));
         }
 
         if (batteryPercent != null)
             batteryPercent.setText(String.valueOf(level) + "%");
+    }
+
+    private Drawable getDrawable(@DrawableRes int res) {
+        return VectorDrawableCompat.create(getResources(), res, getContext().getTheme());
     }
 }

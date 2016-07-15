@@ -10,18 +10,20 @@ public class AppData implements Parcelable {
 
     public String name, packageName;
     @Nullable
-    public Integer color;
+    public Integer color, cachedColor;
 
     public AppData(PackageManager manager, ResolveInfo info) {
         name = info.loadLabel(manager).toString();
         packageName = info.activityInfo.applicationInfo.packageName;
         color = null;
+        cachedColor = null;
     }
 
     protected AppData(Parcel in) {
         name = in.readString();
         packageName = in.readString();
         color = in.readInt();
+        cachedColor = in.readInt();
     }
 
     public static final Creator<AppData> CREATOR = new Creator<AppData>() {
@@ -46,5 +48,6 @@ public class AppData implements Parcelable {
         parcel.writeString(name);
         parcel.writeString(packageName);
         if (color != null) parcel.writeInt(color);
+        if (cachedColor != null) parcel.writeInt(cachedColor);
     }
 }

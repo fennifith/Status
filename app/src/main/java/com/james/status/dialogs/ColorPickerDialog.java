@@ -143,6 +143,11 @@ public class ColorPickerDialog extends AppCompatDialog {
         });
     }
 
+    @Override
+    public void show() {
+        super.show();
+    }
+
     public interface OnColorPickedListener {
         void onColorPicked(int color);
 

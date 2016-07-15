@@ -1,6 +1,7 @@
 package com.james.status.utils;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -8,9 +9,14 @@ import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
 import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.util.Log;
+
+import com.james.status.views.CustomImageView;
 
 public class ImageUtils {
 
@@ -70,6 +76,14 @@ public class ImageUtils {
         }
 
         return resultBitmap;
+    }
+
+    public static void setTint(@NonNull CustomImageView imageView, @ColorInt int color) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            imageView.setImageTintList(ColorStateList.valueOf(color));
+        } else {
+            DrawableCompat.setTint(imageView.getDrawable(), color);
+        }
     }
 
 }

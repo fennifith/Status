@@ -5,9 +5,8 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Handler;
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -42,35 +41,9 @@ public class AppColorPreviewAdapter extends RecyclerView.Adapter<AppColorPreview
     public AppColorPreviewAdapter(final Context context) {
         this.context = context;
         packageManager = context.getPackageManager();
-        apps = new ArrayList<>();
         gson = new Gson();
 
-        jsons = PreferenceUtils.getStringSetPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_APPS);
-        if (jsons == null) jsons = new HashSet<>();
-
-        new Thread() {
-            @Override
-            public void run() {
-                for (String json : jsons) {
-                    AppData app = gson.fromJson(json, AppData.class);
-                    if (app.color != null) apps.add(app);
-                }
-
-                new Handler(context.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Collections.sort(apps, new Comparator<AppData>() {
-                            @Override
-                            public int compare(AppData lhs, AppData rhs) {
-                                return lhs.name.compareToIgnoreCase(rhs.name);
-                            }
-                        });
-
-                        notifyDataSetChanged();
-                    }
-                });
-            }
-        }.start();
+        reload();
     }
 
     public AppColorPreviewAdapter setOnSizeChangedListener(OnSizeChangedListener listener) {
@@ -112,17 +85,60 @@ public class AppColorPreviewAdapter extends RecyclerView.Adapter<AppColorPreview
                 new Handler(context.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
-                        ValueAnimator animator = ValueAnimator.ofArgb(Color.GRAY, ColorUtils.muteColor(color, holder.getAdapterPosition()));
-                        animator.setDuration(150);
-                        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            ValueAnimator animator = ValueAnimator.ofArgb(Color.GRAY, ColorUtils.muteColor(color, holder.getAdapterPosition()));
+                            animator.setDuration(150);
+                            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                                @Override
+                                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                                    int color = (int) valueAnimator.getAnimatedValue();
+                                    ((CustomImageView) holder.v.findViewById(R.id.color)).setImageDrawable(new ColorDrawable(color));
+                                    ((TextView) holder.v.findViewById(R.id.app)).setTextColor(ContextCompat.getColor(context, ColorUtils.isColorDark(color) ? R.color.textColorSecondaryInverse : R.color.textColorSecondary));
+                                }
+                            });
+                            animator.start();
+                        } else {
+                            ((CustomImageView) holder.v.findViewById(R.id.color)).setImageDrawable(new ColorDrawable(color));
+                            ((TextView) holder.v.findViewById(R.id.app)).setTextColor(ContextCompat.getColor(context, ColorUtils.isColorDark(color) ? R.color.textColorSecondaryInverse : R.color.textColorSecondary));
+                        }
+                    }
+                });
+            }
+        }.start();
+    }
+
+    @Override
+    public int getItemCount() {
+        int size = apps.size();
+        if (listener != null) listener.onSizeChanged(size);
+        return size;
+    }
+
+    public void reload() {
+        apps = new ArrayList<>();
+
+        jsons = PreferenceUtils.getStringSetPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_APPS);
+        if (jsons == null) jsons = new HashSet<>();
+
+        new Thread() {
+            @Override
+            public void run() {
+                for (String json : jsons) {
+                    AppData app = gson.fromJson(json, AppData.class);
+                    if (app.color != null) apps.add(app);
+                }
+
+                new Handler(context.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Collections.sort(apps, new Comparator<AppData>() {
                             @Override
-                            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                                int color = (int) valueAnimator.getAnimatedValue();
-                                ((CustomImageView) holder.v.findViewById(R.id.color)).setImageDrawable(new ColorDrawable(color));
-                                ((TextView) holder.v.findViewById(R.id.app)).setTextColor(ContextCompat.getColor(context, ColorUtils.isColorDark(color) ? R.color.textColorSecondaryInverse : R.color.textColorSecondary));
+                            public int compare(AppData lhs, AppData rhs) {
+                                return lhs.name.compareToIgnoreCase(rhs.name);
                             }
                         });
-                        animator.start();
+
+                        notifyDataSetChanged();
                     }
                 });
             }
@@ -133,36 +149,6 @@ public class AppColorPreviewAdapter extends RecyclerView.Adapter<AppColorPreview
     private AppData getApp(int position) {
         if (position < 0 || position >= apps.size()) return null;
         else return apps.get(position);
-    }
-
-    @Override
-    public int getItemCount() {
-        int size = apps.size();
-        if (listener != null) listener.onSizeChanged(size);
-        return size;
-    }
-
-    @ColorInt
-    private int getDefaultColor() {
-        Integer color = PreferenceUtils.getIntegerPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR);
-        if (color == null) color = Color.BLACK;
-        return color;
-    }
-
-    private void overwrite(@NonNull AppData app) {
-        Set<String> jsons = new HashSet<>();
-        for (String json : this.jsons) {
-            AppData data = gson.fromJson(json, AppData.class);
-            if (!data.packageName.matches(app.packageName)) {
-                jsons.add(json);
-            }
-        }
-
-        jsons.add(gson.toJson(app));
-
-        PreferenceUtils.putPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_APPS, jsons);
-        this.jsons = jsons;
-        notifyDataSetChanged();
     }
 
     public interface OnSizeChangedListener {

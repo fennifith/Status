@@ -8,6 +8,13 @@
     <string name="action_ok">OK</string>
     <string name="action_more">More</string>
     <string name="action_add_apps">Add Apps</string>
+    <string name="action_search">Search</string>
+    <string name="action_about">About</string>
+    <string name="action_gplus">Google Plus</string>
+    <string name="action_twitter">Twitter</string>
+    <string name="action_website">Website</string>
+    <string name="action_github">GitHub</string>
+    <string name="action_libraries">View Libraries</string>
 
     <string name="service_name">Status Service</string>
     <string name="service_name_general">Accessibility Service</string>
@@ -36,4 +43,10 @@
     <string name="red">Red</string>
     <string name="green">Green</string>
     <string name="blue">Blue</string>
+
+    <string name="james_name">James Fenn</string>
+    <string name="james_desc">Android developer and professional cabbage eater.</string>
+
+    <string name="anas_name">Anas Khan</string>
+    <string name="anas_desc">Better known as the Oreo lord, this guy can add more butter to buttery interfaces.</string>
 </resources>

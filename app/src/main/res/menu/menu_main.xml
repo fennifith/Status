@@ -2,8 +2,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/action_search"
+        android:iconifiedByDefault="true"
+        android:title="@string/action_search"
+        android:icon="@drawable/ic_search"
+        android:visible="true"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/action_setup"
         android:title="@string/action_setup"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_about"
+        android:title="@string/action_about"
         app:showAsAction="never" />
 
 </menu>

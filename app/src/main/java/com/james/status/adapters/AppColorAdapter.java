@@ -8,6 +8,7 @@ import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
@@ -92,25 +93,28 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
             }
         }
 
+        ((CustomImageView) holder.v.findViewById(R.id.icon)).setImageDrawable(new ColorDrawable(Color.TRANSPARENT));
+
         new Thread() {
             @Override
             public void run() {
                 AppData app = getApp(holder.getAdapterPosition());
-                if (app != null) {
-                    final Drawable icon;
-                    try {
-                        icon = packageManager.getApplicationIcon(app.packageName);
-                    } catch (PackageManager.NameNotFoundException e) {
-                        return;
-                    }
+                if (app == null) return;
 
-                    new Handler(context.getMainLooper()).post(new Runnable() {
-                        @Override
-                        public void run() {
-                            ((CustomImageView) holder.v.findViewById(R.id.icon)).transition(icon);
-                        }
-                    });
+                final Drawable icon;
+                try {
+                    icon = packageManager.getApplicationIcon(app.packageName);
+                } catch (PackageManager.NameNotFoundException e) {
+                    return;
                 }
+
+                new Handler(context.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (icon != null)
+                            ((CustomImageView) holder.v.findViewById(R.id.icon)).transition(icon);
+                    }
+                });
             }
         }.start();
 
@@ -127,23 +131,41 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
             public void run() {
                 AppData app = getApp(holder.getAdapterPosition());
                 if (app == null) return;
-
-                final int color = ColorUtils.getStatusBarColor(context, packageManager, app.packageName);
+                if (app.cachedColor == null)
+                    app.cachedColor = ColorUtils.getStatusBarColor(context, packageManager, app.packageName);
 
                 new Handler(context.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
-                        ValueAnimator animator = ValueAnimator.ofArgb(Color.GRAY, ColorUtils.muteColor(color, holder.getAdapterPosition()));
-                        animator.setDuration(150);
-                        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                            @Override
-                            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                                int color = (int) valueAnimator.getAnimatedValue();
-                                ((CustomImageView) holder.v.findViewById(R.id.color)).setImageDrawable(new ColorDrawable(color));
-                                ((SwitchCompat) holder.v.findViewById(R.id.app)).setTextColor(ContextCompat.getColor(context, ColorUtils.isColorDark(color) ? R.color.textColorSecondaryInverse : R.color.textColorSecondary));
-                            }
-                        });
-                        animator.start();
+                        AppData app = getApp(holder.getAdapterPosition());
+                        if (app == null) return;
+
+                        int color = ColorUtils.muteColor(app.color != null ? app.color : getDefaultColor(app), holder.getAdapterPosition());
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            ValueAnimator animator = ValueAnimator.ofArgb(ColorUtils.muteColor(Color.DKGRAY, holder.getAdapterPosition()), color);
+                            animator.setDuration(150);
+                            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                                @Override
+                                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                                    ((CustomImageView) holder.v.findViewById(R.id.color)).setImageDrawable(new ColorDrawable((int) valueAnimator.getAnimatedValue()));
+                                }
+                            });
+                            animator.start();
+
+                            ValueAnimator textAnimator = ValueAnimator.ofArgb(((SwitchCompat) holder.v.findViewById(R.id.app)).getCurrentTextColor(), ContextCompat.getColor(context, ColorUtils.isColorDark(color) ? R.color.textColorSecondaryInverse : R.color.textColorSecondary));
+                            textAnimator.setDuration(150);
+                            textAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                                @Override
+                                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                                    ((SwitchCompat) holder.v.findViewById(R.id.app)).setTextColor((int) valueAnimator.getAnimatedValue());
+                                }
+                            });
+                            textAnimator.start();
+                        } else {
+                            ((CustomImageView) holder.v.findViewById(R.id.color)).setImageDrawable(new ColorDrawable(color));
+                            ((SwitchCompat) holder.v.findViewById(R.id.app)).setTextColor(ContextCompat.getColor(context, ColorUtils.isColorDark(color) ? R.color.textColorSecondaryInverse : R.color.textColorSecondary));
+                        }
                     }
                 });
             }
@@ -155,7 +177,7 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
                 AppData app = getApp(holder.getAdapterPosition());
                 if (app == null) return;
 
-                new ColorPickerDialog(context).setColor(app.color != null ? app.color : getDefaultColor()).setOnColorPickedListener(new ColorPickerDialog.OnColorPickedListener() {
+                new ColorPickerDialog(context).setColor(app.color != null ? app.color : getDefaultColor(app)).setOnColorPickedListener(new ColorPickerDialog.OnColorPickedListener() {
                     @Override
                     public void onColorPicked(int color) {
                         AppData app = getApp(holder.getAdapterPosition());
@@ -179,7 +201,7 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
                 if (app == null) return;
 
                 if (b) {
-                    new ColorPickerDialog(context).setColor(app.color != null ? app.color : getDefaultColor()).setOnColorPickedListener(new ColorPickerDialog.OnColorPickedListener() {
+                    new ColorPickerDialog(context).setColor(app.color != null ? app.color : getDefaultColor(app)).setOnColorPickedListener(new ColorPickerDialog.OnColorPickedListener() {
                         @Override
                         public void onColorPicked(int color) {
                             AppData app = getApp(holder.getAdapterPosition());
@@ -214,10 +236,13 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
     }
 
     @ColorInt
-    private int getDefaultColor() {
-        Integer color = PreferenceUtils.getIntegerPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR);
-        if (color == null) color = Color.BLACK;
-        return color;
+    private int getDefaultColor(AppData app) {
+        if (app.cachedColor != null) return app.cachedColor;
+        else {
+            Integer color = PreferenceUtils.getIntegerPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR);
+            if (color == null) color = Color.BLACK;
+            return color;
+        }
     }
 
     private void overwrite(@NonNull AppData app) {
