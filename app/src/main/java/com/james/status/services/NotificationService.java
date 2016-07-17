@@ -1,6 +1,7 @@
 package com.james.status.services;
 
 import android.content.Intent;
+import android.os.Build;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 
@@ -53,7 +54,10 @@ public class NotificationService extends NotificationListenerService {
         if (enabled != null && enabled) {
             Intent intent = new Intent(StatusService.ACTION_NOTIFICATION_ADDED);
             intent.setClass(this, StatusService.class);
-            intent.putExtra(StatusService.EXTRA_NOTIFICATION, sbn);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2)
+                intent.putExtra(StatusService.EXTRA_NOTIFICATION, sbn);
+
             startService(intent);
         }
     }
@@ -64,15 +68,20 @@ public class NotificationService extends NotificationListenerService {
         if (enabled != null && enabled) {
             Intent intent = new Intent(StatusService.ACTION_NOTIFICATION_REMOVED);
             intent.setClass(this, StatusService.class);
-            intent.putExtra(StatusService.EXTRA_NOTIFICATION, sbn);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2)
+                intent.putExtra(StatusService.EXTRA_NOTIFICATION, sbn);
+
             startService(intent);
         }
     }
 
     private ArrayList<StatusBarNotification> getNotifications() {
         ArrayList<StatusBarNotification> activeNotifications = new ArrayList<>();
-        StatusBarNotification[] notifications = getActiveNotifications();
-        if (notifications != null) Collections.addAll(activeNotifications, notifications);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            StatusBarNotification[] notifications = getActiveNotifications();
+            if (notifications != null) Collections.addAll(activeNotifications, notifications);
+        }
         return activeNotifications;
     }
 

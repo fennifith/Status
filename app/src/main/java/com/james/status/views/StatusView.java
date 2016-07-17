@@ -1,5 +1,6 @@
 package com.james.status.views;
 
+import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.app.WallpaperManager;
@@ -187,17 +188,36 @@ public class StatusView extends FrameLayout {
 
     public void setFullscreen(boolean isFullscreen) {
         if (this.isFullscreen != isFullscreen) {
-            ValueAnimator animator = ValueAnimator.ofFloat(getAlpha(), isFullscreen ? 0f : 1f);
+            ValueAnimator animator = ValueAnimator.ofFloat(getY(), isFullscreen ? -StaticUtils.getStatusBarHeight(getContext()) : 0f);
             animator.setDuration(150);
             animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    float alpha = (float) valueAnimator.getAnimatedValue();
-                    setAlpha(alpha);
-                    setVisibility(alpha == 0f ? View.GONE : View.VISIBLE);
+                    float y = (float) valueAnimator.getAnimatedValue();
+                    setY(y);
+                }
+            });
+            animator.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animator) {
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animator) {
+                    if (StatusView.this.isFullscreen) setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animator) {
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animator) {
                 }
             });
             animator.start();
+
+            if (!isFullscreen) setVisibility(View.VISIBLE);
 
             this.isFullscreen = isFullscreen;
         }

@@ -122,10 +122,11 @@ public class StatusService extends Service {
                     statusView.setLockscreen(keyguardManager.isKeyguardLocked());
 
                     Boolean isStatusColorAuto = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_AUTO);
-                    if (isStatusColorAuto == null || isStatusColorAuto)
+                    if ((isStatusColorAuto == null || isStatusColorAuto) && intent.hasExtra(EXTRA_COLOR))
                         statusView.setColor(intent.getIntExtra(EXTRA_COLOR, Color.BLACK));
 
-                    statusView.setFullscreen(intent.getBooleanExtra(EXTRA_FULLSCREEN, false));
+                    if (intent.hasExtra(EXTRA_FULLSCREEN))
+                        statusView.setFullscreen(intent.getBooleanExtra(EXTRA_FULLSCREEN, false));
                 }
                 break;
             case ACTION_NOTIFICATION:
@@ -162,14 +163,15 @@ public class StatusService extends Service {
         int bluetoothState = StaticUtils.getBluetoothState(this);
         statusView.setBluetooth(bluetoothState != BluetoothAdapter.STATE_OFF, bluetoothState == BluetoothAdapter.STATE_CONNECTED);
 
-        int wifiState = wifiManager.getWifiState();
-        statusView.setWifiConnected(wifiState != WifiManager.WIFI_STATE_DISABLED && wifiState != WifiManager.WIFI_STATE_DISABLING && wifiState != WifiManager.WIFI_STATE_UNKNOWN);
-        statusView.setWifiStrength(WifiManager.calculateSignalLevel(wifiManager.getConnectionInfo().getRssi(), 4));
+        int level = WifiManager.calculateSignalLevel(wifiManager.getConnectionInfo().getRssi(), 4);
+        statusView.setWifiStrength(level);
+
+        int state = wifiManager.getWifiState();
+        statusView.setWifiConnected(state != WifiManager.WIFI_STATE_DISABLED && state != WifiManager.WIFI_STATE_DISABLING && state != WifiManager.WIFI_STATE_UNKNOWN && level > 0);
 
         Intent intent = new Intent(NotificationService.ACTION_GET_NOTIFICATIONS);
         intent.setClass(this, NotificationService.class);
         startService(intent);
-
 
         params = new WindowManager.LayoutParams(1, WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, PixelFormat.TRANSPARENT);
         params.gravity = Gravity.START | Gravity.TOP;

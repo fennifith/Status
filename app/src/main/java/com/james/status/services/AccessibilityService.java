@@ -38,9 +38,9 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
             final CharSequence packageName = event.getPackageName();
             if (packageName != null && packageName.length() > 0) {
                 if (packageName.toString().equals("com.android.systemui") && event.getClassName().toString().equals("android.widget.FrameLayout")) {
-                    setStatusBarColor(Color.GRAY, true);
+                    setStatusBar(false);
                 } else if (packageName.toString().equals("com.android.systemui")) {
-                    setStatusBarColor(Color.BLACK, false);
+                    setStatusBar(Color.BLACK, true);
                 } else {
                     new Thread() {
                         @Override
@@ -50,7 +50,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                             new Handler(getMainLooper()).post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    setStatusBarColor(color, false);
+                                    setStatusBar(color);
                                 }
                             });
                         }
@@ -60,7 +60,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
         }
     }
 
-    private void setStatusBarColor(@ColorInt int color, boolean fullscreen) {
+    private void setStatusBar(@ColorInt int color) {
         Intent intent = new Intent(StatusService.ACTION_UPDATE);
         intent.setClass(this, StatusService.class);
 
@@ -68,7 +68,27 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
         if (isStatusColorAuto == null || isStatusColorAuto)
             intent.putExtra(StatusService.EXTRA_COLOR, color);
 
-        intent.putExtra(StatusService.EXTRA_FULLSCREEN, fullscreen);
+        startService(intent);
+    }
+
+    private void setStatusBar(@ColorInt int color, boolean shown) {
+        Intent intent = new Intent(StatusService.ACTION_UPDATE);
+        intent.setClass(this, StatusService.class);
+
+        Boolean isStatusColorAuto = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_AUTO);
+        if (isStatusColorAuto == null || isStatusColorAuto)
+            intent.putExtra(StatusService.EXTRA_COLOR, color);
+
+        intent.putExtra(StatusService.EXTRA_FULLSCREEN, !shown);
+
+        startService(intent);
+    }
+
+    private void setStatusBar(boolean shown) {
+        Intent intent = new Intent(StatusService.ACTION_UPDATE);
+        intent.setClass(this, StatusService.class);
+
+        intent.putExtra(StatusService.EXTRA_FULLSCREEN, !shown);
 
         startService(intent);
     }
