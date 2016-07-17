@@ -50,7 +50,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                             new Handler(getMainLooper()).post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    setStatusBar(color);
+                                    setStatusBar(color, true);
                                 }
                             });
                         }
