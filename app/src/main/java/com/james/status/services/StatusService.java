@@ -11,6 +11,7 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
+import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
 import android.os.Build;
@@ -44,6 +45,7 @@ public class StatusService extends Service {
             EXTRA_NOTIFICATIONS = "com.james.status.EXTRA_NOTIFICATIONS",
             EXTRA_NOTIFICATION = "com.james.status.EXTRA_NOTIFICATION",
             EXTRA_COLOR = "com.james.status.EXTRA_COLOR",
+            EXTRA_SYSTEM_FULLSCREEN = "com.james.status.EXTRA_SYSTEM_FULLSCREEN",
             EXTRA_FULLSCREEN = "com.james.status.EXTRA_FULLSCREEN";
 
     private StatusView statusView;
@@ -87,7 +89,7 @@ public class StatusService extends Service {
         telephonyManager.listen(networkReceiver, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
 
         wifiReceiver = new WifiReceiver();
-        registerReceiver(wifiReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+        registerReceiver(wifiReceiver, new IntentFilter(WifiManager.NETWORK_STATE_CHANGED_ACTION));
 
         batteryReceiver = new BatteryReceiver();
         registerReceiver(batteryReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
@@ -124,6 +126,9 @@ public class StatusService extends Service {
                     Boolean isStatusColorAuto = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_AUTO);
                     if ((isStatusColorAuto == null || isStatusColorAuto) && intent.hasExtra(EXTRA_COLOR))
                         statusView.setColor(intent.getIntExtra(EXTRA_COLOR, Color.BLACK));
+
+                    if (intent.hasExtra(EXTRA_SYSTEM_FULLSCREEN))
+                        statusView.setSystemShowing(intent.getBooleanExtra(EXTRA_SYSTEM_FULLSCREEN, false));
 
                     if (intent.hasExtra(EXTRA_FULLSCREEN))
                         statusView.setFullscreen(intent.getBooleanExtra(EXTRA_FULLSCREEN, false));
@@ -163,11 +168,10 @@ public class StatusService extends Service {
         int bluetoothState = StaticUtils.getBluetoothState(this);
         statusView.setBluetooth(bluetoothState != BluetoothAdapter.STATE_OFF, bluetoothState == BluetoothAdapter.STATE_CONNECTED);
 
+        statusView.setWifiConnected(wifiManager.getWifiState() == WifiManager.WIFI_STATE_ENABLED);
+
         int level = WifiManager.calculateSignalLevel(wifiManager.getConnectionInfo().getRssi(), 4);
         statusView.setWifiStrength(level);
-
-        int state = wifiManager.getWifiState();
-        statusView.setWifiConnected(state != WifiManager.WIFI_STATE_DISABLED && state != WifiManager.WIFI_STATE_DISABLING && state != WifiManager.WIFI_STATE_UNKNOWN && level > 0);
 
         Intent intent = new Intent(NotificationService.ACTION_GET_NOTIFICATIONS);
         intent.setClass(this, NotificationService.class);
@@ -241,12 +245,12 @@ public class StatusService extends Service {
     private class WifiReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (statusView != null) {
+            NetworkInfo info = intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
+            if (statusView != null && info != null) {
+                statusView.setWifiConnected(info.isConnected());
+
                 int level = WifiManager.calculateSignalLevel(wifiManager.getConnectionInfo().getRssi(), 4);
                 statusView.setWifiStrength(level);
-
-                int state = wifiManager.getWifiState();
-                statusView.setWifiConnected(state != WifiManager.WIFI_STATE_DISABLED && state != WifiManager.WIFI_STATE_DISABLING && state != WifiManager.WIFI_STATE_UNKNOWN && level > 0);
             }
         }
     }

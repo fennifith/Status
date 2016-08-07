@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 
+import com.google.gson.Gson;
+
 import java.util.Set;
 
 public class PreferenceUtils {
@@ -17,7 +19,13 @@ public class PreferenceUtils {
         STATUS_COLOR,
         STATUS_COLOR_APPS,
         STATUS_DARK_ICONS,
-        STATUS_LOCKSCREEN_EXPAND
+        STATUS_LOCKSCREEN_EXPAND,
+        BATTERY_ICON_STYLE,
+        NETWORK_ICON_STYLE,
+        WIFI_ICON_STYLE,
+        GPS_ICON_STYLE,
+        BLUETOOTH_ICON_STYLE,
+        ALARM_ICON_STYLE
     }
 
     @Nullable
@@ -25,6 +33,15 @@ public class PreferenceUtils {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         if (prefs.contains(identifier.toString()))
             return prefs.getAll().get(identifier.toString());
+        else
+            return null;
+    }
+
+    @Nullable
+    public static <T> T getObjectPreference(Context context, PreferenceIdentifier identifier, Class<T> classOfT) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        if (prefs.contains(identifier.toString()))
+            return new Gson().fromJson(prefs.getString(identifier.toString(), null), classOfT);
         else
             return null;
     }
@@ -45,6 +62,20 @@ public class PreferenceUtils {
             return prefs.getInt(identifier.toString(), 0);
         else
             return null;
+    }
+
+    @Nullable
+    public static int[] getIntegerArrayPreference(Context context, PreferenceIdentifier identifier, int length) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+        int[] value = new int[length];
+        for (int i = 0; i < value.length; i++) {
+            if (prefs.contains(identifier.toString() + i))
+                value[i] = prefs.getInt(identifier.toString() + i, 0);
+            else return null;
+        }
+
+        return value;
     }
 
     @Nullable
@@ -83,12 +114,24 @@ public class PreferenceUtils {
             return null;
     }
 
+    public static void putPreference(Context context, PreferenceIdentifier identifier, Object object) {
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putString(identifier.toString(), new Gson().toJson(object)).apply();
+    }
+
     public static void putPreference(Context context, PreferenceIdentifier identifier, boolean object) {
         PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(identifier.toString(), object).apply();
     }
 
     public static void putPreference(Context context, PreferenceIdentifier identifier, int object) {
         PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(identifier.toString(), object).apply();
+    }
+
+    public static void putPreference(Context context, PreferenceIdentifier identifier, int[] object) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+        for (int i = 0; i < object.length; i++) {
+            prefs.edit().putInt(identifier.toString() + i, object[i]).apply();
+        }
     }
 
     public static void putPreference(Context context, PreferenceIdentifier identifier, String object) {

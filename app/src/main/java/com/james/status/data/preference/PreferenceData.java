@@ -1,4 +1,4 @@
-package com.james.status.data;
+package com.james.status.data.preference;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
@@ -7,14 +7,22 @@ import android.view.View;
 
 import com.james.status.utils.PreferenceUtils;
 
-public class ItemData {
+public class PreferenceData {
 
     private final Context context;
     private final Identifier identifier;
+    private final OnPreferenceChangeListener listener;
 
-    public ItemData(Context context, Identifier identifier) {
+    public PreferenceData(Context context, Identifier identifier) {
         this.context = context;
         this.identifier = identifier;
+        listener = null;
+    }
+
+    public PreferenceData(Context context, Identifier identifier, OnPreferenceChangeListener listener) {
+        this.context = context;
+        this.identifier = identifier;
+        this.listener = listener;
     }
 
     public Context getContext() {
@@ -26,6 +34,14 @@ public class ItemData {
     }
 
     public void onBindViewHolder(ViewHolder holder, int position) {
+    }
+
+    public void onPreferenceChange() {
+        if (listener != null) listener.onPreferenceChange();
+    }
+
+    public interface OnPreferenceChangeListener {
+        void onPreferenceChange();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -43,6 +59,12 @@ public class ItemData {
         private String title, subtitle;
         private PreferenceUtils.PreferenceIdentifier identifier;
         private SectionIdentifier sectionIdentifier;
+
+        public Identifier(PreferenceUtils.PreferenceIdentifier identifier, @Nullable String title, SectionIdentifier sectionIdentifier) {
+            this.identifier = identifier;
+            this.title = title;
+            this.sectionIdentifier = sectionIdentifier;
+        }
 
         public Identifier(PreferenceUtils.PreferenceIdentifier identifier, @Nullable String title, @Nullable String subtitle, SectionIdentifier sectionIdentifier) {
             this.identifier = identifier;
@@ -68,10 +90,12 @@ public class ItemData {
         public SectionIdentifier getSection() {
             return sectionIdentifier;
         }
-    }
 
-    public enum SectionIdentifier {
-        STATUS_BAR_COLORS,
-        STATUS_BAR_ICONS
+        public enum SectionIdentifier {
+            COLORS,
+            CLOCK,
+            ICONS,
+            OTHER
+        }
     }
 }

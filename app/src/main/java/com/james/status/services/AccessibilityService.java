@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.ColorInt;
+import android.support.annotation.Nullable;
 import android.view.accessibility.AccessibilityEvent;
 
 import com.james.status.utils.ColorUtils;
@@ -38,9 +39,9 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
             final CharSequence packageName = event.getPackageName();
             if (packageName != null && packageName.length() > 0) {
                 if (packageName.toString().equals("com.android.systemui") && event.getClassName().toString().equals("android.widget.FrameLayout")) {
-                    setStatusBar(false);
+                    setStatusBar(Color.BLACK, null, true);
                 } else if (packageName.toString().equals("com.android.systemui")) {
-                    setStatusBar(Color.BLACK, true);
+                    setStatusBar(Color.BLACK, null, true);
                 } else {
                     new Thread() {
                         @Override
@@ -50,7 +51,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                             new Handler(getMainLooper()).post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    setStatusBar(color, true);
+                                    setStatusBar(color, null, false);
                                 }
                             });
                         }
@@ -60,7 +61,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
         }
     }
 
-    private void setStatusBar(@ColorInt int color) {
+    private void setStatusBar(@ColorInt int color, @Nullable Boolean fullscreen, @Nullable Boolean systemFullscreen) {
         Intent intent = new Intent(StatusService.ACTION_UPDATE);
         intent.setClass(this, StatusService.class);
 
@@ -68,27 +69,9 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
         if (isStatusColorAuto == null || isStatusColorAuto)
             intent.putExtra(StatusService.EXTRA_COLOR, color);
 
-        startService(intent);
-    }
-
-    private void setStatusBar(@ColorInt int color, boolean shown) {
-        Intent intent = new Intent(StatusService.ACTION_UPDATE);
-        intent.setClass(this, StatusService.class);
-
-        Boolean isStatusColorAuto = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_AUTO);
-        if (isStatusColorAuto == null || isStatusColorAuto)
-            intent.putExtra(StatusService.EXTRA_COLOR, color);
-
-        intent.putExtra(StatusService.EXTRA_FULLSCREEN, !shown);
-
-        startService(intent);
-    }
-
-    private void setStatusBar(boolean shown) {
-        Intent intent = new Intent(StatusService.ACTION_UPDATE);
-        intent.setClass(this, StatusService.class);
-
-        intent.putExtra(StatusService.EXTRA_FULLSCREEN, !shown);
+        if (fullscreen != null) intent.putExtra(StatusService.EXTRA_FULLSCREEN, fullscreen);
+        if (systemFullscreen != null)
+            intent.putExtra(StatusService.EXTRA_SYSTEM_FULLSCREEN, systemFullscreen);
 
         startService(intent);
     }

@@ -1,6 +1,7 @@
 package com.james.status.adapters;
 
 import android.animation.ValueAnimator;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -25,6 +26,7 @@ import com.google.gson.Gson;
 import com.james.status.R;
 import com.james.status.data.AppData;
 import com.james.status.dialogs.ColorPickerDialog;
+import com.james.status.dialogs.PreferenceDialog;
 import com.james.status.utils.ColorUtils;
 import com.james.status.utils.PreferenceUtils;
 import com.james.status.views.CustomImageView;
@@ -177,9 +179,9 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
                 AppData app = getApp(holder.getAdapterPosition());
                 if (app == null) return;
 
-                new ColorPickerDialog(context).setColor(app.color != null ? app.color : getDefaultColor(app)).setOnColorPickedListener(new ColorPickerDialog.OnColorPickedListener() {
+                Dialog dialog = new ColorPickerDialog(context).setPreference(app.color != null ? app.color : getDefaultColor(app)).setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
                     @Override
-                    public void onColorPicked(int color) {
+                    public void onPreference(Integer color) {
                         AppData app = getApp(holder.getAdapterPosition());
                         if (app != null) {
                             app.color = color;
@@ -190,7 +192,11 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
                     @Override
                     public void onCancel() {
                     }
-                }).show();
+                });
+
+                dialog.setTitle(app.name);
+
+                dialog.show();
             }
         });
 
@@ -201,9 +207,9 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
                 if (app == null) return;
 
                 if (b) {
-                    new ColorPickerDialog(context).setColor(app.color != null ? app.color : getDefaultColor(app)).setOnColorPickedListener(new ColorPickerDialog.OnColorPickedListener() {
+                    Dialog dialog = new ColorPickerDialog(context).setPreference(app.color != null ? app.color : getDefaultColor(app)).setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
                         @Override
-                        public void onColorPicked(int color) {
+                        public void onPreference(Integer color) {
                             AppData app = getApp(holder.getAdapterPosition());
                             if (app != null) {
                                 app.color = color;
@@ -215,7 +221,11 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
                         public void onCancel() {
                             ((SwitchCompat) holder.v.findViewById(R.id.app)).setChecked(false);
                         }
-                    }).show();
+                    });
+
+                    dialog.setTitle(app.name);
+
+                    dialog.show();
                 } else {
                     app.color = null;
                     overwrite(app);

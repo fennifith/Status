@@ -12,24 +12,24 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.james.status.R;
-import com.james.status.data.ItemData;
+import com.james.status.data.preference.PreferenceData;
 
 import java.util.ArrayList;
 
 public class PreferenceSectionAdapter extends RecyclerView.Adapter<PreferenceSectionAdapter.ViewHolder> {
 
     private Context context;
-    private ArrayList<ItemData.SectionIdentifier> sections;
-    private ArrayList<ItemData> originalDatas, datas;
+    private ArrayList<PreferenceData.Identifier.SectionIdentifier> sections;
+    private ArrayList<PreferenceData> originalDatas, datas;
 
-    public PreferenceSectionAdapter(Context context, ArrayList<ItemData> datas) {
+    public PreferenceSectionAdapter(Context context, ArrayList<PreferenceData> datas) {
         this.context = context;
         this.datas = datas;
         originalDatas = datas;
 
         sections = new ArrayList<>();
-        for (ItemData data : datas) {
-            ItemData.SectionIdentifier section = data.getIdentifier().getSection();
+        for (PreferenceData data : datas) {
+            PreferenceData.Identifier.SectionIdentifier section = data.getIdentifier().getSection();
             if (!sections.contains(section)) sections.add(section);
         }
     }
@@ -46,7 +46,7 @@ public class PreferenceSectionAdapter extends RecyclerView.Adapter<PreferenceSec
 
         title.setText(sections.get(position).name().replace('_', ' '));
 
-        ArrayList<ItemData> items = getItems(sections.get(position));
+        ArrayList<PreferenceData> items = getItems(sections.get(position));
 
         recycler.setNestedScrollingEnabled(false);
         recycler.setLayoutManager(new GridLayoutManager(context, 1));
@@ -63,9 +63,9 @@ public class PreferenceSectionAdapter extends RecyclerView.Adapter<PreferenceSec
         return sections.size();
     }
 
-    private ArrayList<ItemData> getItems(ItemData.SectionIdentifier section) {
-        ArrayList<ItemData> datas = new ArrayList<>();
-        for (ItemData data : this.datas) {
+    private ArrayList<PreferenceData> getItems(PreferenceData.Identifier.SectionIdentifier section) {
+        ArrayList<PreferenceData> datas = new ArrayList<>();
+        for (PreferenceData data : this.datas) {
             if (data.getIdentifier().getSection() == section) datas.add(data);
         }
         return datas;
@@ -84,9 +84,9 @@ public class PreferenceSectionAdapter extends RecyclerView.Adapter<PreferenceSec
         if (string != null && string.length() > 0) {
             string = string.toLowerCase();
 
-            ArrayList<ItemData> newDatas = new ArrayList<>();
-            for (ItemData data : originalDatas) {
-                ItemData.Identifier identifier = data.getIdentifier();
+            ArrayList<PreferenceData> newDatas = new ArrayList<>();
+            for (PreferenceData data : originalDatas) {
+                PreferenceData.Identifier identifier = data.getIdentifier();
 
                 String title = identifier.getTitle();
                 if (title != null && title.contains(string.toLowerCase())) {

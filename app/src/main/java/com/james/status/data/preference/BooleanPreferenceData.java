@@ -1,4 +1,4 @@
-package com.james.status.data;
+package com.james.status.data.preference;
 
 import android.content.Context;
 import android.support.v7.widget.SwitchCompat;
@@ -9,19 +9,16 @@ import android.widget.TextView;
 import com.james.status.R;
 import com.james.status.utils.PreferenceUtils;
 
-public class BooleanPreferenceData extends ItemData {
+public class BooleanPreferenceData extends PreferenceData {
 
     public boolean value;
-    private OnChangeListener listener;
 
-    public BooleanPreferenceData(Context context, Identifier identifier, boolean defaultValue, OnChangeListener listener) {
-        super(context, identifier);
+    public BooleanPreferenceData(Context context, Identifier identifier, boolean defaultValue, OnPreferenceChangeListener listener) {
+        super(context, identifier, listener);
 
         Boolean value = PreferenceUtils.getBooleanPreference(getContext(), identifier.getPreference());
         if (value == null) value = defaultValue;
         this.value = value;
-
-        this.listener = listener;
     }
 
     public static ViewHolder getViewHolder(Context context) {
@@ -43,7 +40,7 @@ public class BooleanPreferenceData extends ItemData {
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 value = b;
                 PreferenceUtils.putPreference(getContext(), getIdentifier().getPreference(), b);
-                if (listener != null) listener.onPreferenceChange(b);
+                onPreferenceChange();
             }
         });
 

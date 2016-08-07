@@ -1,4 +1,4 @@
-package com.james.status.data;
+package com.james.status.data.preference;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,10 +12,10 @@ import com.james.status.adapters.AppColorPreviewAdapter;
 import com.james.status.dialogs.AppColorDialog;
 import com.james.status.utils.PreferenceUtils;
 
-public class AppsColorPreferenceData extends ItemData {
+public class AppsColorPreferenceData extends PreferenceData {
 
     public AppsColorPreferenceData(Context context) {
-        super(context, new Identifier(PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_APPS, context.getString(R.string.preference_app_colors), null, SectionIdentifier.STATUS_BAR_COLORS));
+        super(context, new Identifier(PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_APPS, context.getString(R.string.preference_app_colors), null, Identifier.SectionIdentifier.COLORS));
     }
 
     public static ViewHolder getViewHolder(Context context) {

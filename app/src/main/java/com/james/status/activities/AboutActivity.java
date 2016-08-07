@@ -68,6 +68,29 @@ public class AboutActivity extends AppCompatActivity {
             }
         });
 
+        Glide.with(this).load("https://theandroidmaster.github.io/images/headers/vukheader.jpg").into((ImageView) findViewById(R.id.vukImage));
+
+        findViewById(R.id.vukGplus).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://plus.google.com/+Vuka%C5%A1inAn%C4%91elkovi%C4%87zavukodlak")));
+            }
+        });
+
+        findViewById(R.id.vukPlay).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/dev?id=6941105890231522296")));
+            }
+        });
+
+        findViewById(R.id.vukDribbble).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://dribbble.com/zavukodlak")));
+            }
+        });
+
         findViewById(R.id.libraries).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

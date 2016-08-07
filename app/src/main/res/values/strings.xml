@@ -10,7 +10,9 @@
     <string name="action_add_apps">Add Apps</string>
     <string name="action_search">Search</string>
     <string name="action_about">About</string>
-    <string name="action_gplus">Google Plus</string>
+    <string name="action_gplus">Google+</string>
+    <string name="action_play">Play Store</string>
+    <string name="action_dribbble">Dribbble</string>
     <string name="action_twitter">Twitter</string>
     <string name="action_website">Website</string>
     <string name="action_github">GitHub</string>
@@ -39,6 +41,14 @@
     <string name="preference_app_colors_desc">Set the color for the status bar to use in a specific app. This will override any other color options.</string>
     <string name="preference_dark_icons">Dark Icons</string>
     <string name="preference_dark_icons_desc">Darkens the status bar icons on light backgrounds.</string>
+    <string name="preference_battery_icon">Battery Icon Style</string>
+    <string name="preference_network_icon">Network Icon Style</string>
+    <string name="preference_wifi_icon">Wifi Icon Style</string>
+    <string name="preference_gps_icon">GPS Icon Style</string>
+    <string name="preference_bluetooth_icon">Bluetooth Icon Style</string>
+    <string name="preference_alarm_icon">Alarm Clock Icon Style</string>
+
+    <string name="icon_style_default">Default</string>
 
     <string name="red">Red</string>
     <string name="green">Green</string>
@@ -49,4 +59,7 @@
 
     <string name="anas_name">Anas Khan</string>
     <string name="anas_desc">Better known as the Oreo lord, this guy can add more butter to buttery interfaces.</string>
+
+    <string name="vuk_name">Vukašin Anđelković</string>
+    <string name="vuk_desc">The great lord of Material Design, yeah he makes icons and stuff.</string>
 </resources>

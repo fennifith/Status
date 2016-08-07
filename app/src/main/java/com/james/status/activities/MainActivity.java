@@ -3,7 +3,6 @@ package com.james.status.activities;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.view.MenuItemCompat;
@@ -21,15 +20,18 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.james.status.R;
 import com.james.status.adapters.PreferenceSectionAdapter;
-import com.james.status.data.AppsColorPreferenceData;
-import com.james.status.data.BooleanPreferenceData;
-import com.james.status.data.ColorPreferenceData;
-import com.james.status.data.ItemData;
+import com.james.status.data.IconStyleData;
+import com.james.status.data.preference.AppsColorPreferenceData;
+import com.james.status.data.preference.BooleanPreferenceData;
+import com.james.status.data.preference.ColorPreferenceData;
+import com.james.status.data.preference.IconPreferenceData;
+import com.james.status.data.preference.PreferenceData;
 import com.james.status.services.StatusService;
 import com.james.status.utils.PreferenceUtils;
 import com.james.status.utils.StaticUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -76,60 +78,250 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ArrayList<ItemData> datas = new ArrayList<>();
+        ArrayList<PreferenceData> datas = new ArrayList<>();
 
-        datas.add(new BooleanPreferenceData(this, new ItemData.Identifier(PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_AUTO, getString(R.string.preference_bar_color_auto), getString(R.string.preference_bar_color_auto_desc), ItemData.SectionIdentifier.STATUS_BAR_COLORS), true, new BooleanPreferenceData.OnChangeListener() {
-            @Override
-            public void onPreferenceChange(boolean preference) {
-                if (StaticUtils.isStatusServiceRunning(MainActivity.this)) {
-                    Intent intent = new Intent(StatusService.ACTION_START);
-                    intent.setClass(MainActivity.this, StatusService.class);
-                    startService(intent);
+        datas.add(new BooleanPreferenceData(
+                this,
+                new PreferenceData.Identifier(
+                        PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_AUTO,
+                        getString(R.string.preference_bar_color_auto), getString(R.string.preference_bar_color_auto_desc),
+                        PreferenceData.Identifier.SectionIdentifier.COLORS
+                ),
+                true,
+                new PreferenceData.OnPreferenceChangeListener() {
+                    @Override
+                    public void onPreferenceChange() {
+                        updateService();
+                    }
                 }
-            }
-        }));
+        ));
 
-        datas.add(new ColorPreferenceData(this, new ItemData.Identifier(PreferenceUtils.PreferenceIdentifier.STATUS_COLOR, getString(R.string.preference_bar_color_chooser), null, ItemData.SectionIdentifier.STATUS_BAR_COLORS), Color.BLACK, new ColorPreferenceData.OnChangeListener() {
-            @Override
-            public void onPreferenceChange(@ColorInt int preference) {
-                if (StaticUtils.isStatusServiceRunning(MainActivity.this)) {
-                    Intent intent = new Intent(StatusService.ACTION_START);
-                    intent.setClass(MainActivity.this, StatusService.class);
-                    startService(intent);
+        datas.add(new ColorPreferenceData(
+                this,
+                new PreferenceData.Identifier(
+                        PreferenceUtils.PreferenceIdentifier.STATUS_COLOR,
+                        getString(R.string.preference_bar_color_chooser),
+                        PreferenceData.Identifier.SectionIdentifier.COLORS
+                ),
+                Color.BLACK,
+                new PreferenceData.OnPreferenceChangeListener() {
+                    @Override
+                    public void onPreferenceChange() {
+                        updateService();
+                    }
                 }
-            }
-        }));
+        ));
 
         datas.add(new AppsColorPreferenceData(this));
 
-        datas.add(new BooleanPreferenceData(this, new ItemData.Identifier(PreferenceUtils.PreferenceIdentifier.STATUS_CLOCK_AMPM, getString(R.string.preference_ampm), getString(R.string.preference_ampm_desc), ItemData.SectionIdentifier.STATUS_BAR_ICONS), true, new BooleanPreferenceData.OnChangeListener() {
-            @Override
-            public void onPreferenceChange(boolean preference) {
-                if (StaticUtils.isStatusServiceRunning(MainActivity.this)) {
-                    Intent intent = new Intent(StatusService.ACTION_START);
-                    intent.setClass(MainActivity.this, StatusService.class);
-                    startService(intent);
+        datas.add(new BooleanPreferenceData(
+                this,
+                new PreferenceData.Identifier(
+                        PreferenceUtils.PreferenceIdentifier.STATUS_CLOCK_AMPM,
+                        getString(R.string.preference_ampm),
+                        getString(R.string.preference_ampm_desc),
+                        PreferenceData.Identifier.SectionIdentifier.CLOCK
+                ),
+                true,
+                new PreferenceData.OnPreferenceChangeListener() {
+                    @Override
+                    public void onPreferenceChange() {
+                        updateService();
+                    }
                 }
-            }
-        }));
+        ));
 
-        datas.add(new BooleanPreferenceData(this, new ItemData.Identifier(PreferenceUtils.PreferenceIdentifier.STATUS_BATTERY_PERCENT, getString(R.string.preference_battery_percent), getString(R.string.preference_battery_percent_desc), ItemData.SectionIdentifier.STATUS_BAR_ICONS), false, new BooleanPreferenceData.OnChangeListener() {
-            @Override
-            public void onPreferenceChange(boolean preference) {
-                if (StaticUtils.isStatusServiceRunning(MainActivity.this)) {
-                    Intent intent = new Intent(StatusService.ACTION_START);
-                    intent.setClass(MainActivity.this, StatusService.class);
-                    startService(intent);
+        datas.add(new BooleanPreferenceData(
+                this,
+                new PreferenceData.Identifier(
+                        PreferenceUtils.PreferenceIdentifier.STATUS_DARK_ICONS,
+                        getString(R.string.preference_dark_icons),
+                        getString(R.string.preference_dark_icons_desc),
+                        PreferenceData.Identifier.SectionIdentifier.ICONS
+                ),
+                true,
+                null
+        ));
+
+        datas.add(new IconPreferenceData(
+                this,
+                new PreferenceData.Identifier(
+                        PreferenceUtils.PreferenceIdentifier.BATTERY_ICON_STYLE,
+                        getString(R.string.preference_battery_icon),
+                        PreferenceData.Identifier.SectionIdentifier.ICONS
+                ),
+                Arrays.asList(
+                        new IconStyleData(
+                                getString(R.string.icon_style_default),
+                                R.drawable.ic_battery_alert,
+                                R.drawable.ic_battery_20,
+                                R.drawable.ic_battery_30,
+                                R.drawable.ic_battery_50,
+                                R.drawable.ic_battery_60,
+                                R.drawable.ic_battery_80,
+                                R.drawable.ic_battery_90,
+                                R.drawable.ic_battery_full,
+                                R.drawable.ic_battery_charging_20,
+                                R.drawable.ic_battery_charging_30,
+                                R.drawable.ic_battery_charging_50,
+                                R.drawable.ic_battery_charging_60,
+                                R.drawable.ic_battery_charging_80,
+                                R.drawable.ic_battery_charging_90,
+                                R.drawable.ic_battery_charging_full
+                        )
+                ),
+                new PreferenceData.OnPreferenceChangeListener() {
+                    @Override
+                    public void onPreferenceChange() {
+                        updateService();
+                    }
                 }
-            }
-        }));
+        ));
 
-        datas.add(new BooleanPreferenceData(this, new ItemData.Identifier(PreferenceUtils.PreferenceIdentifier.STATUS_DARK_ICONS, getString(R.string.preference_dark_icons), getString(R.string.preference_dark_icons_desc), ItemData.SectionIdentifier.STATUS_BAR_ICONS), true, null));
+        datas.add(new IconPreferenceData(
+                this,
+                new PreferenceData.Identifier(
+                        PreferenceUtils.PreferenceIdentifier.NETWORK_ICON_STYLE,
+                        getString(R.string.preference_network_icon),
+                        PreferenceData.Identifier.SectionIdentifier.ICONS
+                ),
+                Arrays.asList(
+                        new IconStyleData(
+                                getString(R.string.icon_style_default),
+                                R.drawable.ic_signal_0,
+                                R.drawable.ic_signal_1,
+                                R.drawable.ic_signal_2,
+                                R.drawable.ic_signal_3,
+                                R.drawable.ic_signal_4
+                        )
+                ),
+                new PreferenceData.OnPreferenceChangeListener() {
+                    @Override
+                    public void onPreferenceChange() {
+                        updateService();
+                    }
+                }
+        ));
+
+        datas.add(new IconPreferenceData(
+                this,
+                new PreferenceData.Identifier(
+                        PreferenceUtils.PreferenceIdentifier.WIFI_ICON_STYLE,
+                        getString(R.string.preference_wifi_icon),
+                        PreferenceData.Identifier.SectionIdentifier.ICONS
+                ),
+                Arrays.asList(
+                        new IconStyleData(
+                                getString(R.string.icon_style_default),
+                                R.drawable.ic_wifi_0,
+                                R.drawable.ic_wifi_1,
+                                R.drawable.ic_wifi_2,
+                                R.drawable.ic_wifi_3,
+                                R.drawable.ic_wifi_4
+                        )
+                ),
+                new PreferenceData.OnPreferenceChangeListener() {
+                    @Override
+                    public void onPreferenceChange() {
+                        updateService();
+                    }
+                }
+        ));
+
+        datas.add(new IconPreferenceData(
+                this,
+                new PreferenceData.Identifier(
+                        PreferenceUtils.PreferenceIdentifier.GPS_ICON_STYLE,
+                        getString(R.string.preference_gps_icon),
+                        PreferenceData.Identifier.SectionIdentifier.ICONS
+                ),
+                Arrays.asList(
+                        new IconStyleData(
+                                getString(R.string.icon_style_default),
+                                R.drawable.ic_gps_searching,
+                                R.drawable.ic_gps_fixed
+                        )
+                ),
+                new PreferenceData.OnPreferenceChangeListener() {
+                    @Override
+                    public void onPreferenceChange() {
+                        updateService();
+                    }
+                }
+        ));
+
+        datas.add(new IconPreferenceData(
+                this,
+                new PreferenceData.Identifier(
+                        PreferenceUtils.PreferenceIdentifier.BLUETOOTH_ICON_STYLE,
+                        getString(R.string.preference_bluetooth_icon),
+                        PreferenceData.Identifier.SectionIdentifier.ICONS
+                ),
+                Arrays.asList(
+                        new IconStyleData(
+                                getString(R.string.icon_style_default),
+                                R.drawable.ic_bluetooth,
+                                R.drawable.ic_bluetooth_connected
+                        )
+                ),
+                new PreferenceData.OnPreferenceChangeListener() {
+                    @Override
+                    public void onPreferenceChange() {
+                        updateService();
+                    }
+                }
+        ));
+
+        datas.add(new IconPreferenceData(
+                this,
+                new PreferenceData.Identifier(
+                        PreferenceUtils.PreferenceIdentifier.ALARM_ICON_STYLE,
+                        getString(R.string.preference_alarm_icon),
+                        PreferenceData.Identifier.SectionIdentifier.ICONS
+                ),
+                Arrays.asList(
+                        new IconStyleData(
+                                getString(R.string.icon_style_default),
+                                R.drawable.ic_alarm
+                        )
+                ),
+                new PreferenceData.OnPreferenceChangeListener() {
+                    @Override
+                    public void onPreferenceChange() {
+                        updateService();
+                    }
+                }
+        ));
+
+        datas.add(new BooleanPreferenceData(
+                this,
+                new PreferenceData.Identifier(
+                        PreferenceUtils.PreferenceIdentifier.STATUS_BATTERY_PERCENT,
+                        getString(R.string.preference_battery_percent),
+                        getString(R.string.preference_battery_percent_desc),
+                        PreferenceData.Identifier.SectionIdentifier.OTHER
+                ),
+                false,
+                new PreferenceData.OnPreferenceChangeListener() {
+                    @Override
+                    public void onPreferenceChange() {
+                        updateService();
+                    }
+                }
+        ));
 
         adapter = new PreferenceSectionAdapter(this, datas);
 
         recycler.setLayoutManager(new GridLayoutManager(this, 1));
         recycler.setAdapter(adapter);
+    }
+
+    private void updateService() {
+        if (StaticUtils.isStatusServiceRunning(MainActivity.this)) {
+            Intent intent = new Intent(StatusService.ACTION_START);
+            intent.setClass(MainActivity.this, StatusService.class);
+            startService(intent);
+        }
     }
 
     @Override
