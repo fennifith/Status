@@ -30,7 +30,6 @@ import com.james.status.services.StatusService;
 import com.james.status.utils.PreferenceUtils;
 import com.james.status.utils.StaticUtils;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
@@ -78,239 +77,287 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ArrayList<PreferenceData> datas = new ArrayList<>();
-
-        datas.add(new BooleanPreferenceData(
-                this,
-                new PreferenceData.Identifier(
-                        PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_AUTO,
-                        getString(R.string.preference_bar_color_auto), getString(R.string.preference_bar_color_auto_desc),
-                        PreferenceData.Identifier.SectionIdentifier.COLORS
+        adapter = new PreferenceSectionAdapter(this, Arrays.asList(
+                new BooleanPreferenceData(
+                        this,
+                        new PreferenceData.Identifier(
+                                PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_AUTO,
+                                getString(R.string.preference_bar_color_auto), getString(R.string.preference_bar_color_auto_desc),
+                                PreferenceData.Identifier.SectionIdentifier.COLORS
+                        ),
+                        true,
+                        new PreferenceData.OnPreferenceChangeListener() {
+                            @Override
+                            public void onPreferenceChange() {
+                                updateService();
+                            }
+                        }
                 ),
-                true,
-                new PreferenceData.OnPreferenceChangeListener() {
-                    @Override
-                    public void onPreferenceChange() {
-                        updateService();
-                    }
-                }
+                new ColorPreferenceData(
+                        this,
+                        new PreferenceData.Identifier(
+                                PreferenceUtils.PreferenceIdentifier.STATUS_COLOR,
+                                getString(R.string.preference_bar_color_chooser),
+                                PreferenceData.Identifier.SectionIdentifier.COLORS
+                        ),
+                        Color.BLACK,
+                        new PreferenceData.OnPreferenceChangeListener() {
+                            @Override
+                            public void onPreferenceChange() {
+                                updateService();
+                            }
+                        }
+                ),
+                new AppsColorPreferenceData(this),
+                new BooleanPreferenceData(
+                        this,
+                        new PreferenceData.Identifier(
+                                PreferenceUtils.PreferenceIdentifier.STATUS_CLOCK_AMPM,
+                                getString(R.string.preference_ampm),
+                                getString(R.string.preference_ampm_desc),
+                                PreferenceData.Identifier.SectionIdentifier.CLOCK
+                        ),
+                        true,
+                        new PreferenceData.OnPreferenceChangeListener() {
+                            @Override
+                            public void onPreferenceChange() {
+                                updateService();
+                            }
+                        }
+                ),
+                new BooleanPreferenceData(
+                        this,
+                        new PreferenceData.Identifier(
+                                PreferenceUtils.PreferenceIdentifier.STATUS_DARK_ICONS,
+                                getString(R.string.preference_dark_icons),
+                                getString(R.string.preference_dark_icons_desc),
+                                PreferenceData.Identifier.SectionIdentifier.ICONS
+                        ),
+                        true,
+                        null
+                ),
+                new IconPreferenceData(
+                        this,
+                        new PreferenceData.Identifier(
+                                PreferenceUtils.PreferenceIdentifier.BATTERY_ICON_STYLE,
+                                getString(R.string.preference_battery_icon),
+                                PreferenceData.Identifier.SectionIdentifier.ICONS
+                        ),
+                        Arrays.asList(
+                                new IconStyleData(
+                                        getString(R.string.icon_style_default),
+                                        R.drawable.ic_battery_alert,
+                                        R.drawable.ic_battery_20,
+                                        R.drawable.ic_battery_30,
+                                        R.drawable.ic_battery_50,
+                                        R.drawable.ic_battery_60,
+                                        R.drawable.ic_battery_80,
+                                        R.drawable.ic_battery_90,
+                                        R.drawable.ic_battery_full,
+                                        R.drawable.ic_battery_charging_20,
+                                        R.drawable.ic_battery_charging_30,
+                                        R.drawable.ic_battery_charging_50,
+                                        R.drawable.ic_battery_charging_60,
+                                        R.drawable.ic_battery_charging_80,
+                                        R.drawable.ic_battery_charging_90,
+                                        R.drawable.ic_battery_charging_full
+                                ),
+                                new IconStyleData(
+                                        getString(R.string.icon_style_circle),
+                                        R.drawable.ic_battery_circle_alert,
+                                        R.drawable.ic_battery_circle_20,
+                                        R.drawable.ic_battery_circle_30,
+                                        R.drawable.ic_battery_circle_50,
+                                        R.drawable.ic_battery_circle_60,
+                                        R.drawable.ic_battery_circle_80,
+                                        R.drawable.ic_battery_circle_90,
+                                        R.drawable.ic_battery_circle_full,
+                                        R.drawable.ic_battery_circle_charging_20,
+                                        R.drawable.ic_battery_circle_charging_30,
+                                        R.drawable.ic_battery_circle_charging_50,
+                                        R.drawable.ic_battery_circle_charging_60,
+                                        R.drawable.ic_battery_circle_charging_80,
+                                        R.drawable.ic_battery_circle_charging_90,
+                                        R.drawable.ic_battery_circle_charging_full
+                                ),
+                                new IconStyleData(
+                                        getString(R.string.icon_style_circle_outline),
+                                        R.drawable.ic_battery_circle_outline_alert,
+                                        R.drawable.ic_battery_circle_outline_20,
+                                        R.drawable.ic_battery_circle_outline_30,
+                                        R.drawable.ic_battery_circle_outline_50,
+                                        R.drawable.ic_battery_circle_outline_60,
+                                        R.drawable.ic_battery_circle_outline_80,
+                                        R.drawable.ic_battery_circle_outline_90,
+                                        R.drawable.ic_battery_circle_outline_full,
+                                        R.drawable.ic_battery_circle_outline_20,
+                                        R.drawable.ic_battery_circle_outline_30,
+                                        R.drawable.ic_battery_circle_outline_50,
+                                        R.drawable.ic_battery_circle_outline_60,
+                                        R.drawable.ic_battery_circle_outline_80,
+                                        R.drawable.ic_battery_circle_outline_90,
+                                        R.drawable.ic_battery_circle_outline_full
+                                )
+                        ),
+                        new PreferenceData.OnPreferenceChangeListener() {
+                            @Override
+                            public void onPreferenceChange() {
+                                updateService();
+                            }
+                        }
+                ),
+                new IconPreferenceData(
+                        this,
+                        new PreferenceData.Identifier(
+                                PreferenceUtils.PreferenceIdentifier.NETWORK_ICON_STYLE,
+                                getString(R.string.preference_network_icon),
+                                PreferenceData.Identifier.SectionIdentifier.ICONS
+                        ),
+                        Arrays.asList(
+                                new IconStyleData(
+                                        getString(R.string.icon_style_default),
+                                        R.drawable.ic_signal_0,
+                                        R.drawable.ic_signal_1,
+                                        R.drawable.ic_signal_2,
+                                        R.drawable.ic_signal_3,
+                                        R.drawable.ic_signal_4
+                                )
+                        ),
+                        new PreferenceData.OnPreferenceChangeListener() {
+                            @Override
+                            public void onPreferenceChange() {
+                                updateService();
+                            }
+                        }
+                ),
+                new IconPreferenceData(
+                        this,
+                        new PreferenceData.Identifier(
+                                PreferenceUtils.PreferenceIdentifier.WIFI_ICON_STYLE,
+                                getString(R.string.preference_wifi_icon),
+                                PreferenceData.Identifier.SectionIdentifier.ICONS
+                        ),
+                        Arrays.asList(
+                                new IconStyleData(
+                                        getString(R.string.icon_style_default),
+                                        R.drawable.ic_wifi_0,
+                                        R.drawable.ic_wifi_1,
+                                        R.drawable.ic_wifi_2,
+                                        R.drawable.ic_wifi_3,
+                                        R.drawable.ic_wifi_4
+                                )
+                        ),
+                        new PreferenceData.OnPreferenceChangeListener() {
+                            @Override
+                            public void onPreferenceChange() {
+                                updateService();
+                            }
+                        }
+                ),
+                new IconPreferenceData(
+                        this,
+                        new PreferenceData.Identifier(
+                                PreferenceUtils.PreferenceIdentifier.GPS_ICON_STYLE,
+                                getString(R.string.preference_gps_icon),
+                                PreferenceData.Identifier.SectionIdentifier.ICONS
+                        ),
+                        Arrays.asList(
+                                new IconStyleData(
+                                        getString(R.string.icon_style_default),
+                                        R.drawable.ic_gps_searching,
+                                        R.drawable.ic_gps_fixed
+                                ),
+                                new IconStyleData(
+                                        getString(R.string.icon_style_dish),
+                                        R.drawable.ic_gps_dish_searching,
+                                        R.drawable.ic_gps_dish_fixed
+                                )
+                        ),
+                        new PreferenceData.OnPreferenceChangeListener() {
+                            @Override
+                            public void onPreferenceChange() {
+                                updateService();
+                            }
+                        }
+                ),
+                new IconPreferenceData(
+                        this,
+                        new PreferenceData.Identifier(
+                                PreferenceUtils.PreferenceIdentifier.BLUETOOTH_ICON_STYLE,
+                                getString(R.string.preference_bluetooth_icon),
+                                PreferenceData.Identifier.SectionIdentifier.ICONS
+                        ),
+                        Arrays.asList(
+                                new IconStyleData(
+                                        getString(R.string.icon_style_default),
+                                        R.drawable.ic_bluetooth,
+                                        R.drawable.ic_bluetooth_connected
+                                )
+                        ),
+                        new PreferenceData.OnPreferenceChangeListener() {
+                            @Override
+                            public void onPreferenceChange() {
+                                updateService();
+                            }
+                        }
+                ),
+                new IconPreferenceData(
+                        this,
+                        new PreferenceData.Identifier(
+                                PreferenceUtils.PreferenceIdentifier.AIRPLANE_MODE_ICON_STYLE,
+                                getString(R.string.preference_airplane_mode_icon),
+                                PreferenceData.Identifier.SectionIdentifier.ICONS
+                        ),
+                        Arrays.asList(
+                                new IconStyleData(
+                                        getString(R.string.icon_style_default),
+                                        R.drawable.ic_airplane
+                                )
+                        ),
+                        new PreferenceData.OnPreferenceChangeListener() {
+                            @Override
+                            public void onPreferenceChange() {
+                                updateService();
+                            }
+                        }
+                ),
+                new IconPreferenceData(
+                        this,
+                        new PreferenceData.Identifier(
+                                PreferenceUtils.PreferenceIdentifier.ALARM_ICON_STYLE,
+                                getString(R.string.preference_alarm_icon),
+                                PreferenceData.Identifier.SectionIdentifier.ICONS
+                        ),
+                        Arrays.asList(
+                                new IconStyleData(
+                                        getString(R.string.icon_style_default),
+                                        R.drawable.ic_alarm
+                                )
+                        ),
+                        new PreferenceData.OnPreferenceChangeListener() {
+                            @Override
+                            public void onPreferenceChange() {
+                                updateService();
+                            }
+                        }
+                ),
+                new BooleanPreferenceData(
+                        this,
+                        new PreferenceData.Identifier(
+                                PreferenceUtils.PreferenceIdentifier.STATUS_BATTERY_PERCENT,
+                                getString(R.string.preference_battery_percent),
+                                getString(R.string.preference_battery_percent_desc),
+                                PreferenceData.Identifier.SectionIdentifier.OTHER
+                        ),
+                        false,
+                        new PreferenceData.OnPreferenceChangeListener() {
+                            @Override
+                            public void onPreferenceChange() {
+                                updateService();
+                            }
+                        }
+                )
         ));
-
-        datas.add(new ColorPreferenceData(
-                this,
-                new PreferenceData.Identifier(
-                        PreferenceUtils.PreferenceIdentifier.STATUS_COLOR,
-                        getString(R.string.preference_bar_color_chooser),
-                        PreferenceData.Identifier.SectionIdentifier.COLORS
-                ),
-                Color.BLACK,
-                new PreferenceData.OnPreferenceChangeListener() {
-                    @Override
-                    public void onPreferenceChange() {
-                        updateService();
-                    }
-                }
-        ));
-
-        datas.add(new AppsColorPreferenceData(this));
-
-        datas.add(new BooleanPreferenceData(
-                this,
-                new PreferenceData.Identifier(
-                        PreferenceUtils.PreferenceIdentifier.STATUS_CLOCK_AMPM,
-                        getString(R.string.preference_ampm),
-                        getString(R.string.preference_ampm_desc),
-                        PreferenceData.Identifier.SectionIdentifier.CLOCK
-                ),
-                true,
-                new PreferenceData.OnPreferenceChangeListener() {
-                    @Override
-                    public void onPreferenceChange() {
-                        updateService();
-                    }
-                }
-        ));
-
-        datas.add(new BooleanPreferenceData(
-                this,
-                new PreferenceData.Identifier(
-                        PreferenceUtils.PreferenceIdentifier.STATUS_DARK_ICONS,
-                        getString(R.string.preference_dark_icons),
-                        getString(R.string.preference_dark_icons_desc),
-                        PreferenceData.Identifier.SectionIdentifier.ICONS
-                ),
-                true,
-                null
-        ));
-
-        datas.add(new IconPreferenceData(
-                this,
-                new PreferenceData.Identifier(
-                        PreferenceUtils.PreferenceIdentifier.BATTERY_ICON_STYLE,
-                        getString(R.string.preference_battery_icon),
-                        PreferenceData.Identifier.SectionIdentifier.ICONS
-                ),
-                Arrays.asList(
-                        new IconStyleData(
-                                getString(R.string.icon_style_default),
-                                R.drawable.ic_battery_alert,
-                                R.drawable.ic_battery_20,
-                                R.drawable.ic_battery_30,
-                                R.drawable.ic_battery_50,
-                                R.drawable.ic_battery_60,
-                                R.drawable.ic_battery_80,
-                                R.drawable.ic_battery_90,
-                                R.drawable.ic_battery_full,
-                                R.drawable.ic_battery_charging_20,
-                                R.drawable.ic_battery_charging_30,
-                                R.drawable.ic_battery_charging_50,
-                                R.drawable.ic_battery_charging_60,
-                                R.drawable.ic_battery_charging_80,
-                                R.drawable.ic_battery_charging_90,
-                                R.drawable.ic_battery_charging_full
-                        )
-                ),
-                new PreferenceData.OnPreferenceChangeListener() {
-                    @Override
-                    public void onPreferenceChange() {
-                        updateService();
-                    }
-                }
-        ));
-
-        datas.add(new IconPreferenceData(
-                this,
-                new PreferenceData.Identifier(
-                        PreferenceUtils.PreferenceIdentifier.NETWORK_ICON_STYLE,
-                        getString(R.string.preference_network_icon),
-                        PreferenceData.Identifier.SectionIdentifier.ICONS
-                ),
-                Arrays.asList(
-                        new IconStyleData(
-                                getString(R.string.icon_style_default),
-                                R.drawable.ic_signal_0,
-                                R.drawable.ic_signal_1,
-                                R.drawable.ic_signal_2,
-                                R.drawable.ic_signal_3,
-                                R.drawable.ic_signal_4
-                        )
-                ),
-                new PreferenceData.OnPreferenceChangeListener() {
-                    @Override
-                    public void onPreferenceChange() {
-                        updateService();
-                    }
-                }
-        ));
-
-        datas.add(new IconPreferenceData(
-                this,
-                new PreferenceData.Identifier(
-                        PreferenceUtils.PreferenceIdentifier.WIFI_ICON_STYLE,
-                        getString(R.string.preference_wifi_icon),
-                        PreferenceData.Identifier.SectionIdentifier.ICONS
-                ),
-                Arrays.asList(
-                        new IconStyleData(
-                                getString(R.string.icon_style_default),
-                                R.drawable.ic_wifi_0,
-                                R.drawable.ic_wifi_1,
-                                R.drawable.ic_wifi_2,
-                                R.drawable.ic_wifi_3,
-                                R.drawable.ic_wifi_4
-                        )
-                ),
-                new PreferenceData.OnPreferenceChangeListener() {
-                    @Override
-                    public void onPreferenceChange() {
-                        updateService();
-                    }
-                }
-        ));
-
-        datas.add(new IconPreferenceData(
-                this,
-                new PreferenceData.Identifier(
-                        PreferenceUtils.PreferenceIdentifier.GPS_ICON_STYLE,
-                        getString(R.string.preference_gps_icon),
-                        PreferenceData.Identifier.SectionIdentifier.ICONS
-                ),
-                Arrays.asList(
-                        new IconStyleData(
-                                getString(R.string.icon_style_default),
-                                R.drawable.ic_gps_searching,
-                                R.drawable.ic_gps_fixed
-                        )
-                ),
-                new PreferenceData.OnPreferenceChangeListener() {
-                    @Override
-                    public void onPreferenceChange() {
-                        updateService();
-                    }
-                }
-        ));
-
-        datas.add(new IconPreferenceData(
-                this,
-                new PreferenceData.Identifier(
-                        PreferenceUtils.PreferenceIdentifier.BLUETOOTH_ICON_STYLE,
-                        getString(R.string.preference_bluetooth_icon),
-                        PreferenceData.Identifier.SectionIdentifier.ICONS
-                ),
-                Arrays.asList(
-                        new IconStyleData(
-                                getString(R.string.icon_style_default),
-                                R.drawable.ic_bluetooth,
-                                R.drawable.ic_bluetooth_connected
-                        )
-                ),
-                new PreferenceData.OnPreferenceChangeListener() {
-                    @Override
-                    public void onPreferenceChange() {
-                        updateService();
-                    }
-                }
-        ));
-
-        datas.add(new IconPreferenceData(
-                this,
-                new PreferenceData.Identifier(
-                        PreferenceUtils.PreferenceIdentifier.ALARM_ICON_STYLE,
-                        getString(R.string.preference_alarm_icon),
-                        PreferenceData.Identifier.SectionIdentifier.ICONS
-                ),
-                Arrays.asList(
-                        new IconStyleData(
-                                getString(R.string.icon_style_default),
-                                R.drawable.ic_alarm
-                        )
-                ),
-                new PreferenceData.OnPreferenceChangeListener() {
-                    @Override
-                    public void onPreferenceChange() {
-                        updateService();
-                    }
-                }
-        ));
-
-        datas.add(new BooleanPreferenceData(
-                this,
-                new PreferenceData.Identifier(
-                        PreferenceUtils.PreferenceIdentifier.STATUS_BATTERY_PERCENT,
-                        getString(R.string.preference_battery_percent),
-                        getString(R.string.preference_battery_percent_desc),
-                        PreferenceData.Identifier.SectionIdentifier.OTHER
-                ),
-                false,
-                new PreferenceData.OnPreferenceChangeListener() {
-                    @Override
-                    public void onPreferenceChange() {
-                        updateService();
-                    }
-                }
-        ));
-
-        adapter = new PreferenceSectionAdapter(this, datas);
 
         recycler.setLayoutManager(new GridLayoutManager(this, 1));
         recycler.setAdapter(adapter);

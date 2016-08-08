@@ -14,7 +14,7 @@
         android:layout_marginRight="16dp"
         android:layout_weight="1" />
 
-    <com.james.status.views.SquareImageView
+    <com.james.status.views.IconStyleImageView
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:id="@+id/icon"

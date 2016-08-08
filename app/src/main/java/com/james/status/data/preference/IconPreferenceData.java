@@ -2,9 +2,6 @@ package com.james.status.data.preference;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -14,7 +11,7 @@ import com.james.status.data.IconStyleData;
 import com.james.status.dialogs.IconPickerDialog;
 import com.james.status.dialogs.PreferenceDialog;
 import com.james.status.utils.PreferenceUtils;
-import com.james.status.views.CustomImageView;
+import com.james.status.views.IconStyleImageView;
 
 import java.util.List;
 
@@ -39,14 +36,11 @@ public class IconPreferenceData extends PreferenceData {
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         TextView title = (TextView) holder.v.findViewById(R.id.title);
-        CustomImageView icon = (CustomImageView) holder.v.findViewById(R.id.icon);
+        IconStyleImageView icon = (IconStyleImageView) holder.v.findViewById(R.id.icon);
 
         title.setText(getIdentifier().getTitle());
 
-        Integer iconResource = getIconResource();
-        if (iconResource != null)
-            icon.setImageDrawable(ContextCompat.getDrawable(getContext(), iconResource));
-        else icon.setImageDrawable(new ColorDrawable(Color.TRANSPARENT));
+        icon.setIconStyle(iconStyle);
 
         holder.v.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,12 +48,8 @@ public class IconPreferenceData extends PreferenceData {
                 Dialog dialog = new IconPickerDialog(getContext(), iconStyles).setPreference(iconStyle).setListener(new PreferenceDialog.OnPreferenceListener<IconStyleData>() {
                     @Override
                     public void onPreference(IconStyleData preference) {
-                        CustomImageView icon = (CustomImageView) holder.v.findViewById(R.id.icon);
-
-                        Integer iconResource = getIconResource();
-                        if (iconResource != null)
-                            icon.transition(ContextCompat.getDrawable(getContext(), iconResource));
-                        else icon.setImageDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        IconStyleImageView icon = (IconStyleImageView) holder.v.findViewById(R.id.icon);
+                        icon.setIconStyle(preference);
 
                         IconPreferenceData.this.iconStyle = iconStyle;
                         PreferenceUtils.putPreference(getContext(), getIdentifier().getPreference(), iconStyle);
@@ -74,19 +64,5 @@ public class IconPreferenceData extends PreferenceData {
                 dialog.show();
             }
         });
-    }
-
-    public Integer getIconResource() {
-        if (getResourceSize() > 0) return iconStyle.resource[0];
-        else return null;
-    }
-
-    public Integer getIconResource(int level) {
-        if (level < getResourceSize()) return iconStyle.resource[level];
-        else return null;
-    }
-
-    public int getResourceSize() {
-        return iconStyle.resource.length;
     }
 }

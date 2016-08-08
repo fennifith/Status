@@ -1,0 +1,64 @@
+package com.james.status.data.icon;
+
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.BatteryManager;
+import android.support.graphics.drawable.VectorDrawableCompat;
+
+import com.james.status.R;
+import com.james.status.data.IconStyleData;
+import com.james.status.utils.PreferenceUtils;
+
+public class BatteryIconData extends IconData<BatteryIconData.BatteryReceiver> {
+
+    public BatteryIconData(Context context, PreferenceUtils.PreferenceIdentifier identifier, DrawableListener drawableListener, TextListener textListener) {
+        super(context, identifier, drawableListener, textListener);
+    }
+
+    @Override
+    public BatteryReceiver getReceiver() {
+        return new BatteryReceiver();
+    }
+
+    @Override
+    public IntentFilter getIntentFilter() {
+        return new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+    }
+
+    @Override
+    public IconStyleData getDefaultIconStyle() {
+        return new IconStyleData(
+                getContext().getString(R.string.icon_style_default),
+                R.drawable.ic_battery_alert,
+                R.drawable.ic_battery_20,
+                R.drawable.ic_battery_30,
+                R.drawable.ic_battery_50,
+                R.drawable.ic_battery_60,
+                R.drawable.ic_battery_80,
+                R.drawable.ic_battery_90,
+                R.drawable.ic_battery_full,
+                R.drawable.ic_battery_charging_20,
+                R.drawable.ic_battery_charging_30,
+                R.drawable.ic_battery_charging_50,
+                R.drawable.ic_battery_charging_60,
+                R.drawable.ic_battery_charging_80,
+                R.drawable.ic_battery_charging_90,
+                R.drawable.ic_battery_charging_full
+        );
+    }
+
+    public class BatteryReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
+            int status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, 0);
+
+            if (status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL)
+                level += 7;
+
+            onDrawableUpdate(VectorDrawableCompat.create(getContext().getResources(), getIconResource(level), getContext().getTheme()));
+        }
+    }
+}

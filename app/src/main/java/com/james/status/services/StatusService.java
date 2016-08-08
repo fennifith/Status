@@ -1,34 +1,22 @@
 package com.james.status.services;
 
-import android.app.AlarmManager;
 import android.app.KeyguardManager;
 import android.app.Service;
-import android.bluetooth.BluetoothAdapter;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
-import android.net.NetworkInfo;
-import android.net.wifi.WifiManager;
-import android.os.BatteryManager;
-import android.os.Build;
 import android.os.IBinder;
 import android.os.Parcelable;
 import android.service.notification.StatusBarNotification;
 import android.support.annotation.Nullable;
-import android.telephony.PhoneStateListener;
-import android.telephony.SignalStrength;
-import android.telephony.TelephonyManager;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 
 import com.james.status.utils.PreferenceUtils;
-import com.james.status.utils.StaticUtils;
 import com.james.status.views.StatusView;
 
 import java.util.ArrayList;
@@ -51,18 +39,8 @@ public class StatusService extends Service {
     private StatusView statusView;
     private View fullscreenView;
 
-    private AlarmManager alarmManager;
-    private WifiManager wifiManager;
-    private TelephonyManager telephonyManager;
     private KeyguardManager keyguardManager;
     private WindowManager windowManager;
-
-    private AlarmReceiver alarmReceiver;
-    private AirplaneModeReceiver airplaneModeReceiver;
-    private BluetoothReceiver bluetoothReceiver;
-    private NetworkReceiver networkReceiver;
-    private WifiReceiver wifiReceiver;
-    private BatteryReceiver batteryReceiver;
 
     @Override
     public void onCreate() {
@@ -70,29 +48,6 @@ public class StatusService extends Service {
         windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
 
         keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
-        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-        telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            alarmReceiver = new AlarmReceiver();
-            registerReceiver(alarmReceiver, new IntentFilter(AlarmManager.ACTION_NEXT_ALARM_CLOCK_CHANGED));
-        }
-
-        airplaneModeReceiver = new AirplaneModeReceiver();
-        registerReceiver(airplaneModeReceiver, new IntentFilter(Intent.ACTION_AIRPLANE_MODE_CHANGED));
-
-        bluetoothReceiver = new BluetoothReceiver();
-        registerReceiver(bluetoothReceiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
-
-        networkReceiver = new NetworkReceiver();
-        telephonyManager.listen(networkReceiver, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
-
-        wifiReceiver = new WifiReceiver();
-        registerReceiver(wifiReceiver, new IntentFilter(WifiManager.NETWORK_STATE_CHANGED_ACTION));
-
-        batteryReceiver = new BatteryReceiver();
-        registerReceiver(batteryReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
 
         Boolean enabled = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED);
         if (enabled == null || !enabled) stopSelf();
@@ -162,17 +117,6 @@ public class StatusService extends Service {
 
         windowManager.addView(statusView, params);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            statusView.setAlarm(alarmManager.getNextAlarmClock() != null);
-
-        int bluetoothState = StaticUtils.getBluetoothState(this);
-        statusView.setBluetooth(bluetoothState != BluetoothAdapter.STATE_OFF, bluetoothState == BluetoothAdapter.STATE_CONNECTED);
-
-        statusView.setWifiConnected(wifiManager.getWifiState() == WifiManager.WIFI_STATE_ENABLED);
-
-        int level = WifiManager.calculateSignalLevel(wifiManager.getConnectionInfo().getRssi(), 4);
-        statusView.setWifiStrength(level);
-
         Intent intent = new Intent(NotificationService.ACTION_GET_NOTIFICATIONS);
         intent.setClass(this, NotificationService.class);
         startService(intent);
@@ -198,12 +142,6 @@ public class StatusService extends Service {
 
     @Override
     public void onDestroy() {
-        unregisterReceiver(alarmReceiver);
-        unregisterReceiver(airplaneModeReceiver);
-        unregisterReceiver(bluetoothReceiver);
-        unregisterReceiver(wifiReceiver);
-        unregisterReceiver(batteryReceiver);
-
         if (fullscreenView != null) {
             windowManager.removeView(fullscreenView);
             fullscreenView = null;
@@ -215,60 +153,5 @@ public class StatusService extends Service {
         }
 
         super.onDestroy();
-    }
-
-    private class AlarmReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (statusView != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                statusView.setAlarm(alarmManager.getNextAlarmClock() != null);
-        }
-    }
-
-    private class AirplaneModeReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (statusView != null)
-                statusView.setAirplaneMode(intent.getBooleanExtra(TelephonyManager.EXTRA_STATE, false));
-        }
-    }
-
-    private class BluetoothReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.STATE_OFF);
-            if (statusView != null)
-                statusView.setBluetooth(state != BluetoothAdapter.STATE_OFF, state == BluetoothAdapter.STATE_CONNECTED);
-        }
-    }
-
-    private class WifiReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            NetworkInfo info = intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
-            if (statusView != null && info != null) {
-                statusView.setWifiConnected(info.isConnected());
-
-                int level = WifiManager.calculateSignalLevel(wifiManager.getConnectionInfo().getRssi(), 4);
-                statusView.setWifiStrength(level);
-            }
-        }
-    }
-
-    private class NetworkReceiver extends PhoneStateListener {
-        @Override
-        public void onSignalStrengthsChanged(SignalStrength signalStrength) {
-            super.onSignalStrengthsChanged(signalStrength);
-            if (statusView != null)
-                statusView.setSignalStrength(signalStrength.getGsmSignalStrength());
-        }
-    }
-
-    private class BatteryReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (statusView != null)
-                statusView.setBattery(intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0), intent.getIntExtra(BatteryManager.EXTRA_STATUS, 0));
-        }
     }
 }

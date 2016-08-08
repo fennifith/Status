@@ -46,9 +46,13 @@
     <string name="preference_wifi_icon">Wifi Icon Style</string>
     <string name="preference_gps_icon">GPS Icon Style</string>
     <string name="preference_bluetooth_icon">Bluetooth Icon Style</string>
+    <string name="preference_airplane_mode_icon">Airplane Mode Icon Style</string>
     <string name="preference_alarm_icon">Alarm Clock Icon Style</string>
 
     <string name="icon_style_default">Default</string>
+    <string name="icon_style_circle">Circle</string>
+    <string name="icon_style_circle_outline">Circle Outline</string>
+    <string name="icon_style_dish">Dish</string>
 
     <string name="red">Red</string>
     <string name="green">Green</string>

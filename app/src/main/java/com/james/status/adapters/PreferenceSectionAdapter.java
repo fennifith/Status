@@ -15,14 +15,15 @@ import com.james.status.R;
 import com.james.status.data.preference.PreferenceData;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PreferenceSectionAdapter extends RecyclerView.Adapter<PreferenceSectionAdapter.ViewHolder> {
 
     private Context context;
-    private ArrayList<PreferenceData.Identifier.SectionIdentifier> sections;
-    private ArrayList<PreferenceData> originalDatas, datas;
+    private List<PreferenceData.Identifier.SectionIdentifier> sections;
+    private List<PreferenceData> originalDatas, datas;
 
-    public PreferenceSectionAdapter(Context context, ArrayList<PreferenceData> datas) {
+    public PreferenceSectionAdapter(Context context, List<PreferenceData> datas) {
         this.context = context;
         this.datas = datas;
         originalDatas = datas;

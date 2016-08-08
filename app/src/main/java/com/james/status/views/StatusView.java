@@ -422,32 +422,32 @@ public class StatusView extends FrameLayout {
         if (battery == null) return;
 
         if (status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL) {
-            if (level < 20)
+            if (level < 10)
                 battery.setImageDrawable(getDrawable(R.drawable.ic_battery_charging_20));
-            else if (level < 35)
+            else if (level < 25)
                 battery.setImageDrawable(getDrawable(R.drawable.ic_battery_charging_30));
-            else if (level < 50)
+            else if (level < 40)
                 battery.setImageDrawable(getDrawable(R.drawable.ic_battery_charging_50));
-            else if (level < 65)
+            else if (level < 55)
                 battery.setImageDrawable(getDrawable(R.drawable.ic_battery_charging_60));
-            else if (level < 80)
+            else if (level < 70)
                 battery.setImageDrawable(getDrawable(R.drawable.ic_battery_charging_80));
-            else if (level < 95)
+            else if (level < 85)
                 battery.setImageDrawable(getDrawable(R.drawable.ic_battery_charging_90));
             else
                 battery.setImageDrawable(getDrawable(R.drawable.ic_battery_charging_full));
         } else {
-            if (level < 20)
+            if (level < 10)
                 battery.setImageDrawable(getDrawable(R.drawable.ic_battery_20));
-            else if (level < 35)
+            else if (level < 25)
                 battery.setImageDrawable(getDrawable(R.drawable.ic_battery_30));
-            else if (level < 50)
+            else if (level < 40)
                 battery.setImageDrawable(getDrawable(R.drawable.ic_battery_50));
-            else if (level < 65)
+            else if (level < 55)
                 battery.setImageDrawable(getDrawable(R.drawable.ic_battery_60));
-            else if (level < 80)
+            else if (level < 70)
                 battery.setImageDrawable(getDrawable(R.drawable.ic_battery_80));
-            else if (level < 95)
+            else if (level < 85)
                 battery.setImageDrawable(getDrawable(R.drawable.ic_battery_90));
             else
                 battery.setImageDrawable(getDrawable(R.drawable.ic_battery_full));

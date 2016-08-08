@@ -25,6 +25,7 @@ public class PreferenceUtils {
         WIFI_ICON_STYLE,
         GPS_ICON_STYLE,
         BLUETOOTH_ICON_STYLE,
+        AIRPLANE_MODE_ICON_STYLE,
         ALARM_ICON_STYLE
     }
 
