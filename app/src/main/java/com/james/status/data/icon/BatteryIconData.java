@@ -13,8 +13,14 @@ import com.james.status.utils.PreferenceUtils;
 
 public class BatteryIconData extends IconData<BatteryIconData.BatteryReceiver> {
 
-    public BatteryIconData(Context context, PreferenceUtils.PreferenceIdentifier identifier, DrawableListener drawableListener, TextListener textListener) {
-        super(context, identifier, drawableListener, textListener);
+    public BatteryIconData(Context context, PreferenceUtils.PreferenceIdentifier identifier) {
+        super(context, identifier);
+    }
+
+    @Override
+    public boolean hasText() {
+        Boolean isBatteryPercent = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_BATTERY_PERCENT);
+        return isBatteryPercent != null && isBatteryPercent;
     }
 
     @Override
@@ -55,10 +61,17 @@ public class BatteryIconData extends IconData<BatteryIconData.BatteryReceiver> {
             int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
             int status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, 0);
 
-            if (status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL)
-                level += 7;
+            int iconLevel = level;
+            if (iconLevel > 0) iconLevel /= 15;
 
-            onDrawableUpdate(VectorDrawableCompat.create(getContext().getResources(), getIconResource(level), getContext().getTheme()));
+            if (status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL)
+                iconLevel += 7;
+
+            onDrawableUpdate(VectorDrawableCompat.create(getContext().getResources(), getIconResource(iconLevel), getContext().getTheme()));
+
+            Boolean isBatteryPercent = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_BATTERY_PERCENT);
+            if (isBatteryPercent != null && isBatteryPercent)
+                onTextUpdate(String.valueOf(level) + "%");
         }
     }
 }

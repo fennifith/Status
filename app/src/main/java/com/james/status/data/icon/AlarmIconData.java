@@ -17,8 +17,8 @@ public class AlarmIconData extends IconData<AlarmIconData.AlarmReceiver> {
 
     private AlarmManager alarmManager;
 
-    public AlarmIconData(Context context, PreferenceUtils.PreferenceIdentifier identifier, DrawableListener drawableListener) {
-        super(context, identifier, drawableListener);
+    public AlarmIconData(Context context, PreferenceUtils.PreferenceIdentifier identifier) {
+        super(context, identifier);
         alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
     }
 

@@ -16,8 +16,8 @@ public class WifiIconData extends IconData<WifiIconData.WifiReceiver> {
 
     WifiManager wifiManager;
 
-    public WifiIconData(Context context, PreferenceUtils.PreferenceIdentifier identifier, DrawableListener drawableListener) {
-        super(context, identifier, drawableListener);
+    public WifiIconData(Context context, PreferenceUtils.PreferenceIdentifier identifier) {
+        super(context, identifier);
         wifiManager = (WifiManager) getContext().getSystemService(Context.WIFI_SERVICE);
     }
 

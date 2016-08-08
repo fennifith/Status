@@ -16,10 +16,17 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 
+import com.james.status.data.icon.AirplaneModeIconData;
+import com.james.status.data.icon.AlarmIconData;
+import com.james.status.data.icon.BatteryIconData;
+import com.james.status.data.icon.BluetoothIconData;
+import com.james.status.data.icon.NetworkIconData;
+import com.james.status.data.icon.WifiIconData;
 import com.james.status.utils.PreferenceUtils;
 import com.james.status.views.StatusView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class StatusService extends Service {
 
@@ -45,8 +52,8 @@ public class StatusService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
 
+        windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
 
         Boolean enabled = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED);
@@ -138,6 +145,16 @@ public class StatusService extends Service {
             }
         });
 
+        statusView.setIcons(Arrays.asList(
+                new BatteryIconData(this, PreferenceUtils.PreferenceIdentifier.BATTERY_ICON_STYLE),
+                new NetworkIconData(this, PreferenceUtils.PreferenceIdentifier.NETWORK_ICON_STYLE),
+                new WifiIconData(this, PreferenceUtils.PreferenceIdentifier.WIFI_ICON_STYLE),
+                new BluetoothIconData(this, PreferenceUtils.PreferenceIdentifier.BLUETOOTH_ICON_STYLE),
+                new AirplaneModeIconData(this, PreferenceUtils.PreferenceIdentifier.AIRPLANE_MODE_ICON_STYLE),
+                new AlarmIconData(this, PreferenceUtils.PreferenceIdentifier.ALARM_ICON_STYLE)
+        ));
+
+        statusView.register();
     }
 
     @Override
@@ -148,6 +165,7 @@ public class StatusService extends Service {
         }
 
         if (statusView != null) {
+            statusView.unregister();
             windowManager.removeView(statusView);
             statusView = null;
         }

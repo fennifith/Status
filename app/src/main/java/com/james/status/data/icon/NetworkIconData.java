@@ -16,8 +16,8 @@ public class NetworkIconData extends IconData {
     private NetworkListener networkListener;
     private boolean isRegistered;
 
-    public NetworkIconData(Context context, PreferenceUtils.PreferenceIdentifier identifier, DrawableListener drawableListener) {
-        super(context, identifier, drawableListener);
+    public NetworkIconData(Context context, PreferenceUtils.PreferenceIdentifier identifier) {
+        super(context, identifier);
         telephonyManager = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
         networkListener = new NetworkListener();
     }

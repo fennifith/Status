@@ -46,7 +46,7 @@ public class ColorPreferenceData extends PreferenceData {
                     public void onPreference(Integer color) {
                         value = color;
                         ((CustomImageView) holder.v.findViewById(R.id.color)).transition(new ColorDrawable(color));
-                        PreferenceUtils.putPreference(getContext(), getIdentifier().getPreference(), color);
+                        PreferenceUtils.putPreference(getContext(), getIdentifier().getPreference(), (int) color);
                         onPreferenceChange();
                     }
 

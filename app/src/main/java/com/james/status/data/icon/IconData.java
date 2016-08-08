@@ -17,27 +17,22 @@ public class IconData<T extends BroadcastReceiver> {
     private IconStyleData iconStyle;
     private T receiver;
 
-    public IconData(Context context, PreferenceUtils.PreferenceIdentifier identifier, DrawableListener drawableListener) {
+    private Drawable drawable;
+    private String text;
+
+    public IconData(Context context, PreferenceUtils.PreferenceIdentifier identifier) {
         this.context = context;
 
         iconStyle = PreferenceUtils.getObjectPreference(context, identifier, IconStyleData.class);
         if (iconStyle == null) iconStyle = getDefaultIconStyle();
-
-        this.drawableListener = drawableListener;
-    }
-
-    public IconData(Context context, PreferenceUtils.PreferenceIdentifier identifier, DrawableListener drawableListener, TextListener textListener) {
-        this.context = context;
-
-        iconStyle = PreferenceUtils.getObjectPreference(context, identifier, IconStyleData.class);
-        if (iconStyle == null) iconStyle = getDefaultIconStyle();
-
-        this.drawableListener = drawableListener;
-        this.textListener = textListener;
     }
 
     public Context getContext() {
         return context;
+    }
+
+    public void setDrawableListener(DrawableListener drawableListener) {
+        this.drawableListener = drawableListener;
     }
 
     public boolean hasDrawableListener() {
@@ -46,6 +41,10 @@ public class IconData<T extends BroadcastReceiver> {
 
     public DrawableListener getDrawableListener() {
         return drawableListener;
+    }
+
+    public void setTextListener(TextListener textListener) {
+        this.textListener = textListener;
     }
 
     public boolean hasTextListener() {
@@ -58,10 +57,18 @@ public class IconData<T extends BroadcastReceiver> {
 
     public void onDrawableUpdate(@Nullable Drawable drawable) {
         if (hasDrawableListener()) getDrawableListener().onUpdate(drawable);
+        this.drawable = drawable;
     }
 
     public void onTextUpdate(@Nullable String text) {
-        if (hasTextListener()) getTextListener().onUpdate(text);
+        if (hasText()) {
+            if (hasTextListener()) getTextListener().onUpdate(text);
+            this.text = text;
+        }
+    }
+
+    public boolean hasText() {
+        return false;
     }
 
     public T getReceiver() {
@@ -75,6 +82,7 @@ public class IconData<T extends BroadcastReceiver> {
     public void register() {
         if (receiver == null) receiver = getReceiver();
         if (receiver != null) getContext().registerReceiver(receiver, getIntentFilter());
+        onDrawableUpdate(null);
     }
 
     public void unregister() {
@@ -95,7 +103,13 @@ public class IconData<T extends BroadcastReceiver> {
 
     @Nullable
     public Drawable getDrawable() {
-        return null;
+        return drawable;
+    }
+
+    @Nullable
+    public String getText() {
+        if (hasText()) return text;
+        else return null;
     }
 
     public interface DrawableListener {
