@@ -86,6 +86,9 @@ public class StatusView extends FrameLayout {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
             clock.setFormat12Hour(format);
 
+        Boolean showClock = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.SHOW_CLOCK);
+        if (showClock != null && !showClock) clock.setVisibility(View.GONE);
+
         addView(v);
 
         Boolean isStatusColorAuto = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_AUTO);

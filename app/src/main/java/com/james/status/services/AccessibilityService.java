@@ -35,12 +35,10 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
     @Override
     public void onAccessibilityEvent(final AccessibilityEvent event) {
         Boolean enabled = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED);
-        if (enabled != null && enabled && event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
+        if (enabled != null && enabled) {
             final CharSequence packageName = event.getPackageName();
             if (packageName != null && packageName.length() > 0) {
                 if (packageName.toString().equals("com.android.systemui") && event.getClassName().toString().equals("android.widget.FrameLayout")) {
-                    setStatusBar(Color.BLACK, null, true);
-                } else if (packageName.toString().equals("com.android.systemui")) {
                     setStatusBar(Color.BLACK, null, true);
                 } else {
                     new Thread() {

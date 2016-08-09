@@ -30,6 +30,7 @@
     <string name="permissions_name">Additional permissions</string>
     <string name="permissions_desc">This app needs a few additional permissions in order to access parts of the phone relevant to the status bar.</string>
 
+    <string name="preference_show_clock">Show Clock</string>
     <string name="preference_ampm">Show AM/PM in Clock</string>
     <string name="preference_ampm_desc">Choose whether to show the AM/PM in the clock. Only works if the system time is in a 12h format.</string>
     <string name="preference_battery_percent">Display Battery Percent</string>
@@ -41,12 +42,19 @@
     <string name="preference_app_colors_desc">Set the color for the status bar to use in a specific app. This will override any other color options.</string>
     <string name="preference_dark_icons">Dark Icons</string>
     <string name="preference_dark_icons_desc">Darkens the status bar icons on light backgrounds.</string>
+    <string name="preference_show_battery_icon">Show Battery Icon</string>
     <string name="preference_battery_icon">Battery Icon Style</string>
+    <string name="preference_show_network_icon">Show Network Icon</string>
     <string name="preference_network_icon">Network Icon Style</string>
+    <string name="preference_show_wifi_icon">Show Wifi Icon</string>
     <string name="preference_wifi_icon">Wifi Icon Style</string>
+    <string name="preference_show_gps_icon">Show GPS Icon</string>
     <string name="preference_gps_icon">GPS Icon Style</string>
+    <string name="preference_show_bluetooth_icon">Show Bluetooth Icon</string>
     <string name="preference_bluetooth_icon">Bluetooth Icon Style</string>
+    <string name="preference_show_airplane_mode_icon">Show Airplane Mode Icon</string>
     <string name="preference_airplane_mode_icon">Airplane Mode Icon Style</string>
+    <string name="preference_show_alarm_icon">Show Alarm Clock Icon</string>
     <string name="preference_alarm_icon">Alarm Clock Icon Style</string>
 
     <string name="icon_style_default">Default</string>

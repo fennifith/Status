@@ -13,8 +13,8 @@ import com.james.status.utils.PreferenceUtils;
 
 public class AirplaneModeIconData extends IconData<AirplaneModeIconData.AirplaneModeReceiver> {
 
-    public AirplaneModeIconData(Context context, PreferenceUtils.PreferenceIdentifier identifier) {
-        super(context, identifier);
+    public AirplaneModeIconData(Context context) {
+        super(context, PreferenceUtils.PreferenceIdentifier.STYLE_AIRPLANE_MODE_ICON);
     }
 
     @Override

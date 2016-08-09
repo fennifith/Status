@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
+import android.os.Build;
 import android.os.IBinder;
 import android.os.Parcelable;
 import android.service.notification.StatusBarNotification;
@@ -20,13 +21,14 @@ import com.james.status.data.icon.AirplaneModeIconData;
 import com.james.status.data.icon.AlarmIconData;
 import com.james.status.data.icon.BatteryIconData;
 import com.james.status.data.icon.BluetoothIconData;
+import com.james.status.data.icon.IconData;
 import com.james.status.data.icon.NetworkIconData;
 import com.james.status.data.icon.WifiIconData;
 import com.james.status.utils.PreferenceUtils;
 import com.james.status.views.StatusView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 
 public class StatusService extends Service {
 
@@ -145,15 +147,28 @@ public class StatusService extends Service {
             }
         });
 
-        statusView.setIcons(Arrays.asList(
-                new BatteryIconData(this, PreferenceUtils.PreferenceIdentifier.BATTERY_ICON_STYLE),
-                new NetworkIconData(this, PreferenceUtils.PreferenceIdentifier.NETWORK_ICON_STYLE),
-                new WifiIconData(this, PreferenceUtils.PreferenceIdentifier.WIFI_ICON_STYLE),
-                new BluetoothIconData(this, PreferenceUtils.PreferenceIdentifier.BLUETOOTH_ICON_STYLE),
-                new AirplaneModeIconData(this, PreferenceUtils.PreferenceIdentifier.AIRPLANE_MODE_ICON_STYLE),
-                new AlarmIconData(this, PreferenceUtils.PreferenceIdentifier.ALARM_ICON_STYLE)
-        ));
+        List<IconData> icons = new ArrayList<>();
 
+        Boolean battery = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.SHOW_BATTERY_ICON);
+        if (battery == null || battery) icons.add(new BatteryIconData(this));
+
+        Boolean network = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.SHOW_NETWORK_ICON);
+        if (network == null || network) icons.add(new NetworkIconData(this));
+
+        Boolean wifi = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.SHOW_WIFI_ICON);
+        if (wifi == null || wifi) icons.add(new WifiIconData(this));
+
+        Boolean bluetooth = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.SHOW_BLUETOOTH_ICON);
+        if (bluetooth == null || bluetooth) icons.add(new BluetoothIconData(this));
+
+        Boolean airplane = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.SHOW_AIRPLANE_MODE_ICON);
+        if (airplane == null || airplane) icons.add(new AirplaneModeIconData(this));
+
+        Boolean alarm = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.SHOW_ALARM_ICON);
+        if ((alarm == null || alarm) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            icons.add(new AlarmIconData(this));
+
+        statusView.setIcons(icons);
         statusView.register();
     }
 

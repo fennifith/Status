@@ -23,7 +23,7 @@ public class IconPreferenceData extends PreferenceData {
     public IconPreferenceData(Context context, Identifier identifier, List<IconStyleData> iconStyles, OnPreferenceChangeListener listener) {
         super(context, identifier, listener);
 
-        iconStyle = PreferenceUtils.getObjectPreference(context, identifier.getPreference(), IconStyleData.class);
+        iconStyle = PreferenceUtils.getObjectPreference(context, getIdentifier().getPreference(), IconStyleData.class);
         if (iconStyle == null) iconStyle = iconStyles.get(0);
 
         this.iconStyles = iconStyles;
@@ -48,8 +48,7 @@ public class IconPreferenceData extends PreferenceData {
                 Dialog dialog = new IconPickerDialog(getContext(), iconStyles).setPreference(iconStyle).setListener(new PreferenceDialog.OnPreferenceListener<IconStyleData>() {
                     @Override
                     public void onPreference(IconStyleData preference) {
-                        IconStyleImageView icon = (IconStyleImageView) holder.v.findViewById(R.id.icon);
-                        icon.setIconStyle(preference);
+                        ((IconStyleImageView) holder.v.findViewById(R.id.icon)).setIconStyle(preference);
 
                         IconPreferenceData.this.iconStyle = iconStyle;
                         PreferenceUtils.putPreference(getContext(), getIdentifier().getPreference(), iconStyle);

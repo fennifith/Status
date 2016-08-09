@@ -14,8 +14,8 @@ import com.james.status.utils.StaticUtils;
 
 public class BluetoothIconData extends IconData<BluetoothIconData.BluetoothReceiver> {
 
-    public BluetoothIconData(Context context, PreferenceUtils.PreferenceIdentifier identifier) {
-        super(context, identifier);
+    public BluetoothIconData(Context context) {
+        super(context, PreferenceUtils.PreferenceIdentifier.STYLE_BLUETOOTH_ICON);
     }
 
     @Override

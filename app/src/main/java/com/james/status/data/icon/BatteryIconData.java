@@ -13,8 +13,8 @@ import com.james.status.utils.PreferenceUtils;
 
 public class BatteryIconData extends IconData<BatteryIconData.BatteryReceiver> {
 
-    public BatteryIconData(Context context, PreferenceUtils.PreferenceIdentifier identifier) {
-        super(context, identifier);
+    public BatteryIconData(Context context) {
+        super(context, PreferenceUtils.PreferenceIdentifier.STYLE_BATTERY_ICON);
     }
 
     @Override

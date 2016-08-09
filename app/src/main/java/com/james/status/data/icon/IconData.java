@@ -98,7 +98,7 @@ public class IconData<T extends BroadcastReceiver> {
     }
 
     public int getIconResource(int level) {
-        return iconStyle.resource[level];
+        return iconStyle.resource[level % iconStyle.resource.length];
     }
 
     @Nullable

@@ -35,6 +35,10 @@ public class IconStyleImageView extends SquareImageView {
             @Override
             public void run() {
                 while (true) {
+                    if (System.currentTimeMillis() % 600 == 0) break;
+                }
+
+                while (true) {
                     for (final int resource : iconStyle.resource) {
                         new Handler(Looper.getMainLooper()).post(new Runnable() {
                             @Override
@@ -48,7 +52,6 @@ public class IconStyleImageView extends SquareImageView {
                         } catch (InterruptedException e) {
                             return;
                         }
-
                     }
                 }
             }
