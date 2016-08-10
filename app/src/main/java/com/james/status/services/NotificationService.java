@@ -1,5 +1,7 @@
 package com.james.status.services;
 
+import android.annotation.TargetApi;
+import android.app.Notification;
 import android.content.Intent;
 import android.os.Build;
 import android.service.notification.NotificationListenerService;
@@ -8,8 +10,8 @@ import android.service.notification.StatusBarNotification;
 import com.james.status.utils.PreferenceUtils;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
+@TargetApi(18)
 public class NotificationService extends NotificationListenerService {
 
     public static final String ACTION_GET_NOTIFICATIONS = "com.james.status.ACTION_GET_NOTIFICATIONS";
@@ -55,8 +57,8 @@ public class NotificationService extends NotificationListenerService {
             Intent intent = new Intent(StatusService.ACTION_NOTIFICATION_ADDED);
             intent.setClass(this, StatusService.class);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2)
-                intent.putExtra(StatusService.EXTRA_NOTIFICATION, sbn);
+            intent.putExtra(StatusService.EXTRA_NOTIFICATION, sbn.getNotification());
+            intent.putExtra(StatusService.EXTRA_PACKAGE_NAME, sbn.getPackageName());
 
             startService(intent);
         }
@@ -69,18 +71,20 @@ public class NotificationService extends NotificationListenerService {
             Intent intent = new Intent(StatusService.ACTION_NOTIFICATION_REMOVED);
             intent.setClass(this, StatusService.class);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2)
-                intent.putExtra(StatusService.EXTRA_NOTIFICATION, sbn);
+            intent.putExtra(StatusService.EXTRA_NOTIFICATION, sbn.getNotification());
+            intent.putExtra(StatusService.EXTRA_PACKAGE_NAME, sbn.getPackageName());
 
             startService(intent);
         }
     }
 
-    private ArrayList<StatusBarNotification> getNotifications() {
-        ArrayList<StatusBarNotification> activeNotifications = new ArrayList<>();
+    private ArrayList<Notification> getNotifications() {
+        ArrayList<Notification> activeNotifications = new ArrayList<>();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             StatusBarNotification[] notifications = getActiveNotifications();
-            if (notifications != null) Collections.addAll(activeNotifications, notifications);
+            for (StatusBarNotification notification : notifications) {
+                activeNotifications.add(notification.getNotification());
+            }
         }
         return activeNotifications;
     }

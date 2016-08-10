@@ -9,7 +9,6 @@ import android.content.IntentFilter;
 import android.support.graphics.drawable.VectorDrawableCompat;
 
 import com.james.status.R;
-import com.james.status.data.IconStyleData;
 import com.james.status.utils.PreferenceUtils;
 
 @TargetApi(21)
@@ -40,11 +39,8 @@ public class AlarmIconData extends IconData<AlarmIconData.AlarmReceiver> {
     }
 
     @Override
-    public IconStyleData getDefaultIconStyle() {
-        return new IconStyleData(
-                getContext().getString(R.string.icon_style_default),
-                R.drawable.ic_alarm
-        );
+    public int[] getDefaultIconResource() {
+        return new int[]{R.drawable.ic_alarm};
     }
 
     public class AlarmReceiver extends BroadcastReceiver {

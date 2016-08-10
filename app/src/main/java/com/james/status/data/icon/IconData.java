@@ -6,7 +6,6 @@ import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 
-import com.james.status.data.IconStyleData;
 import com.james.status.utils.PreferenceUtils;
 
 public class IconData<T extends BroadcastReceiver> {
@@ -14,7 +13,7 @@ public class IconData<T extends BroadcastReceiver> {
     private Context context;
     private DrawableListener drawableListener;
     private TextListener textListener;
-    private IconStyleData iconStyle;
+    private int[] resource;
     private T receiver;
 
     private Drawable drawable;
@@ -23,8 +22,8 @@ public class IconData<T extends BroadcastReceiver> {
     public IconData(Context context, PreferenceUtils.PreferenceIdentifier identifier) {
         this.context = context;
 
-        iconStyle = PreferenceUtils.getObjectPreference(context, identifier, IconStyleData.class);
-        if (iconStyle == null) iconStyle = getDefaultIconStyle();
+        resource = PreferenceUtils.getIntegerArrayPreference(context, identifier);
+        if (resource == null) resource = getDefaultIconResource();
     }
 
     public Context getContext() {
@@ -89,16 +88,16 @@ public class IconData<T extends BroadcastReceiver> {
         if (receiver != null) getContext().unregisterReceiver(receiver);
     }
 
-    public IconStyleData getDefaultIconStyle() {
+    public int[] getDefaultIconResource() {
         return null;
     }
 
     public int getIconResource() {
-        return iconStyle.resource[0];
+        return resource[0];
     }
 
     public int getIconResource(int level) {
-        return iconStyle.resource[level % iconStyle.resource.length];
+        return resource[level % resource.length];
     }
 
     @Nullable

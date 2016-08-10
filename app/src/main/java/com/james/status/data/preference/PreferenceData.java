@@ -93,13 +93,14 @@ public class PreferenceData {
 
         public enum SectionIdentifier {
             COLORS,
+            NOTIFICATIONS,
             CLOCK,
             BATTERY,
             NETWORK,
             WIFI,
             GPS,
             BLUETOOTH,
-            AIRPLANE_MODE
+            AIRPLANE_MODE,
         }
     }
 }

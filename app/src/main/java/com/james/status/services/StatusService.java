@@ -1,6 +1,7 @@
 package com.james.status.services;
 
 import android.app.KeyguardManager;
+import android.app.Notification;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -10,7 +11,6 @@ import android.graphics.Point;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.Parcelable;
-import android.service.notification.StatusBarNotification;
 import android.support.annotation.Nullable;
 import android.view.Gravity;
 import android.view.View;
@@ -43,7 +43,8 @@ public class StatusService extends Service {
             EXTRA_NOTIFICATION = "com.james.status.EXTRA_NOTIFICATION",
             EXTRA_COLOR = "com.james.status.EXTRA_COLOR",
             EXTRA_SYSTEM_FULLSCREEN = "com.james.status.EXTRA_SYSTEM_FULLSCREEN",
-            EXTRA_FULLSCREEN = "com.james.status.EXTRA_FULLSCREEN";
+            EXTRA_FULLSCREEN = "com.james.status.EXTRA_FULLSCREEN",
+            EXTRA_PACKAGE_NAME = "com.james.status.EXTRA_PACKAGE_NAME";
 
     private StatusView statusView;
     private View fullscreenView;
@@ -91,26 +92,26 @@ public class StatusService extends Service {
                     if ((isStatusColorAuto == null || isStatusColorAuto) && intent.hasExtra(EXTRA_COLOR))
                         statusView.setColor(intent.getIntExtra(EXTRA_COLOR, Color.BLACK));
 
-                    if (intent.hasExtra(EXTRA_SYSTEM_FULLSCREEN))
-                        statusView.setSystemShowing(intent.getBooleanExtra(EXTRA_SYSTEM_FULLSCREEN, false));
-
                     if (intent.hasExtra(EXTRA_FULLSCREEN))
                         statusView.setFullscreen(intent.getBooleanExtra(EXTRA_FULLSCREEN, false));
+
+                    if (intent.hasExtra(EXTRA_SYSTEM_FULLSCREEN))
+                        statusView.setSystemShowing(intent.getBooleanExtra(EXTRA_SYSTEM_FULLSCREEN, false));
                 }
                 break;
             case ACTION_NOTIFICATION:
-                ArrayList<StatusBarNotification> notifications = new ArrayList<>();
+                ArrayList<Notification> notifications = new ArrayList<>();
                 for (Parcelable parcelable : intent.getParcelableArrayListExtra(EXTRA_NOTIFICATIONS)) {
-                    notifications.add((StatusBarNotification) parcelable);
+                    notifications.add((Notification) parcelable);
                 }
 
                 if (statusView != null) statusView.setNotifications(notifications);
                 break;
             case ACTION_NOTIFICATION_ADDED:
-                statusView.addNotification((StatusBarNotification) intent.getParcelableExtra(EXTRA_NOTIFICATION));
+                statusView.addNotification((Notification) intent.getParcelableExtra(EXTRA_NOTIFICATION), intent.getStringExtra(EXTRA_PACKAGE_NAME));
                 break;
             case ACTION_NOTIFICATION_REMOVED:
-                statusView.removeNotification((StatusBarNotification) intent.getParcelableExtra(EXTRA_NOTIFICATION));
+                statusView.removeNotification((Notification) intent.getParcelableExtra(EXTRA_NOTIFICATION));
                 break;
         }
         return START_STICKY;
@@ -126,9 +127,11 @@ public class StatusService extends Service {
 
         windowManager.addView(statusView, params);
 
-        Intent intent = new Intent(NotificationService.ACTION_GET_NOTIFICATIONS);
-        intent.setClass(this, NotificationService.class);
-        startService(intent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            Intent intent = new Intent(NotificationService.ACTION_GET_NOTIFICATIONS);
+            intent.setClass(this, NotificationService.class);
+            startService(intent);
+        }
 
         params = new WindowManager.LayoutParams(1, WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, PixelFormat.TRANSPARENT);
         params.gravity = Gravity.START | Gravity.TOP;

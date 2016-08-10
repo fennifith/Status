@@ -1,12 +1,15 @@
 package com.james.status.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.view.View;
@@ -45,10 +48,24 @@ public class StartActivity extends AppCompatActivity {
             }
         });
 
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            findViewById(R.id.notifications).setVisibility(View.GONE);
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.notifications_compat)
+                    .setMessage(R.string.notifications_compat_desc)
+                    .setPositiveButton(R.string.action_ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    })
+                    .create()
+                    .show();
+        }
         notificationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivityForResult(new Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS), REQUEST_NOTIFICATION);
+                startActivityForResult(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"), REQUEST_NOTIFICATION);
             }
         });
 
@@ -101,5 +118,17 @@ public class StartActivity extends AppCompatActivity {
         if (StaticUtils.isAccessibilityGranted(this) && StaticUtils.isNotificationGranted(this) && isPermissionsGranted)
             fab.show();
         else fab.hide();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case REQUEST_ACCESSIBILITY:
+                break;
+            case REQUEST_NOTIFICATION:
+                break;
+        }
     }
 }

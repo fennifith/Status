@@ -8,7 +8,6 @@ import android.support.graphics.drawable.VectorDrawableCompat;
 import android.telephony.TelephonyManager;
 
 import com.james.status.R;
-import com.james.status.data.IconStyleData;
 import com.james.status.utils.PreferenceUtils;
 
 public class AirplaneModeIconData extends IconData<AirplaneModeIconData.AirplaneModeReceiver> {
@@ -28,11 +27,8 @@ public class AirplaneModeIconData extends IconData<AirplaneModeIconData.Airplane
     }
 
     @Override
-    public IconStyleData getDefaultIconStyle() {
-        return new IconStyleData(
-                getContext().getString(R.string.icon_style_default),
-                R.drawable.ic_airplane
-        );
+    public int[] getDefaultIconResource() {
+        return new int[]{R.drawable.ic_airplane};
     }
 
     public class AirplaneModeReceiver extends BroadcastReceiver {

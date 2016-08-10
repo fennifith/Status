@@ -7,7 +7,6 @@ import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
 
 import com.james.status.R;
-import com.james.status.data.IconStyleData;
 import com.james.status.utils.PreferenceUtils;
 
 public class NetworkIconData extends IconData {
@@ -35,15 +34,14 @@ public class NetworkIconData extends IconData {
     }
 
     @Override
-    public IconStyleData getDefaultIconStyle() {
-        return new IconStyleData(
-                getContext().getString(R.string.icon_style_default),
+    public int[] getDefaultIconResource() {
+        return new int[]{
                 R.drawable.ic_signal_0,
                 R.drawable.ic_signal_1,
                 R.drawable.ic_signal_2,
                 R.drawable.ic_signal_3,
                 R.drawable.ic_signal_4
-        );
+        };
     }
 
     private class NetworkListener extends PhoneStateListener {

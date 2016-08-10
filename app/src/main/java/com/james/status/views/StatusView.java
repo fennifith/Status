@@ -3,6 +3,7 @@ package com.james.status.views;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
+import android.app.Notification;
 import android.app.WallpaperManager;
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -11,7 +12,6 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.service.notification.StatusBarNotification;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.support.graphics.drawable.VectorDrawableCompat;
@@ -44,7 +44,7 @@ public class StatusView extends FrameLayout {
     @ColorInt
     private int color = 0;
     private boolean isSystemShowing, isDarkMode, isFullscreen;
-    private ArrayList<StatusBarNotification> notifications;
+    private ArrayList<Notification> notifications;
 
     private List<IconData> icons;
 
@@ -77,6 +77,10 @@ public class StatusView extends FrameLayout {
         clock = (TextClock) v.findViewById(R.id.clock);
 
         notificationIconLayout = (LinearLayout) v.findViewById(R.id.notificationIcons);
+
+        Boolean isNotifications = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.SHOW_NOTIFICATIONS);
+        if (isNotifications != null && !isNotifications)
+            notificationIconLayout.setVisibility(View.GONE);
 
         VectorDrawableCompat.create(getResources(), R.drawable.ic_battery_alert, getContext().getTheme());
 
@@ -145,14 +149,14 @@ public class StatusView extends FrameLayout {
         }
     }
 
-    public void setNotifications(ArrayList<StatusBarNotification> notifications) {
+    public void setNotifications(ArrayList<Notification> notifications) {
         this.notifications = notifications;
 
         if (notificationIconLayout != null) {
             notificationIconLayout.removeAllViewsInLayout();
-            for (StatusBarNotification notification : notifications) {
+            for (Notification notification : notifications) {
                 View v = LayoutInflater.from(getContext()).inflate(R.layout.item_icon, null);
-                Drawable drawable = getNotificationIcon(notification);
+                Drawable drawable = getNotificationIcon(notification, null);
 
                 if (drawable != null) {
                     CustomImageView icon = (CustomImageView) v.findViewById(R.id.icon);
@@ -165,22 +169,36 @@ public class StatusView extends FrameLayout {
         }
     }
 
-    public void addNotification(StatusBarNotification notification) {
+    public void addNotification(Notification notification, @Nullable String packageName) {
         if (notifications == null) notifications = new ArrayList<>();
         else {
-            for (StatusBarNotification notification2 : notifications) {
-                if (notification.getId() == notification2.getId()) return;
+            for (Notification notification2 : notifications) {
+                if (StaticUtils.areNotificationsEqual(notification, notification2)) return;
             }
         }
+
         notifications.add(notification);
-        setNotifications(notifications);
+
+        if (notificationIconLayout != null) {
+            View v = LayoutInflater.from(getContext()).inflate(R.layout.item_icon, null);
+            Drawable drawable = getNotificationIcon(notification, packageName);
+
+            if (drawable != null) {
+                CustomImageView icon = (CustomImageView) v.findViewById(R.id.icon);
+                icon.setImageDrawable(drawable);
+
+                if (isDarkMode) ImageUtils.setTint(icon, Color.BLACK);
+                notificationIconLayout.addView(v);
+            }
+        }
     }
 
-    public void removeNotification(StatusBarNotification notification) {
-        ArrayList<StatusBarNotification> notifications = new ArrayList<>();
+    public void removeNotification(Notification notification) {
+        ArrayList<Notification> notifications = new ArrayList<>();
         if (this.notifications != null) {
-            for (StatusBarNotification notification2 : this.notifications) {
-                if (notification.getId() != notification2.getId()) notifications.add(notification2);
+            for (Notification notification2 : this.notifications) {
+                if (!StaticUtils.areNotificationsEqual(notification, notification2))
+                    notifications.add(notification2);
             }
         }
 
@@ -188,14 +206,26 @@ public class StatusView extends FrameLayout {
     }
 
     @Nullable
-    private Drawable getNotificationIcon(StatusBarNotification notification) {
+    private Drawable getNotificationIcon(Notification notification, @Nullable String packageName) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             Resources resources = null;
             PackageInfo packageInfo = null;
 
+            if (packageName == null) {
+                if (notification.contentIntent != null)
+                    packageName = notification.contentIntent.getCreatorPackage();
+                else if (notification.deleteIntent != null)
+                    packageName = notification.deleteIntent.getCreatorPackage();
+                else if (notification.fullScreenIntent != null)
+                    packageName = notification.fullScreenIntent.getCreatorPackage();
+                else if (notification.actions != null && notification.actions.length > 0)
+                    packageName = notification.actions[0].actionIntent.getCreatorPackage();
+                else return null;
+            }
+
             try {
-                resources = getContext().getPackageManager().getResourcesForApplication(notification.getPackageName());
-                packageInfo = getContext().getPackageManager().getPackageInfo(notification.getPackageName(), PackageManager.GET_META_DATA);
+                resources = getContext().getPackageManager().getResourcesForApplication(packageName);
+                packageInfo = getContext().getPackageManager().getPackageInfo(packageName, PackageManager.GET_META_DATA);
             } catch (PackageManager.NameNotFoundException ignored) {
             }
 
@@ -205,7 +235,7 @@ public class StatusView extends FrameLayout {
 
                 Drawable drawable = null;
                 try {
-                    drawable = ResourcesCompat.getDrawable(resources, notification.getNotification().icon, theme);
+                    drawable = ResourcesCompat.getDrawable(resources, notification.icon, theme);
                 } catch (Resources.NotFoundException ignored) {
                 }
 
@@ -213,7 +243,7 @@ public class StatusView extends FrameLayout {
             }
 
         } else
-            return notification.getNotification().getSmallIcon().loadDrawable(getContext());
+            return notification.getSmallIcon().loadDrawable(getContext());
 
         return null;
     }

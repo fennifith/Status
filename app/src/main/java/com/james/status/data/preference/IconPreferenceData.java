@@ -23,8 +23,12 @@ public class IconPreferenceData extends PreferenceData {
     public IconPreferenceData(Context context, Identifier identifier, List<IconStyleData> iconStyles, OnPreferenceChangeListener listener) {
         super(context, identifier, listener);
 
-        iconStyle = PreferenceUtils.getObjectPreference(context, getIdentifier().getPreference(), IconStyleData.class);
-        if (iconStyle == null) iconStyle = iconStyles.get(0);
+        int[] resource = PreferenceUtils.getIntegerArrayPreference(context, getIdentifier().getPreference());
+        if (resource != null) {
+            for (IconStyleData style : iconStyles) {
+                if (style.resource == resource) iconStyle = style;
+            }
+        } else iconStyle = iconStyles.get(0);
 
         this.iconStyles = iconStyles;
     }
@@ -51,7 +55,7 @@ public class IconPreferenceData extends PreferenceData {
                         ((IconStyleImageView) holder.v.findViewById(R.id.icon)).setIconStyle(preference);
 
                         IconPreferenceData.this.iconStyle = iconStyle;
-                        PreferenceUtils.putPreference(getContext(), getIdentifier().getPreference(), iconStyle);
+                        PreferenceUtils.putPreference(getContext(), getIdentifier().getPreference(), iconStyle.resource);
                         onPreferenceChange();
                     }
 

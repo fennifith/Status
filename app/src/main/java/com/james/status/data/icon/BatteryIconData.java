@@ -8,7 +8,6 @@ import android.os.BatteryManager;
 import android.support.graphics.drawable.VectorDrawableCompat;
 
 import com.james.status.R;
-import com.james.status.data.IconStyleData;
 import com.james.status.utils.PreferenceUtils;
 
 public class BatteryIconData extends IconData<BatteryIconData.BatteryReceiver> {
@@ -34,9 +33,8 @@ public class BatteryIconData extends IconData<BatteryIconData.BatteryReceiver> {
     }
 
     @Override
-    public IconStyleData getDefaultIconStyle() {
-        return new IconStyleData(
-                getContext().getString(R.string.icon_style_default),
+    public int[] getDefaultIconResource() {
+        return new int[]{
                 R.drawable.ic_battery_alert,
                 R.drawable.ic_battery_20,
                 R.drawable.ic_battery_30,
@@ -52,7 +50,7 @@ public class BatteryIconData extends IconData<BatteryIconData.BatteryReceiver> {
                 R.drawable.ic_battery_charging_80,
                 R.drawable.ic_battery_charging_90,
                 R.drawable.ic_battery_charging_full
-        );
+        };
     }
 
     public class BatteryReceiver extends BroadcastReceiver {

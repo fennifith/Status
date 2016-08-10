@@ -9,7 +9,6 @@ import android.net.wifi.WifiManager;
 import android.support.graphics.drawable.VectorDrawableCompat;
 
 import com.james.status.R;
-import com.james.status.data.IconStyleData;
 import com.james.status.utils.PreferenceUtils;
 
 public class WifiIconData extends IconData<WifiIconData.WifiReceiver> {
@@ -42,15 +41,14 @@ public class WifiIconData extends IconData<WifiIconData.WifiReceiver> {
     }
 
     @Override
-    public IconStyleData getDefaultIconStyle() {
-        return new IconStyleData(
-                getContext().getString(R.string.icon_style_default),
+    public int[] getDefaultIconResource() {
+        return new int[]{
                 R.drawable.ic_wifi_0,
                 R.drawable.ic_wifi_1,
                 R.drawable.ic_wifi_2,
                 R.drawable.ic_wifi_3,
                 R.drawable.ic_wifi_4
-        );
+        };
     }
 
     public class WifiReceiver extends BroadcastReceiver {

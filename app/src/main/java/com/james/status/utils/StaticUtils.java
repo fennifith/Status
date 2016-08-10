@@ -3,6 +3,7 @@ package com.james.status.utils;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.Notification;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
@@ -37,6 +38,23 @@ public class StaticUtils {
         else return 0;
     }
 
+    public static int getBluetoothState(Context context) {
+        BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+        if (adapter != null) return adapter.getState();
+        else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2)
+                adapter = ((BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE)).getAdapter();
+            if (adapter != null) return adapter.getState();
+            else return BluetoothAdapter.STATE_OFF;
+        }
+    }
+
+    public static boolean areNotificationsEqual(Notification n1, Notification n2) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH)
+            return n1.getGroup().matches(n2.getGroup()) && n1.getSortKey().matches(n2.getSortKey()) || n1.when == n2.when;
+        else return n1.when == n2.when;
+    }
+
     public static boolean isAccessibilityGranted(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean("isResumed", false);
     }
@@ -45,17 +63,7 @@ public class StaticUtils {
         for (String packageName : NotificationManagerCompat.getEnabledListenerPackages(context)) {
             if (packageName.contains(context.getPackageName()) || packageName.matches(context.getPackageName())) return true;
         }
-        return false;
-    }
-
-    public static int getBluetoothState(Context context) {
-        BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
-        if (adapter != null) return adapter.getState();
-        else {
-            adapter = ((BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE)).getAdapter();
-            if (adapter != null) return adapter.getState();
-            else return BluetoothAdapter.STATE_OFF;
-        }
+        return Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2;
     }
 
     private static boolean canDrawOverlays(Context context) {

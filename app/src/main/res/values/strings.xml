@@ -22,6 +22,9 @@
     <string name="service_name_general">Accessibility Service</string>
     <string name="service_desc">This service needs to be enabled in order to detect window changes to update the status bar.</string>
 
+    <string name="notifications_compat">Notification Compatibility Mode</string>
+    <string name="notifications_compat_desc">Since your android version is below 4.3 (Jelly Bean MR2), the app cannot use the standard notification listener API to display the notification icons. I have found a way to listen for them through the accessibility service, however it cannot detect when a notification has been dismissed. Thus, it removes all notifications whenever the notification panel is opened. If you do not like this, you can either check for a firmware update or disable the notifications in the settings menu.</string>
+
     <string name="service_start_stop">Status Bar Service</string>
 
     <string name="notification_name">Notification Access</string>
@@ -33,6 +36,7 @@
     <string name="preference_show_clock">Show Clock</string>
     <string name="preference_ampm">Show AM/PM in Clock</string>
     <string name="preference_ampm_desc">Choose whether to show the AM/PM in the clock. Only works if the system time is in a 12h format.</string>
+    <string name="preference_show_notifications">Show Notifications</string>
     <string name="preference_battery_percent">Display Battery Percent</string>
     <string name="preference_battery_percent_desc">Shows the battery percentage next to the icon in the status bar.</string>
     <string name="preference_bar_color_auto">Status Bar Coloring</string>

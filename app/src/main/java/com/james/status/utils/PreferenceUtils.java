@@ -5,8 +5,6 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 
-import com.google.gson.Gson;
-
 import java.util.Set;
 
 public class PreferenceUtils {
@@ -27,6 +25,7 @@ public class PreferenceUtils {
         STYLE_BLUETOOTH_ICON,
         STYLE_AIRPLANE_MODE_ICON,
         STYLE_ALARM_ICON,
+        SHOW_NOTIFICATIONS,
         SHOW_CLOCK,
         SHOW_BATTERY_ICON,
         SHOW_NETWORK_ICON,
@@ -42,15 +41,6 @@ public class PreferenceUtils {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         if (prefs.contains(identifier.toString()))
             return prefs.getAll().get(identifier.toString());
-        else
-            return null;
-    }
-
-    @Nullable
-    public static <T> T getObjectPreference(Context context, PreferenceIdentifier identifier, Class<T> classOfT) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        if (prefs.contains(identifier.toString()))
-            return new Gson().fromJson(prefs.getString(identifier.toString(), null), classOfT);
         else
             return null;
     }
@@ -74,17 +64,19 @@ public class PreferenceUtils {
     }
 
     @Nullable
-    public static int[] getIntegerArrayPreference(Context context, PreferenceIdentifier identifier, int length) {
+    public static int[] getIntegerArrayPreference(Context context, PreferenceIdentifier identifier) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
-        int[] value = new int[length];
-        for (int i = 0; i < value.length; i++) {
-            if (prefs.contains(identifier.toString() + i))
-                value[i] = prefs.getInt(identifier.toString() + i, 0);
-            else return null;
-        }
+        if (prefs.contains(identifier.toString() + "-length")) {
+            int[] value = new int[prefs.getInt(identifier.toString() + "-length", 0)];
+            for (int i = 0; i < value.length; i++) {
+                if (prefs.contains(identifier.toString() + i))
+                    value[i] = prefs.getInt(identifier.toString() + "-" + i, 0);
+                else return null;
+            }
 
-        return value;
+            return value;
+        } else return null;
     }
 
     @Nullable
@@ -123,10 +115,6 @@ public class PreferenceUtils {
             return null;
     }
 
-    public static void putPreference(Context context, PreferenceIdentifier identifier, Object object) {
-        PreferenceManager.getDefaultSharedPreferences(context).edit().putString(identifier.toString(), new Gson().toJson(object)).apply();
-    }
-
     public static void putPreference(Context context, PreferenceIdentifier identifier, boolean object) {
         PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(identifier.toString(), object).apply();
     }
@@ -138,8 +126,10 @@ public class PreferenceUtils {
     public static void putPreference(Context context, PreferenceIdentifier identifier, int[] object) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
+        prefs.edit().putInt(identifier.toString() + "-length", object.length).apply();
+
         for (int i = 0; i < object.length; i++) {
-            prefs.edit().putInt(identifier.toString() + i, object[i]).apply();
+            prefs.edit().putInt(identifier.toString() + "-" + i, object[i]).apply();
         }
     }
 

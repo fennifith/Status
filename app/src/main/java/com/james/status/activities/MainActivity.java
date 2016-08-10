@@ -123,6 +123,21 @@ public class MainActivity extends AppCompatActivity {
                 new BooleanPreferenceData(
                         this,
                         new PreferenceData.Identifier(
+                                PreferenceUtils.PreferenceIdentifier.SHOW_NOTIFICATIONS,
+                                getString(R.string.preference_show_notifications),
+                                PreferenceData.Identifier.SectionIdentifier.NOTIFICATIONS
+                        ),
+                        true,
+                        new PreferenceData.OnPreferenceChangeListener() {
+                            @Override
+                            public void onPreferenceChange() {
+                                updateService();
+                            }
+                        }
+                ),
+                new BooleanPreferenceData(
+                        this,
+                        new PreferenceData.Identifier(
                                 PreferenceUtils.PreferenceIdentifier.SHOW_CLOCK,
                                 getString(R.string.preference_show_clock),
                                 PreferenceData.Identifier.SectionIdentifier.CLOCK
