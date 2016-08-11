@@ -172,8 +172,12 @@ public class StatusView extends FrameLayout {
     public void addNotification(Notification notification, @Nullable String packageName) {
         if (notifications == null) notifications = new ArrayList<>();
         else {
-            for (Notification notification2 : notifications) {
-                if (StaticUtils.areNotificationsEqual(notification, notification2)) return;
+            for (int i = 0; i < notifications.size(); i++) {
+                Notification notification2 = notifications.get(i);
+                if (StaticUtils.areNotificationsEqual(notification, notification2)) {
+                    notificationIconLayout.removeViewAt(i);
+                    notifications.remove(notification2);
+                }
             }
         }
 

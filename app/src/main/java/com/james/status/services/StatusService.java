@@ -23,6 +23,7 @@ import com.james.status.data.icon.BatteryIconData;
 import com.james.status.data.icon.BluetoothIconData;
 import com.james.status.data.icon.IconData;
 import com.james.status.data.icon.NetworkIconData;
+import com.james.status.data.icon.RingerIconData;
 import com.james.status.data.icon.WifiIconData;
 import com.james.status.utils.PreferenceUtils;
 import com.james.status.views.StatusView;
@@ -170,6 +171,9 @@ public class StatusService extends Service {
         Boolean alarm = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.SHOW_ALARM_ICON);
         if ((alarm == null || alarm) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             icons.add(new AlarmIconData(this));
+
+        Boolean ringer = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.SHOW_ALARM_ICON);
+        if (ringer == null || ringer) icons.add(new RingerIconData(this));
 
         statusView.setIcons(icons);
         statusView.register();

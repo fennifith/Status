@@ -101,6 +101,7 @@ public class PreferenceData {
             GPS,
             BLUETOOTH,
             AIRPLANE_MODE,
+            RINGER
         }
     }
 }

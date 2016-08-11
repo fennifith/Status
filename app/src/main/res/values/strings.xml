@@ -60,6 +60,8 @@
     <string name="preference_airplane_mode_icon">Airplane Mode Icon Style</string>
     <string name="preference_show_alarm_icon">Show Alarm Clock Icon</string>
     <string name="preference_alarm_icon">Alarm Clock Icon Style</string>
+    <string name="preference_show_ringer_icon">Show RInger Icon</string>
+    <string name="preference_ringer_icon">Ringer Icon Style</string>
 
     <string name="icon_style_default">Default</string>
     <string name="icon_style_circle">Circle</string>

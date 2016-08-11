@@ -25,6 +25,7 @@ public class PreferenceUtils {
         STYLE_BLUETOOTH_ICON,
         STYLE_AIRPLANE_MODE_ICON,
         STYLE_ALARM_ICON,
+        STYLE_RINGER_ICON,
         SHOW_NOTIFICATIONS,
         SHOW_CLOCK,
         SHOW_BATTERY_ICON,
@@ -33,7 +34,8 @@ public class PreferenceUtils {
         SHOW_GPS_ICON,
         SHOW_BLUETOOTH_ICON,
         SHOW_AIRPLANE_MODE_ICON,
-        SHOW_ALARM_ICON
+        SHOW_ALARM_ICON,
+        SHOW_RINGER_ICON
     }
 
     @Nullable
@@ -68,8 +70,10 @@ public class PreferenceUtils {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         if (prefs.contains(identifier.toString() + "-length")) {
-            int[] value = new int[prefs.getInt(identifier.toString() + "-length", 0)];
-            for (int i = 0; i < value.length; i++) {
+            int length = prefs.getInt(identifier.toString() + "-length", 0);
+            int[] value = new int[length];
+
+            for (int i = 0; i < length; i++) {
                 if (prefs.contains(identifier.toString() + i))
                     value[i] = prefs.getInt(identifier.toString() + "-" + i, 0);
                 else return null;

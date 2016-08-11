@@ -491,6 +491,42 @@ public class MainActivity extends AppCompatActivity {
                                 updateService();
                             }
                         }
+                ),
+                new BooleanPreferenceData(
+                        this,
+                        new PreferenceData.Identifier(
+                                PreferenceUtils.PreferenceIdentifier.SHOW_RINGER_ICON,
+                                getString(R.string.preference_show_ringer_icon),
+                                PreferenceData.Identifier.SectionIdentifier.RINGER
+                        ),
+                        true,
+                        new PreferenceData.OnPreferenceChangeListener() {
+                            @Override
+                            public void onPreferenceChange() {
+                                updateService();
+                            }
+                        }
+                ),
+                new IconPreferenceData(
+                        this,
+                        new PreferenceData.Identifier(
+                                PreferenceUtils.PreferenceIdentifier.STYLE_RINGER_ICON,
+                                getString(R.string.preference_ringer_icon),
+                                PreferenceData.Identifier.SectionIdentifier.RINGER
+                        ),
+                        Arrays.asList(
+                                new IconStyleData(
+                                        getString(R.string.icon_style_default),
+                                        R.drawable.ic_sound_mute,
+                                        R.drawable.ic_sound_vibration
+                                )
+                        ),
+                        new PreferenceData.OnPreferenceChangeListener() {
+                            @Override
+                            public void onPreferenceChange() {
+                                updateService();
+                            }
+                        }
                 )
         ));
 
