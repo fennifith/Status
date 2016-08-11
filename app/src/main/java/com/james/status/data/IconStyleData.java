@@ -44,6 +44,6 @@ public class IconStyleData implements Parcelable {
     }
 
     public boolean equals(IconStyleData data) {
-        return super.equals(data) || (data.name.matches(name) && Arrays.equals(data.resource, resource));
+        return super.equals(data) || (data != null && (Arrays.equals(data.resource, resource) || data.name.matches(name)));
     }
 }

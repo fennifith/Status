@@ -13,6 +13,7 @@ import com.james.status.dialogs.PreferenceDialog;
 import com.james.status.utils.PreferenceUtils;
 import com.james.status.views.IconStyleImageView;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class IconPreferenceData extends PreferenceData {
@@ -26,7 +27,7 @@ public class IconPreferenceData extends PreferenceData {
         int[] resource = PreferenceUtils.getIntegerArrayPreference(context, getIdentifier().getPreference());
         if (resource != null) {
             for (IconStyleData style : iconStyles) {
-                if (style.resource == resource) iconStyle = style;
+                if (Arrays.equals(style.resource, resource)) iconStyle = style;
             }
         } else iconStyle = iconStyles.get(0);
 
@@ -54,7 +55,7 @@ public class IconPreferenceData extends PreferenceData {
                     public void onPreference(IconStyleData preference) {
                         ((IconStyleImageView) holder.v.findViewById(R.id.icon)).setIconStyle(preference);
 
-                        IconPreferenceData.this.iconStyle = iconStyle;
+                        IconPreferenceData.this.iconStyle = preference;
                         PreferenceUtils.putPreference(getContext(), getIdentifier().getPreference(), iconStyle.resource);
                         onPreferenceChange();
                     }

@@ -74,7 +74,7 @@ public class PreferenceUtils {
             int[] value = new int[length];
 
             for (int i = 0; i < length; i++) {
-                if (prefs.contains(identifier.toString() + i))
+                if (prefs.contains(identifier.toString() + "-" + i))
                     value[i] = prefs.getInt(identifier.toString() + "-" + i, 0);
                 else return null;
             }
