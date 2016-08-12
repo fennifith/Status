@@ -162,7 +162,7 @@ public class StatusService extends Service {
         if ((alarm == null || alarm) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             icons.add(new AlarmIconData(this));
 
-        Boolean ringer = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.SHOW_ALARM_ICON);
+        Boolean ringer = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.SHOW_RINGER_ICON);
         if (ringer == null || ringer) icons.add(new RingerIconData(this));
 
         statusView.setIcons(icons);
