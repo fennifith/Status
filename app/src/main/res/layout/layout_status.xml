@@ -22,6 +22,7 @@
             android:layout_weight="1"
             android:orientation="horizontal"
             android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
             android:id="@+id/notificationIcons" />
 
         <TextClock

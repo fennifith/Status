@@ -129,7 +129,23 @@ public class MainActivity extends AppCompatActivity {
                                 PreferenceData.Identifier.SectionIdentifier.ICONS
                         ),
                         2,
-                        getString(R.string.preference_icon_padding_unit),
+                        getString(R.string.unit_dp),
+                        new PreferenceData.OnPreferenceChangeListener() {
+                            @Override
+                            public void onPreferenceChange() {
+                                updateService();
+                            }
+                        }
+                ),
+                new IntegerPreferenceData(
+                        this,
+                        new PreferenceData.Identifier(
+                                PreferenceUtils.PreferenceIdentifier.STATUS_ICON_SCALE,
+                                getString(R.string.preference_icon_scale),
+                                PreferenceData.Identifier.SectionIdentifier.ICONS
+                        ),
+                        24,
+                        getString(R.string.unit_dp),
                         new PreferenceData.OnPreferenceChangeListener() {
                             @Override
                             public void onPreferenceChange() {
@@ -349,6 +365,14 @@ public class MainActivity extends AppCompatActivity {
                                         R.drawable.ic_signal_2,
                                         R.drawable.ic_signal_3,
                                         R.drawable.ic_signal_4
+                                ),
+                                new IconStyleData(
+                                        getString(R.string.icon_style_square),
+                                        R.drawable.ic_signal_square_0,
+                                        R.drawable.ic_signal_square_1,
+                                        R.drawable.ic_signal_square_2,
+                                        R.drawable.ic_signal_square_3,
+                                        R.drawable.ic_signal_square_4
                                 )
                         ),
                         new PreferenceData.OnPreferenceChangeListener() {
@@ -388,6 +412,14 @@ public class MainActivity extends AppCompatActivity {
                                         R.drawable.ic_wifi_2,
                                         R.drawable.ic_wifi_3,
                                         R.drawable.ic_wifi_4
+                                ),
+                                new IconStyleData(
+                                        getString(R.string.icon_style_triangle),
+                                        R.drawable.ic_wifi_triangle_0,
+                                        R.drawable.ic_wifi_triangle_1,
+                                        R.drawable.ic_wifi_triangle_2,
+                                        R.drawable.ic_wifi_triangle_3,
+                                        R.drawable.ic_wifi_triangle_4
                                 )
                         ),
                         new PreferenceData.OnPreferenceChangeListener() {

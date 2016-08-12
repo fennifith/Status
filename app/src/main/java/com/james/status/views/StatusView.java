@@ -21,6 +21,7 @@ import android.support.v7.graphics.Palette;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextClock;
@@ -80,7 +81,7 @@ public class StatusView extends FrameLayout {
 
         Boolean isNotifications = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.SHOW_NOTIFICATIONS);
         if (isNotifications != null && !isNotifications)
-            notificationIconLayout.setVisibility(View.GONE);
+            notificationIconLayout.setVisibility(View.INVISIBLE);
 
         VectorDrawableCompat.create(getResources(), R.drawable.ic_battery_alert, getContext().getTheme());
 
@@ -350,6 +351,17 @@ public class StatusView extends FrameLayout {
         float iconPaddingDp = StaticUtils.getPixelsFromDp(getContext(), iconPadding);
 
         v.setPadding((int) iconPaddingDp, 0, (int) iconPaddingDp, 0);
+
+        Integer iconScale = PreferenceUtils.getIntegerPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_ICON_SCALE);
+        if (iconScale == null) iconScale = 24;
+
+        float iconScaleDp = StaticUtils.getPixelsFromDp(getContext(), iconScale);
+
+        ViewGroup.LayoutParams layoutParams = v.getLayoutParams();
+        if (layoutParams != null) layoutParams.height = (int) iconScaleDp;
+        else
+            layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, (int) iconScaleDp);
+        v.setLayoutParams(layoutParams);
 
         return v;
     }
