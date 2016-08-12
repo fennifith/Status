@@ -3,7 +3,6 @@ package com.james.status.utils;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.app.Notification;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
@@ -18,6 +17,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.util.TypedValue;
 
 import com.james.status.services.StatusService;
 
@@ -38,6 +38,10 @@ public class StaticUtils {
         else return 0;
     }
 
+    public static float getPixelsFromDp(Context context, int dp) {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
+    }
+
     public static int getBluetoothState(Context context) {
         BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
         if (adapter != null) return adapter.getState();
@@ -47,12 +51,6 @@ public class StaticUtils {
             if (adapter != null) return adapter.getState();
             else return BluetoothAdapter.STATE_OFF;
         }
-    }
-
-    public static boolean areNotificationsEqual(Notification n1, Notification n2) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH)
-            return n1.getGroup().matches(n2.getGroup()) && n1.getSortKey().matches(n2.getSortKey()) || n1.when == n2.when;
-        else return n1.when == n2.when;
     }
 
     public static boolean isAccessibilityGranted(Context context) {

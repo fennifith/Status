@@ -93,6 +93,7 @@ public class PreferenceData {
 
         public enum SectionIdentifier {
             COLORS,
+            ICONS,
             NOTIFICATIONS,
             CLOCK,
             BATTERY,

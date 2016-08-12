@@ -25,6 +25,7 @@ import com.james.status.data.preference.AppsColorPreferenceData;
 import com.james.status.data.preference.BooleanPreferenceData;
 import com.james.status.data.preference.ColorPreferenceData;
 import com.james.status.data.preference.IconPreferenceData;
+import com.james.status.data.preference.IntegerPreferenceData;
 import com.james.status.data.preference.PreferenceData;
 import com.james.status.services.StatusService;
 import com.james.status.utils.PreferenceUtils;
@@ -108,18 +109,34 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                 ),
+                new AppsColorPreferenceData(this),
                 new BooleanPreferenceData(
                         this,
                         new PreferenceData.Identifier(
                                 PreferenceUtils.PreferenceIdentifier.STATUS_DARK_ICONS,
                                 getString(R.string.preference_dark_icons),
                                 getString(R.string.preference_dark_icons_desc),
-                                PreferenceData.Identifier.SectionIdentifier.COLORS
+                                PreferenceData.Identifier.SectionIdentifier.ICONS
                         ),
                         true,
                         null
                 ),
-                new AppsColorPreferenceData(this),
+                new IntegerPreferenceData(
+                        this,
+                        new PreferenceData.Identifier(
+                                PreferenceUtils.PreferenceIdentifier.STATUS_ICON_PADDING,
+                                getString(R.string.preference_icon_padding),
+                                PreferenceData.Identifier.SectionIdentifier.ICONS
+                        ),
+                        2,
+                        getString(R.string.preference_icon_padding_unit),
+                        new PreferenceData.OnPreferenceChangeListener() {
+                            @Override
+                            public void onPreferenceChange() {
+                                updateService();
+                            }
+                        }
+                ),
                 new BooleanPreferenceData(
                         this,
                         new PreferenceData.Identifier(

@@ -90,18 +90,23 @@ public class PreferenceSectionAdapter extends RecyclerView.Adapter<PreferenceSec
                 PreferenceData.Identifier identifier = data.getIdentifier();
 
                 String title = identifier.getTitle();
-                if (title != null && title.contains(string.toLowerCase())) {
+                if (title != null && title.toLowerCase().contains(string.toLowerCase())) {
                     newDatas.add(data);
                     continue;
                 }
 
                 String subtitle = identifier.getSubtitle();
-                if (subtitle != null && subtitle.contains(string.toLowerCase())) {
+                if (subtitle != null && subtitle.toLowerCase().contains(string.toLowerCase())) {
                     newDatas.add(data);
                     continue;
                 }
 
                 if (string.contains(identifier.getPreference().toString().toLowerCase())) {
+                    newDatas.add(data);
+                    continue;
+                }
+
+                if (string.contains(identifier.getSection().toString().toLowerCase())) {
                     newDatas.add(data);
                 }
             }

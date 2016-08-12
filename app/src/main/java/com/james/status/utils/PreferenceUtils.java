@@ -18,6 +18,7 @@ public class PreferenceUtils {
         STATUS_COLOR_APPS,
         STATUS_DARK_ICONS,
         STATUS_LOCKSCREEN_EXPAND,
+        STATUS_ICON_PADDING,
         STYLE_BATTERY_ICON,
         STYLE_NETWORK_ICON,
         STYLE_WIFI_ICON,

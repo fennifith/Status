@@ -10,7 +10,6 @@ import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.os.Build;
 import android.os.IBinder;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.view.Gravity;
 import android.view.View;
@@ -37,11 +36,10 @@ public class StatusService extends Service {
             ACTION_START = "com.james.status.ACTION_START",
             ACTION_STOP = "com.james.status.ACTION_STOP",
             ACTION_UPDATE = "com.james.status.ACTION_UPDATE",
-            ACTION_NOTIFICATION = "com.james.status.ACTION_NOTIFICATION",
             ACTION_NOTIFICATION_ADDED = "com.james.status.ACTION_NOTIFICATION_ADDED",
             ACTION_NOTIFICATION_REMOVED = "com.james.status.ACTION_NOTIFICATION_REMOVED",
-            EXTRA_NOTIFICATIONS = "com.james.status.EXTRA_NOTIFICATIONS",
             EXTRA_NOTIFICATION = "com.james.status.EXTRA_NOTIFICATION",
+            EXTRA_NOTIFICATION_KEY = "com.james.status.EXTRA_NOTIFICATION_KEY",
             EXTRA_COLOR = "com.james.status.EXTRA_COLOR",
             EXTRA_SYSTEM_FULLSCREEN = "com.james.status.EXTRA_SYSTEM_FULLSCREEN",
             EXTRA_FULLSCREEN = "com.james.status.EXTRA_FULLSCREEN",
@@ -100,19 +98,11 @@ public class StatusService extends Service {
                         statusView.setSystemShowing(intent.getBooleanExtra(EXTRA_SYSTEM_FULLSCREEN, false));
                 }
                 break;
-            case ACTION_NOTIFICATION:
-                ArrayList<Notification> notifications = new ArrayList<>();
-                for (Parcelable parcelable : intent.getParcelableArrayListExtra(EXTRA_NOTIFICATIONS)) {
-                    notifications.add((Notification) parcelable);
-                }
-
-                if (statusView != null) statusView.setNotifications(notifications);
-                break;
             case ACTION_NOTIFICATION_ADDED:
-                statusView.addNotification((Notification) intent.getParcelableExtra(EXTRA_NOTIFICATION), intent.getStringExtra(EXTRA_PACKAGE_NAME));
+                statusView.addNotification(intent.getStringExtra(EXTRA_NOTIFICATION_KEY), (Notification) intent.getParcelableExtra(EXTRA_NOTIFICATION), intent.getStringExtra(EXTRA_PACKAGE_NAME));
                 break;
             case ACTION_NOTIFICATION_REMOVED:
-                statusView.removeNotification((Notification) intent.getParcelableExtra(EXTRA_NOTIFICATION));
+                statusView.removeNotification(intent.getStringExtra(EXTRA_NOTIFICATION_KEY));
                 break;
         }
         return START_STICKY;

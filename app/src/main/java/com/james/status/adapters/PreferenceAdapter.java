@@ -8,6 +8,7 @@ import com.james.status.data.preference.AppsColorPreferenceData;
 import com.james.status.data.preference.BooleanPreferenceData;
 import com.james.status.data.preference.ColorPreferenceData;
 import com.james.status.data.preference.IconPreferenceData;
+import com.james.status.data.preference.IntegerPreferenceData;
 import com.james.status.data.preference.PreferenceData;
 
 import java.util.ArrayList;
@@ -33,6 +34,8 @@ public class PreferenceAdapter extends RecyclerView.Adapter<PreferenceData.ViewH
                 return AppsColorPreferenceData.getViewHolder(context);
             case 3:
                 return IconPreferenceData.getViewHolder(context);
+            case 4:
+                return IntegerPreferenceData.getViewHolder(context);
             default:
                 return null;
         }
@@ -49,6 +52,7 @@ public class PreferenceAdapter extends RecyclerView.Adapter<PreferenceData.ViewH
         else if (datas.get(position) instanceof ColorPreferenceData) return 1;
         else if (datas.get(position) instanceof AppsColorPreferenceData) return 2;
         else if (datas.get(position) instanceof IconPreferenceData) return 3;
+        else if (datas.get(position) instanceof IntegerPreferenceData) return 4;
         else return super.getItemViewType(position);
     }
 

@@ -16,6 +16,7 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.util.ArrayMap;
 import android.support.v7.graphics.Palette;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -32,7 +33,6 @@ import com.james.status.utils.ImageUtils;
 import com.james.status.utils.PreferenceUtils;
 import com.james.status.utils.StaticUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class StatusView extends FrameLayout {
@@ -44,7 +44,7 @@ public class StatusView extends FrameLayout {
     @ColorInt
     private int color = 0;
     private boolean isSystemShowing, isDarkMode, isFullscreen;
-    private ArrayList<Notification> notifications;
+    private ArrayMap<String, Notification> notifications;
 
     private List<IconData> icons;
 
@@ -106,7 +106,7 @@ public class StatusView extends FrameLayout {
         this.icons = icons;
 
         for (IconData iconData : icons) {
-            final View item = LayoutInflater.from(getContext()).inflate(R.layout.item_icon, null);
+            final View item = getIconView();
 
             iconData.setDrawableListener(new IconData.DrawableListener() {
                 @Override
@@ -149,13 +149,13 @@ public class StatusView extends FrameLayout {
         }
     }
 
-    public void setNotifications(ArrayList<Notification> notifications) {
+    public void setNotifications(ArrayMap<String, Notification> notifications) {
         this.notifications = notifications;
 
         if (notificationIconLayout != null) {
             notificationIconLayout.removeAllViewsInLayout();
-            for (Notification notification : notifications) {
-                View v = LayoutInflater.from(getContext()).inflate(R.layout.item_icon, null);
+            for (Notification notification : notifications.values()) {
+                View v = getIconView();
                 Drawable drawable = getNotificationIcon(notification, null);
 
                 if (drawable != null) {
@@ -169,22 +169,21 @@ public class StatusView extends FrameLayout {
         }
     }
 
-    public void addNotification(Notification notification, @Nullable String packageName) {
-        if (notifications == null) notifications = new ArrayList<>();
+    public void addNotification(String key, Notification notification, @Nullable String packageName) {
+        if (notifications == null) notifications = new ArrayMap<>();
         else {
             for (int i = 0; i < notifications.size(); i++) {
-                Notification notification2 = notifications.get(i);
-                if (StaticUtils.areNotificationsEqual(notification, notification2)) {
+                if (notifications.containsKey(key)) {
                     notificationIconLayout.removeViewAt(i);
-                    notifications.remove(notification2);
+                    notifications.remove(key);
                 }
             }
         }
 
-        notifications.add(notification);
+        notifications.put(key, notification);
 
         if (notificationIconLayout != null) {
-            View v = LayoutInflater.from(getContext()).inflate(R.layout.item_icon, null);
+            View v = getIconView();
             Drawable drawable = getNotificationIcon(notification, packageName);
 
             if (drawable != null) {
@@ -197,59 +196,16 @@ public class StatusView extends FrameLayout {
         }
     }
 
-    public void removeNotification(Notification notification) {
-        ArrayList<Notification> notifications = new ArrayList<>();
+    public void removeNotification(String key) {
+        ArrayMap<String, Notification> notifications = new ArrayMap<>();
         if (this.notifications != null) {
-            for (Notification notification2 : this.notifications) {
-                if (!StaticUtils.areNotificationsEqual(notification, notification2))
-                    notifications.add(notification2);
+            for (String key2 : this.notifications.keySet()) {
+                if (!key.matches(key2))
+                    notifications.put(key2, this.notifications.get(key2));
             }
         }
 
         setNotifications(notifications);
-    }
-
-    @Nullable
-    private Drawable getNotificationIcon(Notification notification, @Nullable String packageName) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            Resources resources = null;
-            PackageInfo packageInfo = null;
-
-            if (packageName == null) {
-                if (notification.contentIntent != null)
-                    packageName = notification.contentIntent.getCreatorPackage();
-                else if (notification.deleteIntent != null)
-                    packageName = notification.deleteIntent.getCreatorPackage();
-                else if (notification.fullScreenIntent != null)
-                    packageName = notification.fullScreenIntent.getCreatorPackage();
-                else if (notification.actions != null && notification.actions.length > 0)
-                    packageName = notification.actions[0].actionIntent.getCreatorPackage();
-                else return null;
-            }
-
-            try {
-                resources = getContext().getPackageManager().getResourcesForApplication(packageName);
-                packageInfo = getContext().getPackageManager().getPackageInfo(packageName, PackageManager.GET_META_DATA);
-            } catch (PackageManager.NameNotFoundException ignored) {
-            }
-
-            if (resources != null && packageInfo != null) {
-                Resources.Theme theme = resources.newTheme();
-                theme.applyStyle(packageInfo.applicationInfo.theme, false);
-
-                Drawable drawable = null;
-                try {
-                    drawable = ResourcesCompat.getDrawable(resources, notification.icon, theme);
-                } catch (Resources.NotFoundException ignored) {
-                }
-
-                return drawable;
-            }
-
-        } else
-            return notification.getSmallIcon().loadDrawable(getContext());
-
-        return null;
     }
 
     public void setSystemShowing(boolean isSystemShowing) {
@@ -383,5 +339,61 @@ public class StatusView extends FrameLayout {
                 }
             });
         }
+    }
+
+    private View getIconView() {
+        View v = LayoutInflater.from(getContext()).inflate(R.layout.item_icon, null);
+
+        Integer iconPadding = PreferenceUtils.getIntegerPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_ICON_PADDING);
+        if (iconPadding == null) iconPadding = 2;
+
+        float iconPaddingDp = StaticUtils.getPixelsFromDp(getContext(), iconPadding);
+
+        v.setPadding((int) iconPaddingDp, 0, (int) iconPaddingDp, 0);
+
+        return v;
+    }
+
+    @Nullable
+    private Drawable getNotificationIcon(Notification notification, @Nullable String packageName) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            Resources resources = null;
+            PackageInfo packageInfo = null;
+
+            if (packageName == null) {
+                if (notification.contentIntent != null)
+                    packageName = notification.contentIntent.getCreatorPackage();
+                else if (notification.deleteIntent != null)
+                    packageName = notification.deleteIntent.getCreatorPackage();
+                else if (notification.fullScreenIntent != null)
+                    packageName = notification.fullScreenIntent.getCreatorPackage();
+                else if (notification.actions != null && notification.actions.length > 0)
+                    packageName = notification.actions[0].actionIntent.getCreatorPackage();
+                else return null;
+            }
+
+            try {
+                resources = getContext().getPackageManager().getResourcesForApplication(packageName);
+                packageInfo = getContext().getPackageManager().getPackageInfo(packageName, PackageManager.GET_META_DATA);
+            } catch (PackageManager.NameNotFoundException ignored) {
+            }
+
+            if (resources != null && packageInfo != null) {
+                Resources.Theme theme = resources.newTheme();
+                theme.applyStyle(packageInfo.applicationInfo.theme, false);
+
+                Drawable drawable = null;
+                try {
+                    drawable = ResourcesCompat.getDrawable(resources, notification.icon, theme);
+                } catch (Resources.NotFoundException ignored) {
+                }
+
+                return drawable;
+            }
+
+        } else
+            return notification.getSmallIcon().loadDrawable(getContext());
+
+        return null;
     }
 }

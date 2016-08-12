@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minWidth="300dp"
+    android:minHeight="300dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="64dp"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:id="@+id/scaleUp">
+
+            <com.james.status.views.CustomImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="bottom|center_horizontal"
+                app:srcCompat="@drawable/ic_arrow_up" />
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1.2"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:textSize="20sp"
+                android:textColor="@color/textColorPrimary"
+                android:id="@+id/scale" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/textColorSecondary"
+                android:id="@+id/unit" />
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:id="@+id/scaleDown">
+
+            <com.james.status.views.CustomImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="top|center_horizontal"
+                app:srcCompat="@drawable/ic_arrow_down" />
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="bottom|end"
+        android:gravity="end"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAllCaps="true"
+            android:textSize="16sp"
+            android:text="@string/action_cancel"
+            android:textColor="?android:textColorPrimary"
+            android:background="?attr/selectableItemBackground"
+            android:id="@+id/cancel"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAllCaps="true"
+            android:textSize="16sp"
+            android:text="@string/action_ok"
+            android:textColor="?android:textColorPrimary"
+            android:background="?attr/selectableItemBackground"
+            android:id="@+id/confirm"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+</FrameLayout>

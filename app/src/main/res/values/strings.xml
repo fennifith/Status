@@ -62,6 +62,8 @@
     <string name="preference_alarm_icon">Alarm Clock Icon Style</string>
     <string name="preference_show_ringer_icon">Show RInger Icon</string>
     <string name="preference_ringer_icon">Ringer Icon Style</string>
+    <string name="preference_icon_padding">Icon Padding (dp)</string>
+    <string name="preference_icon_padding_unit">dp</string>
 
     <string name="icon_style_default">Default</string>
     <string name="icon_style_circle">Circle</string>
