@@ -114,7 +114,12 @@ public class StatusView extends FrameLayout {
                 public void onUpdate(@Nullable Drawable drawable) {
                     if (drawable != null) {
                         item.setVisibility(View.VISIBLE);
-                        ((CustomImageView) item.findViewById(R.id.icon)).setImageDrawable(drawable);
+
+                        CustomImageView icon = (CustomImageView) item.findViewById(R.id.icon);
+                        icon.setImageDrawable(drawable);
+
+                        if (isDarkMode) ImageUtils.setTint(icon, Color.BLACK);
+                        else ImageUtils.setTint(icon, Color.WHITE);
                     } else item.setVisibility(View.GONE);
                 }
             });
@@ -126,6 +131,9 @@ public class StatusView extends FrameLayout {
                     if (text != null) {
                         textView.setVisibility(View.VISIBLE);
                         textView.setText(text);
+
+                        if (isDarkMode) textView.setTextColor(Color.BLACK);
+                        else textView.setTextColor(Color.WHITE);
                     } else textView.setVisibility(View.GONE);
                 }
             });
