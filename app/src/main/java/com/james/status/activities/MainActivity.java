@@ -385,6 +385,22 @@ public class MainActivity extends AppCompatActivity {
                 new BooleanPreferenceData(
                         this,
                         new PreferenceData.Identifier(
+                                PreferenceUtils.PreferenceIdentifier.SHOW_DATA,
+                                getString(R.string.preference_data),
+                                getString(R.string.preference_data_desc),
+                                PreferenceData.Identifier.SectionIdentifier.NETWORK
+                        ),
+                        true,
+                        new PreferenceData.OnPreferenceChangeListener() {
+                            @Override
+                            public void onPreferenceChange() {
+                                updateService();
+                            }
+                        }
+                ),
+                new BooleanPreferenceData(
+                        this,
+                        new PreferenceData.Identifier(
                                 PreferenceUtils.PreferenceIdentifier.SHOW_WIFI_ICON,
                                 getString(R.string.preference_show_wifi_icon),
                                 PreferenceData.Identifier.SectionIdentifier.WIFI

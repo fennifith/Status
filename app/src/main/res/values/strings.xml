@@ -50,6 +50,8 @@
     <string name="preference_battery_icon">Battery Icon Style</string>
     <string name="preference_show_network_icon">Show Network Icon</string>
     <string name="preference_network_icon">Network Icon Style</string>
+    <string name="preference_data">Show Data Connection</string>
+    <string name="preference_data_desc">Shows whether the data connection is 2G, 3G, 4G, or unknown/none (doesn\'t show anything).</string>
     <string name="preference_show_wifi_icon">Show Wifi Icon</string>
     <string name="preference_wifi_icon">Wifi Icon Style</string>
     <string name="preference_show_gps_icon">Show GPS Icon</string>
