@@ -57,7 +57,7 @@ public class NotificationService extends NotificationListenerService {
             Intent intent = new Intent(StatusService.ACTION_NOTIFICATION_ADDED);
             intent.setClass(this, StatusService.class);
 
-            intent.putExtra(StatusService.EXTRA_NOTIFICATION_KEY, String.valueOf(sbn.getId()));
+            intent.putExtra(StatusService.EXTRA_NOTIFICATION_KEY, getKey(sbn));
             intent.putExtra(StatusService.EXTRA_NOTIFICATION, sbn.getNotification());
             intent.putExtra(StatusService.EXTRA_PACKAGE_NAME, sbn.getPackageName());
 
@@ -72,7 +72,7 @@ public class NotificationService extends NotificationListenerService {
             Intent intent = new Intent(StatusService.ACTION_NOTIFICATION_REMOVED);
             intent.setClass(this, StatusService.class);
 
-            intent.putExtra(StatusService.EXTRA_NOTIFICATION_KEY, String.valueOf(sbn.getId()));
+            intent.putExtra(StatusService.EXTRA_NOTIFICATION_KEY, getKey(sbn));
             intent.putExtra(StatusService.EXTRA_NOTIFICATION, sbn.getNotification());
             intent.putExtra(StatusService.EXTRA_PACKAGE_NAME, sbn.getPackageName());
 
@@ -95,12 +95,23 @@ public class NotificationService extends NotificationListenerService {
                 Intent intent = new Intent(StatusService.ACTION_NOTIFICATION_ADDED);
                 intent.setClass(this, StatusService.class);
 
-                intent.putExtra(StatusService.EXTRA_NOTIFICATION_KEY, String.valueOf(sbn.getId()));
+                intent.putExtra(StatusService.EXTRA_NOTIFICATION_KEY, getKey(sbn));
                 intent.putExtra(StatusService.EXTRA_NOTIFICATION, sbn.getNotification());
                 intent.putExtra(StatusService.EXTRA_PACKAGE_NAME, sbn.getPackageName());
 
                 startService(intent);
             }
         }
+    }
+
+    private String getKey(StatusBarNotification statusBarNotification) {
+        String key = "";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
+            String notificationKey = statusBarNotification.getKey();
+            if (notificationKey != null) key += notificationKey;
+        }
+        key += "/" + statusBarNotification.getId();
+
+        return key;
     }
 }

@@ -110,36 +110,40 @@ public class StatusService extends Service {
 
 
     public void setUp() {
-        if (statusView != null) windowManager.removeView(statusView);
-        statusView = new StatusView(this);
+        if (statusView == null || statusView.getParent() == null) {
+            if (statusView != null) windowManager.removeView(statusView);
+            statusView = new StatusView(this);
 
-        WindowManager.LayoutParams params = new WindowManager.LayoutParams(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN, PixelFormat.TRANSLUCENT);
-        params.gravity = Gravity.TOP;
+            WindowManager.LayoutParams params = new WindowManager.LayoutParams(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN, PixelFormat.TRANSLUCENT);
+            params.gravity = Gravity.TOP;
 
-        windowManager.addView(statusView, params);
+            windowManager.addView(statusView, params);
+        }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 && statusView.getNotifications().size() < 1) {
             Intent intent = new Intent(NotificationService.ACTION_GET_NOTIFICATIONS);
             intent.setClass(this, NotificationService.class);
             startService(intent);
         }
 
-        params = new WindowManager.LayoutParams(1, WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, PixelFormat.TRANSPARENT);
-        params.gravity = Gravity.START | Gravity.TOP;
-        fullscreenView = new View(this);
+        if (fullscreenView == null || fullscreenView.getParent() == null) {
+            WindowManager.LayoutParams params = new WindowManager.LayoutParams(1, WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, PixelFormat.TRANSPARENT);
+            params.gravity = Gravity.START | Gravity.TOP;
+            fullscreenView = new View(this);
 
-        windowManager.addView(fullscreenView, params);
+            windowManager.addView(fullscreenView, params);
 
-        fullscreenView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                if (statusView != null && fullscreenView != null) {
-                    Point size = new Point();
-                    windowManager.getDefaultDisplay().getSize(size);
-                    statusView.setFullscreen(fullscreenView.getMeasuredHeight() == size.y);
+            fullscreenView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    if (statusView != null && fullscreenView != null) {
+                        Point size = new Point();
+                        windowManager.getDefaultDisplay().getSize(size);
+                        statusView.setFullscreen(fullscreenView.getMeasuredHeight() == size.y);
+                    }
                 }
-            }
-        });
+            });
+        }
 
         List<IconData> icons = new ArrayList<>();
 

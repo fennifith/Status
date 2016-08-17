@@ -12,8 +12,14 @@ import com.james.status.utils.PreferenceUtils;
 
 public class BatteryIconData extends IconData<BatteryIconData.BatteryReceiver> {
 
+    BatteryManager batteryManager;
+    BatteryReceiver receiver;
+
     public BatteryIconData(Context context) {
         super(context, PreferenceUtils.PreferenceIdentifier.STYLE_BATTERY_ICON);
+
+        batteryManager = (BatteryManager) context.getSystemService(Context.BATTERY_SERVICE);
+        receiver = new BatteryReceiver();
     }
 
     @Override
@@ -30,6 +36,33 @@ public class BatteryIconData extends IconData<BatteryIconData.BatteryReceiver> {
     @Override
     public IntentFilter getIntentFilter() {
         return new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+    }
+
+    @Override
+    public void register() {
+        Intent intent = getContext().registerReceiver(receiver, getIntentFilter());
+
+        if (intent != null) {
+            int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
+            int status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, 0);
+
+            int iconLevel = level;
+            if (iconLevel > 0) iconLevel /= 15;
+
+            if (status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL)
+                iconLevel += 7;
+
+            onDrawableUpdate(VectorDrawableCompat.create(getContext().getResources(), getIconResource(iconLevel), getContext().getTheme()));
+
+            Boolean isBatteryPercent = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_BATTERY_PERCENT);
+            if (isBatteryPercent != null && isBatteryPercent)
+                onTextUpdate(String.valueOf(level) + "%");
+        }
+    }
+
+    @Override
+    public void unregister() {
+        getContext().unregisterReceiver(receiver);
     }
 
     @Override
