@@ -105,13 +105,6 @@ public class NotificationService extends NotificationListenerService {
     }
 
     private String getKey(StatusBarNotification statusBarNotification) {
-        String key = "";
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
-            String notificationKey = statusBarNotification.getKey();
-            if (notificationKey != null) key += notificationKey;
-        }
-        key += "/" + statusBarNotification.getId();
-
-        return key;
+        return String.valueOf(statusBarNotification.getId());
     }
 }
