@@ -23,6 +23,7 @@ import com.james.status.data.icon.BluetoothIconData;
 import com.james.status.data.icon.IconData;
 import com.james.status.data.icon.NetworkIconData;
 import com.james.status.data.icon.RingerIconData;
+import com.james.status.data.icon.TimeIconData;
 import com.james.status.data.icon.WifiIconData;
 import com.james.status.utils.PreferenceUtils;
 import com.james.status.views.StatusView;
@@ -120,7 +121,9 @@ public class StatusService extends Service {
             windowManager.addView(statusView, params);
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 && statusView.getNotifications().size() < 1) {
+        statusView.setUp();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             Intent intent = new Intent(NotificationService.ACTION_GET_NOTIFICATIONS);
             intent.setClass(this, NotificationService.class);
             startService(intent);
@@ -146,6 +149,9 @@ public class StatusService extends Service {
         }
 
         List<IconData> icons = new ArrayList<>();
+
+        Boolean showClock = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.SHOW_CLOCK);
+        if (showClock == null || showClock) icons.add(new TimeIconData(this));
 
         Boolean battery = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.SHOW_BATTERY_ICON);
         if (battery == null || battery) icons.add(new BatteryIconData(this));

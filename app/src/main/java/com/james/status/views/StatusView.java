@@ -25,7 +25,6 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.TextClock;
 import android.widget.TextView;
 
 import com.james.status.R;
@@ -41,11 +40,10 @@ import java.util.List;
 public class StatusView extends FrameLayout {
 
     private LinearLayout status;
-    private TextClock clock;
     private LinearLayout notificationIconLayout;
 
     @ColorInt
-    private int color = 0;
+    private Integer color;
     private boolean isSystemShowing, isDarkMode, isFullscreen;
     private ArrayMap<String, Notification> notifications;
 
@@ -53,31 +51,27 @@ public class StatusView extends FrameLayout {
 
     public StatusView(Context context) {
         super(context);
-        setUp();
     }
 
     public StatusView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        setUp();
     }
 
     public StatusView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        setUp();
     }
 
     @TargetApi(21)
     public StatusView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        setUp();
     }
 
     public void setUp() {
+        if (status != null && status.getParent() != null) removeView(status);
+
         View v = LayoutInflater.from(getContext()).inflate(R.layout.layout_status, null);
         status = (LinearLayout) v.findViewById(R.id.status);
         status.getLayoutParams().height = StaticUtils.getStatusBarHeight(getContext());
-
-        clock = (TextClock) v.findViewById(R.id.clock);
 
         notificationIconLayout = (LinearLayout) v.findViewById(R.id.notificationIcons);
 
@@ -87,22 +81,14 @@ public class StatusView extends FrameLayout {
 
         VectorDrawableCompat.create(getResources(), R.drawable.ic_battery_alert, getContext().getTheme());
 
-        Boolean isAmPmEnabled = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_CLOCK_AMPM);
-        String format = isAmPmEnabled == null || isAmPmEnabled ? "h:mm a" : "h:mm";
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
-            clock.setFormat12Hour(format);
-
-        Boolean showClock = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.SHOW_CLOCK);
-        if (showClock != null && !showClock) clock.setVisibility(View.GONE);
-
         addView(v);
 
         Boolean isStatusColorAuto = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_AUTO);
         if (isStatusColorAuto != null && !isStatusColorAuto) {
             Integer statusBarColor = PreferenceUtils.getIntegerPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_COLOR);
             if (statusBarColor != null) setColor(statusBarColor);
-        } else if (color > 0) setColor(color);
+        } else if (color != null) setColor(color);
+        else setColor(Color.BLACK);
     }
 
     public void setIcons(List<IconData> icons) {
@@ -136,7 +122,7 @@ public class StatusView extends FrameLayout {
                         else ImageUtils.setTint(iconView, Color.WHITE);
                     } else {
                         iconView.setVisibility(View.GONE);
-                        if (iconData.getText() == null) item.setVisibility(View.GONE);
+                        if (!iconData.hasText()) item.setVisibility(View.GONE);
                     }
                 }
             });
@@ -155,10 +141,13 @@ public class StatusView extends FrameLayout {
                         else textView.setTextColor(Color.WHITE);
                     } else {
                         textView.setVisibility(View.GONE);
-                        if (iconData.getDrawable() == null) item.setVisibility(View.GONE);
+                        if (!iconData.hasDrawable()) item.setVisibility(View.GONE);
                     }
                 }
             });
+
+            item.findViewById(R.id.icon).setVisibility(iconData.hasDrawable() ? View.VISIBLE : View.GONE);
+            item.findViewById(R.id.text).setVisibility(iconData.hasText() ? View.VISIBLE : View.GONE);
 
             status.addView(item, 1);
         }
@@ -308,6 +297,8 @@ public class StatusView extends FrameLayout {
     }
 
     public void setColor(@ColorInt int color) {
+        if (this.color == null) this.color = Color.BLACK;
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             ValueAnimator animator = ValueAnimator.ofArgb(this.color, color);
             animator.setDuration(150);
@@ -376,32 +367,28 @@ public class StatusView extends FrameLayout {
 
         v.setPadding((int) iconPaddingDp, 0, (int) iconPaddingDp, 0);
 
-        Integer iconScale = PreferenceUtils.getIntegerPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_ICON_SCALE);
-        if (iconScale == null) iconScale = 24;
-
-        float iconScaleDp = StaticUtils.getPixelsFromDp(getContext(), iconScale);
-
-        ViewGroup.LayoutParams layoutParams = v.getLayoutParams();
-        if (layoutParams != null) layoutParams.height = (int) iconScaleDp;
-        else
-            layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, (int) iconScaleDp);
-        v.setLayoutParams(layoutParams);
-
         v.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
-                ValueAnimator animator = ValueAnimator.ofInt(0, v.getWidth());
+                Integer iconScale = PreferenceUtils.getIntegerPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_ICON_SCALE);
+                if (iconScale == null) iconScale = 24;
+
+                ValueAnimator animator = ValueAnimator.ofInt(0, (int) StaticUtils.getPixelsFromDp(getContext(), iconScale));
                 animator.setDuration(150);
                 animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                     @Override
                     public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        ViewGroup.LayoutParams layoutParams = v.getLayoutParams();
+                        v.setAlpha(valueAnimator.getAnimatedFraction());
+
+                        View iconView = v.findViewById(R.id.icon);
+
+                        ViewGroup.LayoutParams layoutParams = iconView.getLayoutParams();
                         if (layoutParams != null) layoutParams.height = (int) valueAnimator.getAnimatedValue();
                         else
                             layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, (int) valueAnimator.getAnimatedValue());
-                        v.setLayoutParams(layoutParams);
+                        iconView.setLayoutParams(layoutParams);
                     }
                 });
                 animator.start();

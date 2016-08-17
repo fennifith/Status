@@ -22,7 +22,8 @@ public class IconData<T extends BroadcastReceiver> {
     public IconData(Context context, PreferenceUtils.PreferenceIdentifier identifier) {
         this.context = context;
 
-        resource = PreferenceUtils.getIntegerArrayPreference(context, identifier);
+        if (identifier != null)
+            resource = PreferenceUtils.getIntegerArrayPreference(context, identifier);
         if (resource == null) resource = getDefaultIconResource();
     }
 
@@ -55,8 +56,10 @@ public class IconData<T extends BroadcastReceiver> {
     }
 
     public void onDrawableUpdate(@Nullable Drawable drawable) {
-        if (hasDrawableListener()) getDrawableListener().onUpdate(drawable);
-        this.drawable = drawable;
+        if (hasDrawable()) {
+            if (hasDrawableListener()) getDrawableListener().onUpdate(drawable);
+            this.drawable = drawable;
+        }
     }
 
     public void onTextUpdate(@Nullable String text) {
@@ -64,6 +67,10 @@ public class IconData<T extends BroadcastReceiver> {
             if (hasTextListener()) getTextListener().onUpdate(text);
             this.text = text;
         }
+    }
+
+    public boolean hasDrawable() {
+        return true;
     }
 
     public boolean hasText() {
@@ -102,7 +109,8 @@ public class IconData<T extends BroadcastReceiver> {
 
     @Nullable
     public Drawable getDrawable() {
-        return drawable;
+        if (hasDrawable()) return drawable;
+        else return null;
     }
 
     @Nullable
