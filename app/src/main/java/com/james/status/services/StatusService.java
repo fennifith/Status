@@ -26,6 +26,7 @@ import com.james.status.data.icon.RingerIconData;
 import com.james.status.data.icon.TimeIconData;
 import com.james.status.data.icon.WifiIconData;
 import com.james.status.utils.PreferenceUtils;
+import com.james.status.utils.StaticUtils;
 import com.james.status.views.StatusView;
 
 import java.util.ArrayList;
@@ -174,6 +175,12 @@ public class StatusService extends Service {
 
         statusView.setIcons(icons);
         statusView.register();
+
+        if (StaticUtils.isAccessibilityServiceRunning(this)) {
+            Intent intent = new Intent(AccessibilityService.ACTION_GET_COLOR);
+            intent.setClass(this, AccessibilityService.class);
+            startService(intent);
+        }
     }
 
     public boolean isFullscreen() {

@@ -1,7 +1,11 @@
 package com.james.status.services;
 
 import android.accessibilityservice.AccessibilityServiceInfo;
+import android.app.ActivityManager;
 import android.app.Notification;
+import android.app.usage.UsageStats;
+import android.app.usage.UsageStatsManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -16,23 +20,54 @@ import android.view.accessibility.AccessibilityEvent;
 import com.james.status.utils.ColorUtils;
 import com.james.status.utils.PreferenceUtils;
 
+import java.util.List;
+import java.util.SortedMap;
+import java.util.TreeMap;
+
 public class AccessibilityService extends android.accessibilityservice.AccessibilityService {
+
+    public static final String ACTION_GET_COLOR = "com.james.status.ACTION_GET_COLOR";
 
     private PackageManager packageManager;
     private ArrayMap<String, Notification> notifications;
+
+    private UsageStatsManager usageStatsManager;
+    private ActivityManager activityManager;
+
+    private int color = Color.BLACK;
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        if (intent != null) {
+            String action = intent.getAction();
+
+            if (action != null && action.matches(ACTION_GET_COLOR)) {
+                Intent i = new Intent(StatusService.ACTION_UPDATE);
+                i.setClass(this, StatusService.class);
+                i.putExtra(StatusService.EXTRA_COLOR, color);
+                startService(i);
+            }
+        }
+
+        return super.onStartCommand(intent, flags, startId);
+    }
 
     @Override
     protected void onServiceConnected() {
         super.onServiceConnected();
 
         packageManager = getPackageManager();
-        notifications = new ArrayMap<>();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1)
+            usageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
+        activityManager = (ActivityManager) this.getSystemService(ACTIVITY_SERVICE);
 
+        notifications = new ArrayMap<>();
         AccessibilityServiceInfo config = new AccessibilityServiceInfo();
         config.eventTypes = AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED | AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED;
         config.feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC;
 
-        if (Build.VERSION.SDK_INT >= 16) config.flags = AccessibilityServiceInfo.FLAG_INCLUDE_NOT_IMPORTANT_VIEWS;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
+            config.flags = AccessibilityServiceInfo.FLAG_INCLUDE_NOT_IMPORTANT_VIEWS;
 
         setServiceInfo(config);
     }
@@ -101,6 +136,28 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
         }
     }
 
+    private String getCurrentActivity() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            long time = System.currentTimeMillis();
+
+            List<UsageStats> apps = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, (time - 1000) * 1000, time);
+
+            if (apps != null && apps.size() > 0) {
+                SortedMap<Long, UsageStats> sortedMap = new TreeMap<>();
+                for (UsageStats usageStats : apps) {
+                    sortedMap.put(usageStats.getLastTimeUsed(), usageStats);
+
+                }
+
+                if (!sortedMap.isEmpty())
+                    return sortedMap.get(sortedMap.lastKey()).getPackageName();
+                else return null;
+            } else return null;
+        } else {
+            return activityManager.getRunningTasks(1).get(0).topActivity.getPackageName();
+        }
+    }
+
     private void setStatusBar(@ColorInt int color, @Nullable Boolean fullscreen, @Nullable Boolean systemFullscreen) {
         Intent intent = new Intent(StatusService.ACTION_UPDATE);
         intent.setClass(this, StatusService.class);
@@ -114,6 +171,8 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
             intent.putExtra(StatusService.EXTRA_SYSTEM_FULLSCREEN, systemFullscreen);
 
         startService(intent);
+
+        this.color = color;
     }
 
     @Override

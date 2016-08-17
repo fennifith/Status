@@ -264,7 +264,7 @@ public class StatusView extends FrameLayout {
     }
 
     public void setFullscreen(boolean isFullscreen) {
-        if (this.isFullscreen != isFullscreen && !isSystemShowing) {
+        if (((getVisibility() == View.GONE) != isFullscreen) && !isSystemShowing) {
             ValueAnimator animator = ValueAnimator.ofFloat(getY(), isFullscreen ? -StaticUtils.getStatusBarHeight(getContext()) : 0f);
             animator.setDuration(150);
             animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {

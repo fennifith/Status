@@ -19,6 +19,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.util.TypedValue;
 
+import com.james.status.services.AccessibilityService;
 import com.james.status.services.StatusService;
 
 import java.util.ArrayList;
@@ -59,7 +60,8 @@ public class StaticUtils {
 
     public static boolean isNotificationGranted(Context context) {
         for (String packageName : NotificationManagerCompat.getEnabledListenerPackages(context)) {
-            if (packageName.contains(context.getPackageName()) || packageName.matches(context.getPackageName())) return true;
+            if (packageName.contains(context.getPackageName()) || packageName.matches(context.getPackageName()))
+                return true;
         }
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2;
     }
@@ -82,7 +84,7 @@ public class StaticUtils {
             for (String permission : info.requestedPermissions) {
                 if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
                     Log.wtf("Permission", permission);
-                    if (!permission.matches(Manifest.permission.SYSTEM_ALERT_WINDOW) || !canDrawOverlays(context))
+                    if ((!(permission.matches(Manifest.permission.SYSTEM_ALERT_WINDOW) || !canDrawOverlays(context))) && !permission.matches(Manifest.permission.GET_TASKS))
                         return false;
                 }
             }
@@ -105,7 +107,7 @@ public class StaticUtils {
             for (String permission : info.requestedPermissions) {
                 if (ContextCompat.checkSelfPermission(activity, permission) != PackageManager.PERMISSION_GRANTED) {
                     Log.wtf("Permission", permission);
-                    if (!permission.matches(Manifest.permission.SYSTEM_ALERT_WINDOW))
+                    if (!permission.matches(Manifest.permission.SYSTEM_ALERT_WINDOW) && !permission.matches(Manifest.permission.GET_TASKS))
                         unrequestedPermissions.add(permission);
                 }
             }
@@ -132,6 +134,16 @@ public class StaticUtils {
         ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
             if (StatusService.class.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isAccessibilityServiceRunning(Context context) {
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (AccessibilityService.class.getName().equals(service.service.getClassName())) {
                 return true;
             }
         }
