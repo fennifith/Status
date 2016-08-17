@@ -92,11 +92,8 @@ public class StatusService extends Service {
                     if ((isStatusColorAuto == null || isStatusColorAuto) && intent.hasExtra(EXTRA_COLOR))
                         statusView.setColor(intent.getIntExtra(EXTRA_COLOR, Color.BLACK));
 
-                    if (intent.hasExtra(EXTRA_FULLSCREEN))
-                        statusView.setFullscreen(intent.getBooleanExtra(EXTRA_FULLSCREEN, false));
-
-                    if (intent.hasExtra(EXTRA_SYSTEM_FULLSCREEN))
-                        statusView.setSystemShowing(intent.getBooleanExtra(EXTRA_SYSTEM_FULLSCREEN, false));
+                    statusView.setSystemShowing(intent.getBooleanExtra(EXTRA_SYSTEM_FULLSCREEN, statusView.isSystemShowing()));
+                    statusView.setFullscreen(intent.getBooleanExtra(EXTRA_FULLSCREEN, isFullscreen()));
                 }
                 break;
             case ACTION_NOTIFICATION_ADDED:
@@ -177,6 +174,14 @@ public class StatusService extends Service {
 
         statusView.setIcons(icons);
         statusView.register();
+    }
+
+    public boolean isFullscreen() {
+        if (statusView != null && fullscreenView != null) {
+            Point size = new Point();
+            windowManager.getDefaultDisplay().getSize(size);
+            return fullscreenView.getMeasuredHeight() == size.y;
+        } else return false;
     }
 
     @Override

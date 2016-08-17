@@ -224,39 +224,43 @@ public class StatusView extends FrameLayout {
 
     public void setSystemShowing(boolean isSystemShowing) {
         if (this.isFullscreen != isSystemShowing || this.isSystemShowing != isSystemShowing) {
-            ValueAnimator animator = ValueAnimator.ofFloat(getY(), isSystemShowing ? -StaticUtils.getStatusBarHeight(getContext()) : 0f);
-            animator.setDuration(150);
-            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    float y = (float) valueAnimator.getAnimatedValue();
-                    setY(y);
-                }
-            });
-            animator.addListener(new Animator.AnimatorListener() {
-                @Override
-                public void onAnimationStart(Animator animator) {
-                }
+            if (isSystemShowing) {
+                ValueAnimator animator = ValueAnimator.ofFloat(getY(), -StaticUtils.getStatusBarHeight(getContext()));
+                animator.setDuration(150);
+                animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                        float y = (float) valueAnimator.getAnimatedValue();
+                        setY(y);
+                    }
+                });
+                animator.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animator) {
+                    }
 
-                @Override
-                public void onAnimationEnd(Animator animator) {
-                    if (StatusView.this.isSystemShowing) setVisibility(View.GONE);
-                }
+                    @Override
+                    public void onAnimationEnd(Animator animator) {
+                        setVisibility(View.GONE);
+                    }
 
-                @Override
-                public void onAnimationCancel(Animator animator) {
-                }
+                    @Override
+                    public void onAnimationCancel(Animator animator) {
+                    }
 
-                @Override
-                public void onAnimationRepeat(Animator animator) {
-                }
-            });
-            animator.start();
-
-            if (!isSystemShowing) setVisibility(View.VISIBLE);
+                    @Override
+                    public void onAnimationRepeat(Animator animator) {
+                    }
+                });
+                animator.start();
+            }
         }
 
         this.isSystemShowing = isSystemShowing;
+    }
+
+    public boolean isSystemShowing() {
+        return isSystemShowing;
     }
 
     public void setFullscreen(boolean isFullscreen) {
@@ -291,9 +295,13 @@ public class StatusView extends FrameLayout {
             animator.start();
 
             if (!isFullscreen) setVisibility(View.VISIBLE);
-
-            this.isFullscreen = isFullscreen;
         }
+
+        this.isFullscreen = isFullscreen;
+    }
+
+    public boolean isFullscreen() {
+        return isFullscreen;
     }
 
     public void setColor(@ColorInt int color) {
