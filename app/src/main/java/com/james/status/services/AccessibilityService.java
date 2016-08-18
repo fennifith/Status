@@ -19,6 +19,7 @@ import android.view.accessibility.AccessibilityEvent;
 
 import com.james.status.utils.ColorUtils;
 import com.james.status.utils.PreferenceUtils;
+import com.james.status.utils.StaticUtils;
 
 import java.util.List;
 import java.util.SortedMap;
@@ -124,7 +125,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                                     new Handler(getMainLooper()).post(new Runnable() {
                                         @Override
                                         public void run() {
-                                            setStatusBar(color, null, false);
+                                            setStatusBar(color, StaticUtils.isStatusBarFullscreen(AccessibilityService.this, packageName.toString()), false);
                                         }
                                     });
                                 }
@@ -146,7 +147,6 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                 SortedMap<Long, UsageStats> sortedMap = new TreeMap<>();
                 for (UsageStats usageStats : apps) {
                     sortedMap.put(usageStats.getLastTimeUsed(), usageStats);
-
                 }
 
                 if (!sortedMap.isEmpty())

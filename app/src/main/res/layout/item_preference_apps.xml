@@ -18,13 +18,13 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/preference_app_colors"
                 android:textColor="?android:textColorPrimary"
                 android:textSize="16sp"
                 android:paddingBottom="16dp"
                 android:paddingLeft="12dp"
                 android:paddingRight="12dp"
-                android:paddingTop="16dp" />
+                android:paddingTop="16dp"
+                android:id="@+id/title" />
 
             <TextView
                 android:layout_width="wrap_content"

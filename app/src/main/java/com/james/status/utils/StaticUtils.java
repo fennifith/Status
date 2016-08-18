@@ -13,17 +13,21 @@ import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.util.TypedValue;
 
+import com.google.gson.Gson;
+import com.james.status.data.AppStatusData;
 import com.james.status.services.AccessibilityService;
 import com.james.status.services.StatusService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class StaticUtils {
 
@@ -84,7 +88,7 @@ public class StaticUtils {
             for (String permission : info.requestedPermissions) {
                 if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
                     Log.wtf("Permission", permission);
-                    if ((!(permission.matches(Manifest.permission.SYSTEM_ALERT_WINDOW) || !canDrawOverlays(context))) && !permission.matches(Manifest.permission.GET_TASKS))
+                    if (((!permission.matches(Manifest.permission.SYSTEM_ALERT_WINDOW) || !canDrawOverlays(context))) && !permission.matches(Manifest.permission.GET_TASKS))
                         return false;
                 }
             }
@@ -148,5 +152,19 @@ public class StaticUtils {
             }
         }
         return false;
+    }
+
+    @Nullable
+    public static Boolean isStatusBarFullscreen(Context context, String packageName) {
+        Set<String> apps = PreferenceUtils.getStringSetPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_FULLSCREEN_APPS);
+        if (apps != null) {
+            Gson gson = new Gson();
+            for (String app : apps) {
+                AppStatusData data = gson.fromJson(app, AppStatusData.class);
+                if (packageName.matches(data.packageName) && data.isFullscreen) return true;
+            }
+        }
+
+        return null;
     }
 }

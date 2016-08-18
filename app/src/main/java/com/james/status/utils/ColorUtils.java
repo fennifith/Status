@@ -14,7 +14,7 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.graphics.Palette;
 
 import com.google.gson.Gson;
-import com.james.status.data.AppData;
+import com.james.status.data.AppColorData;
 
 import java.util.Set;
 
@@ -64,7 +64,7 @@ public class ColorUtils {
         if (apps != null) {
             Gson gson = new Gson();
             for (String app : apps) {
-                AppData data = gson.fromJson(app, AppData.class);
+                AppColorData data = gson.fromJson(app, AppColorData.class);
                 if (packageName.matches(data.packageName) && data.color != null) {
                     return data.color;
                 }

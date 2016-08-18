@@ -6,35 +6,35 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 
-public class AppData implements Parcelable {
+public class AppColorData implements Parcelable {
 
     public String name, packageName;
     @Nullable
     public Integer color, cachedColor;
 
-    public AppData(PackageManager manager, ResolveInfo info) {
+    public AppColorData(PackageManager manager, ResolveInfo info) {
         name = info.loadLabel(manager).toString();
         packageName = info.activityInfo.applicationInfo.packageName;
         color = null;
         cachedColor = null;
     }
 
-    protected AppData(Parcel in) {
+    protected AppColorData(Parcel in) {
         name = in.readString();
         packageName = in.readString();
         color = in.readInt();
         cachedColor = in.readInt();
     }
 
-    public static final Creator<AppData> CREATOR = new Creator<AppData>() {
+    public static final Creator<AppColorData> CREATOR = new Creator<AppColorData>() {
         @Override
-        public AppData createFromParcel(Parcel in) {
-            return new AppData(in);
+        public AppColorData createFromParcel(Parcel in) {
+            return new AppColorData(in);
         }
 
         @Override
-        public AppData[] newArray(int size) {
-            return new AppData[size];
+        public AppColorData[] newArray(int size) {
+            return new AppColorData[size];
         }
     };
 

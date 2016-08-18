@@ -44,6 +44,8 @@
     <string name="preference_bar_color_chooser">Status Bar Color</string>
     <string name="preference_app_colors">App-Specific Colors</string>
     <string name="preference_app_colors_desc">Set the color for the status bar to use in a specific app. This will override any other color options.</string>
+    <string name="preference_fullscreen_apps">Fullscreen Apps</string>
+    <string name="preference_fullscreen_apps_desc">The status bar will be disabled in the apps set here.</string>
     <string name="preference_dark_icons">Dark Icons</string>
     <string name="preference_dark_icons_desc">Darkens the status bar icons on light backgrounds.</string>
     <string name="preference_show_battery_icon">Show Battery Icon</string>

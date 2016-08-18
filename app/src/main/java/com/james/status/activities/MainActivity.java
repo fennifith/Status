@@ -22,6 +22,7 @@ import com.james.status.R;
 import com.james.status.adapters.PreferenceSectionAdapter;
 import com.james.status.data.IconStyleData;
 import com.james.status.data.preference.AppsColorPreferenceData;
+import com.james.status.data.preference.AppsStatusPreferenceData;
 import com.james.status.data.preference.BooleanPreferenceData;
 import com.james.status.data.preference.ColorPreferenceData;
 import com.james.status.data.preference.IconPreferenceData;
@@ -110,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                 ),
                 new AppsColorPreferenceData(this),
+                new AppsStatusPreferenceData(this),
                 new BooleanPreferenceData(
                         this,
                         new PreferenceData.Identifier(

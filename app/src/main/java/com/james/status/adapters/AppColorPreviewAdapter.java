@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.james.status.R;
-import com.james.status.data.AppData;
+import com.james.status.data.AppColorData;
 import com.james.status.utils.ColorUtils;
 import com.james.status.utils.PreferenceUtils;
 import com.james.status.views.CustomImageView;
@@ -32,7 +32,7 @@ public class AppColorPreviewAdapter extends RecyclerView.Adapter<AppColorPreview
 
     private Context context;
     private PackageManager packageManager;
-    private ArrayList<AppData> apps;
+    private ArrayList<AppColorData> apps;
     private Gson gson;
     private Set<String> jsons;
 
@@ -58,10 +58,10 @@ public class AppColorPreviewAdapter extends RecyclerView.Adapter<AppColorPreview
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        AppData app = apps.get(position);
+        AppColorData app = apps.get(position);
 
         for (String json : jsons) {
-            AppData data = gson.fromJson(json, AppData.class);
+            AppColorData data = gson.fromJson(json, AppColorData.class);
             if (data.packageName.matches(app.packageName) && data.color != null) {
                 app.color = data.color;
                 break;
@@ -77,7 +77,7 @@ public class AppColorPreviewAdapter extends RecyclerView.Adapter<AppColorPreview
         new Thread() {
             @Override
             public void run() {
-                AppData app = getApp(holder.getAdapterPosition());
+                AppColorData app = getApp(holder.getAdapterPosition());
                 if (app == null) return;
 
                 final int color = ColorUtils.getStatusBarColor(context, packageManager, app.packageName);
@@ -124,16 +124,16 @@ public class AppColorPreviewAdapter extends RecyclerView.Adapter<AppColorPreview
             @Override
             public void run() {
                 for (String json : jsons) {
-                    AppData app = gson.fromJson(json, AppData.class);
+                    AppColorData app = gson.fromJson(json, AppColorData.class);
                     if (app.color != null) apps.add(app);
                 }
 
                 new Handler(context.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
-                        Collections.sort(apps, new Comparator<AppData>() {
+                        Collections.sort(apps, new Comparator<AppColorData>() {
                             @Override
-                            public int compare(AppData lhs, AppData rhs) {
+                            public int compare(AppColorData lhs, AppColorData rhs) {
                                 return lhs.name.compareToIgnoreCase(rhs.name);
                             }
                         });
@@ -146,7 +146,7 @@ public class AppColorPreviewAdapter extends RecyclerView.Adapter<AppColorPreview
     }
 
     @Nullable
-    private AppData getApp(int position) {
+    private AppColorData getApp(int position) {
         if (position < 0 || position >= apps.size()) return null;
         else return apps.get(position);
     }

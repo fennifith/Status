@@ -24,7 +24,7 @@ import android.widget.CompoundButton;
 
 import com.google.gson.Gson;
 import com.james.status.R;
-import com.james.status.data.AppData;
+import com.james.status.data.AppColorData;
 import com.james.status.dialogs.ColorPickerDialog;
 import com.james.status.dialogs.PreferenceDialog;
 import com.james.status.utils.ColorUtils;
@@ -41,7 +41,7 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
 
     private Context context;
     private PackageManager packageManager;
-    private ArrayList<AppData> apps;
+    private ArrayList<AppColorData> apps;
     private Gson gson;
     private Set<String> jsons;
 
@@ -58,15 +58,15 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
             @Override
             public void run() {
                 for (ResolveInfo info : packageManager.queryIntentActivities(new Intent(Intent.ACTION_MAIN, null).addCategory(Intent.CATEGORY_LAUNCHER), 0)) {
-                    apps.add(new AppData(packageManager, info));
+                    apps.add(new AppColorData(packageManager, info));
                 }
 
                 new Handler(context.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
-                        Collections.sort(apps, new Comparator<AppData>() {
+                        Collections.sort(apps, new Comparator<AppColorData>() {
                             @Override
-                            public int compare(AppData lhs, AppData rhs) {
+                            public int compare(AppColorData lhs, AppColorData rhs) {
                                 return lhs.name.compareToIgnoreCase(rhs.name);
                             }
                         });
@@ -85,10 +85,10 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        AppData app = apps.get(position);
+        AppColorData app = apps.get(position);
 
         for (String json : jsons) {
-            AppData data = gson.fromJson(json, AppData.class);
+            AppColorData data = gson.fromJson(json, AppColorData.class);
             if (data.packageName.matches(app.packageName) && data.color != null) {
                 app.color = data.color;
                 break;
@@ -100,7 +100,7 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
         new Thread() {
             @Override
             public void run() {
-                AppData app = getApp(holder.getAdapterPosition());
+                AppColorData app = getApp(holder.getAdapterPosition());
                 if (app == null) return;
 
                 final Drawable icon;
@@ -126,12 +126,12 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
         appSwitch.setOnCheckedChangeListener(null); //totally not a spaghetti way of preventing an exception from being thrown...
         appSwitch.setChecked(app.color != null);
 
-        ((CustomImageView) holder.v.findViewById(R.id.color)).setImageDrawable(new ColorDrawable(ColorUtils.muteColor(Color.DKGRAY, position)));
+        holder.v.findViewById(R.id.color).setBackgroundColor(ColorUtils.muteColor(Color.DKGRAY, position));
 
         new Thread() {
             @Override
             public void run() {
-                AppData app = getApp(holder.getAdapterPosition());
+                AppColorData app = getApp(holder.getAdapterPosition());
                 if (app == null) return;
                 if (app.cachedColor == null)
                     app.cachedColor = ColorUtils.getStatusBarColor(context, packageManager, app.packageName);
@@ -139,7 +139,7 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
                 new Handler(context.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
-                        AppData app = getApp(holder.getAdapterPosition());
+                        AppColorData app = getApp(holder.getAdapterPosition());
                         if (app == null) return;
 
                         int color = ColorUtils.muteColor(app.color != null ? app.color : getDefaultColor(app), holder.getAdapterPosition());
@@ -150,7 +150,7 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
                             animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                                 @Override
                                 public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                                    ((CustomImageView) holder.v.findViewById(R.id.color)).setImageDrawable(new ColorDrawable((int) valueAnimator.getAnimatedValue()));
+                                    holder.v.findViewById(R.id.color).setBackgroundColor((int) valueAnimator.getAnimatedValue());
                                 }
                             });
                             animator.start();
@@ -176,13 +176,13 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
         holder.v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AppData app = getApp(holder.getAdapterPosition());
+                AppColorData app = getApp(holder.getAdapterPosition());
                 if (app == null) return;
 
                 Dialog dialog = new ColorPickerDialog(context).setPreference(app.color != null ? app.color : getDefaultColor(app)).setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
                     @Override
                     public void onPreference(Integer color) {
-                        AppData app = getApp(holder.getAdapterPosition());
+                        AppColorData app = getApp(holder.getAdapterPosition());
                         if (app != null) {
                             app.color = color;
                             overwrite(app);
@@ -203,14 +203,14 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
         appSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                AppData app = getApp(holder.getAdapterPosition());
+                AppColorData app = getApp(holder.getAdapterPosition());
                 if (app == null) return;
 
                 if (b) {
                     Dialog dialog = new ColorPickerDialog(context).setPreference(app.color != null ? app.color : getDefaultColor(app)).setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
                         @Override
                         public void onPreference(Integer color) {
-                            AppData app = getApp(holder.getAdapterPosition());
+                            AppColorData app = getApp(holder.getAdapterPosition());
                             if (app != null) {
                                 app.color = color;
                                 overwrite(app);
@@ -235,7 +235,7 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
     }
 
     @Nullable
-    private AppData getApp(int position) {
+    private AppColorData getApp(int position) {
         if (position < 0 || position >= apps.size()) return null;
         else return apps.get(position);
     }
@@ -246,7 +246,7 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
     }
 
     @ColorInt
-    private int getDefaultColor(AppData app) {
+    private int getDefaultColor(AppColorData app) {
         if (app.cachedColor != null) return app.cachedColor;
         else {
             Integer color = PreferenceUtils.getIntegerPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR);
@@ -255,10 +255,10 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
         }
     }
 
-    private void overwrite(@NonNull AppData app) {
+    private void overwrite(@NonNull AppColorData app) {
         Set<String> jsons = new HashSet<>();
         for (String json : this.jsons) {
-            AppData data = gson.fromJson(json, AppData.class);
+            AppColorData data = gson.fromJson(json, AppColorData.class);
             if (!data.packageName.matches(app.packageName)) {
                 jsons.add(json);
             }

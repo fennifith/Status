@@ -9,14 +9,14 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.james.status.R;
-import com.james.status.adapters.AppColorPreviewAdapter;
-import com.james.status.dialogs.AppColorDialog;
+import com.james.status.adapters.AppStatusPreviewAdapter;
+import com.james.status.dialogs.AppStatusDialog;
 import com.james.status.utils.PreferenceUtils;
 
-public class AppsColorPreferenceData extends PreferenceData {
+public class AppsStatusPreferenceData extends PreferenceData {
 
-    public AppsColorPreferenceData(Context context) {
-        super(context, new Identifier(PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_APPS, context.getString(R.string.preference_app_colors), Identifier.SectionIdentifier.COLORS));
+    public AppsStatusPreferenceData(Context context) {
+        super(context, new Identifier(PreferenceUtils.PreferenceIdentifier.STATUS_FULLSCREEN_APPS, context.getString(R.string.preference_fullscreen_apps), Identifier.SectionIdentifier.COLORS));
     }
 
     public static ViewHolder getViewHolder(Context context) {
@@ -25,7 +25,7 @@ public class AppsColorPreferenceData extends PreferenceData {
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        final AppColorPreviewAdapter adapter = new AppColorPreviewAdapter(getContext()).setOnSizeChangedListener(new AppColorPreviewAdapter.OnSizeChangedListener() {
+        final AppStatusPreviewAdapter adapter = new AppStatusPreviewAdapter(getContext()).setOnSizeChangedListener(new AppStatusPreviewAdapter.OnSizeChangedListener() {
             @Override
             public void onSizeChanged(int size) {
                 if (size > 0) {
@@ -48,7 +48,7 @@ public class AppsColorPreferenceData extends PreferenceData {
         holder.v.findViewById(R.id.more).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AppColorDialog dialog = new AppColorDialog(getContext());
+                AppStatusDialog dialog = new AppStatusDialog(getContext());
                 dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialogInterface) {
@@ -62,7 +62,7 @@ public class AppsColorPreferenceData extends PreferenceData {
         holder.v.findViewById(R.id.addMore).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AppColorDialog dialog = new AppColorDialog(getContext());
+                AppStatusDialog dialog = new AppStatusDialog(getContext());
                 dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialogInterface) {

@@ -7,11 +7,11 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.james.status.R;
-import com.james.status.adapters.AppColorAdapter;
+import com.james.status.adapters.AppStatusAdapter;
 
-public class AppColorDialog extends BottomSheetDialog {
+public class AppStatusDialog extends BottomSheetDialog {
 
-    public AppColorDialog(Context context) {
+    public AppStatusDialog(Context context) {
         super(context);
     }
 
@@ -23,6 +23,6 @@ public class AppColorDialog extends BottomSheetDialog {
         RecyclerView recycler = (RecyclerView) findViewById(R.id.recycler);
         recycler.setLayoutManager(new GridLayoutManager(getContext(), 2));
         recycler.setHasFixedSize(true);
-        recycler.setAdapter(new AppColorAdapter(getContext()));
+        recycler.setAdapter(new AppStatusAdapter(getContext()));
     }
 }

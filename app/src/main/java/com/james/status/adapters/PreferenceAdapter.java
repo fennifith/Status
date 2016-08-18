@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
 import com.james.status.data.preference.AppsColorPreferenceData;
+import com.james.status.data.preference.AppsStatusPreferenceData;
 import com.james.status.data.preference.BooleanPreferenceData;
 import com.james.status.data.preference.ColorPreferenceData;
 import com.james.status.data.preference.IconPreferenceData;
@@ -33,8 +34,10 @@ public class PreferenceAdapter extends RecyclerView.Adapter<PreferenceData.ViewH
             case 2:
                 return AppsColorPreferenceData.getViewHolder(context);
             case 3:
-                return IconPreferenceData.getViewHolder(context);
+                return AppsStatusPreferenceData.getViewHolder(context);
             case 4:
+                return IconPreferenceData.getViewHolder(context);
+            case 5:
                 return IntegerPreferenceData.getViewHolder(context);
             default:
                 return null;
@@ -51,9 +54,10 @@ public class PreferenceAdapter extends RecyclerView.Adapter<PreferenceData.ViewH
         if (datas.get(position) instanceof BooleanPreferenceData) return 0;
         else if (datas.get(position) instanceof ColorPreferenceData) return 1;
         else if (datas.get(position) instanceof AppsColorPreferenceData) return 2;
-        else if (datas.get(position) instanceof IconPreferenceData) return 3;
-        else if (datas.get(position) instanceof IntegerPreferenceData) return 4;
-        else return super.getItemViewType(position);
+        else if (datas.get(position) instanceof AppsStatusPreferenceData) return 3;
+        else if (datas.get(position) instanceof IconPreferenceData) return 4;
+        else if (datas.get(position) instanceof IntegerPreferenceData) return 5;
+        else return -1;
     }
 
     @Override
