@@ -408,44 +408,63 @@ public class StatusView extends FrameLayout {
 
     @Nullable
     private Drawable getNotificationIcon(Notification notification, @Nullable String packageName) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            Resources resources = null;
-            PackageInfo packageInfo = null;
+        Drawable drawable;
 
-            if (packageName == null) {
-                if (notification.contentIntent != null)
-                    packageName = notification.contentIntent.getCreatorPackage();
-                else if (notification.deleteIntent != null)
-                    packageName = notification.deleteIntent.getCreatorPackage();
-                else if (notification.fullScreenIntent != null)
-                    packageName = notification.fullScreenIntent.getCreatorPackage();
-                else if (notification.actions != null && notification.actions.length > 0)
-                    packageName = notification.actions[0].actionIntent.getCreatorPackage();
-                else return null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            drawable = notification.getSmallIcon().loadDrawable(getContext());
+            if (drawable != null) return drawable;
+        } else {
+            if (packageName != null) {
+                drawable = getDrawable(notification.icon, packageName);
+                if (drawable != null) return drawable;
             }
 
-            try {
-                resources = getContext().getPackageManager().getResourcesForApplication(packageName);
-                packageInfo = getContext().getPackageManager().getPackageInfo(packageName, PackageManager.GET_META_DATA);
-            } catch (PackageManager.NameNotFoundException ignored) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && notification.contentIntent != null) {
+                drawable = getDrawable(notification.icon, notification.contentIntent.getCreatorPackage());
+                if (drawable != null) return drawable;
             }
 
-            if (resources != null && packageInfo != null) {
-                Resources.Theme theme = resources.newTheme();
-                theme.applyStyle(packageInfo.applicationInfo.theme, false);
-
-                Drawable drawable = null;
-                try {
-                    drawable = ResourcesCompat.getDrawable(resources, notification.icon, theme);
-                } catch (Resources.NotFoundException ignored) {
-                }
-
-                return drawable;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && notification.deleteIntent != null) {
+                drawable = getDrawable(notification.icon, notification.deleteIntent.getCreatorPackage());
+                if (drawable != null) return drawable;
             }
 
-        } else
-            return notification.getSmallIcon().loadDrawable(getContext());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && notification.fullScreenIntent != null) {
+                drawable = getDrawable(notification.icon, notification.fullScreenIntent.getCreatorPackage());
+                if (drawable != null) return drawable;
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && notification.actions != null && notification.actions.length > 0) {
+                drawable = getDrawable(notification.icon, notification.actions[0].actionIntent.getCreatorPackage());
+                if (drawable != null) return drawable;
+            }
+        }
 
         return null;
+    }
+
+    @Nullable
+    private Drawable getDrawable(int resource, String packageName) {
+        if (packageName == null) return null;
+
+        Resources resources = null;
+        PackageInfo packageInfo = null;
+
+        try {
+            resources = getContext().getPackageManager().getResourcesForApplication(packageName);
+            packageInfo = getContext().getPackageManager().getPackageInfo(packageName, PackageManager.GET_META_DATA);
+        } catch (PackageManager.NameNotFoundException ignored) {
+        }
+
+        if (resources == null || packageInfo == null) return null;
+
+        Resources.Theme theme = resources.newTheme();
+        theme.applyStyle(packageInfo.applicationInfo.theme, false);
+
+        try {
+            return ResourcesCompat.getDrawable(resources, resource, theme);
+        } catch (Resources.NotFoundException e) {
+            return null;
+        }
     }
 }
