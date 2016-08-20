@@ -183,7 +183,7 @@ public class StatusView extends FrameLayout {
                 Object tag = child.getTag();
 
                 if (tag != null && tag instanceof String && ((String) tag).matches(key)) {
-                    notificationIconLayout.removeViewAt(i);
+                    notificationIconLayout.removeView(child);
                     notifications.remove(key);
                 }
             }
@@ -210,7 +210,7 @@ public class StatusView extends FrameLayout {
             for (int i = 0; i < notificationIconLayout.getChildCount(); i++) {
                 View child = notificationIconLayout.getChildAt(i);
                 if (((String) child.getTag()).matches(key) && notifications.containsKey(key)) {
-                    notificationIconLayout.removeViewAt(i);
+                    removeView(notificationIconLayout.getChildAt(i), notificationIconLayout);
                     notifications.remove(key);
                 }
             }
@@ -404,6 +404,31 @@ public class StatusView extends FrameLayout {
         });
 
         return v;
+    }
+
+    private void removeView(final View child, final ViewGroup parent) {
+        ValueAnimator animator = ValueAnimator.ofInt(child.getHeight(), 0);
+        animator.setDuration(150);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                child.setAlpha(valueAnimator.getAnimatedFraction());
+
+                View iconView = child.findViewById(R.id.icon);
+
+                if (iconView != null) {
+                    ViewGroup.LayoutParams layoutParams = iconView.getLayoutParams();
+                    if (layoutParams != null)
+                        layoutParams.height = (int) valueAnimator.getAnimatedValue();
+                    else
+                        layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, (int) valueAnimator.getAnimatedValue());
+                    iconView.setLayoutParams(layoutParams);
+                }
+
+                if ((int) valueAnimator.getAnimatedValue() == 0) parent.removeView(child);
+            }
+        });
+        animator.start();
     }
 
     @Nullable

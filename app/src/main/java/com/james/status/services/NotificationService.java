@@ -105,6 +105,6 @@ public class NotificationService extends NotificationListenerService {
     }
 
     private String getKey(StatusBarNotification statusBarNotification) {
-        return String.valueOf(statusBarNotification.getId());
+        return statusBarNotification.getPackageName() + "/" + String.valueOf(statusBarNotification.getId());
     }
 }

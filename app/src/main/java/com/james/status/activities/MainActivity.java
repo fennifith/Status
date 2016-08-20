@@ -188,6 +188,22 @@ public class MainActivity extends AppCompatActivity {
                 new BooleanPreferenceData(
                         this,
                         new PreferenceData.Identifier(
+                                PreferenceUtils.PreferenceIdentifier.STATUS_CLOCK_24H,
+                                getString(R.string.preference_24h),
+                                getString(R.string.preference_24h_desc),
+                                PreferenceData.Identifier.SectionIdentifier.CLOCK
+                        ),
+                        false,
+                        new PreferenceData.OnPreferenceChangeListener() {
+                            @Override
+                            public void onPreferenceChange() {
+                                updateService();
+                            }
+                        }
+                ),
+                new BooleanPreferenceData(
+                        this,
+                        new PreferenceData.Identifier(
                                 PreferenceUtils.PreferenceIdentifier.STATUS_CLOCK_AMPM,
                                 getString(R.string.preference_ampm),
                                 getString(R.string.preference_ampm_desc),

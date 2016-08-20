@@ -51,20 +51,23 @@ public class AppStatusAdapter extends RecyclerView.Adapter<AppStatusAdapter.View
         new Thread() {
             @Override
             public void run() {
+                final ArrayList<AppStatusData> loadedApps = new ArrayList<>();
+
                 for (ResolveInfo info : packageManager.queryIntentActivities(new Intent(Intent.ACTION_MAIN, null).addCategory(Intent.CATEGORY_LAUNCHER), 0)) {
-                    apps.add(new AppStatusData(packageManager, info));
+                    loadedApps.add(new AppStatusData(packageManager, info));
                 }
 
                 new Handler(context.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
-                        Collections.sort(apps, new Comparator<AppStatusData>() {
+                        Collections.sort(loadedApps, new Comparator<AppStatusData>() {
                             @Override
                             public int compare(AppStatusData lhs, AppStatusData rhs) {
                                 return lhs.name.compareToIgnoreCase(rhs.name);
                             }
                         });
 
+                        apps = loadedApps;
                         notifyDataSetChanged();
                     }
                 });

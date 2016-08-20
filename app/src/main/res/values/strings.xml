@@ -34,8 +34,10 @@
     <string name="permissions_desc">This app needs a few additional permissions in order to access parts of the phone relevant to the status bar.</string>
 
     <string name="preference_show_clock">Show Clock</string>
+    <string name="preference_24h">Use 24 Hour Time Format</string>
+    <string name="preference_24h_desc">The clock will show in a 24 hour time format if this is turned on.</string>
     <string name="preference_ampm">Show AM/PM in Clock</string>
-    <string name="preference_ampm_desc">Choose whether to show the AM/PM in the clock. Only works if the system time is in a 12h format.</string>
+    <string name="preference_ampm_desc">Choose whether to show the AM/PM indicator in the clock.</string>
     <string name="preference_show_notifications">Show Notifications</string>
     <string name="preference_battery_percent">Display Battery Percent</string>
     <string name="preference_battery_percent_desc">Shows the battery percentage next to the icon in the status bar.</string>
@@ -64,7 +66,7 @@
     <string name="preference_airplane_mode_icon">Airplane Mode Icon Style</string>
     <string name="preference_show_alarm_icon">Show Alarm Clock Icon</string>
     <string name="preference_alarm_icon">Alarm Clock Icon Style</string>
-    <string name="preference_show_ringer_icon">Show RInger Icon</string>
+    <string name="preference_show_ringer_icon">Show Ringer Icon</string>
     <string name="preference_ringer_icon">Ringer Icon Style</string>
     <string name="preference_icon_padding">Horizontal Icon Padding (dp)</string>
     <string name="preference_icon_scale">Icon Scale (dp)</string>
