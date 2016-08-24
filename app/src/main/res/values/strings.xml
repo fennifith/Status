@@ -81,6 +81,8 @@
     <string name="icon_style_dish">Dish</string>
     <string name="icon_style_triangle">Triangle</string>
     <string name="icon_style_square">Square</string>
+    <string name="icon_style_retro">Retro</string>
+    <string name="icon_style_pixel">Pixelated</string>
 
     <string name="red">Red</string>
     <string name="green">Green</string>

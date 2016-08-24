@@ -312,6 +312,24 @@ public class MainActivity extends AppCompatActivity {
                                         R.drawable.ic_battery_circle_charging_full
                                 ),
                                 new IconStyleData(
+                                        getString(R.string.icon_style_retro),
+                                        R.drawable.ic_battery_retro_alert,
+                                        R.drawable.ic_battery_retro_20,
+                                        R.drawable.ic_battery_retro_30,
+                                        R.drawable.ic_battery_retro_50,
+                                        R.drawable.ic_battery_retro_60,
+                                        R.drawable.ic_battery_retro_80,
+                                        R.drawable.ic_battery_retro_90,
+                                        R.drawable.ic_battery_retro_full,
+                                        R.drawable.ic_battery_retro_20,
+                                        R.drawable.ic_battery_retro_30,
+                                        R.drawable.ic_battery_retro_50,
+                                        R.drawable.ic_battery_retro_60,
+                                        R.drawable.ic_battery_retro_80,
+                                        R.drawable.ic_battery_retro_90,
+                                        R.drawable.ic_battery_retro_full
+                                ),
+                                new IconStyleData(
                                         getString(R.string.icon_style_circle_outline),
                                         R.drawable.ic_battery_circle_outline_alert,
                                         R.drawable.ic_battery_circle_outline_20,
@@ -391,6 +409,14 @@ public class MainActivity extends AppCompatActivity {
                                         R.drawable.ic_signal_square_2,
                                         R.drawable.ic_signal_square_3,
                                         R.drawable.ic_signal_square_4
+                                ),
+                                new IconStyleData(
+                                        getString(R.string.icon_style_retro),
+                                        R.drawable.ic_signal_retro_0,
+                                        R.drawable.ic_signal_retro_1,
+                                        R.drawable.ic_signal_retro_2,
+                                        R.drawable.ic_signal_retro_3,
+                                        R.drawable.ic_signal_retro_4
                                 )
                         ),
                         new PreferenceData.OnPreferenceChangeListener() {
@@ -454,6 +480,14 @@ public class MainActivity extends AppCompatActivity {
                                         R.drawable.ic_wifi_triangle_2,
                                         R.drawable.ic_wifi_triangle_3,
                                         R.drawable.ic_wifi_triangle_4
+                                ),
+                                new IconStyleData(
+                                        getString(R.string.icon_style_retro),
+                                        R.drawable.ic_wifi_retro_0,
+                                        R.drawable.ic_wifi_retro_1,
+                                        R.drawable.ic_wifi_retro_2,
+                                        R.drawable.ic_wifi_retro_3,
+                                        R.drawable.ic_wifi_retro_4
                                 )
                         ),
                         new PreferenceData.OnPreferenceChangeListener() {
