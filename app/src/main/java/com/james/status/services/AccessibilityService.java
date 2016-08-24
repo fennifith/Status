@@ -1,11 +1,7 @@
 package com.james.status.services;
 
 import android.accessibilityservice.AccessibilityServiceInfo;
-import android.app.ActivityManager;
 import android.app.Notification;
-import android.app.usage.UsageStats;
-import android.app.usage.UsageStatsManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -21,19 +17,12 @@ import com.james.status.utils.ColorUtils;
 import com.james.status.utils.PreferenceUtils;
 import com.james.status.utils.StaticUtils;
 
-import java.util.List;
-import java.util.SortedMap;
-import java.util.TreeMap;
-
 public class AccessibilityService extends android.accessibilityservice.AccessibilityService {
 
     public static final String ACTION_GET_COLOR = "com.james.status.ACTION_GET_COLOR";
 
     private PackageManager packageManager;
     private ArrayMap<String, Notification> notifications;
-
-    private UsageStatsManager usageStatsManager;
-    private ActivityManager activityManager;
 
     private int color = Color.BLACK;
 
@@ -58,9 +47,6 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
         super.onServiceConnected();
 
         packageManager = getPackageManager();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1)
-            usageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
-        activityManager = (ActivityManager) this.getSystemService(ACTIVITY_SERVICE);
 
         notifications = new ArrayMap<>();
         AccessibilityServiceInfo config = new AccessibilityServiceInfo();
@@ -79,10 +65,13 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
         if (enabled != null && enabled) {
             switch (event.getEventType()) {
                 case AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED:
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                    if (StaticUtils.shouldUseCompatNotifications(this)) {
                         Parcelable parcelable = event.getParcelableData();
                         if (parcelable instanceof Notification) {
                             String key = event.getPackageName().toString() + event.getClassName().toString();
+
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+                                ((Notification) parcelable).extras = null;
 
                             Intent intent = new Intent(StatusService.ACTION_NOTIFICATION_ADDED);
                             intent.setClass(this, StatusService.class);
@@ -103,7 +92,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                         if (packageName.toString().equals("com.android.systemui") && event.getClassName().toString().equals("android.widget.FrameLayout")) {
                             setStatusBar(Color.BLACK, null, true);
 
-                            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                            if (StaticUtils.shouldUseCompatNotifications(this)) {
                                 for (String key : notifications.keySet()) {
                                     Intent intent = new Intent(StatusService.ACTION_NOTIFICATION_REMOVED);
                                     intent.setClass(this, StatusService.class);
@@ -134,27 +123,6 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                     }
                     return;
             }
-        }
-    }
-
-    private String getCurrentActivity() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            long time = System.currentTimeMillis();
-
-            List<UsageStats> apps = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, (time - 1000) * 1000, time);
-
-            if (apps != null && apps.size() > 0) {
-                SortedMap<Long, UsageStats> sortedMap = new TreeMap<>();
-                for (UsageStats usageStats : apps) {
-                    sortedMap.put(usageStats.getLastTimeUsed(), usageStats);
-                }
-
-                if (!sortedMap.isEmpty())
-                    return sortedMap.get(sortedMap.lastKey()).getPackageName();
-                else return null;
-            } else return null;
-        } else {
-            return activityManager.getRunningTasks(1).get(0).topActivity.getPackageName();
         }
     }
 

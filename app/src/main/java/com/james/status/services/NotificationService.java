@@ -7,6 +7,7 @@ import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 
 import com.james.status.utils.PreferenceUtils;
+import com.james.status.utils.StaticUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,7 +54,10 @@ public class NotificationService extends NotificationListenerService {
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
         Boolean enabled = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED);
-        if (enabled != null && enabled) {
+        if (enabled != null && enabled && !StaticUtils.shouldUseCompatNotifications(this)) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+                sbn.getNotification().extras = null;
+
             Intent intent = new Intent(StatusService.ACTION_NOTIFICATION_ADDED);
             intent.setClass(this, StatusService.class);
 
@@ -68,7 +72,10 @@ public class NotificationService extends NotificationListenerService {
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn) {
         Boolean enabled = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED);
-        if (enabled != null && enabled) {
+        if (enabled != null && enabled && !StaticUtils.shouldUseCompatNotifications(this)) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+                sbn.getNotification().extras = null;
+
             Intent intent = new Intent(StatusService.ACTION_NOTIFICATION_REMOVED);
             intent.setClass(this, StatusService.class);
 
@@ -90,8 +97,11 @@ public class NotificationService extends NotificationListenerService {
 
     private void sendNotifications() {
         Boolean enabled = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED);
-        if (enabled != null && enabled) {
+        if (enabled != null && enabled && !StaticUtils.shouldUseCompatNotifications(this)) {
             for (StatusBarNotification sbn : getNotifications()) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+                    sbn.getNotification().extras = null;
+
                 Intent intent = new Intent(StatusService.ACTION_NOTIFICATION_ADDED);
                 intent.setClass(this, StatusService.class);
 

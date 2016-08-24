@@ -17,13 +17,15 @@
     <string name="action_website">Website</string>
     <string name="action_github">GitHub</string>
     <string name="action_libraries">View Libraries</string>
+    <string name="action_enable">Enable</string>
+    <string name="action_disable">Disable</string>
 
     <string name="service_name">Status Service</string>
     <string name="service_name_general">Accessibility Service</string>
     <string name="service_desc">This service needs to be enabled in order to detect window changes to update the status bar.</string>
 
-    <string name="notifications_compat">Notification Compatibility Mode</string>
-    <string name="notifications_compat_desc">Since your android version is below 4.3 (Jelly Bean MR2), the app cannot use the standard notification listener API to display the notification icons. I have found a way to listen for them through the accessibility service, however it cannot detect when a notification has been dismissed. Thus, it removes all notifications whenever the notification panel is opened. If you do not like this, you can either check for a firmware update or disable the notifications in the settings menu.</string>
+    <string name="notifications_compat">Compatibility Mode</string>
+    <string name="notifications_compat_desc">On some versions of android the app cannot use the standard notification listener API to display the notification icons. I have found a way to detect them through the accessibility service, however it cannot detect when a notification has been dismissed. Thus, it removes all notifications whenever the notification panel is opened. If you do not like this, you can either check for a firmware update or disable the notifications in the settings menu.</string>
 
     <string name="service_start_stop">Status Bar Service</string>
 

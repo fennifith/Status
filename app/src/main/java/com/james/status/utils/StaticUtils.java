@@ -11,7 +11,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
-import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -59,7 +58,7 @@ public class StaticUtils {
     }
 
     public static boolean isAccessibilityGranted(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean("isResumed", false);
+        return isAccessibilityServiceRunning(context);
     }
 
     public static boolean isNotificationGranted(Context context) {
@@ -67,7 +66,7 @@ public class StaticUtils {
             if (packageName.contains(context.getPackageName()) || packageName.matches(context.getPackageName()))
                 return true;
         }
-        return Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2;
+        return shouldUseCompatNotifications(context);
     }
 
     private static boolean canDrawOverlays(Context context) {
@@ -166,5 +165,10 @@ public class StaticUtils {
         }
 
         return null;
+    }
+
+    public static boolean shouldUseCompatNotifications(Context context) {
+        Boolean enabled = PreferenceUtils.getBooleanPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_NOTIFICATIONS_COMPAT);
+        return Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2 || (enabled != null && enabled);
     }
 }

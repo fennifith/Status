@@ -33,4 +33,5 @@ dependencies {
     compile('com.mikepenz:aboutlibraries:5.7.1@aar') {
         transitive = true
     }
+    compile 'me.drozdzynski.library.steppers:steppers:0.3.3-SNAPSHOT'
 }
