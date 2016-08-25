@@ -45,9 +45,9 @@
     <string name="preference_show_notifications">Show Notifications</string>
     <string name="preference_battery_percent">Display Battery Percent</string>
     <string name="preference_battery_percent_desc">Shows the battery percentage next to the icon in the status bar.</string>
-    <string name="preference_bar_color_auto">Status Bar Coloring</string>
+    <string name="preference_bar_color_auto">Automatic Status Bar Coloring</string>
     <string name="preference_bar_color_auto_desc">Picks the status bar color from the current application.</string>
-    <string name="preference_bar_color_chooser">Status Bar Color</string>
+    <string name="preference_bar_color_chooser">Default Status Bar Color</string>
     <string name="preference_app_colors">App-Specific Colors</string>
     <string name="preference_app_colors_desc">Set the color for the status bar to use in a specific app. This will override any other color options.</string>
     <string name="preference_transparent_home">Transparency on Home Screen</string>
@@ -60,6 +60,8 @@
     <string name="preference_battery_icon">Battery Icon Style</string>
     <string name="preference_show_network_icon">Show Network Icon</string>
     <string name="preference_network_icon">Network Icon Style</string>
+    <string name="preference_dual_sim">Dual Sim</string>
+    <string name="preference_dual_sim_desc">If your phone has more than one sim card, this option will show two signal indicators instead of one.</string>
     <string name="preference_data">Show Data Connection</string>
     <string name="preference_data_desc">Shows whether the data connection is 2G, 3G, 4G, or unknown/none (doesn\'t show anything).</string>
     <string name="preference_show_wifi_icon">Show Wifi Icon</string>

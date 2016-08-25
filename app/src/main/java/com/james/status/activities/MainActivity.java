@@ -469,6 +469,22 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                 ),
+                /*new BooleanPreferenceData(
+                        this,
+                        new PreferenceData.Identifier(
+                                PreferenceUtils.PreferenceIdentifier.SHOW_NETWORK_DUAL_SIM,
+                                getString(R.string.preference_dual_sim),
+                                getString(R.string.preference_dual_sim_desc),
+                                PreferenceData.Identifier.SectionIdentifier.NETWORK
+                        ),
+                        false,
+                        new PreferenceData.OnPreferenceChangeListener() {
+                            @Override
+                            public void onPreferenceChange() {
+                                updateService();
+                            }
+                        }
+                ),*/
                 new BooleanPreferenceData(
                         this,
                         new PreferenceData.Identifier(

@@ -21,6 +21,7 @@ import com.james.status.data.icon.AlarmIconData;
 import com.james.status.data.icon.BatteryIconData;
 import com.james.status.data.icon.BluetoothIconData;
 import com.james.status.data.icon.DataIconData;
+import com.james.status.data.icon.DualNetworkIconData;
 import com.james.status.data.icon.IconData;
 import com.james.status.data.icon.NetworkIconData;
 import com.james.status.data.icon.RingerIconData;
@@ -162,6 +163,9 @@ public class StatusService extends Service {
 
         Boolean network = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.SHOW_NETWORK_ICON);
         if (network == null || network) icons.add(new NetworkIconData(this));
+
+        Boolean dualSim = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.SHOW_NETWORK_DUAL_SIM);
+        if (dualSim != null && dualSim) icons.add(new DualNetworkIconData(this));
 
         Boolean data = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.SHOW_DATA);
         if (data == null || data) icons.add(new DataIconData(this));

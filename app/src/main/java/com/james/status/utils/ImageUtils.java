@@ -5,8 +5,11 @@ import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -100,5 +103,15 @@ public class ImageUtils {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static Bitmap tintBitmap(Bitmap source, @ColorInt int color) {
+        Bitmap bitmap = Bitmap.createBitmap(source);
+
+        Paint paint = new Paint();
+        paint.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
+        new Canvas(bitmap).drawBitmap(source, new Matrix(), paint);
+
+        return bitmap;
     }
 }

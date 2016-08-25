@@ -37,6 +37,7 @@ public class PreferenceUtils {
         SHOW_CLOCK,
         SHOW_BATTERY_ICON,
         SHOW_NETWORK_ICON,
+        SHOW_NETWORK_DUAL_SIM,
         SHOW_DATA,
         SHOW_WIFI_ICON,
         SHOW_GPS_ICON,
