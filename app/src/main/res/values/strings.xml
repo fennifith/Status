@@ -48,6 +48,8 @@
     <string name="preference_bar_color_chooser">Status Bar Color</string>
     <string name="preference_app_colors">App-Specific Colors</string>
     <string name="preference_app_colors_desc">Set the color for the status bar to use in a specific app. This will override any other color options.</string>
+    <string name="preference_transparent_home">Transparency on Home Screen</string>
+    <string name="preference_transparent_home_desc">This option sets the status bar\'s background as the current wallpaper when the home screen is displayed. This setting will not work correctly on live wallpapers or if your home screen\'s scrolling wallpaper option is enabled.</string>
     <string name="preference_fullscreen_apps">Fullscreen Apps</string>
     <string name="preference_fullscreen_apps_desc">The status bar will be disabled in the apps set here.</string>
     <string name="preference_dark_icons">Dark Icons</string>

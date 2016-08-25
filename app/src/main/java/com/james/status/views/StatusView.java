@@ -9,7 +9,9 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.ColorInt;
@@ -327,6 +329,31 @@ public class StatusView extends FrameLayout {
         }
 
         this.color = color;
+    }
+
+    public void setHomeScreen() {
+        if (status != null) {
+            Bitmap background = ImageUtils.cropBitmapToBar(getContext(), ImageUtils.drawableToBitmap(WallpaperManager.getInstance(getContext()).getDrawable()));
+
+            if (background != null) {
+                Palette.from(background).generate(new Palette.PaletteAsyncListener() {
+                    @Override
+                    public void onGenerated(Palette palette) {
+                        int color = palette.getVibrantColor(palette.getDarkVibrantColor(Color.BLACK));
+
+                        Boolean transparent = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_HOME_TRANSPARENT);
+                        if (transparent == null || transparent) {
+                            setDarkMode(ColorUtils.isColorDark(color));
+                            StatusView.this.color = color;
+                        } else setColor(color);
+                    }
+                });
+
+                Boolean transparent = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_HOME_TRANSPARENT);
+                if (transparent == null || transparent)
+                    status.setBackground(new BitmapDrawable(getResources(), background));
+            } else setColor(Color.BLACK);
+        }
     }
 
     public void setDarkMode(boolean isDarkMode) {

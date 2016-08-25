@@ -6,15 +6,18 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.util.Log;
+import android.view.WindowManager;
 
 import com.james.status.views.CustomImageView;
 
@@ -86,4 +89,16 @@ public class ImageUtils {
         }
     }
 
+    @Nullable
+    public static Bitmap cropBitmapToBar(Context context, Bitmap source) {
+        Point size = new Point();
+        ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getSize(size);
+
+        try {
+            return Bitmap.createBitmap(source, (source.getWidth() - size.x) / 2, 0, size.x, StaticUtils.getStatusBarHeight(context));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

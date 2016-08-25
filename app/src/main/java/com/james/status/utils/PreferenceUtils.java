@@ -18,6 +18,7 @@ public class PreferenceUtils {
         STATUS_COLOR_AUTO,
         STATUS_COLOR,
         STATUS_COLOR_APPS,
+        STATUS_HOME_TRANSPARENT,
         STATUS_FULLSCREEN_APPS,
         STATUS_DARK_ICONS,
         STATUS_LOCKSCREEN_EXPAND,

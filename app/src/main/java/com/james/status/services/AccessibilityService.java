@@ -90,7 +90,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                     final CharSequence packageName = event.getPackageName();
                     if (packageName != null && packageName.length() > 0) {
                         if (packageName.toString().equals("com.android.systemui") && event.getClassName().toString().equals("android.widget.FrameLayout")) {
-                            setStatusBar(Color.BLACK, null, true);
+                            setStatusBar(null, null, null, true);
 
                             if (StaticUtils.shouldUseCompatNotifications(this)) {
                                 for (String key : notifications.keySet()) {
@@ -106,6 +106,15 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                                 notifications.clear();
                             }
                         } else {
+                            Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+                            homeIntent.addCategory(Intent.CATEGORY_HOME);
+                            String homePackageName = packageManager.resolveActivity(homeIntent, PackageManager.MATCH_DEFAULT_ONLY).activityInfo.packageName;
+
+                            if (packageName.toString().contains(homePackageName) || packageName.toString().matches(homePackageName)) {
+                                setStatusBar(null, true, StaticUtils.isStatusBarFullscreen(AccessibilityService.this, packageName.toString()), false);
+                                return;
+                            }
+
                             new Thread() {
                                 @Override
                                 public void run() {
@@ -114,7 +123,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                                     new Handler(getMainLooper()).post(new Runnable() {
                                         @Override
                                         public void run() {
-                                            setStatusBar(color, StaticUtils.isStatusBarFullscreen(AccessibilityService.this, packageName.toString()), false);
+                                            setStatusBar(color, null, StaticUtils.isStatusBarFullscreen(AccessibilityService.this, packageName.toString()), false);
                                         }
                                     });
                                 }
@@ -126,21 +135,22 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
         }
     }
 
-    private void setStatusBar(@ColorInt int color, @Nullable Boolean fullscreen, @Nullable Boolean systemFullscreen) {
+    private void setStatusBar(@Nullable @ColorInt Integer color, @Nullable Boolean isHomeScreen, @Nullable Boolean isFullscreen, @Nullable Boolean isSystemFullscreen) {
         Intent intent = new Intent(StatusService.ACTION_UPDATE);
         intent.setClass(this, StatusService.class);
 
-        Boolean isStatusColorAuto = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_AUTO);
-        if (isStatusColorAuto == null || isStatusColorAuto)
-            intent.putExtra(StatusService.EXTRA_COLOR, color);
+        if (color != null) intent.putExtra(StatusService.EXTRA_COLOR, color);
 
-        if (fullscreen != null) intent.putExtra(StatusService.EXTRA_FULLSCREEN, fullscreen);
-        if (systemFullscreen != null)
-            intent.putExtra(StatusService.EXTRA_SYSTEM_FULLSCREEN, systemFullscreen);
+        if (isHomeScreen != null) intent.putExtra(StatusService.EXTRA_IS_HOME_SCREEN, isHomeScreen);
+
+        if (isFullscreen != null) intent.putExtra(StatusService.EXTRA_IS_FULLSCREEN, isFullscreen);
+
+        if (isSystemFullscreen != null)
+            intent.putExtra(StatusService.EXTRA_IS_SYSTEM_FULLSCREEN, isSystemFullscreen);
 
         startService(intent);
 
-        this.color = color;
+        if (color != null) this.color = color;
     }
 
     @Override

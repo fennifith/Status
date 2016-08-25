@@ -111,6 +111,17 @@ public class MainActivity extends AppCompatActivity {
                         }
                 ),
                 new AppsColorPreferenceData(this),
+                new BooleanPreferenceData(
+                        this,
+                        new PreferenceData.Identifier(
+                                PreferenceUtils.PreferenceIdentifier.STATUS_HOME_TRANSPARENT,
+                                getString(R.string.preference_transparent_home),
+                                getString(R.string.preference_transparent_home_desc),
+                                PreferenceData.Identifier.SectionIdentifier.COLORS
+                        ),
+                        true,
+                        null
+                ),
                 new AppsStatusPreferenceData(this),
                 new BooleanPreferenceData(
                         this,

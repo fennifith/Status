@@ -44,8 +44,9 @@ public class StatusService extends Service {
             EXTRA_NOTIFICATION = "com.james.status.EXTRA_NOTIFICATION",
             EXTRA_NOTIFICATION_KEY = "com.james.status.EXTRA_NOTIFICATION_KEY",
             EXTRA_COLOR = "com.james.status.EXTRA_COLOR",
-            EXTRA_SYSTEM_FULLSCREEN = "com.james.status.EXTRA_SYSTEM_FULLSCREEN",
-            EXTRA_FULLSCREEN = "com.james.status.EXTRA_FULLSCREEN",
+            EXTRA_IS_SYSTEM_FULLSCREEN = "com.james.status.EXTRA_IS_SYSTEM_FULLSCREEN",
+            EXTRA_IS_FULLSCREEN = "com.james.status.EXTRA_IS_FULLSCREEN",
+            EXTRA_IS_HOME_SCREEN = "com.james.status.EXTRA_IS_HOME_SCREEN",
             EXTRA_PACKAGE_NAME = "com.james.status.EXTRA_PACKAGE_NAME";
 
     private StatusView statusView;
@@ -91,11 +92,15 @@ public class StatusService extends Service {
                     statusView.setLockscreen(keyguardManager.isKeyguardLocked());
 
                     Boolean isStatusColorAuto = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_AUTO);
-                    if ((isStatusColorAuto == null || isStatusColorAuto) && intent.hasExtra(EXTRA_COLOR))
-                        statusView.setColor(intent.getIntExtra(EXTRA_COLOR, Color.BLACK));
+                    if (isStatusColorAuto == null || isStatusColorAuto) {
+                        if (intent.hasExtra(EXTRA_IS_HOME_SCREEN) && intent.getBooleanExtra(EXTRA_IS_HOME_SCREEN, false))
+                            statusView.setHomeScreen();
+                        else if (intent.hasExtra(EXTRA_COLOR))
+                            statusView.setColor(intent.getIntExtra(EXTRA_COLOR, Color.BLACK));
+                    }
 
-                    statusView.setSystemShowing(intent.getBooleanExtra(EXTRA_SYSTEM_FULLSCREEN, statusView.isSystemShowing()));
-                    statusView.setFullscreen(intent.getBooleanExtra(EXTRA_FULLSCREEN, isFullscreen()));
+                    statusView.setSystemShowing(intent.getBooleanExtra(EXTRA_IS_SYSTEM_FULLSCREEN, statusView.isSystemShowing()));
+                    statusView.setFullscreen(intent.getBooleanExtra(EXTRA_IS_FULLSCREEN, isFullscreen()));
                 }
                 break;
             case ACTION_NOTIFICATION_ADDED:

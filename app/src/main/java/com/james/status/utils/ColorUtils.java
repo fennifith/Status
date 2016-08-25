@@ -1,9 +1,7 @@
 package com.james.status.utils;
 
-import android.app.WallpaperManager;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -51,15 +49,6 @@ public class ColorUtils {
     }
 
     public static int getStatusBarColor(Context context, PackageManager packageManager, String packageName) {
-        Intent homeIntent = new Intent(Intent.ACTION_MAIN);
-        homeIntent.addCategory(Intent.CATEGORY_HOME);
-        String homePackageName = packageManager.resolveActivity(homeIntent, PackageManager.MATCH_DEFAULT_ONLY).activityInfo.packageName;
-
-        if (packageName.contains(homePackageName) || packageName.matches(homePackageName)) {
-            Palette palette = Palette.from(ImageUtils.drawableToBitmap(WallpaperManager.getInstance(context).getFastDrawable())).generate();
-            return palette.getDarkVibrantColor(darkColor(palette.getVibrantColor(Color.BLACK)));
-        }
-
         Set<String> apps = PreferenceUtils.getStringSetPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_APPS);
         if (apps != null) {
             Gson gson = new Gson();
