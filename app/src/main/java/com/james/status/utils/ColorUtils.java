@@ -113,11 +113,11 @@ public class ColorUtils {
 
     public static Integer getStatusBarColor(String packageName, Resources resources, Resources.Theme theme) {
         TypedArray typedArray = theme.obtainStyledAttributes(new int[]{
-                android.R.attr.colorPrimaryDark,
-                android.R.attr.statusBarColor,
-                android.R.attr.navigationBarColor,
                 resources.getIdentifier("colorPrimaryDark", "attr", packageName),
                 resources.getIdentifier("colorPrimaryDark", "color", packageName),
+                android.R.attr.colorPrimaryDark,
+                android.R.attr.statusBarColor,
+                android.R.attr.navigationBarColor
         });
 
         for (int i = 0; i < typedArray.length(); i++) {
@@ -131,9 +131,9 @@ public class ColorUtils {
         }
 
         typedArray = theme.obtainStyledAttributes(new int[]{
-                android.R.attr.colorPrimary,
                 resources.getIdentifier("colorPrimary", "attr", packageName),
-                resources.getIdentifier("colorPrimary", "color", packageName)
+                resources.getIdentifier("colorPrimary", "color", packageName),
+                android.R.attr.colorPrimary
         });
 
         for (int i = 0; i < typedArray.length(); i++) {

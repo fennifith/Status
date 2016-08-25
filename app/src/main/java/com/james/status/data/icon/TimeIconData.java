@@ -26,6 +26,9 @@ public class TimeIconData extends IconData<TimeIconData.TimeReceiver> {
 
         Boolean isAmPmEnabled = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_CLOCK_AMPM);
         if (isAmPmEnabled == null || isAmPmEnabled) format += " a";
+
+        Boolean isDateEnabled = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_CLOCK_DATE);
+        if (isDateEnabled != null && isDateEnabled) format += ", EEE MMM d";
     }
 
     @Override

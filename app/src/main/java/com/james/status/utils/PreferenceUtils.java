@@ -14,6 +14,7 @@ public class PreferenceUtils {
         STATUS_NOTIFICATIONS_COMPAT,
         STATUS_CLOCK_24H,
         STATUS_CLOCK_AMPM,
+        STATUS_CLOCK_DATE,
         STATUS_BATTERY_PERCENT,
         STATUS_COLOR_AUTO,
         STATUS_COLOR,

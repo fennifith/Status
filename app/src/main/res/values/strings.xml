@@ -40,6 +40,8 @@
     <string name="preference_24h_desc">The clock will show in a 24 hour time format if this is turned on.</string>
     <string name="preference_ampm">Show AM/PM in Clock</string>
     <string name="preference_ampm_desc">Choose whether to show the AM/PM indicator in the clock.</string>
+    <string name="preference_date">Show Current Date</string>
+    <string name="preference_date_desc">Shows the date next to the time in the clock.</string>
     <string name="preference_show_notifications">Show Notifications</string>
     <string name="preference_battery_percent">Display Battery Percent</string>
     <string name="preference_battery_percent_desc">Shows the battery percentage next to the icon in the status bar.</string>

@@ -231,6 +231,22 @@ public class MainActivity extends AppCompatActivity {
                 new BooleanPreferenceData(
                         this,
                         new PreferenceData.Identifier(
+                                PreferenceUtils.PreferenceIdentifier.STATUS_CLOCK_DATE,
+                                getString(R.string.preference_date),
+                                getString(R.string.preference_date_desc),
+                                PreferenceData.Identifier.SectionIdentifier.CLOCK
+                        ),
+                        false,
+                        new PreferenceData.OnPreferenceChangeListener() {
+                            @Override
+                            public void onPreferenceChange() {
+                                updateService();
+                            }
+                        }
+                ),
+                new BooleanPreferenceData(
+                        this,
+                        new PreferenceData.Identifier(
                                 PreferenceUtils.PreferenceIdentifier.SHOW_ALARM_ICON,
                                 getString(R.string.preference_show_alarm_icon),
                                 PreferenceData.Identifier.SectionIdentifier.CLOCK
