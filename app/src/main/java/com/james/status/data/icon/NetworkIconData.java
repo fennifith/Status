@@ -8,6 +8,7 @@ import android.telephony.TelephonyManager;
 
 import com.james.status.R;
 import com.james.status.utils.PreferenceUtils;
+import com.james.status.utils.StaticUtils;
 
 public class NetworkIconData extends IconData {
 
@@ -48,8 +49,26 @@ public class NetworkIconData extends IconData {
         @Override
         public void onSignalStrengthsChanged(SignalStrength signalStrength) {
             super.onSignalStrengthsChanged(signalStrength);
-            if (isRegistered)
-                onDrawableUpdate(VectorDrawableCompat.create(getContext().getResources(), getIconResource(signalStrength.getGsmSignalStrength()), getContext().getTheme()));
+            if (isRegistered) {
+                int level;
+
+                if (signalStrength.isGsm()) {
+                    int strength = signalStrength.getGsmSignalStrength();
+
+                    if (strength <= 2 || strength == 99) level = 0;
+                    else if (strength >= 12) level = 4;
+                    else if (strength >= 8) level = 3;
+                    else if (strength >= 5) level = 2;
+                    else level = 1;
+                } else {
+                    int cdmaLevel = StaticUtils.getSignalStrength(signalStrength.getCdmaDbm(), signalStrength.getCdmaEcio());
+                    int evdoLevel = StaticUtils.getSignalStrength(signalStrength.getEvdoDbm(), signalStrength.getEvdoEcio());
+                    if (cdmaLevel != 0) level = cdmaLevel;
+                    else level = evdoLevel;
+                }
+
+                onDrawableUpdate(VectorDrawableCompat.create(getContext().getResources(), getIconResource(level), getContext().getTheme()));
+            }
         }
     }
 }

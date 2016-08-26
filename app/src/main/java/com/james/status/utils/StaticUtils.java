@@ -117,7 +117,7 @@ public class StaticUtils {
             }
 
             if (shouldRequestPermissions) {
-                ActivityCompat.requestPermissions(activity, (String[]) unrequestedPermissions.toArray(), StartActivity.REQUEST_PERMISSIONS);
+                ActivityCompat.requestPermissions(activity, unrequestedPermissions.toArray(new String[unrequestedPermissions.size()]), StartActivity.REQUEST_PERMISSIONS);
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if (!canDrawOverlays(activity))
@@ -166,5 +166,23 @@ public class StaticUtils {
     public static boolean shouldUseCompatNotifications(Context context) {
         Boolean enabled = PreferenceUtils.getBooleanPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_NOTIFICATIONS_COMPAT);
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2 || (enabled != null && enabled);
+    }
+
+    public static int getSignalStrength(int dbm, int ecio) {
+        int dbmLevel, ecioLevel;
+
+        if (dbm >= -75) dbmLevel = 4;
+        else if (dbm >= -85) dbmLevel = 3;
+        else if (dbm >= -95) dbmLevel = 2;
+        else if (dbm >= -100) dbmLevel = 1;
+        else return dbmLevel = 0;
+
+        if (ecio >= -90) ecioLevel = 4;
+        else if (ecio >= -110) ecioLevel = 3;
+        else if (ecio >= -130) ecioLevel = 2;
+        else if (ecio >= -150) ecioLevel = 1;
+        else ecioLevel = 0;
+
+        return (dbmLevel < ecioLevel) ? dbmLevel : ecioLevel;
     }
 }
