@@ -168,7 +168,7 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
                             });
                             textAnimator.start();
                         } else {
-                            ((CustomImageView) holder.v.findViewById(R.id.color)).setImageDrawable(new ColorDrawable(color));
+                            holder.v.findViewById(R.id.color).setBackgroundColor(color);
                             ((SwitchCompat) holder.v.findViewById(R.id.app)).setTextColor(ContextCompat.getColor(context, ColorUtils.isColorDark(color) ? R.color.textColorSecondaryInverse : R.color.textColorSecondary));
                         }
                     }

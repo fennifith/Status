@@ -28,7 +28,7 @@ import me.drozdzynski.library.steppers.SteppersView;
 
 public class StartActivity extends AppCompatActivity {
 
-    private static final int REQUEST_ACCESSIBILITY = 7369, REQUEST_NOTIFICATION = 2285;
+    public static final int REQUEST_ACCESSIBILITY = 7369, REQUEST_NOTIFICATION = 2285, REQUEST_PERMISSIONS = 9374;
 
     SteppersItem accessibilityStep, notificationStep, permissionsStep;
 
@@ -126,6 +126,10 @@ public class StartActivity extends AppCompatActivity {
             case REQUEST_NOTIFICATION:
                 if (notificationStep != null)
                     notificationStep.setPositiveButtonEnable(StaticUtils.isNotificationGranted(this));
+                break;
+            case REQUEST_PERMISSIONS:
+                if (permissionsStep != null)
+                    permissionsStep.setPositiveButtonEnable(StaticUtils.isPermissionsGranted(this));
                 break;
         }
     }

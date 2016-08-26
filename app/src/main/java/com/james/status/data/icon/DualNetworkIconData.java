@@ -4,6 +4,8 @@ import android.content.Context;
 import android.support.graphics.drawable.VectorDrawableCompat;
 import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
+import android.telephony.TelephonyManager;
+import android.widget.Toast;
 
 import com.james.status.R;
 import com.james.status.utils.PreferenceUtils;
@@ -13,34 +15,36 @@ import java.lang.reflect.Method;
 
 public class DualNetworkIconData extends IconData {
 
-    private Object telephonyManager;
+    private TelephonyManager telephonyManager;
     private NetworkListener networkListener;
     private boolean isRegistered;
 
     public DualNetworkIconData(Context context) {
         super(context, PreferenceUtils.PreferenceIdentifier.STYLE_NETWORK_ICON);
 
-        try {
-            final Class<?> tmClass = Class.forName("android.telephony.MultiSimTelephonyManager");
-            Method methodDefault = tmClass.getDeclaredMethod("getDefault", int.class);
-            methodDefault.setAccessible(true);
-
-            telephonyManager = methodDefault.invoke(null, 1);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        networkListener = new NetworkListener();
+        telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
     }
 
     @Override
     public void register() {
-        if (networkListener != null && telephonyManager != null) {
+        if (telephonyManager != null) {
             try {
-                Method method = telephonyManager.getClass().getMethod("listen", void.class);
-                method.invoke(telephonyManager, networkListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
+                final Class<?> subscriptionManager = Class.forName("android.telephony.SubscriptionManager");
+
+                Method getActiveSubIdList = subscriptionManager.getDeclaredMethod("getActiveSubIdList");
+                long[] subIdList = (long[]) getActiveSubIdList.invoke(null);
+
+                if (subIdList.length > 1 && networkListener == null) {
+                    networkListener = new NetworkListener(subIdList[1]);
+                }
+
+                if (networkListener != null) {
+                    telephonyManager.listen(networkListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
+
+                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -65,14 +69,16 @@ public class DualNetworkIconData extends IconData {
 
     private class NetworkListener extends PhoneStateListener {
 
-        public NetworkListener() {
+        public NetworkListener(long id) {
             super();
             try {
-                Field field = this.getClass().getSuperclass().getDeclaredField("mSubscription");
+                Field field = this.getClass().getSuperclass().getDeclaredField("mSubId");
                 field.setAccessible(true);
-                field.set(this, 1);
+                field.set(this, id);
             } catch (Exception e) {
                 e.printStackTrace();
+
+                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
 

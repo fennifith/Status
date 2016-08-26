@@ -20,6 +20,7 @@ import android.util.Log;
 import android.util.TypedValue;
 
 import com.google.gson.Gson;
+import com.james.status.activities.StartActivity;
 import com.james.status.data.AppStatusData;
 import com.james.status.services.AccessibilityService;
 import com.james.status.services.StatusService;
@@ -116,16 +117,11 @@ public class StaticUtils {
             }
 
             if (shouldRequestPermissions) {
-                String[] permissions = new String[unrequestedPermissions.size()];
-                for (int i = 0; i < unrequestedPermissions.size(); i++) {
-                    permissions[i] = unrequestedPermissions.get(i);
-                }
-
-                ActivityCompat.requestPermissions(activity, permissions, 9374);
+                ActivityCompat.requestPermissions(activity, (String[]) unrequestedPermissions.toArray(), StartActivity.REQUEST_PERMISSIONS);
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if (!canDrawOverlays(activity))
-                        activity.startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + activity.getPackageName())), 9374);
+                        activity.startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + activity.getPackageName())), StartActivity.REQUEST_PERMISSIONS);
                 }
             }
         }
