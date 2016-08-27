@@ -90,12 +90,11 @@ public class DualNetworkIconData extends IconData {
             super.onSignalStrengthsChanged(signalStrength);
 
             if (isRegistered) {
-                int level = 0;
+                int level = signalStrength.getGsmSignalStrength();
 
-                int strength = signalStrength.getGsmSignalStrength();
-                if (strength != 99 && strength != 0) level = (int) (strength / 7.75);
-                else {
-                    strength = signalStrength.getCdmaDbm();
+                if (level > 4) level /= 7.75;
+                else if (level < 1) {
+                    int strength = signalStrength.getCdmaDbm();
 
                     if (strength < -100) level = 0;
                     else if (strength < -95) level = 1;
