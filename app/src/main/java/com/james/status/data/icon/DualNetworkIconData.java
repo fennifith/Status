@@ -8,11 +8,9 @@ import android.telephony.SignalStrength;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
-import android.widget.Toast;
 
 import com.james.status.R;
 import com.james.status.utils.PreferenceUtils;
-import com.james.status.utils.StaticUtils;
 
 import java.lang.reflect.Field;
 
@@ -38,10 +36,11 @@ public class DualNetworkIconData extends IconData {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1 && subscriptionManager != null) {
 
                     if (networkListener == null) {
+                        int index = 0;
                         for (SubscriptionInfo info : subscriptionManager.getActiveSubscriptionInfoList()) {
-                            if (info.getSimSlotIndex() == 1) {
+                            if (info.getSimSlotIndex() > index) {
                                 networkListener = new NetworkListener(info.getSubscriptionId());
-                                break;
+                                index = info.getSimSlotIndex();
                             }
                         }
                     }
@@ -51,8 +50,6 @@ public class DualNetworkIconData extends IconData {
                     telephonyManager.listen(networkListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
             } catch (Exception e) {
                 e.printStackTrace();
-
-                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -85,34 +82,34 @@ public class DualNetworkIconData extends IconData {
                 field.set(this, id);
             } catch (Exception e) {
                 e.printStackTrace();
-
-                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
 
         @Override
         public void onSignalStrengthsChanged(SignalStrength signalStrength) {
             super.onSignalStrengthsChanged(signalStrength);
+
             if (isRegistered) {
-                int level;
+                int level = 0;
 
-                if (signalStrength.isGsm()) {
-                    int strength = signalStrength.getGsmSignalStrength();
+                int strength = signalStrength.getGsmSignalStrength();
+                if (strength != 99 && strength != 0) level = (int) (strength / 7.75);
+                else {
+                    strength = signalStrength.getCdmaDbm();
 
-                    if (strength <= 2 || strength == 99) level = 0;
-                    else if (strength >= 12) level = 4;
-                    else if (strength >= 8) level = 3;
-                    else if (strength >= 5) level = 2;
-                    else level = 1;
-                } else {
-                    int cdmaLevel = StaticUtils.getSignalStrength(signalStrength.getCdmaDbm(), signalStrength.getCdmaEcio());
-                    int evdoLevel = StaticUtils.getSignalStrength(signalStrength.getEvdoDbm(), signalStrength.getEvdoEcio());
-                    if (evdoLevel == 0) {
-                        level = cdmaLevel;
-                    } else if (cdmaLevel == 0) {
-                        level = evdoLevel;
-                    } else {
-                        level = cdmaLevel < evdoLevel ? cdmaLevel : evdoLevel;
+                    if (strength < -100) level = 0;
+                    else if (strength < -95) level = 1;
+                    else if (strength < -85) level = 2;
+                    else if (strength < -75) level = 3;
+                    else if (strength != 0) level = 4;
+                    else {
+                        strength = signalStrength.getEvdoDbm();
+
+                        if (strength == 0 || strength < -100) level = 0;
+                        else if (strength < -95) level = 1;
+                        else if (strength < -85) level = 2;
+                        else if (strength < -75) level = 3;
+                        else level = 4;
                     }
                 }
 

@@ -8,7 +8,6 @@ import android.telephony.TelephonyManager;
 
 import com.james.status.R;
 import com.james.status.utils.PreferenceUtils;
-import com.james.status.utils.StaticUtils;
 
 public class NetworkIconData extends IconData {
 
@@ -19,13 +18,14 @@ public class NetworkIconData extends IconData {
     public NetworkIconData(Context context) {
         super(context, PreferenceUtils.PreferenceIdentifier.STYLE_NETWORK_ICON);
         telephonyManager = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
-        networkListener = new NetworkListener();
     }
 
     @Override
     public void register() {
-        if (networkListener != null)
+        if (networkListener == null) {
+            networkListener = new NetworkListener();
             telephonyManager.listen(networkListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
+        }
         isRegistered = true;
     }
 
@@ -50,21 +50,27 @@ public class NetworkIconData extends IconData {
         public void onSignalStrengthsChanged(SignalStrength signalStrength) {
             super.onSignalStrengthsChanged(signalStrength);
             if (isRegistered) {
-                int level;
+                int level = 0;
 
-                if (signalStrength.isGsm()) {
-                    int strength = signalStrength.getGsmSignalStrength();
+                int strength = signalStrength.getGsmSignalStrength();
+                if (strength != 99 && strength != 0) level = (int) (strength / 7.75);
+                else {
+                    strength = signalStrength.getCdmaDbm();
 
-                    if (strength <= 2 || strength == 99) level = 0;
-                    else if (strength >= 12) level = 4;
-                    else if (strength >= 8) level = 3;
-                    else if (strength >= 5) level = 2;
-                    else level = 1;
-                } else {
-                    int cdmaLevel = StaticUtils.getSignalStrength(signalStrength.getCdmaDbm(), signalStrength.getCdmaEcio());
-                    int evdoLevel = StaticUtils.getSignalStrength(signalStrength.getEvdoDbm(), signalStrength.getEvdoEcio());
-                    if (cdmaLevel != 0) level = cdmaLevel;
-                    else level = evdoLevel;
+                    if (strength < -100) level = 0;
+                    else if (strength < -95) level = 1;
+                    else if (strength < -85) level = 2;
+                    else if (strength < -75) level = 3;
+                    else if (strength != 0) level = 4;
+                    else {
+                        strength = signalStrength.getEvdoDbm();
+
+                        if (strength == 0 || strength < -100) level = 0;
+                        else if (strength < -95) level = 1;
+                        else if (strength < -85) level = 2;
+                        else if (strength < -75) level = 3;
+                        else level = 4;
+                    }
                 }
 
                 onDrawableUpdate(VectorDrawableCompat.create(getContext().getResources(), getIconResource(level), getContext().getTheme()));

@@ -104,7 +104,7 @@ public class IconData<T extends BroadcastReceiver> {
     }
 
     public int getIconResource(int level) {
-        return resource[level % resource.length];
+        return resource[Math.abs(level % resource.length)];
     }
 
     @Nullable
