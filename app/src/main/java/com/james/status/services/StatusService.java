@@ -163,6 +163,7 @@ public class StatusService extends Service {
             case ACTION_NOTIFICATION_REMOVED:
                 notification = intent.getParcelableExtra(EXTRA_NOTIFICATION);
                 statusView.removeNotification(notification);
+
                 if (headsUpNotification != null && headsUpNotification.equals(notification)) {
                     if (headsUpView != null && headsUpView.getParent() != null) removeHeadsUpView();
                     else {

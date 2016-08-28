@@ -7,12 +7,12 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="32dp"
+        android:layout_height="24dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
-        android:layout_marginTop="8dp">
+        android:layout_marginTop="12dp">
 
         <com.james.status.views.SquareImageView
             android:layout_width="20dp"
@@ -26,6 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/textColorPrimary"
+            android:textSize="14sp"
             android:id="@+id/name"
             android:singleLine="true"
             android:lines="1"
@@ -42,7 +43,6 @@
         android:textColor="@color/textColorPrimary"
         android:textSize="16sp"
         android:id="@+id/title"
-        android:layout_marginBottom="2dp"
         android:singleLine="true"
         android:lines="1"
         android:maxLines="1"

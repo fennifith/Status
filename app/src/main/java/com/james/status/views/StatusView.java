@@ -23,6 +23,7 @@ import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.james.status.R;
 import com.james.status.data.NotificationData;
@@ -189,14 +190,13 @@ public class StatusView extends FrameLayout {
             Drawable drawable = notification.getIcon(getContext());
 
             if (drawable != null) {
-                if (isDarkMode)
-                    ImageUtils.tintDrawable((CustomImageView) v.findViewById(R.id.icon), drawable, Color.BLACK);
+                ImageUtils.tintDrawable((CustomImageView) v.findViewById(R.id.icon), drawable, isDarkMode ? Color.BLACK : Color.WHITE);
 
                 notificationIconLayout.addView(v);
 
                 notifications.put(notification.getKey(), notification);
-            }
-        }
+            } else Toast.makeText(getContext(), "drawable null", Toast.LENGTH_SHORT).show();
+        } else Toast.makeText(getContext(), "layout null", Toast.LENGTH_SHORT).show();
     }
 
     public void removeNotification(NotificationData notification) {
