@@ -8,6 +8,7 @@ import android.telephony.SignalStrength;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
+import android.widget.Toast;
 
 import com.james.status.R;
 import com.james.status.utils.PreferenceUtils;
@@ -50,6 +51,7 @@ public class DualNetworkIconData extends IconData {
                     telephonyManager.listen(networkListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
             } catch (Exception e) {
                 e.printStackTrace();
+                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
 

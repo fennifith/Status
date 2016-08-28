@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
-import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.NotificationCompat;
 
 import com.james.status.data.NotificationData;
@@ -23,15 +22,7 @@ public class NotificationService extends NotificationListenerService {
             ACTION_CANCEL_NOTIFICATION = "com.james.status.ACTION_CANCEL_NOTIFICATION",
             EXTRA_NOTIFICATION = "com.james.status.EXTRA_NOTIFICATION";
 
-    private NotificationManagerCompat notificationManager;
-
     private boolean isConnected, shouldSendOnConnect;
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        notificationManager = NotificationManagerCompat.from(this);
-    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -78,9 +69,11 @@ public class NotificationService extends NotificationListenerService {
     public void onNotificationPosted(StatusBarNotification sbn) {
         Boolean enabled = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED);
         if (enabled != null && enabled && !StaticUtils.shouldUseCompatNotifications(this)) {
+            NotificationData notification = new NotificationData(sbn, getKey(sbn));
+
             Intent intent = new Intent(StatusService.ACTION_NOTIFICATION_ADDED);
             intent.setClass(this, StatusService.class);
-            intent.putExtra(StatusService.EXTRA_NOTIFICATION, new NotificationData(sbn, getKey(sbn)));
+            intent.putExtra(StatusService.EXTRA_NOTIFICATION, notification);
 
             startService(intent);
         }

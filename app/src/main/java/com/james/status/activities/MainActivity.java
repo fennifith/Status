@@ -33,7 +33,9 @@ import com.james.status.services.StatusService;
 import com.james.status.utils.PreferenceUtils;
 import com.james.status.utils.StaticUtils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -80,7 +82,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        adapter = new PreferenceSectionAdapter(this, Arrays.asList(
+        List<PreferenceData> preferences = new ArrayList<>();
+
+        preferences.addAll(Arrays.asList(
                 new BooleanPreferenceData(
                         this,
                         new PreferenceData.Identifier(
@@ -481,22 +485,6 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                 ),
-                /*new BooleanPreferenceData(
-                        this,
-                        new PreferenceData.Identifier(
-                                PreferenceUtils.PreferenceIdentifier.SHOW_NETWORK_DUAL_SIM,
-                                getString(R.string.preference_dual_sim),
-                                getString(R.string.preference_dual_sim_desc),
-                                PreferenceData.Identifier.SectionIdentifier.NETWORK
-                        ),
-                        false,
-                        new PreferenceData.OnPreferenceChangeListener() {
-                            @Override
-                            public void onPreferenceChange() {
-                                updateService();
-                            }
-                        }
-                ),*/
                 new BooleanPreferenceData(
                         this,
                         new PreferenceData.Identifier(
@@ -701,6 +689,29 @@ public class MainActivity extends AppCompatActivity {
                         }
                 )
         ));
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            preferences.add(
+                    new BooleanPreferenceData(
+                            this,
+                            new PreferenceData.Identifier(
+                                    PreferenceUtils.PreferenceIdentifier.SHOW_NETWORK_DUAL_SIM,
+                                    getString(R.string.preference_dual_sim),
+                                    getString(R.string.preference_dual_sim_desc),
+                                    PreferenceData.Identifier.SectionIdentifier.NETWORK
+                            ),
+                            false,
+                            new PreferenceData.OnPreferenceChangeListener() {
+                                @Override
+                                public void onPreferenceChange() {
+                                    updateService();
+                                }
+                            }
+                    )
+            );
+        }
+
+        adapter = new PreferenceSectionAdapter(this, preferences);
 
         recycler.setLayoutManager(new GridLayoutManager(this, 1));
         recycler.setAdapter(adapter);

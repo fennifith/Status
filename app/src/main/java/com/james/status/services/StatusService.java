@@ -432,6 +432,9 @@ public class StatusService extends Service {
         }
 
         WindowManager.LayoutParams params = new WindowManager.LayoutParams(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.TYPE_SYSTEM_ERROR, WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH, PixelFormat.TRANSLUCENT);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
+            params.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
+
         params.gravity = Gravity.TOP;
 
         windowManager.addView(headsUpView, params);

@@ -39,74 +39,45 @@ public class NotificationData implements Parcelable {
 
     @TargetApi(18)
     public NotificationData(StatusBarNotification sbn, String key) {
-        Notification notification = sbn.getNotification();
-
-        category = NotificationCompat.getCategory(notification);
-        title = getTitle(notification);
-        subtitle = getSubtitle(notification);
-        packageName = sbn.getPackageName();
         this.key = key;
-        tag = sbn.getTag();
-        priority = notification.priority;
-        id = sbn.getId();
-
-        iconRes = getIcon(notification);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-            unloadedIcon = notification.getSmallIcon();
-
-        largeIcon = getLargeIcon(notification);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-            unloadedIcon = notification.getLargeIcon();
-
-        intent = notification.contentIntent;
-
-        actions = new ActionData[NotificationCompat.getActionCount(notification)];
-        for (int i = 0; i < actions.length; i++) {
-            actions[i] = new ActionData(NotificationCompat.getAction(notification, i), packageName);
-        }
+        init(sbn.getNotification(), sbn.getId(), sbn.getPackageName());
     }
 
     public NotificationData(Notification notification, String packageName) {
-        category = NotificationCompat.getCategory(notification);
-        title = getTitle(notification);
-        subtitle = getSubtitle(notification);
-        this.packageName = packageName;
-        priority = notification.priority;
-        id = -1;
-        key = getKey();
-
-        iconRes = getIcon(notification);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-            unloadedIcon = notification.getSmallIcon();
-
-        largeIcon = getLargeIcon(notification);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-            unloadedIcon = notification.getLargeIcon();
-
-        intent = notification.contentIntent;
-
-        actions = new ActionData[NotificationCompat.getActionCount(notification)];
-        for (int i = 0; i < actions.length; i++) {
-            actions[i] = new ActionData(NotificationCompat.getAction(notification, i), packageName);
-        }
+        init(notification, -1, packageName);
     }
 
     public NotificationData(Notification notification, int id, String packageName) {
+        init(notification, id, packageName);
+    }
+
+    private void init(Notification notification, int id, String packageName) {
         category = NotificationCompat.getCategory(notification);
         title = getTitle(notification);
         subtitle = getSubtitle(notification);
         this.packageName = packageName;
         priority = notification.priority;
         this.id = id;
-        key = getKey();
 
-        iconRes = getIcon(notification);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-            unloadedIcon = notification.getSmallIcon();
+        Bundle extras = NotificationCompat.getExtras(notification);
 
-        largeIcon = getLargeIcon(notification);
+        iconRes = extras.getInt(NotificationCompat.EXTRA_SMALL_ICON, 0);
+        if (iconRes == 0 && Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+            iconRes = notification.icon;
+
+        if (iconRes == 0 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            unloadedIcon = extras.getParcelable(NotificationCompat.EXTRA_SMALL_ICON);
+            if (unloadedIcon == null) unloadedIcon = notification.getSmallIcon();
+        }
+
+        largeIcon = extras.getParcelable(NotificationCompat.EXTRA_LARGE_ICON);
+        if (largeIcon == null)
+            largeIcon = extras.getParcelable(NotificationCompat.EXTRA_LARGE_ICON_BIG);
+        if (largeIcon == null && Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+            largeIcon = notification.largeIcon;
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-            unloadedIcon = notification.getLargeIcon();
+            unloadedLargeIcon = notification.getLargeIcon();
 
         intent = notification.contentIntent;
 
@@ -207,7 +178,7 @@ public class NotificationData implements Parcelable {
 
     public boolean shouldShowHeadsUp(Context context) {
         Boolean headsUp = PreferenceUtils.getBooleanPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_NOTIFICATIONS_HEADS_UP);
-        return (headsUp != null ? headsUp : Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) && priority >= NotificationCompat.PRIORITY_HIGH;
+        return (headsUp != null ? headsUp : Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) && (priority >= NotificationCompat.PRIORITY_HIGH || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP);
     }
 
     public boolean shouldHideStatusBar() {
@@ -235,26 +206,6 @@ public class NotificationData implements Parcelable {
             subtitle = notification.tickerText.toString();
 
         return subtitle != null ? subtitle : "";
-    }
-
-    private int getIcon(Notification notification) {
-        Bundle extras = NotificationCompat.getExtras(notification);
-
-        int icon = extras.getInt(NotificationCompat.EXTRA_SMALL_ICON, 0);
-        if (icon == 0 && Build.VERSION.SDK_INT < Build.VERSION_CODES.M) icon = notification.icon;
-
-        return icon;
-    }
-
-    private Bitmap getLargeIcon(Notification notification) {
-        Bundle extras = NotificationCompat.getExtras(notification);
-
-        Bitmap icon = extras.getParcelable(NotificationCompat.EXTRA_LARGE_ICON);
-        if (icon == null) icon = extras.getParcelable(NotificationCompat.EXTRA_LARGE_ICON_BIG);
-        if (icon == null && Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
-            icon = notification.largeIcon;
-
-        return icon;
     }
 
     @Nullable
