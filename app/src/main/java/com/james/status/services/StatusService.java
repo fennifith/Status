@@ -343,10 +343,7 @@ public class StatusService extends Service {
 
         CustomImageView icon = (CustomImageView) headsUpView.findViewById(R.id.icon);
         Drawable drawable = notification.getIcon(this);
-        if (drawable != null) {
-            drawable = ImageUtils.tintDrawable(drawable, color);
-            icon.setImageDrawable(drawable);
-        }
+        if (drawable != null) ImageUtils.tintDrawable(icon, drawable, color);
 
         TextView name = (TextView) headsUpView.findViewById(R.id.name);
         name.setText(notification.getName(this));

@@ -21,7 +21,7 @@ public class TimeIconData extends IconData<TimeIconData.TimeReceiver> {
         calendar = Calendar.getInstance();
 
         Boolean is24h = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_CLOCK_24H);
-        if (is24h != null && is24h) format = "HH:mm";
+        if (is24h != null && is24h) format = "kk:mm";
         else format = "h:mm";
 
         Boolean isAmPmEnabled = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_CLOCK_AMPM);

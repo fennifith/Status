@@ -114,7 +114,7 @@ public class StatusView extends FrameLayout {
                         item.setVisibility(View.VISIBLE);
                         iconView.setVisibility(View.VISIBLE);
 
-                        iconView.setImageDrawable(ImageUtils.tintDrawable(drawable, isDarkMode ? Color.BLACK : Color.WHITE));
+                        ImageUtils.tintDrawable(iconView, drawable, isDarkMode ? Color.BLACK : Color.WHITE);
                     } else {
                         iconView.setVisibility(View.GONE);
                         if (!iconData.hasText()) item.setVisibility(View.GONE);
@@ -189,9 +189,8 @@ public class StatusView extends FrameLayout {
             Drawable drawable = notification.getIcon(getContext());
 
             if (drawable != null) {
-                CustomImageView icon = (CustomImageView) v.findViewById(R.id.icon);
-                if (isDarkMode) drawable = ImageUtils.tintDrawable(drawable, Color.BLACK);
-                icon.setImageDrawable(drawable);
+                if (isDarkMode)
+                    ImageUtils.tintDrawable((CustomImageView) v.findViewById(R.id.icon), drawable, Color.BLACK);
 
                 notificationIconLayout.addView(v);
 
@@ -381,7 +380,7 @@ public class StatusView extends FrameLayout {
         } else if (view instanceof CustomImageView) {
             CustomImageView imageView = (CustomImageView) view;
             if (imageView.getDrawable() != null)
-                imageView.setImageDrawable(ImageUtils.tintDrawable(imageView.getDrawable(), color));
+                ImageUtils.tintDrawable(imageView, imageView.getDrawable(), color);
         }
     }
 
