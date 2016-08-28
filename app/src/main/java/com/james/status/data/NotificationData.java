@@ -8,42 +8,55 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.service.notification.StatusBarNotification;
+import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.NotificationCompat;
 
+import com.james.status.utils.ColorUtils;
 import com.james.status.utils.PreferenceUtils;
 
 public class NotificationData implements Parcelable {
 
-    public String category, title, subtitle, packageName;
-    public int priority, id, icon;
-    private Icon unloadedIcon;
+    public String category, title, subtitle, packageName, key, tag = "";
+    public int priority, id, iconRes;
+    private Bitmap largeIcon;
+    private Icon unloadedIcon, unloadedLargeIcon;
 
     public PendingIntent intent;
     public ActionData[] actions;
 
     @TargetApi(18)
-    public NotificationData(StatusBarNotification sbn) {
+    public NotificationData(StatusBarNotification sbn, String key) {
         Notification notification = sbn.getNotification();
 
         category = NotificationCompat.getCategory(notification);
         title = getTitle(notification);
         subtitle = getSubtitle(notification);
         packageName = sbn.getPackageName();
+        this.key = key;
+        tag = sbn.getTag();
         priority = notification.priority;
         id = sbn.getId();
 
-        icon = getIcon(notification);
+        iconRes = getIcon(notification);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             unloadedIcon = notification.getSmallIcon();
+
+        largeIcon = getLargeIcon(notification);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            unloadedIcon = notification.getLargeIcon();
 
         intent = notification.contentIntent;
 
@@ -60,10 +73,15 @@ public class NotificationData implements Parcelable {
         this.packageName = packageName;
         priority = notification.priority;
         id = -1;
+        key = getKey();
 
-        icon = getIcon(notification);
+        iconRes = getIcon(notification);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             unloadedIcon = notification.getSmallIcon();
+
+        largeIcon = getLargeIcon(notification);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            unloadedIcon = notification.getLargeIcon();
 
         intent = notification.contentIntent;
 
@@ -80,10 +98,15 @@ public class NotificationData implements Parcelable {
         this.packageName = packageName;
         priority = notification.priority;
         this.id = id;
+        key = getKey();
 
-        icon = getIcon(notification);
+        iconRes = getIcon(notification);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             unloadedIcon = notification.getSmallIcon();
+
+        largeIcon = getLargeIcon(notification);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            unloadedIcon = notification.getLargeIcon();
 
         intent = notification.contentIntent;
 
@@ -98,9 +121,12 @@ public class NotificationData implements Parcelable {
         title = in.readString();
         subtitle = in.readString();
         packageName = in.readString();
+        key = in.readString();
+        tag = in.readString();
         priority = in.readInt();
         id = in.readInt();
-        icon = in.readInt();
+        iconRes = in.readInt();
+        if (in.readInt() == 1) largeIcon = Bitmap.CREATOR.createFromParcel(in);
 
         intent = PendingIntent.readPendingIntentOrNullFromParcel(in);
 
@@ -110,8 +136,10 @@ public class NotificationData implements Parcelable {
             actions[i] = in.readParcelable(ActionData.class.getClassLoader());
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             unloadedIcon = in.readParcelable(Icon.class.getClassLoader());
+            unloadedLargeIcon = in.readParcelable(Icon.class.getClassLoader());
+        }
     }
 
     public static final Creator<NotificationData> CREATOR = new Creator<NotificationData>() {
@@ -129,11 +157,36 @@ public class NotificationData implements Parcelable {
     @Nullable
     public Drawable getIcon(Context context) {
         Drawable drawable = null;
-        if (icon != 0) drawable = getDrawable(context, icon, packageName);
+        if (iconRes != 0) drawable = getDrawable(context, iconRes, packageName);
         if (drawable == null && unloadedIcon != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             drawable = unloadedIcon.loadDrawable(context);
 
         return drawable;
+    }
+
+    @Nullable
+    public Drawable getLargeIcon(Context context) {
+        Drawable drawable = null;
+        if (largeIcon != null) drawable = new BitmapDrawable(context.getResources(), largeIcon);
+        if (drawable == null && unloadedLargeIcon != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            drawable = unloadedLargeIcon.loadDrawable(context);
+
+        return drawable;
+    }
+
+    public void getColor(final Context context, final OnColorListener onColorListener) {
+        new Thread() {
+            @Override
+            public void run() {
+                final int color = ColorUtils.getStatusBarColor(context, context.getPackageManager(), packageName);
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        onColorListener.onColor(getKey(), color);
+                    }
+                });
+            }
+        }.start();
     }
 
     public ActionData[] getActions() {
@@ -193,6 +246,17 @@ public class NotificationData implements Parcelable {
         return icon;
     }
 
+    private Bitmap getLargeIcon(Notification notification) {
+        Bundle extras = NotificationCompat.getExtras(notification);
+
+        Bitmap icon = extras.getParcelable(NotificationCompat.EXTRA_LARGE_ICON);
+        if (icon == null) icon = extras.getParcelable(NotificationCompat.EXTRA_LARGE_ICON_BIG);
+        if (icon == null && Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+            icon = notification.largeIcon;
+
+        return icon;
+    }
+
     @Nullable
     private Drawable getDrawable(Context context, int resource, String packageName) {
         if (packageName == null) return null;
@@ -233,18 +297,30 @@ public class NotificationData implements Parcelable {
         dest.writeString(title);
         dest.writeString(subtitle);
         dest.writeString(packageName);
+        dest.writeString(key);
+        dest.writeString(tag);
         dest.writeInt(priority);
         dest.writeInt(id);
-        dest.writeInt(icon);
+        dest.writeInt(iconRes);
+        if (largeIcon != null) {
+            dest.writeInt(1);
+            largeIcon.writeToParcel(dest, flags);
+        } else dest.writeInt(0);
 
         PendingIntent.writePendingIntentOrNullToParcel(intent, dest);
 
         dest.writeInt(actions.length);
         for (ActionData action : actions) {
-            dest.writeParcelable(action, 0);
+            dest.writeParcelable(action, flags);
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             dest.writeParcelable(unloadedIcon, flags);
+            dest.writeParcelable(unloadedLargeIcon, flags);
+        }
+    }
+
+    public interface OnColorListener {
+        void onColor(String key, @ColorInt int color);
     }
 }

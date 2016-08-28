@@ -13,6 +13,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
+import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
 import android.view.Gravity;
@@ -22,6 +23,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
+import android.view.animation.OvershootInterpolator;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -137,7 +139,7 @@ public class StatusService extends Service {
                     if (isStatusColorAuto == null || isStatusColorAuto) {
                         if (intent.hasExtra(EXTRA_IS_HOME_SCREEN) && intent.getBooleanExtra(EXTRA_IS_HOME_SCREEN, false))
                             statusView.setHomeScreen();
-                        else if (intent.hasExtra(EXTRA_COLOR))
+                        else if (intent.hasExtra(EXTRA_COLOR) && headsUpView == null)
                             statusView.setColor(intent.getIntExtra(EXTRA_COLOR, Color.BLACK));
                     }
 
@@ -295,8 +297,8 @@ public class StatusService extends Service {
                 headsUpView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
                 ValueAnimator animator = ValueAnimator.ofInt(-headsUpView.getHeight(), 0);
-                animator.setDuration(150);
-                animator.setInterpolator(new DecelerateInterpolator());
+                animator.setDuration(250);
+                animator.setInterpolator(new OvershootInterpolator());
                 animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                     @Override
                     public void onAnimationUpdate(ValueAnimator valueAnimator) {
@@ -321,8 +323,8 @@ public class StatusService extends Service {
                         break;
                     case MotionEvent.ACTION_UP:
                     case MotionEvent.ACTION_CANCEL:
-                        if (Math.abs(event.getX() - offsetX) > StaticUtils.getPixelsFromDp(StatusService.this, 206) && headsUpView != null && headsUpView.getParent() != null)
-                            removeHeadsUpView();
+                        if (Math.abs(event.getX() - offsetX) > StaticUtils.getPixelsFromDp(StatusService.this, 72) && headsUpView != null && headsUpView.getParent() != null)
+                            dismissHeadsUpView();
                         else if (headsUpView != null)
                             headsUpView.animate().x(0).setDuration(150).start();
                         offsetX = 0;
@@ -338,17 +340,34 @@ public class StatusService extends Service {
 
         headsUpHandler.postDelayed(headsUpRunnable, HEADS_UP_DURATION);
 
-        int color = Color.BLACK;
-        if (statusView != null) color = statusView.getColor();
+        Integer color = PreferenceUtils.getIntegerPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR);
+        if (color == null) color = Color.BLACK;
         if (!ColorUtils.isColorDark(color)) color = ColorUtils.darkColor(color);
 
         CustomImageView icon = (CustomImageView) headsUpView.findViewById(R.id.icon);
         Drawable drawable = notification.getIcon(this);
         if (drawable != null) ImageUtils.tintDrawable(icon, drawable, color);
 
+        CustomImageView largeIcon = (CustomImageView) headsUpView.findViewById(R.id.largeIcon);
+        Drawable largeDrawable = notification.getLargeIcon(this);
+        if (drawable != null) largeIcon.setImageDrawable(largeDrawable);
+
         TextView name = (TextView) headsUpView.findViewById(R.id.name);
         name.setText(notification.getName(this));
         name.setTextColor(color);
+
+        notification.getColor(this, new NotificationData.OnColorListener() {
+            @Override
+            public void onColor(String key, @ColorInt int color) {
+                if (headsUpView != null && headsUpNotification != null && headsUpNotification.getKey().matches(key)) {
+                    CustomImageView icon = (CustomImageView) headsUpView.findViewById(R.id.icon);
+                    if (icon.getDrawable() != null)
+                        ImageUtils.tintDrawable(icon, icon.getDrawable(), color);
+
+                    ((TextView) headsUpView.findViewById(R.id.name)).setTextColor(color);
+                }
+            }
+        });
 
         ((TextView) headsUpView.findViewById(R.id.title)).setText(notification.title);
         ((TextView) headsUpView.findViewById(R.id.subtitle)).setText(notification.subtitle);
@@ -364,9 +383,10 @@ public class StatusService extends Service {
                             ((PendingIntent) tag).send();
                         } catch (PendingIntent.CanceledException ignored) {
                         }
-                    }
 
-                    if (headsUpView != null && headsUpView.getParent() != null) removeHeadsUpView();
+                        if (headsUpView != null && headsUpView.getParent() != null)
+                            removeHeadsUpView();
+                    }
                 }
             });
         }
@@ -394,15 +414,15 @@ public class StatusService extends Service {
                         @Override
                         public void onClick(View v) {
                             Object tag = v.getTag();
-                            if (tag != null && tag instanceof PendingIntent) {
+                            if (tag != null && tag instanceof PendingIntent && shouldFireClickEvent) {
                                 try {
                                     ((PendingIntent) tag).send();
                                 } catch (PendingIntent.CanceledException ignored) {
                                 }
-                            }
 
-                            if (headsUpView != null && headsUpView.getParent() != null)
-                                removeHeadsUpView();
+                                if (headsUpView != null && headsUpView.getParent() != null)
+                                    removeHeadsUpView();
+                            }
                         }
                     });
                 }
@@ -418,6 +438,7 @@ public class StatusService extends Service {
     }
 
     private void removeHeadsUpView() {
+        headsUpNotification = null;
         headsUpHandler.removeCallbacks(headsUpRunnable);
 
         ValueAnimator animator = ValueAnimator.ofInt((int) headsUpView.getY(), -headsUpView.getHeight());
@@ -433,7 +454,40 @@ public class StatusService extends Service {
                     if (valueAnimator.getAnimatedFraction() == 1 && headsUpView.getParent() != null) {
                         windowManager.removeView(headsUpView);
                         headsUpView = null;
-                        headsUpNotification = null;
+                    }
+                }
+            }
+        });
+        animator.start();
+    }
+
+    private void dismissHeadsUpView() {
+        if (!StaticUtils.shouldUseCompatNotifications(this)) {
+            Intent intent = new Intent(NotificationService.ACTION_CANCEL_NOTIFICATION);
+            intent.setClass(this, NotificationService.class);
+            intent.putExtra(NotificationService.EXTRA_NOTIFICATION, headsUpNotification);
+            startService(intent);
+        }
+
+        headsUpNotification = null;
+        headsUpHandler.removeCallbacks(headsUpRunnable);
+
+        Point size = new Point();
+        windowManager.getDefaultDisplay().getSize(size);
+
+        ValueAnimator animator = ValueAnimator.ofInt((int) headsUpView.getX(), headsUpView.getX() > 0 ? size.x : -size.x);
+        animator.setDuration(150);
+        animator.setInterpolator(new DecelerateInterpolator());
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                if (headsUpView != null) {
+                    headsUpView.setX((int) valueAnimator.getAnimatedValue());
+                    headsUpView.setAlpha(1 - valueAnimator.getAnimatedFraction());
+
+                    if (valueAnimator.getAnimatedFraction() == 1 && headsUpView.getParent() != null) {
+                        windowManager.removeView(headsUpView);
+                        headsUpView = null;
                     }
                 }
             }
