@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.os.Build;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
+import android.support.v7.app.NotificationCompat;
 
+import com.james.status.data.NotificationData;
 import com.james.status.utils.PreferenceUtils;
 import com.james.status.utils.StaticUtils;
 
@@ -55,15 +57,9 @@ public class NotificationService extends NotificationListenerService {
     public void onNotificationPosted(StatusBarNotification sbn) {
         Boolean enabled = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED);
         if (enabled != null && enabled && !StaticUtils.shouldUseCompatNotifications(this)) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
-                sbn.getNotification().extras = null;
-
             Intent intent = new Intent(StatusService.ACTION_NOTIFICATION_ADDED);
             intent.setClass(this, StatusService.class);
-
-            intent.putExtra(StatusService.EXTRA_NOTIFICATION_KEY, getKey(sbn));
-            intent.putExtra(StatusService.EXTRA_NOTIFICATION, sbn.getNotification());
-            intent.putExtra(StatusService.EXTRA_PACKAGE_NAME, sbn.getPackageName());
+            intent.putExtra(StatusService.EXTRA_NOTIFICATION, new NotificationData(sbn));
 
             startService(intent);
         }
@@ -73,15 +69,9 @@ public class NotificationService extends NotificationListenerService {
     public void onNotificationRemoved(StatusBarNotification sbn) {
         Boolean enabled = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED);
         if (enabled != null && enabled && !StaticUtils.shouldUseCompatNotifications(this)) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
-                sbn.getNotification().extras = null;
-
             Intent intent = new Intent(StatusService.ACTION_NOTIFICATION_REMOVED);
             intent.setClass(this, StatusService.class);
-
-            intent.putExtra(StatusService.EXTRA_NOTIFICATION_KEY, getKey(sbn));
-            intent.putExtra(StatusService.EXTRA_NOTIFICATION, sbn.getNotification());
-            intent.putExtra(StatusService.EXTRA_PACKAGE_NAME, sbn.getPackageName());
+            intent.putExtra(StatusService.EXTRA_NOTIFICATION, new NotificationData(sbn));
 
             startService(intent);
         }
@@ -99,15 +89,12 @@ public class NotificationService extends NotificationListenerService {
         Boolean enabled = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED);
         if (enabled != null && enabled && !StaticUtils.shouldUseCompatNotifications(this)) {
             for (StatusBarNotification sbn : getNotifications()) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
-                    sbn.getNotification().extras = null;
+                NotificationData notification = new NotificationData(sbn);
+                notification.priority = NotificationCompat.PRIORITY_DEFAULT;
 
                 Intent intent = new Intent(StatusService.ACTION_NOTIFICATION_ADDED);
                 intent.setClass(this, StatusService.class);
-
-                intent.putExtra(StatusService.EXTRA_NOTIFICATION_KEY, getKey(sbn));
-                intent.putExtra(StatusService.EXTRA_NOTIFICATION, sbn.getNotification());
-                intent.putExtra(StatusService.EXTRA_PACKAGE_NAME, sbn.getPackageName());
+                intent.putExtra(StatusService.EXTRA_NOTIFICATION, notification);
 
                 startService(intent);
             }

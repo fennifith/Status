@@ -1,21 +1,33 @@
 package com.james.status.services;
 
+import android.animation.ValueAnimator;
 import android.app.KeyguardManager;
-import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v4.view.ViewCompat;
 import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.james.status.R;
+import com.james.status.data.ActionData;
+import com.james.status.data.NotificationData;
 import com.james.status.data.icon.AirplaneModeIconData;
 import com.james.status.data.icon.AlarmIconData;
 import com.james.status.data.icon.BatteryIconData;
@@ -27,8 +39,11 @@ import com.james.status.data.icon.NetworkIconData;
 import com.james.status.data.icon.RingerIconData;
 import com.james.status.data.icon.TimeIconData;
 import com.james.status.data.icon.WifiIconData;
+import com.james.status.utils.ColorUtils;
+import com.james.status.utils.ImageUtils;
 import com.james.status.utils.PreferenceUtils;
 import com.james.status.utils.StaticUtils;
+import com.james.status.views.CustomImageView;
 import com.james.status.views.StatusView;
 
 import java.util.ArrayList;
@@ -43,18 +58,25 @@ public class StatusService extends Service {
             ACTION_NOTIFICATION_ADDED = "com.james.status.ACTION_NOTIFICATION_ADDED",
             ACTION_NOTIFICATION_REMOVED = "com.james.status.ACTION_NOTIFICATION_REMOVED",
             EXTRA_NOTIFICATION = "com.james.status.EXTRA_NOTIFICATION",
-            EXTRA_NOTIFICATION_KEY = "com.james.status.EXTRA_NOTIFICATION_KEY",
             EXTRA_COLOR = "com.james.status.EXTRA_COLOR",
             EXTRA_IS_SYSTEM_FULLSCREEN = "com.james.status.EXTRA_IS_SYSTEM_FULLSCREEN",
             EXTRA_IS_FULLSCREEN = "com.james.status.EXTRA_IS_FULLSCREEN",
-            EXTRA_IS_HOME_SCREEN = "com.james.status.EXTRA_IS_HOME_SCREEN",
-            EXTRA_PACKAGE_NAME = "com.james.status.EXTRA_PACKAGE_NAME";
+            EXTRA_IS_HOME_SCREEN = "com.james.status.EXTRA_IS_HOME_SCREEN";
+
+    private static final int HEADS_UP_DURATION = 11000;
 
     private StatusView statusView;
     private View fullscreenView;
+    private View headsUpView;
 
     private KeyguardManager keyguardManager;
     private WindowManager windowManager;
+
+    private Handler headsUpHandler;
+    private Runnable headsUpRunnable, headsUpDisabledRunnable;
+    private NotificationData headsUpNotification;
+
+    private boolean shouldFireClickEvent = true;
 
     @Override
     public void onCreate() {
@@ -62,6 +84,25 @@ public class StatusService extends Service {
 
         windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
+
+        headsUpHandler = new Handler();
+        headsUpRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if (headsUpView != null && headsUpView.getParent() != null) removeHeadsUpView();
+            }
+        };
+
+        headsUpDisabledRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if (statusView != null) {
+                    statusView.setSystemShowing(false);
+                    statusView.setFullscreen(isFullscreen());
+                    headsUpNotification = null;
+                }
+            }
+        };
 
         Boolean enabled = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED);
         if (enabled == null || !enabled) stopSelf();
@@ -105,10 +146,32 @@ public class StatusService extends Service {
                 }
                 break;
             case ACTION_NOTIFICATION_ADDED:
-                statusView.addNotification(intent.getStringExtra(EXTRA_NOTIFICATION_KEY), (Notification) intent.getParcelableExtra(EXTRA_NOTIFICATION), intent.getStringExtra(EXTRA_PACKAGE_NAME));
+                NotificationData notification = intent.getParcelableExtra(EXTRA_NOTIFICATION);
+
+                if (!statusView.containsNotification(notification) && notification.shouldShowHeadsUp(this) && headsUpNotification == null) {
+                    showHeadsUp(notification);
+                    headsUpNotification = notification;
+                } else if (notification.shouldHideStatusBar()) {
+                    statusView.setSystemShowing(true);
+                    headsUpNotification = notification;
+
+                    headsUpHandler.postDelayed(headsUpDisabledRunnable, HEADS_UP_DURATION);
+                }
+
+                statusView.addNotification(notification);
                 break;
             case ACTION_NOTIFICATION_REMOVED:
-                statusView.removeNotification(intent.getStringExtra(EXTRA_NOTIFICATION_KEY));
+                notification = intent.getParcelableExtra(EXTRA_NOTIFICATION);
+                statusView.removeNotification(notification);
+                if (headsUpNotification != null && headsUpNotification.equals(notification)) {
+                    if (headsUpView != null && headsUpView.getParent() != null) removeHeadsUpView();
+                    else {
+                        statusView.setSystemShowing(false);
+                        statusView.setFullscreen(isFullscreen());
+                        headsUpHandler.removeCallbacks(headsUpDisabledRunnable);
+                        headsUpNotification = null;
+                    }
+                }
                 break;
         }
         return START_STICKY;
@@ -218,5 +281,165 @@ public class StatusService extends Service {
         }
 
         super.onDestroy();
+    }
+
+    public void showHeadsUp(NotificationData notification) {
+        headsUpView = LayoutInflater.from(this).inflate(R.layout.layout_notification, null);
+
+        ViewCompat.setElevation(headsUpView, StaticUtils.getPixelsFromDp(this, 2));
+
+        headsUpView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                headsUpView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                ValueAnimator animator = ValueAnimator.ofInt(-headsUpView.getHeight(), 0);
+                animator.setDuration(150);
+                animator.setInterpolator(new DecelerateInterpolator());
+                animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                        headsUpView.setY((int) valueAnimator.getAnimatedValue());
+                    }
+                });
+                animator.start();
+            }
+        });
+
+        headsUpView.setFilterTouchesWhenObscured(false);
+        headsUpView.setOnTouchListener(new View.OnTouchListener() {
+            float offsetX = 0;
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getActionMasked()) {
+                    case MotionEvent.ACTION_DOWN:
+                    case MotionEvent.ACTION_OUTSIDE:
+                        if (headsUpView != null && headsUpView.getParent() != null && event.getX() < v.getWidth() && event.getY() < v.getHeight())
+                            offsetX = event.getX();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_CANCEL:
+                        if (Math.abs(event.getX() - offsetX) > StaticUtils.getPixelsFromDp(StatusService.this, 206) && headsUpView != null && headsUpView.getParent() != null)
+                            removeHeadsUpView();
+                        else if (headsUpView != null)
+                            headsUpView.animate().x(0).setDuration(150).start();
+                        offsetX = 0;
+                        break;
+                    default:
+                        headsUpView.setX(event.getX() - offsetX);
+                        shouldFireClickEvent = Math.abs(event.getX() - offsetX) < StaticUtils.getPixelsFromDp(StatusService.this, 8);
+                }
+
+                return false;
+            }
+        });
+
+        headsUpHandler.postDelayed(headsUpRunnable, HEADS_UP_DURATION);
+
+        int color = Color.BLACK;
+        if (statusView != null) color = statusView.getColor();
+        if (!ColorUtils.isColorDark(color)) color = ColorUtils.darkColor(color);
+
+        CustomImageView icon = (CustomImageView) headsUpView.findViewById(R.id.icon);
+        Drawable drawable = notification.getIcon(this);
+        if (drawable != null) {
+            drawable = ImageUtils.tintDrawable(drawable, color);
+            icon.setImageDrawable(drawable);
+        }
+
+        TextView name = (TextView) headsUpView.findViewById(R.id.name);
+        name.setText(notification.getName(this));
+        name.setTextColor(color);
+
+        ((TextView) headsUpView.findViewById(R.id.title)).setText(notification.title);
+        ((TextView) headsUpView.findViewById(R.id.subtitle)).setText(notification.subtitle);
+
+        if (notification.intent != null) {
+            headsUpView.setTag(notification.intent);
+            headsUpView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Object tag = v.getTag();
+                    if (tag != null && tag instanceof PendingIntent && shouldFireClickEvent) {
+                        try {
+                            ((PendingIntent) tag).send();
+                        } catch (PendingIntent.CanceledException ignored) {
+                        }
+                    }
+
+                    if (headsUpView != null && headsUpView.getParent() != null) removeHeadsUpView();
+                }
+            });
+        }
+
+        LinearLayout actionsLayout = (LinearLayout) headsUpView.findViewById(R.id.actions);
+        ActionData[] actions = notification.getActions();
+
+        if (actions.length > 0) {
+            actionsLayout.setVisibility(View.VISIBLE);
+
+            for (ActionData action : actions) {
+                View button = LayoutInflater.from(this).inflate(R.layout.item_action, null);
+
+                Drawable actionIcon = action.getIcon(this);
+                if (actionIcon != null)
+                    ((CustomImageView) button.findViewById(R.id.icon)).setImageDrawable(actionIcon);
+                else button.findViewById(R.id.icon).setVisibility(View.GONE);
+
+                ((TextView) button.findViewById(R.id.title)).setText(action.getTitle());
+
+                PendingIntent intent = action.getActionIntent();
+                if (intent != null) {
+                    button.setTag(intent);
+                    button.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Object tag = v.getTag();
+                            if (tag != null && tag instanceof PendingIntent) {
+                                try {
+                                    ((PendingIntent) tag).send();
+                                } catch (PendingIntent.CanceledException ignored) {
+                                }
+                            }
+
+                            if (headsUpView != null && headsUpView.getParent() != null)
+                                removeHeadsUpView();
+                        }
+                    });
+                }
+
+                actionsLayout.addView(button);
+            }
+        }
+
+        WindowManager.LayoutParams params = new WindowManager.LayoutParams(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.TYPE_SYSTEM_ERROR, WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH, PixelFormat.TRANSLUCENT);
+        params.gravity = Gravity.TOP;
+
+        windowManager.addView(headsUpView, params);
+    }
+
+    private void removeHeadsUpView() {
+        headsUpHandler.removeCallbacks(headsUpRunnable);
+
+        ValueAnimator animator = ValueAnimator.ofInt((int) headsUpView.getY(), -headsUpView.getHeight());
+        animator.setDuration(150);
+        animator.setInterpolator(new DecelerateInterpolator());
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                if (headsUpView != null) {
+                    headsUpView.setY((int) valueAnimator.getAnimatedValue());
+                    headsUpView.setAlpha(1 - valueAnimator.getAnimatedFraction());
+
+                    if (valueAnimator.getAnimatedFraction() == 1 && headsUpView.getParent() != null) {
+                        windowManager.removeView(headsUpView);
+                        headsUpView = null;
+                        headsUpNotification = null;
+                    }
+                }
+            }
+        });
+        animator.start();
     }
 }

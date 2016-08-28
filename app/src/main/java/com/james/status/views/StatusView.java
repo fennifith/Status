@@ -3,12 +3,8 @@ package com.james.status.views;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
-import android.app.Notification;
 import android.app.WallpaperManager;
 import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -17,7 +13,6 @@ import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.support.graphics.drawable.VectorDrawableCompat;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.graphics.Palette;
 import android.util.AttributeSet;
@@ -30,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.james.status.R;
+import com.james.status.data.NotificationData;
 import com.james.status.data.icon.IconData;
 import com.james.status.utils.ColorUtils;
 import com.james.status.utils.ImageUtils;
@@ -47,7 +43,7 @@ public class StatusView extends FrameLayout {
     @ColorInt
     private Integer color;
     private boolean isSystemShowing, isDarkMode, isFullscreen;
-    private ArrayMap<String, Notification> notifications;
+    private ArrayMap<String, NotificationData> notifications;
 
     private List<IconData> icons;
 
@@ -118,10 +114,7 @@ public class StatusView extends FrameLayout {
                         item.setVisibility(View.VISIBLE);
                         iconView.setVisibility(View.VISIBLE);
 
-                        iconView.setImageDrawable(drawable);
-
-                        if (isDarkMode) ImageUtils.setTint(iconView, Color.BLACK);
-                        else ImageUtils.setTint(iconView, Color.WHITE);
+                        iconView.setImageDrawable(ImageUtils.tintDrawable(drawable, isDarkMode ? Color.BLACK : Color.WHITE));
                     } else {
                         iconView.setVisibility(View.GONE);
                         if (!iconData.hasText()) item.setVisibility(View.GONE);
@@ -176,7 +169,7 @@ public class StatusView extends FrameLayout {
         }
     }
 
-    public void addNotification(String key, Notification notification, @Nullable String packageName) {
+    public void addNotification(NotificationData notification) {
         if (notifications == null) notifications = new ArrayMap<>();
 
         if (notificationIconLayout != null) {
@@ -184,42 +177,50 @@ public class StatusView extends FrameLayout {
                 View child = notificationIconLayout.getChildAt(i);
                 Object tag = child.getTag();
 
-                if (tag != null && tag instanceof String && ((String) tag).matches(key)) {
+                if (tag != null && tag instanceof String && ((String) tag).matches(notification.getKey())) {
                     notificationIconLayout.removeView(child);
-                    notifications.remove(key);
+                    notifications.remove(notification.getKey());
                 }
             }
 
             View v = getIconView();
-            v.setTag(key);
+            v.setTag(notification.getKey());
 
-            Drawable drawable = getNotificationIcon(notification, packageName);
+            Drawable drawable = notification.getIcon(getContext());
 
             if (drawable != null) {
                 CustomImageView icon = (CustomImageView) v.findViewById(R.id.icon);
+                if (isDarkMode) drawable = ImageUtils.tintDrawable(drawable, Color.BLACK);
                 icon.setImageDrawable(drawable);
 
-                if (isDarkMode) ImageUtils.setTint(icon, Color.BLACK);
                 notificationIconLayout.addView(v);
 
-                notifications.put(key, notification);
+                notifications.put(notification.getKey(), notification);
             }
         }
     }
 
-    public void removeNotification(String key) {
+    public void removeNotification(NotificationData notification) {
         if (notificationIconLayout != null) {
             for (int i = 0; i < notificationIconLayout.getChildCount(); i++) {
                 View child = notificationIconLayout.getChildAt(i);
-                if (((String) child.getTag()).matches(key) && notifications.containsKey(key)) {
-                    removeView(notificationIconLayout.getChildAt(i), notificationIconLayout);
-                    notifications.remove(key);
+                if (((String) child.getTag()).matches(notification.getKey()) && notifications.containsKey(notification.getKey())) {
+                    removeIconView(notificationIconLayout.getChildAt(i), notificationIconLayout);
+                    notifications.remove(notification.getKey());
                 }
             }
         }
     }
 
-    public ArrayMap<String, Notification> getNotifications() {
+    public boolean containsNotification(NotificationData notification) {
+        if (notifications == null) notifications = new ArrayMap<>();
+        for (NotificationData data : notifications.values()) {
+            if (data.equals(notification)) return true;
+        }
+        return false;
+    }
+
+    public ArrayMap<String, NotificationData> getNotifications() {
         if (notifications == null) notifications = new ArrayMap<>();
         return notifications;
     }
@@ -331,6 +332,11 @@ public class StatusView extends FrameLayout {
         this.color = color;
     }
 
+    @ColorInt
+    public int getColor() {
+        return color;
+    }
+
     public void setHomeScreen() {
         if (status != null) {
             Bitmap background = ImageUtils.cropBitmapToBar(getContext(), ImageUtils.drawableToBitmap(WallpaperManager.getInstance(getContext()).getDrawable()));
@@ -373,7 +379,9 @@ public class StatusView extends FrameLayout {
         } else if (view instanceof TextView) {
             ((TextView) view).setTextColor(color);
         } else if (view instanceof CustomImageView) {
-            ImageUtils.setTint((CustomImageView) view, color);
+            CustomImageView imageView = (CustomImageView) view;
+            if (imageView.getDrawable() != null)
+                imageView.setImageDrawable(ImageUtils.tintDrawable(imageView.getDrawable(), color));
         }
     }
 
@@ -433,7 +441,7 @@ public class StatusView extends FrameLayout {
         return v;
     }
 
-    private void removeView(final View child, final ViewGroup parent) {
+    private void removeIconView(final View child, final ViewGroup parent) {
         ValueAnimator animator = ValueAnimator.ofInt(child.getHeight(), 0);
         animator.setDuration(150);
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -452,71 +460,9 @@ public class StatusView extends FrameLayout {
                     iconView.setLayoutParams(layoutParams);
                 }
 
-                if ((int) valueAnimator.getAnimatedValue() == 0) parent.removeView(child);
+                if (valueAnimator.getAnimatedFraction() == 1) parent.removeView(child);
             }
         });
         animator.start();
-    }
-
-    @Nullable
-    private Drawable getNotificationIcon(Notification notification, @Nullable String packageName) {
-        Drawable drawable;
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            drawable = notification.getSmallIcon().loadDrawable(getContext());
-            if (drawable != null) return drawable;
-        } else {
-            if (packageName != null) {
-                drawable = getDrawable(notification.icon, packageName);
-                if (drawable != null) return drawable;
-            }
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && notification.contentIntent != null) {
-                drawable = getDrawable(notification.icon, notification.contentIntent.getCreatorPackage());
-                if (drawable != null) return drawable;
-            }
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && notification.deleteIntent != null) {
-                drawable = getDrawable(notification.icon, notification.deleteIntent.getCreatorPackage());
-                if (drawable != null) return drawable;
-            }
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && notification.fullScreenIntent != null) {
-                drawable = getDrawable(notification.icon, notification.fullScreenIntent.getCreatorPackage());
-                if (drawable != null) return drawable;
-            }
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && notification.actions != null && notification.actions.length > 0) {
-                drawable = getDrawable(notification.icon, notification.actions[0].actionIntent.getCreatorPackage());
-                if (drawable != null) return drawable;
-            }
-        }
-
-        return null;
-    }
-
-    @Nullable
-    private Drawable getDrawable(int resource, String packageName) {
-        if (packageName == null) return null;
-
-        Resources resources = null;
-        PackageInfo packageInfo = null;
-
-        try {
-            resources = getContext().getPackageManager().getResourcesForApplication(packageName);
-            packageInfo = getContext().getPackageManager().getPackageInfo(packageName, PackageManager.GET_META_DATA);
-        } catch (PackageManager.NameNotFoundException ignored) {
-        }
-
-        if (resources == null || packageInfo == null) return null;
-
-        Resources.Theme theme = resources.newTheme();
-        theme.applyStyle(packageInfo.applicationInfo.theme, false);
-
-        try {
-            return ResourcesCompat.getDrawable(resources, resource, theme);
-        } catch (Resources.NotFoundException e) {
-            return null;
-        }
     }
 }

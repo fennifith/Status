@@ -43,6 +43,8 @@
     <string name="preference_date">Show Current Date</string>
     <string name="preference_date_desc">Shows the date next to the time in the clock.</string>
     <string name="preference_show_notifications">Show Notifications</string>
+    <string name="preference_heads_up">Show Heads-Up Overlays</string>
+    <string name="preference_heads_up_desc">The app will show a small dialog at the top of the screen whenever an important notification is received. If you are on Android M or higher, you may want to disable the system heads up notifications to prevent annoying things from happening. Unfortunately it is not possible to disable them on Android L.</string>
     <string name="preference_battery_percent">Display Battery Percent</string>
     <string name="preference_battery_percent_desc">Shows the battery percentage next to the icon in the status bar.</string>
     <string name="preference_bar_color_auto">Automatic Status Bar Coloring</string>

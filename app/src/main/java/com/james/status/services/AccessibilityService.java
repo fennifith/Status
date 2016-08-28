@@ -10,19 +10,22 @@ import android.os.Handler;
 import android.os.Parcelable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
-import android.support.v4.util.ArrayMap;
 import android.view.accessibility.AccessibilityEvent;
 
+import com.james.status.data.NotificationData;
 import com.james.status.utils.ColorUtils;
 import com.james.status.utils.PreferenceUtils;
 import com.james.status.utils.StaticUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AccessibilityService extends android.accessibilityservice.AccessibilityService {
 
     public static final String ACTION_GET_COLOR = "com.james.status.ACTION_GET_COLOR";
 
     private PackageManager packageManager;
-    private ArrayMap<String, Notification> notifications;
+    private List<NotificationData> notifications;
 
     private int color = Color.BLACK;
 
@@ -48,7 +51,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
 
         packageManager = getPackageManager();
 
-        notifications = new ArrayMap<>();
+        notifications = new ArrayList<>();
         AccessibilityServiceInfo config = new AccessibilityServiceInfo();
         config.eventTypes = AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED | AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED;
         config.feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC;
@@ -68,21 +71,15 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                     if (StaticUtils.shouldUseCompatNotifications(this)) {
                         Parcelable parcelable = event.getParcelableData();
                         if (parcelable instanceof Notification) {
-                            String key = event.getPackageName().toString() + event.getClassName().toString();
-
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
-                                ((Notification) parcelable).extras = null;
+                            NotificationData notification = new NotificationData((Notification) parcelable, event.getPackageName().toString());
 
                             Intent intent = new Intent(StatusService.ACTION_NOTIFICATION_ADDED);
                             intent.setClass(this, StatusService.class);
-
-                            intent.putExtra(StatusService.EXTRA_NOTIFICATION_KEY, key);
-                            intent.putExtra(StatusService.EXTRA_NOTIFICATION, parcelable);
-                            intent.putExtra(StatusService.EXTRA_PACKAGE_NAME, event.getPackageName());
+                            intent.putExtra(StatusService.EXTRA_NOTIFICATION, notification);
 
                             startService(intent);
 
-                            notifications.put(key, (Notification) parcelable);
+                            notifications.add(notification);
                         }
                     }
                     return;
@@ -93,12 +90,10 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                             setStatusBar(null, null, null, true);
 
                             if (StaticUtils.shouldUseCompatNotifications(this)) {
-                                for (String key : notifications.keySet()) {
+                                for (NotificationData notification : notifications) {
                                     Intent intent = new Intent(StatusService.ACTION_NOTIFICATION_REMOVED);
                                     intent.setClass(this, StatusService.class);
-
-                                    intent.putExtra(StatusService.EXTRA_NOTIFICATION_KEY, key);
-                                    intent.putExtra(StatusService.EXTRA_NOTIFICATION, notifications.get(key));
+                                    intent.putExtra(StatusService.EXTRA_NOTIFICATION, notification);
 
                                     startService(intent);
                                 }

@@ -2,6 +2,7 @@ package com.james.status.activities;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -180,6 +181,17 @@ public class MainActivity extends AppCompatActivity {
                                 updateService();
                             }
                         }
+                ),
+                new BooleanPreferenceData(
+                        this,
+                        new PreferenceData.Identifier(
+                                PreferenceUtils.PreferenceIdentifier.STATUS_NOTIFICATIONS_HEADS_UP,
+                                getString(R.string.preference_heads_up),
+                                getString(R.string.preference_heads_up_desc),
+                                PreferenceData.Identifier.SectionIdentifier.NOTIFICATIONS
+                        ),
+                        Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP,
+                        null
                 ),
                 new BooleanPreferenceData(
                         this,

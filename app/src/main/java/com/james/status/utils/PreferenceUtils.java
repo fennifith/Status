@@ -12,6 +12,7 @@ public class PreferenceUtils {
     public enum PreferenceIdentifier {
         STATUS_ENABLED,
         STATUS_NOTIFICATIONS_COMPAT,
+        STATUS_NOTIFICATIONS_HEADS_UP,
         STATUS_CLOCK_24H,
         STATUS_CLOCK_AMPM,
         STATUS_CLOCK_DATE,
