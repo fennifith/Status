@@ -2,36 +2,43 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/color">
+    android:background="@android:color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:background="?attr/selectableItemBackground">
 
         <com.james.status.views.SquareImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scaleType="center"
-            android:id="@+id/icon" />
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:scaleType="fitCenter"
+            android:id="@+id/icon"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_gravity="center_vertical" />
 
-        <android.support.v7.widget.SwitchCompat
+        <TextView
             android:id="@+id/app"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textColor="@color/textColorSecondary"
-            android:textStyle="bold"
+            android:textColor="@color/textColorPrimary"
             android:textSize="16sp"
-            android:singleLine="true"
-            android:lines="1"
-            android:maxLines="1"
-            android:ellipsize="end"
             android:paddingBottom="16dp"
             android:paddingLeft="12dp"
             android:paddingRight="12dp"
             android:paddingTop="16dp"
-            android:background="#1FFFFFFF" />
+            android:layout_weight="1" />
+
+        <com.james.status.views.CircleImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:src="@android:color/black"
+            android:id="@+id/color" />
 
     </LinearLayout>
 

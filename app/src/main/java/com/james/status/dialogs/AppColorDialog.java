@@ -21,7 +21,7 @@ public class AppColorDialog extends BottomSheetDialog {
         setContentView(R.layout.dialog_app_colors);
 
         RecyclerView recycler = (RecyclerView) findViewById(R.id.recycler);
-        recycler.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        recycler.setLayoutManager(new GridLayoutManager(getContext(), 1));
         recycler.setHasFixedSize(true);
         recycler.setAdapter(new AppColorAdapter(getContext()));
     }

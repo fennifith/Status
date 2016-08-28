@@ -14,13 +14,11 @@ import android.os.Handler;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.james.status.R;
@@ -123,13 +121,8 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
             }
         }.start();
 
-        SwitchCompat appSwitch = (SwitchCompat) holder.v.findViewById(R.id.app);
-        appSwitch.setText(app.name);
-        appSwitch.setTextColor(ContextCompat.getColor(context, R.color.textColorSecondaryInverse));
-        appSwitch.setOnCheckedChangeListener(null); //totally not a spaghetti way of preventing an exception from being thrown...
-        appSwitch.setChecked(app.color != null);
-
-        holder.v.findViewById(R.id.color).setBackgroundColor(ColorUtils.muteColor(Color.DKGRAY, position));
+        TextView appName = (TextView) holder.v.findViewById(R.id.app);
+        appName.setText(app.name);
 
         new Thread() {
             @Override
@@ -145,7 +138,7 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
                         AppColorData app = getApp(holder.getAdapterPosition());
                         if (app == null) return;
 
-                        int color = ColorUtils.muteColor(app.color != null ? app.color : getDefaultColor(app), holder.getAdapterPosition());
+                        int color = app.color != null ? app.color : getDefaultColor(app);
 
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                             ValueAnimator animator = ValueAnimator.ofArgb(ColorUtils.muteColor(Color.DKGRAY, holder.getAdapterPosition()), color);
@@ -153,23 +146,12 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
                             animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                                 @Override
                                 public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                                    holder.v.findViewById(R.id.color).setBackgroundColor((int) valueAnimator.getAnimatedValue());
+                                    ((CustomImageView) holder.v.findViewById(R.id.color)).setImageDrawable(new ColorDrawable((int) valueAnimator.getAnimatedValue()));
                                 }
                             });
                             animator.start();
-
-                            ValueAnimator textAnimator = ValueAnimator.ofArgb(((SwitchCompat) holder.v.findViewById(R.id.app)).getCurrentTextColor(), ContextCompat.getColor(context, ColorUtils.isColorDark(color) ? R.color.textColorSecondaryInverse : R.color.textColorSecondary));
-                            textAnimator.setDuration(150);
-                            textAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                                @Override
-                                public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                                    ((SwitchCompat) holder.v.findViewById(R.id.app)).setTextColor((int) valueAnimator.getAnimatedValue());
-                                }
-                            });
-                            textAnimator.start();
                         } else {
-                            holder.v.findViewById(R.id.color).setBackgroundColor(color);
-                            ((SwitchCompat) holder.v.findViewById(R.id.app)).setTextColor(ContextCompat.getColor(context, ColorUtils.isColorDark(color) ? R.color.textColorSecondaryInverse : R.color.textColorSecondary));
+                            ((CustomImageView) holder.v.findViewById(R.id.color)).transition(new ColorDrawable(color));
                         }
                     }
                 });
@@ -200,39 +182,6 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
                 dialog.setTitle(app.name);
 
                 dialog.show();
-            }
-        });
-
-        appSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                AppColorData app = getApp(holder.getAdapterPosition());
-                if (app == null) return;
-
-                if (b) {
-                    Dialog dialog = new ColorPickerDialog(context).setPreference(app.color != null ? app.color : getDefaultColor(app)).setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
-                        @Override
-                        public void onPreference(Integer color) {
-                            AppColorData app = getApp(holder.getAdapterPosition());
-                            if (app != null) {
-                                app.color = color;
-                                overwrite(app);
-                            }
-                        }
-
-                        @Override
-                        public void onCancel() {
-                            ((SwitchCompat) holder.v.findViewById(R.id.app)).setChecked(false);
-                        }
-                    });
-
-                    dialog.setTitle(app.name);
-
-                    dialog.show();
-                } else {
-                    app.color = null;
-                    overwrite(app);
-                }
             }
         });
     }
