@@ -24,7 +24,8 @@
                 android:gravity="center_vertical"
                 android:paddingLeft="4dp"
                 android:paddingRight="4dp"
-                android:layout_marginTop="12dp">
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="4dp">
 
                 <com.james.status.views.SquareImageView
                     android:layout_width="20dp"
@@ -80,7 +81,7 @@
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:id="@+id/largeIcon"
-            android:layout_margin="12dp" />
+            android:layout_margin="8dp" />
 
     </LinearLayout>
 

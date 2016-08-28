@@ -7,7 +7,10 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.graphics.Palette;
 
@@ -147,5 +150,25 @@ public class ColorUtils {
         }
 
         return null;
+    }
+
+    @ColorInt
+    public static int getAverageColor(@NonNull Bitmap bitmap) {
+        int red = 0, green = 0, blue = 0;
+        int width = bitmap.getWidth(), height = bitmap.getHeight(), size = width * height;
+
+        int[] pixels = new int[size];
+        bitmap.getPixels(pixels, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                int color = pixels[x + y * width];
+                red += (color >> 16) & 0xFF;
+                green += (color >> 8) & 0xFF;
+                blue += (color & 0xFF);
+            }
+        }
+
+        return Color.argb(255, red / size, green / size, blue / size);
     }
 }

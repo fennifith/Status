@@ -340,22 +340,14 @@ public class StatusView extends FrameLayout {
             Bitmap background = ImageUtils.cropBitmapToBar(getContext(), ImageUtils.drawableToBitmap(WallpaperManager.getInstance(getContext()).getDrawable()));
 
             if (background != null) {
-                Palette.from(background).generate(new Palette.PaletteAsyncListener() {
-                    @Override
-                    public void onGenerated(Palette palette) {
-                        int color = palette.getVibrantColor(palette.getDarkVibrantColor(Color.BLACK));
-
-                        Boolean transparent = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_HOME_TRANSPARENT);
-                        if (transparent == null || transparent) {
-                            setDarkMode(ColorUtils.isColorDark(color));
-                            StatusView.this.color = color;
-                        } else setColor(color);
-                    }
-                });
+                int color = ColorUtils.getAverageColor(background);
 
                 Boolean transparent = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_HOME_TRANSPARENT);
-                if (transparent == null || transparent)
+                if (transparent == null || transparent) {
                     status.setBackground(new BitmapDrawable(getResources(), background));
+                    setDarkMode(ColorUtils.isColorDark(color));
+                    StatusView.this.color = color;
+                } else setColor(color);
             } else setColor(Color.BLACK);
         }
     }
