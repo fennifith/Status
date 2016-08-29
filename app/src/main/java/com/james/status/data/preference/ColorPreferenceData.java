@@ -2,6 +2,7 @@ package com.james.status.data.preference;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.ColorInt;
 import android.view.LayoutInflater;
@@ -41,7 +42,7 @@ public class ColorPreferenceData extends PreferenceData {
         holder.v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Dialog dialog = new ColorPickerDialog(getContext()).setPreference(value).setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
+                Dialog dialog = new ColorPickerDialog(getContext()).setPreference(value).setDefaultPreference(Color.BLACK).setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
                     @Override
                     public void onPreference(Integer color) {
                         value = color;

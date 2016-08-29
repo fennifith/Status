@@ -2,6 +2,7 @@ package com.james.status.services;
 
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.app.Notification;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -28,6 +29,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
     private List<NotificationData> notifications;
 
     private int color = Color.BLACK;
+    private String packageName;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -85,12 +87,14 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                     return;
                 case AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED:
                     final CharSequence packageName = event.getPackageName();
-                    if (packageName != null && packageName.length() > 0) {
-                        if (packageName.toString().equals("com.android.systemui") && event.getClassName().toString().equals("android.widget.FrameLayout")) {
+                    final CharSequence className = event.getClassName();
+                    if (packageName != null && packageName.length() > 0 && className != null && className.length() > 0) {
+                        if (packageName.toString().equals("com.android.systemui") && className.toString().equals("android.widget.FrameLayout")) {
                             setStatusBar(null, null, null, true);
 
                             if (StaticUtils.shouldUseCompatNotifications(this)) {
                                 for (NotificationData notification : notifications) {
+
                                     Intent intent = new Intent(StatusService.ACTION_NOTIFICATION_REMOVED);
                                     intent.setClass(this, StatusService.class);
                                     intent.putExtra(StatusService.EXTRA_NOTIFICATION, notification);
@@ -100,6 +104,8 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
 
                                 notifications.clear();
                             }
+                        } else if (packageName.toString().equals("com.android.systemui")) {
+                            setStatusBar(getDefaultColor(), null, false, false);
                         } else {
                             Intent homeIntent = new Intent(Intent.ACTION_MAIN);
                             homeIntent.addCategory(Intent.CATEGORY_HOME);
@@ -113,12 +119,19 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                             new Thread() {
                                 @Override
                                 public void run() {
-                                    final int color = ColorUtils.getStatusBarColor(AccessibilityService.this, packageManager, packageName.toString());
+                                    final Integer color = ColorUtils.getStatusBarColor(AccessibilityService.this, new ComponentName(packageName.toString(), className.toString()), null);
 
                                     new Handler(getMainLooper()).post(new Runnable() {
                                         @Override
                                         public void run() {
-                                            setStatusBar(color, null, StaticUtils.isStatusBarFullscreen(AccessibilityService.this, packageName.toString()), false);
+                                            Integer statusBarColor;
+
+                                            if (color == null && (AccessibilityService.this.packageName == null || !packageName.toString().matches(AccessibilityService.this.packageName))) {
+                                                statusBarColor = getDefaultColor();
+                                                AccessibilityService.this.packageName = packageName.toString();
+                                            } else statusBarColor = color;
+
+                                            setStatusBar(statusBarColor, null, StaticUtils.isStatusBarFullscreen(AccessibilityService.this, packageName.toString()), false);
                                         }
                                     });
                                 }
@@ -128,6 +141,13 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                     return;
             }
         }
+    }
+
+    @ColorInt
+    private int getDefaultColor() {
+        Integer color = PreferenceUtils.getIntegerPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR);
+        if (color == null) color = Color.BLACK;
+        return color;
     }
 
     private void setStatusBar(@Nullable @ColorInt Integer color, @Nullable Boolean isHomeScreen, @Nullable Boolean isFullscreen, @Nullable Boolean isSystemFullscreen) {

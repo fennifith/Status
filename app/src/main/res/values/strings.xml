@@ -19,6 +19,7 @@
     <string name="action_libraries">View Libraries</string>
     <string name="action_enable">Enable</string>
     <string name="action_disable">Disable</string>
+    <string name="action_reset">Reset</string>
 
     <string name="service_name">Status Service</string>
     <string name="service_name_general">Accessibility Service</string>

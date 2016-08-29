@@ -3,12 +3,14 @@ package com.james.status.data;
 import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
@@ -149,11 +151,11 @@ public class NotificationData implements Parcelable {
         new Thread() {
             @Override
             public void run() {
-                final int color = ColorUtils.getStatusBarColor(context, context.getPackageManager(), packageName);
+                final Integer color = ColorUtils.getStatusBarColor(context, new ComponentName(packageName, packageName), Color.BLACK);
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
-                        onColorListener.onColor(getKey(), color);
+                        onColorListener.onColor(getKey(), color != null ? color : Color.BLACK);
                     }
                 });
             }

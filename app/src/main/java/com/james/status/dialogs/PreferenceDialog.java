@@ -8,7 +8,7 @@ import com.james.status.R;
 
 public class PreferenceDialog<T> extends AppCompatDialog {
 
-    private T preference;
+    private T preference, defaultPreference;
     private OnPreferenceListener<T> listener;
 
     public PreferenceDialog(Context context) {
@@ -38,7 +38,16 @@ public class PreferenceDialog<T> extends AppCompatDialog {
     }
 
     public T getPreference() {
-        return preference;
+        return preference != null ? preference : getDefaultPreference();
+    }
+
+    public PreferenceDialog setDefaultPreference(T preference) {
+        defaultPreference = preference;
+        return this;
+    }
+
+    public T getDefaultPreference() {
+        return defaultPreference;
     }
 
     public PreferenceDialog setListener(OnPreferenceListener<T> listener) {

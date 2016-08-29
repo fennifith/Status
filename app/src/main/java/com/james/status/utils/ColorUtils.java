@@ -11,11 +11,11 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.res.ResourcesCompat;
-import android.support.v7.graphics.Palette;
 
 import com.google.gson.Gson;
-import com.james.status.data.AppColorData;
+import com.james.status.data.ActivityColorData;
 
 import java.util.Set;
 
@@ -51,25 +51,15 @@ public class ColorUtils {
         }
     }
 
-    public static int getStatusBarColor(Context context, PackageManager packageManager, String packageName) {
-        Set<String> apps = PreferenceUtils.getStringSetPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_APPS);
-        if (apps != null) {
-            Gson gson = new Gson();
-            for (String app : apps) {
-                AppColorData data = gson.fromJson(app, AppColorData.class);
-                if (packageName.matches(data.packageName) && data.color != null) {
-                    return data.color;
-                }
-            }
-        }
-
-        ComponentName componentName = new ComponentName(packageName, packageName);
+    @Nullable
+    public static Integer getPrimaryColor(Context context, ComponentName componentName) {
+        PackageManager packageManager = context.getPackageManager();
 
         ActivityInfo activityInfo = null;
         PackageInfo packageInfo = null;
         Resources resources = null, activityResources = null;
         try {
-            packageInfo = packageManager.getPackageInfo(packageName, PackageManager.GET_META_DATA);
+            packageInfo = packageManager.getPackageInfo(componentName.getPackageName(), PackageManager.GET_META_DATA);
             resources = packageManager.getResourcesForApplication(packageInfo.applicationInfo);
             activityInfo = packageManager.getActivityInfo(componentName, 0);
             activityResources = packageManager.getResourcesForActivity(componentName);
@@ -77,19 +67,13 @@ public class ColorUtils {
         }
 
         if (packageInfo != null && resources != null) {
-            Resources.Theme theme = resources.newTheme();
-            theme.applyStyle(packageInfo.applicationInfo.theme, false);
-
-            Integer statusBarColor = getStatusBarColor(packageInfo.packageName, resources, theme);
+            Integer statusBarColor = getStatusBarColor(packageInfo.packageName, resources, packageInfo.applicationInfo.theme);
             if (statusBarColor != null) {
                 return statusBarColor;
             }
 
             if (activityInfo != null && activityResources != null) {
-                Resources.Theme activityTheme = resources.newTheme();
-                activityTheme.applyStyle(activityInfo.theme, false);
-
-                Integer activityStatusBarColor = getStatusBarColor(activityInfo.packageName, resources, activityTheme);
+                Integer activityStatusBarColor = getStatusBarColor(activityInfo.packageName, resources, activityInfo.theme);
                 if (activityStatusBarColor != null) {
                     return activityStatusBarColor;
                 }
@@ -97,30 +81,41 @@ public class ColorUtils {
 
             if (packageInfo.activities != null) {
                 for (ActivityInfo otherActivityInfo : packageInfo.activities) {
-                    Resources.Theme otherTheme = resources.newTheme();
-                    otherTheme.applyStyle(otherActivityInfo.theme, false);
-
-                    Integer otherStatusBarColor = getStatusBarColor(packageInfo.packageName, resources, otherTheme);
+                    Integer otherStatusBarColor = getStatusBarColor(packageInfo.packageName, resources, otherActivityInfo.theme);
                     if (otherStatusBarColor != null) {
                         return otherStatusBarColor;
                     }
                 }
             }
-
-            Palette palette = Palette.from(ImageUtils.drawableToBitmap(packageManager.getApplicationIcon(packageInfo.applicationInfo))).generate();
-            return palette.getDarkVibrantColor(darkColor(palette.getVibrantColor(Color.BLACK)));
         }
 
-        return Color.BLACK;
+        return null;
     }
 
-    public static Integer getStatusBarColor(String packageName, Resources resources, Resources.Theme theme) {
-        TypedArray typedArray = theme.obtainStyledAttributes(new int[]{
+    public static Integer getStatusBarColor(Context context, ComponentName componentName, @ColorInt Integer defaultColor) {
+        Set<String> apps = PreferenceUtils.getStringSetPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_APPS);
+        if (apps != null) {
+            Gson gson = new Gson();
+            for (String app : apps) {
+                ActivityColorData data = gson.fromJson(app, ActivityColorData.class);
+                if (componentName.getPackageName().matches(data.packageName) && (data.name == null || componentName.getClassName().matches(data.name)) && data.color != null) {
+                    return data.color;
+                }
+            }
+        }
+
+        Integer color = getPrimaryColor(context, componentName);
+        return color != null ? color : defaultColor;
+    }
+
+    public static Integer getStatusBarColor(String packageName, Resources resources, int style) {
+        Resources.Theme theme = resources.newTheme();
+        theme.applyStyle(style, true);
+
+        TypedArray typedArray = theme.obtainStyledAttributes(style, new int[]{
                 resources.getIdentifier("colorPrimaryDark", "attr", packageName),
-                resources.getIdentifier("colorPrimaryDark", "color", packageName),
-                android.R.attr.colorPrimaryDark,
-                android.R.attr.statusBarColor,
-                android.R.attr.navigationBarColor
+                resources.getIdentifier("statusBarColor", "attr", packageName),
+                resources.getIdentifier("colorPrimaryDark", "color", packageName)
         });
 
         for (int i = 0; i < typedArray.length(); i++) {
@@ -133,10 +128,10 @@ public class ColorUtils {
             }
         }
 
-        typedArray = theme.obtainStyledAttributes(new int[]{
+        typedArray = theme.obtainStyledAttributes(style, new int[]{
                 resources.getIdentifier("colorPrimary", "attr", packageName),
                 resources.getIdentifier("colorPrimary", "color", packageName),
-                android.R.attr.colorPrimary
+                resources.getIdentifier("navigationBarColor", "attr", packageName)
         });
 
         for (int i = 0; i < typedArray.length(); i++) {

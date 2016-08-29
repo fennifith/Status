@@ -3,9 +3,9 @@ package com.james.status.adapters;
 import android.animation.ValueAnimator;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -22,7 +22,7 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.james.status.R;
-import com.james.status.data.AppColorData;
+import com.james.status.data.ActivityColorData;
 import com.james.status.dialogs.ColorPickerDialog;
 import com.james.status.dialogs.PreferenceDialog;
 import com.james.status.utils.ColorUtils;
@@ -39,12 +39,14 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
 
     private Context context;
     private PackageManager packageManager;
-    private ArrayList<AppColorData> apps;
+    private ArrayList<ActivityColorData> apps;
     private Gson gson;
     private Set<String> jsons;
+    private String packageName;
 
-    public AppColorAdapter(final Context context) {
+    public AppColorAdapter(final Context context, final String packageName) {
         this.context = context;
+        this.packageName = packageName;
         packageManager = context.getPackageManager();
         apps = new ArrayList<>();
         gson = new Gson();
@@ -55,19 +57,26 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
         new Thread() {
             @Override
             public void run() {
-                final ArrayList<AppColorData> loadedApps = new ArrayList<>();
+                final ArrayList<ActivityColorData> loadedApps = new ArrayList<>();
 
-                for (ResolveInfo info : packageManager.queryIntentActivities(new Intent(Intent.ACTION_MAIN, null).addCategory(Intent.CATEGORY_LAUNCHER), 0)) {
-                    loadedApps.add(new AppColorData(packageManager, info));
+                PackageInfo packageInfo;
+                try {
+                    packageInfo = packageManager.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES);
+                } catch (PackageManager.NameNotFoundException e) {
+                    return;
+                }
+
+                for (ActivityInfo activity : packageInfo.activities) {
+                    loadedApps.add(new ActivityColorData(packageManager, activity));
                 }
 
                 new Handler(context.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
-                        Collections.sort(loadedApps, new Comparator<AppColorData>() {
+                        Collections.sort(loadedApps, new Comparator<ActivityColorData>() {
                             @Override
-                            public int compare(AppColorData lhs, AppColorData rhs) {
-                                return lhs.name.compareToIgnoreCase(rhs.name);
+                            public int compare(ActivityColorData lhs, ActivityColorData rhs) {
+                                return lhs.label.compareToIgnoreCase(rhs.label);
                             }
                         });
 
@@ -79,6 +88,10 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
         }.start();
     }
 
+    public String getPackageName() {
+        return packageName;
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_app_grid, null));
@@ -86,11 +99,11 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        AppColorData app = apps.get(position);
+        ActivityColorData app = apps.get(position);
 
         for (String json : jsons) {
-            AppColorData data = gson.fromJson(json, AppColorData.class);
-            if (data.packageName.matches(app.packageName) && data.color != null) {
+            ActivityColorData data = gson.fromJson(json, ActivityColorData.class);
+            if (data.packageName.matches(app.packageName) && (data.name != null && app.name != null && data.name.matches(app.name)) && data.color != null) {
                 app.color = data.color;
                 break;
             }
@@ -101,7 +114,7 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
         new Thread() {
             @Override
             public void run() {
-                AppColorData app = getApp(holder.getAdapterPosition());
+                ActivityColorData app = getApp(holder.getAdapterPosition());
                 if (app == null) return;
 
                 final Drawable icon;
@@ -122,20 +135,25 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
         }.start();
 
         TextView appName = (TextView) holder.v.findViewById(R.id.app);
-        appName.setText(app.name);
+        if (app.label != null && app.label.length() > 0) {
+            appName.setVisibility(View.VISIBLE);
+            appName.setText(app.label);
+        } else appName.setVisibility(View.GONE);
+
+        ((TextView) holder.v.findViewById(R.id.appPackage)).setText(app.getComponentName().getClassName());
 
         new Thread() {
             @Override
             public void run() {
-                AppColorData app = getApp(holder.getAdapterPosition());
+                ActivityColorData app = getApp(holder.getAdapterPosition());
                 if (app == null) return;
                 if (app.cachedColor == null)
-                    app.cachedColor = ColorUtils.getStatusBarColor(context, packageManager, app.packageName);
+                    app.cachedColor = ColorUtils.getPrimaryColor(context, app.getComponentName());
 
                 new Handler(context.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
-                        AppColorData app = getApp(holder.getAdapterPosition());
+                        ActivityColorData app = getApp(holder.getAdapterPosition());
                         if (app == null) return;
 
                         int color = app.color != null ? app.color : getDefaultColor(app);
@@ -150,9 +168,8 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
                                 }
                             });
                             animator.start();
-                        } else {
+                        } else
                             ((CustomImageView) holder.v.findViewById(R.id.color)).transition(new ColorDrawable(color));
-                        }
                     }
                 });
             }
@@ -161,13 +178,13 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
         holder.v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AppColorData app = getApp(holder.getAdapterPosition());
+                ActivityColorData app = getApp(holder.getAdapterPosition());
                 if (app == null) return;
 
-                Dialog dialog = new ColorPickerDialog(context).setPreference(app.color != null ? app.color : getDefaultColor(app)).setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
+                Dialog dialog = new ColorPickerDialog(context).setPreference(app.color).setDefaultPreference(getDefaultColor(app)).setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
                     @Override
                     public void onPreference(Integer color) {
-                        AppColorData app = getApp(holder.getAdapterPosition());
+                        ActivityColorData app = getApp(holder.getAdapterPosition());
                         if (app != null) {
                             app.color = color;
                             overwrite(app);
@@ -179,7 +196,7 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
                     }
                 });
 
-                dialog.setTitle(app.name);
+                dialog.setTitle(app.label);
 
                 dialog.show();
             }
@@ -187,7 +204,7 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
     }
 
     @Nullable
-    private AppColorData getApp(int position) {
+    private ActivityColorData getApp(int position) {
         if (position < 0 || position >= apps.size()) return null;
         else return apps.get(position);
     }
@@ -198,7 +215,7 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
     }
 
     @ColorInt
-    private int getDefaultColor(AppColorData app) {
+    private int getDefaultColor(ActivityColorData app) {
         if (app.cachedColor != null) return app.cachedColor;
         else {
             Integer color = PreferenceUtils.getIntegerPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR);
@@ -207,11 +224,11 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
         }
     }
 
-    private void overwrite(@NonNull AppColorData app) {
+    private void overwrite(@NonNull ActivityColorData app) {
         Set<String> jsons = new HashSet<>();
         for (String json : this.jsons) {
-            AppColorData data = gson.fromJson(json, AppColorData.class);
-            if (!data.packageName.matches(app.packageName)) {
+            ActivityColorData data = gson.fromJson(json, ActivityColorData.class);
+            if (!data.packageName.matches(app.packageName) || !(data.name.matches(app.name))) {
                 jsons.add(json);
             }
         }

@@ -2,11 +2,11 @@ package com.james.status.adapters;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Handler;
+import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.james.status.R;
-import com.james.status.data.AppColorData;
+import com.james.status.data.ActivityColorData;
 import com.james.status.utils.ColorUtils;
 import com.james.status.utils.PreferenceUtils;
 import com.james.status.views.CustomImageView;
@@ -31,8 +31,7 @@ import java.util.Set;
 public class AppColorPreviewAdapter extends RecyclerView.Adapter<AppColorPreviewAdapter.ViewHolder> {
 
     private Context context;
-    private PackageManager packageManager;
-    private ArrayList<AppColorData> apps;
+    private ArrayList<ActivityColorData> apps;
     private Gson gson;
     private Set<String> jsons;
 
@@ -40,7 +39,6 @@ public class AppColorPreviewAdapter extends RecyclerView.Adapter<AppColorPreview
 
     public AppColorPreviewAdapter(final Context context) {
         this.context = context;
-        packageManager = context.getPackageManager();
         gson = new Gson();
 
         reload();
@@ -58,53 +56,40 @@ public class AppColorPreviewAdapter extends RecyclerView.Adapter<AppColorPreview
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        AppColorData app = apps.get(position);
+        ActivityColorData app = apps.get(position);
 
         for (String json : jsons) {
-            AppColorData data = gson.fromJson(json, AppColorData.class);
-            if (data.packageName.matches(app.packageName) && data.color != null) {
+            ActivityColorData data = gson.fromJson(json, ActivityColorData.class);
+            if (data.packageName.matches(app.packageName) && data.name.matches(app.name) && data.color != null) {
                 app.color = data.color;
                 break;
             }
         }
 
         TextView appView = (TextView) holder.v.findViewById(R.id.app);
-        appView.setText(app.name);
+        appView.setText(app.label);
         appView.setTextColor(ContextCompat.getColor(context, R.color.textColorSecondaryInverse));
 
         ((CustomImageView) holder.v.findViewById(R.id.color)).setImageDrawable(new ColorDrawable(ColorUtils.muteColor(Color.DKGRAY, position)));
 
-        new Thread() {
-            @Override
-            public void run() {
-                AppColorData app = getApp(holder.getAdapterPosition());
-                if (app == null) return;
+        int color = app.color != null ? app.color : getDefaultColor();
 
-                final int color = ColorUtils.getStatusBarColor(context, packageManager, app.packageName);
-
-                new Handler(context.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            ValueAnimator animator = ValueAnimator.ofArgb(Color.GRAY, ColorUtils.muteColor(color, holder.getAdapterPosition()));
-                            animator.setDuration(150);
-                            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                                @Override
-                                public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                                    int color = (int) valueAnimator.getAnimatedValue();
-                                    ((CustomImageView) holder.v.findViewById(R.id.color)).setImageDrawable(new ColorDrawable(color));
-                                    ((TextView) holder.v.findViewById(R.id.app)).setTextColor(ContextCompat.getColor(context, ColorUtils.isColorDark(color) ? R.color.textColorSecondaryInverse : R.color.textColorSecondary));
-                                }
-                            });
-                            animator.start();
-                        } else {
-                            ((CustomImageView) holder.v.findViewById(R.id.color)).setImageDrawable(new ColorDrawable(color));
-                            ((TextView) holder.v.findViewById(R.id.app)).setTextColor(ContextCompat.getColor(context, ColorUtils.isColorDark(color) ? R.color.textColorSecondaryInverse : R.color.textColorSecondary));
-                        }
-                    }
-                });
-            }
-        }.start();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ValueAnimator animator = ValueAnimator.ofArgb(Color.GRAY, ColorUtils.muteColor(color, holder.getAdapterPosition()));
+            animator.setDuration(150);
+            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    int color = (int) valueAnimator.getAnimatedValue();
+                    ((CustomImageView) holder.v.findViewById(R.id.color)).setImageDrawable(new ColorDrawable(color));
+                    ((TextView) holder.v.findViewById(R.id.app)).setTextColor(ContextCompat.getColor(context, ColorUtils.isColorDark(color) ? R.color.textColorSecondaryInverse : R.color.textColorSecondary));
+                }
+            });
+            animator.start();
+        } else {
+            ((CustomImageView) holder.v.findViewById(R.id.color)).setImageDrawable(new ColorDrawable(color));
+            ((TextView) holder.v.findViewById(R.id.app)).setTextColor(ContextCompat.getColor(context, ColorUtils.isColorDark(color) ? R.color.textColorSecondaryInverse : R.color.textColorSecondary));
+        }
     }
 
     @Override
@@ -124,17 +109,17 @@ public class AppColorPreviewAdapter extends RecyclerView.Adapter<AppColorPreview
             @Override
             public void run() {
                 for (String json : jsons) {
-                    AppColorData app = gson.fromJson(json, AppColorData.class);
+                    ActivityColorData app = gson.fromJson(json, ActivityColorData.class);
                     if (app.color != null) apps.add(app);
                 }
 
                 new Handler(context.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
-                        Collections.sort(apps, new Comparator<AppColorData>() {
+                        Collections.sort(apps, new Comparator<ActivityColorData>() {
                             @Override
-                            public int compare(AppColorData lhs, AppColorData rhs) {
-                                return lhs.name.compareToIgnoreCase(rhs.name);
+                            public int compare(ActivityColorData lhs, ActivityColorData rhs) {
+                                return lhs.label.compareToIgnoreCase(rhs.label);
                             }
                         });
 
@@ -145,8 +130,15 @@ public class AppColorPreviewAdapter extends RecyclerView.Adapter<AppColorPreview
         }.start();
     }
 
+    @ColorInt
+    private int getDefaultColor() {
+        Integer color = PreferenceUtils.getIntegerPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR);
+        if (color == null) color = Color.BLACK;
+        return color;
+    }
+
     @Nullable
-    private AppColorData getApp(int position) {
+    private ActivityColorData getApp(int position) {
         if (position < 0 || position >= apps.size()) return null;
         else return apps.get(position);
     }
