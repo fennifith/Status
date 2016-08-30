@@ -1,9 +1,8 @@
 package com.james.status.adapters;
 
 import android.content.Context;
-import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -22,12 +21,13 @@ import com.james.status.views.CustomImageView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 public class AppColorSectionAdapter extends RecyclerView.Adapter<AppColorSectionAdapter.ViewHolder> {
 
     private Context context;
     private PackageManager packageManager;
-    private ArrayList<ActivityColorData> apps;
+    private List<ActivityColorData> apps;
 
     public AppColorSectionAdapter(final Context context) {
         this.context = context;
@@ -37,10 +37,10 @@ public class AppColorSectionAdapter extends RecyclerView.Adapter<AppColorSection
         new Thread() {
             @Override
             public void run() {
-                final ArrayList<ActivityColorData> loadedApps = new ArrayList<>();
+                final List<ActivityColorData> loadedApps = new ArrayList<>();
 
-                for (ResolveInfo info : packageManager.queryIntentActivities(new Intent(Intent.ACTION_MAIN, null).addCategory(Intent.CATEGORY_LAUNCHER), 0)) {
-                    loadedApps.add(new ActivityColorData(packageManager, info.activityInfo.applicationInfo));
+                for (ApplicationInfo applicationInfo : packageManager.getInstalledApplications(PackageManager.GET_META_DATA)) {
+                    loadedApps.add(new ActivityColorData(packageManager, applicationInfo));
                 }
 
                 new Handler(context.getMainLooper()).post(new Runnable() {

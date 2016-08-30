@@ -17,6 +17,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.NotificationCompat;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.james.status.R;
@@ -37,7 +38,8 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
 
     public static final String
             ACTION_GET_COLOR = "com.james.status.ACTION_GET_COLOR",
-            ACTION_NOTIFY_COLOR = "com.james.status.ACTION_NOTIFY_COLOR";
+            ACTION_NOTIFY_COLOR = "com.james.status.ACTION_NOTIFY_COLOR",
+            EXTRA_COMPONENT = "com.james.status.EXTRA_COMPONENT";
 
     private static final int NOTIFICATION_ID = 7146;
 
@@ -64,41 +66,35 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                         Integer defaultColor = PreferenceUtils.getIntegerPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR);
                         if (defaultColor == null) defaultColor = Color.BLACK;
 
-                        PreferenceDialog dialog = new ColorPickerDialog(this).setDefaultPreference(defaultColor).setTag(intent.getParcelableExtra("component")).setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
+                        ComponentName component;
+
+                        if (intent.hasExtra(EXTRA_COMPONENT))
+                            component = intent.getParcelableExtra(EXTRA_COMPONENT);
+                        else break;
+
+                        ActivityColorData data;
+                        try {
+                            data = new ActivityColorData(packageManager, packageManager.getActivityInfo(component, PackageManager.GET_META_DATA));
+                        } catch (PackageManager.NameNotFoundException e) {
+                            e.printStackTrace();
+                            Toast.makeText(AccessibilityService.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            break;
+                        }
+
+                        PreferenceDialog dialog = new ColorPickerDialog(this).setDefaultPreference(defaultColor).setTag(data).setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
                             @Override
                             public void onPreference(PreferenceDialog dialog, Integer preference) {
                                 Gson gson = new Gson();
-                                ComponentName component;
-
-                                if (dialog.getTag() != null && dialog.getTag() instanceof ComponentName)
-                                    component = (ComponentName) dialog.getTag();
-                                else return;
 
                                 Set<String> jsons = PreferenceUtils.getStringSetPreference(AccessibilityService.this, PreferenceUtils.PreferenceIdentifier.STATUS_COLORED_APPS);
                                 if (jsons == null) jsons = new HashSet<>();
 
-                                Set<String> newJsons = new HashSet<>();
-
-                                for (String json : newJsons) {
-                                    ActivityColorData data = gson.fromJson(json, ActivityColorData.class);
-                                    if (!data.packageName.matches(component.getPackageName()) || !(data.name.matches(component.getClassName()))) {
-                                        newJsons.add(json);
-                                    }
-                                }
-
-                                ActivityColorData app;
-                                try {
-                                    app = new ActivityColorData(packageManager, packageManager.getActivityInfo(component, 0));
-                                } catch (PackageManager.NameNotFoundException e) {
-                                    e.printStackTrace();
-                                    return;
-                                }
-
+                                ActivityColorData app = (ActivityColorData) dialog.getTag();
                                 app.color = preference;
 
                                 jsons.add(gson.toJson(app));
 
-                                PreferenceUtils.putPreference(AccessibilityService.this, PreferenceUtils.PreferenceIdentifier.STATUS_COLORED_APPS, newJsons);
+                                PreferenceUtils.putPreference(AccessibilityService.this, PreferenceUtils.PreferenceIdentifier.STATUS_COLORED_APPS, jsons);
                                 setStatusBar(preference, null, null, null);
                             }
 
@@ -107,6 +103,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                             }
                         });
 
+                        dialog.setTitle(data.label);
                         dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
                         dialog.show();
                         break;
@@ -204,14 +201,14 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
 
                                                 Intent intent = new Intent(ACTION_NOTIFY_COLOR);
                                                 intent.setClass(AccessibilityService.this, AccessibilityService.class);
-                                                intent.putExtra("component", new ComponentName(packageName.toString(), className.toString()));
+                                                intent.putExtra(EXTRA_COMPONENT, new ComponentName(packageName.toString(), className.toString()));
 
                                                 notificationManager.notify(NOTIFICATION_ID, new NotificationCompat.Builder(AccessibilityService.this)
                                                         .setSmallIcon(R.drawable.ic_colorize)
                                                         .setColor(ContextCompat.getColor(AccessibilityService.this, R.color.colorAccent))
                                                         .setContentTitle(getString(R.string.notification_color))
                                                         .setContentText(getString(R.string.notification_color_desc))
-                                                        .setContentIntent(PendingIntent.getService(AccessibilityService.this, 0, intent, 0))
+                                                        .setContentIntent(PendingIntent.getService(AccessibilityService.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT))
                                                         .build()
                                                 );
                                             } else {
@@ -226,7 +223,6 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                             }.start();
                         }
                     }
-                    return;
             }
         }
     }
@@ -257,5 +253,6 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
     }
 
     @Override
-    public void onInterrupt() {}
+    public void onInterrupt() {
+    }
 }

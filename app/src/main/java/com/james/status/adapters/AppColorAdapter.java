@@ -33,13 +33,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHolder> {
 
     private Context context;
     private PackageManager packageManager;
-    private ArrayList<ActivityColorData> apps;
+    private List<ActivityColorData> apps;
     private Gson gson;
     private Set<String> jsons;
     private String packageName;
@@ -57,7 +58,7 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
         new Thread() {
             @Override
             public void run() {
-                final ArrayList<ActivityColorData> loadedApps = new ArrayList<>();
+                final List<ActivityColorData> loadedApps = new ArrayList<>();
 
                 PackageInfo packageInfo;
                 try {
