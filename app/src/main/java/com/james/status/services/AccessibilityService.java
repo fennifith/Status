@@ -2,6 +2,7 @@ package com.james.status.services;
 
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -11,36 +12,105 @@ import android.os.Handler;
 import android.os.Parcelable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationManagerCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.NotificationCompat;
+import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
 
+import com.google.gson.Gson;
+import com.james.status.R;
+import com.james.status.data.ActivityColorData;
 import com.james.status.data.NotificationData;
+import com.james.status.dialogs.ColorPickerDialog;
+import com.james.status.dialogs.PreferenceDialog;
 import com.james.status.utils.ColorUtils;
 import com.james.status.utils.PreferenceUtils;
 import com.james.status.utils.StaticUtils;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class AccessibilityService extends android.accessibilityservice.AccessibilityService {
 
-    public static final String ACTION_GET_COLOR = "com.james.status.ACTION_GET_COLOR";
+    public static final String
+            ACTION_GET_COLOR = "com.james.status.ACTION_GET_COLOR",
+            ACTION_NOTIFY_COLOR = "com.james.status.ACTION_NOTIFY_COLOR";
+
+    private static final int NOTIFICATION_ID = 7146;
 
     private PackageManager packageManager;
+    private NotificationManagerCompat notificationManager;
     private List<NotificationData> notifications;
 
     private int color = Color.BLACK;
-    private String packageName;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null) {
             String action = intent.getAction();
 
-            if (action != null && action.matches(ACTION_GET_COLOR)) {
-                Intent i = new Intent(StatusService.ACTION_UPDATE);
-                i.setClass(this, StatusService.class);
-                i.putExtra(StatusService.EXTRA_COLOR, color);
-                startService(i);
+            if (action != null) {
+                switch (action) {
+                    case ACTION_GET_COLOR:
+                        Intent i = new Intent(StatusService.ACTION_UPDATE);
+                        i.setClass(this, StatusService.class);
+                        i.putExtra(StatusService.EXTRA_COLOR, color);
+                        startService(i);
+                        break;
+                    case ACTION_NOTIFY_COLOR:
+                        Integer defaultColor = PreferenceUtils.getIntegerPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR);
+                        if (defaultColor == null) defaultColor = Color.BLACK;
+
+                        PreferenceDialog dialog = new ColorPickerDialog(this).setDefaultPreference(defaultColor).setTag(intent.getParcelableExtra("component")).setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
+                            @Override
+                            public void onPreference(PreferenceDialog dialog, Integer preference) {
+                                Gson gson = new Gson();
+                                ComponentName component;
+
+                                if (dialog.getTag() != null && dialog.getTag() instanceof ComponentName)
+                                    component = (ComponentName) dialog.getTag();
+                                else return;
+
+                                Set<String> jsons = PreferenceUtils.getStringSetPreference(AccessibilityService.this, PreferenceUtils.PreferenceIdentifier.STATUS_COLORED_APPS);
+                                if (jsons == null) jsons = new HashSet<>();
+
+                                Set<String> newJsons = new HashSet<>();
+
+                                for (String json : newJsons) {
+                                    ActivityColorData data = gson.fromJson(json, ActivityColorData.class);
+                                    if (!data.packageName.matches(component.getPackageName()) || !(data.name.matches(component.getClassName()))) {
+                                        newJsons.add(json);
+                                    }
+                                }
+
+                                ActivityColorData app;
+                                try {
+                                    app = new ActivityColorData(packageManager, packageManager.getActivityInfo(component, 0));
+                                } catch (PackageManager.NameNotFoundException e) {
+                                    e.printStackTrace();
+                                    return;
+                                }
+
+                                app.color = preference;
+
+                                jsons.add(gson.toJson(app));
+
+                                PreferenceUtils.putPreference(AccessibilityService.this, PreferenceUtils.PreferenceIdentifier.STATUS_COLORED_APPS, newJsons);
+                                setStatusBar(preference, null, null, null);
+                            }
+
+                            @Override
+                            public void onCancel(PreferenceDialog dialog) {
+                            }
+                        });
+
+                        dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+                        dialog.show();
+                        break;
+                }
             }
         }
 
@@ -52,6 +122,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
         super.onServiceConnected();
 
         packageManager = getPackageManager();
+        notificationManager = NotificationManagerCompat.from(this);
 
         notifications = new ArrayList<>();
         AccessibilityServiceInfo config = new AccessibilityServiceInfo();
@@ -106,6 +177,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                             }
                         } else if (packageName.toString().equals("com.android.systemui")) {
                             setStatusBar(getDefaultColor(), null, false, false);
+                            notificationManager.cancel(NOTIFICATION_ID);
                         } else {
                             Intent homeIntent = new Intent(Intent.ACTION_MAIN);
                             homeIntent.addCategory(Intent.CATEGORY_HOME);
@@ -113,6 +185,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
 
                             if (packageName.toString().contains(homePackageName) || packageName.toString().matches(homePackageName)) {
                                 setStatusBar(null, true, StaticUtils.isStatusBarFullscreen(AccessibilityService.this, packageName.toString()), false);
+                                notificationManager.cancel(NOTIFICATION_ID);
                                 return;
                             }
 
@@ -126,10 +199,25 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                                         public void run() {
                                             Integer statusBarColor;
 
-                                            if (color == null && (AccessibilityService.this.packageName == null || !packageName.toString().matches(AccessibilityService.this.packageName))) {
+                                            if (color == null) {
                                                 statusBarColor = getDefaultColor();
-                                                AccessibilityService.this.packageName = packageName.toString();
-                                            } else statusBarColor = color;
+
+                                                Intent intent = new Intent(ACTION_NOTIFY_COLOR);
+                                                intent.setClass(AccessibilityService.this, AccessibilityService.class);
+                                                intent.putExtra("component", new ComponentName(packageName.toString(), className.toString()));
+
+                                                notificationManager.notify(NOTIFICATION_ID, new NotificationCompat.Builder(AccessibilityService.this)
+                                                        .setSmallIcon(R.drawable.ic_colorize)
+                                                        .setColor(ContextCompat.getColor(AccessibilityService.this, R.color.colorAccent))
+                                                        .setContentTitle(getString(R.string.notification_color))
+                                                        .setContentText(getString(R.string.notification_color_desc))
+                                                        .setContentIntent(PendingIntent.getService(AccessibilityService.this, 0, intent, 0))
+                                                        .build()
+                                                );
+                                            } else {
+                                                statusBarColor = color;
+                                                notificationManager.cancel(NOTIFICATION_ID);
+                                            }
 
                                             setStatusBar(statusBarColor, null, StaticUtils.isStatusBarFullscreen(AccessibilityService.this, packageName.toString()), false);
                                         }

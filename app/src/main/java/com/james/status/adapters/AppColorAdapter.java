@@ -183,7 +183,7 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
 
                 Dialog dialog = new ColorPickerDialog(context).setPreference(app.color).setDefaultPreference(getDefaultColor(app)).setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
                     @Override
-                    public void onPreference(Integer color) {
+                    public void onPreference(PreferenceDialog dialog, Integer color) {
                         ActivityColorData app = getApp(holder.getAdapterPosition());
                         if (app != null) {
                             app.color = color;
@@ -192,7 +192,7 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
                     }
 
                     @Override
-                    public void onCancel() {
+                    public void onCancel(PreferenceDialog dialog) {
                     }
                 });
 

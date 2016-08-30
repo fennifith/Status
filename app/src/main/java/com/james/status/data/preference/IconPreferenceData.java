@@ -52,7 +52,7 @@ public class IconPreferenceData extends PreferenceData {
             public void onClick(View view) {
                 Dialog dialog = new IconPickerDialog(getContext(), iconStyles).setPreference(iconStyle).setListener(new PreferenceDialog.OnPreferenceListener<IconStyleData>() {
                     @Override
-                    public void onPreference(IconStyleData preference) {
+                    public void onPreference(PreferenceDialog dialog, IconStyleData preference) {
                         if (preference != null) {
                             ((IconStyleImageView) holder.v.findViewById(R.id.icon)).setIconStyle(preference);
 
@@ -63,7 +63,7 @@ public class IconPreferenceData extends PreferenceData {
                     }
 
                     @Override
-                    public void onCancel() {
+                    public void onCancel(PreferenceDialog dialog) {
                     }
                 });
                 dialog.setTitle(getIdentifier().getTitle());

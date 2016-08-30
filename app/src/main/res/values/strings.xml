@@ -83,6 +83,9 @@
     <string name="preference_icon_padding">Horizontal Icon Padding (dp)</string>
     <string name="preference_icon_scale">Icon Scale (dp)</string>
 
+    <string name="notification_color">Set App Color</string>
+    <string name="notification_color_desc">Status couldn\'t find a color to use for this application, so it\'s reverted to the default color. You can specify a color to use by clicking this notification.</string>
+
     <string name="unit_dp">dp</string>
 
     <string name="icon_style_default">Default</string>

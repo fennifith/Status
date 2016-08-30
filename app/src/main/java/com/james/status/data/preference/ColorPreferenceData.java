@@ -44,7 +44,7 @@ public class ColorPreferenceData extends PreferenceData {
             public void onClick(View view) {
                 Dialog dialog = new ColorPickerDialog(getContext()).setPreference(value).setDefaultPreference(Color.BLACK).setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
                     @Override
-                    public void onPreference(Integer color) {
+                    public void onPreference(PreferenceDialog dialog, Integer color) {
                         value = color;
                         ((CustomImageView) holder.v.findViewById(R.id.color)).transition(new ColorDrawable(color));
                         PreferenceUtils.putPreference(getContext(), getIdentifier().getPreference(), (int) color);
@@ -52,7 +52,7 @@ public class ColorPreferenceData extends PreferenceData {
                     }
 
                     @Override
-                    public void onCancel() {
+                    public void onCancel(PreferenceDialog dialog) {
                     }
                 });
 

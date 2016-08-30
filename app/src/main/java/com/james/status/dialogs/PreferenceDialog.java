@@ -9,6 +9,7 @@ import com.james.status.R;
 public class PreferenceDialog<T> extends AppCompatDialog {
 
     private T preference, defaultPreference;
+    private Object tag;
     private OnPreferenceListener<T> listener;
 
     public PreferenceDialog(Context context) {
@@ -17,18 +18,18 @@ public class PreferenceDialog<T> extends AppCompatDialog {
         setOnDismissListener(new OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
-                if (hasListener()) getListener().onCancel();
+                if (hasListener()) getListener().onCancel(PreferenceDialog.this);
             }
         });
     }
 
     public void confirm() {
-        if (hasListener()) getListener().onPreference(getPreference());
+        if (hasListener()) getListener().onPreference(this, getPreference());
         if (isShowing()) dismiss();
     }
 
     public void cancel() {
-        if (hasListener()) getListener().onCancel();
+        if (hasListener()) getListener().onCancel(this);
         if (isShowing()) dismiss();
     }
 
@@ -50,6 +51,15 @@ public class PreferenceDialog<T> extends AppCompatDialog {
         return defaultPreference;
     }
 
+    public PreferenceDialog setTag(Object tag) {
+        this.tag = tag;
+        return this;
+    }
+
+    public Object getTag() {
+        return tag;
+    }
+
     public PreferenceDialog setListener(OnPreferenceListener<T> listener) {
         this.listener = listener;
         return this;
@@ -64,8 +74,8 @@ public class PreferenceDialog<T> extends AppCompatDialog {
     }
 
     public interface OnPreferenceListener<T> {
-        void onPreference(T preference);
+        void onPreference(PreferenceDialog dialog, T preference);
 
-        void onCancel();
+        void onCancel(PreferenceDialog dialog);
     }
 }

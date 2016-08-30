@@ -39,14 +39,14 @@ public class IntegerPreferenceData extends PreferenceData {
             public void onClick(View view) {
                 Dialog dialog = new IntegerPickerDialog(getContext(), unit).setPreference(preference).setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
                     @Override
-                    public void onPreference(Integer preference) {
+                    public void onPreference(PreferenceDialog dialog, Integer preference) {
                         IntegerPreferenceData.this.preference = preference;
                         PreferenceUtils.putPreference(getContext(), getIdentifier().getPreference(), preference);
                         onPreferenceChange();
                     }
 
                     @Override
-                    public void onCancel() {
+                    public void onCancel(PreferenceDialog dialog) {
                     }
                 });
                 dialog.setTitle(getIdentifier().getTitle());
