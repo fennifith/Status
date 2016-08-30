@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.james.status.R;
@@ -77,7 +78,7 @@ public class AppStatusAdapter extends RecyclerView.Adapter<AppStatusAdapter.View
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_app_grid, null));
+        return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_app_status, null));
     }
 
     @Override
@@ -109,13 +110,9 @@ public class AppStatusAdapter extends RecyclerView.Adapter<AppStatusAdapter.View
             }
         }.start();
 
-        int color = ColorUtils.muteColor(Color.GRAY, position);
-        holder.v.findViewById(R.id.color).setBackgroundColor(color);
-
-        SwitchCompat titleView = (SwitchCompat) holder.v.findViewById(R.id.app);
+        SwitchCompat titleView = (SwitchCompat) holder.v.findViewById(R.id.title);
 
         titleView.setText(app.name);
-        titleView.setTextColor(ContextCompat.getColor(context, ColorUtils.isColorDark(color) ? R.color.textColorSecondaryInverse : R.color.textColorSecondary));
 
         titleView.setOnCheckedChangeListener(null);
         titleView.setChecked(app.isFullscreen);
@@ -130,6 +127,8 @@ public class AppStatusAdapter extends RecyclerView.Adapter<AppStatusAdapter.View
                 }
             }
         });
+
+        ((TextView) holder.v.findViewById(R.id.subtitle)).setText(app.packageName);
     }
 
     @Override

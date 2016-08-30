@@ -16,7 +16,7 @@ import com.james.status.utils.PreferenceUtils;
 public class AppsColorPreferenceData extends PreferenceData {
 
     public AppsColorPreferenceData(Context context) {
-        super(context, new Identifier(PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_APPS, context.getString(R.string.preference_app_colors), Identifier.SectionIdentifier.COLORS));
+        super(context, new Identifier(PreferenceUtils.PreferenceIdentifier.STATUS_COLORED_APPS, context.getString(R.string.preference_app_colors), Identifier.SectionIdentifier.COLORS));
     }
 
     public static ViewHolder getViewHolder(Context context) {

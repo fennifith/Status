@@ -93,7 +93,7 @@ public class ColorUtils {
     }
 
     public static Integer getStatusBarColor(Context context, ComponentName componentName, @ColorInt Integer defaultColor) {
-        Set<String> apps = PreferenceUtils.getStringSetPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_APPS);
+        Set<String> apps = PreferenceUtils.getStringSetPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_COLORED_APPS);
         if (apps != null) {
             Gson gson = new Gson();
             for (String app : apps) {

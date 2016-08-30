@@ -2,6 +2,7 @@ package com.james.status.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -16,11 +17,13 @@ import com.james.status.R;
 import com.james.status.data.AppStatusData;
 import com.james.status.utils.ColorUtils;
 import com.james.status.utils.PreferenceUtils;
+import com.james.status.views.CustomImageView;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 public class AppStatusPreviewAdapter extends RecyclerView.Adapter<AppStatusPreviewAdapter.ViewHolder> {
@@ -51,21 +54,29 @@ public class AppStatusPreviewAdapter extends RecyclerView.Adapter<AppStatusPrevi
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        AppStatusData app = getApp(position);
+        if (position < 4) {
+            AppStatusData app = getApp(position);
 
-        int color = ColorUtils.muteColor(Color.GRAY, position);
-        holder.v.findViewById(R.id.color).setBackgroundColor(color);
+            int color = ColorUtils.muteColor(Color.GRAY, position);
+            holder.v.findViewById(R.id.color).setBackgroundColor(color);
 
-        TextView appView = (TextView) holder.v.findViewById(R.id.app);
-        if (app != null) appView.setText(app.name);
-        appView.setTextColor(ContextCompat.getColor(context, ColorUtils.isColorDark(color) ? R.color.textColorSecondaryInverse : R.color.textColorSecondary));
+            TextView appView = (TextView) holder.v.findViewById(R.id.app);
+            if (app != null) appView.setText(app.name);
+            appView.setTextColor(ContextCompat.getColor(context, ColorUtils.isColorDark(color) ? R.color.textColorSecondaryInverse : R.color.textColorSecondary));
+        } else {
+            TextView appView = (TextView) holder.v.findViewById(R.id.app);
+            appView.setText(String.format(Locale.getDefault(), "+%d MORE", apps.size() - 4));
+            appView.setTextColor(ContextCompat.getColor(context, R.color.textColorSecondary));
+
+            ((CustomImageView) holder.v.findViewById(R.id.color)).setImageDrawable(null);
+        }
     }
 
     @Override
     public int getItemCount() {
         int size = apps.size();
         if (listener != null) listener.onSizeChanged(size);
-        return size;
+        return Math.min(size, 5);
     }
 
     public void reload() {

@@ -51,7 +51,7 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
         apps = new ArrayList<>();
         gson = new Gson();
 
-        jsons = PreferenceUtils.getStringSetPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_APPS);
+        jsons = PreferenceUtils.getStringSetPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_COLORED_APPS);
         if (jsons == null) jsons = new HashSet<>();
 
         new Thread() {
@@ -94,7 +94,7 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_app_grid, null));
+        return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_app_color, null));
     }
 
     @Override
@@ -128,7 +128,7 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
                     @Override
                     public void run() {
                         if (icon != null)
-                            ((CustomImageView) holder.v.findViewById(R.id.icon)).transition(icon);
+                            ((CustomImageView) holder.v.findViewById(R.id.icon)).setImageDrawable(icon);
                     }
                 });
             }
@@ -235,7 +235,7 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
 
         jsons.add(gson.toJson(app));
 
-        PreferenceUtils.putPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_APPS, jsons);
+        PreferenceUtils.putPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_COLORED_APPS, jsons);
         this.jsons = jsons;
         notifyDataSetChanged();
     }
