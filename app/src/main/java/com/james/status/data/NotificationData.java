@@ -32,7 +32,7 @@ import com.james.status.utils.PreferenceUtils;
 public class NotificationData implements Parcelable {
 
     public String category, title, subtitle, packageName, key, tag = "";
-    public int priority, id, iconRes;
+    public int priority, id, iconRes, color = Color.BLACK;
     private Bitmap largeIcon;
     private Icon unloadedIcon, unloadedLargeIcon;
 
@@ -60,6 +60,7 @@ public class NotificationData implements Parcelable {
         this.packageName = packageName;
         priority = notification.priority;
         this.id = id;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) this.color = notification.color;
 
         Bundle extras = NotificationCompat.getExtras(notification);
 
@@ -98,6 +99,7 @@ public class NotificationData implements Parcelable {
         tag = in.readString();
         priority = in.readInt();
         id = in.readInt();
+        color = in.readInt();
         iconRes = in.readInt();
         if (in.readInt() == 1) largeIcon = Bitmap.CREATOR.createFromParcel(in);
 
@@ -148,18 +150,22 @@ public class NotificationData implements Parcelable {
     }
 
     public void getColor(final Context context, final OnColorListener onColorListener) {
-        new Thread() {
-            @Override
-            public void run() {
-                final Integer color = ColorUtils.getStatusBarColor(context, new ComponentName(packageName, packageName), Color.BLACK);
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        onColorListener.onColor(getKey(), color != null ? color : Color.BLACK);
-                    }
-                });
-            }
-        }.start();
+        if (color != Color.BLACK) {
+            onColorListener.onColor(getKey(), color);
+        } else {
+            new Thread() {
+                @Override
+                public void run() {
+                    final Integer color = ColorUtils.getStatusBarColor(context, new ComponentName(packageName, packageName), Color.BLACK);
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            onColorListener.onColor(getKey(), color != null ? color : Color.BLACK);
+                        }
+                    });
+                }
+            }.start();
+        }
     }
 
     public ActionData[] getActions() {
@@ -254,6 +260,7 @@ public class NotificationData implements Parcelable {
         dest.writeString(tag);
         dest.writeInt(priority);
         dest.writeInt(id);
+        dest.writeInt(color);
         dest.writeInt(iconRes);
         if (largeIcon != null) {
             dest.writeInt(1);

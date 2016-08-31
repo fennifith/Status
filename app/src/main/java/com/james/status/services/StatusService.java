@@ -291,7 +291,8 @@ public class StatusService extends Service {
         headsUpView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                headsUpView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                if (headsUpView != null)
+                    headsUpView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
                 ValueAnimator animator = ValueAnimator.ofInt(-headsUpView.getHeight(), 0);
                 animator.setDuration(250);
@@ -299,7 +300,8 @@ public class StatusService extends Service {
                 animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                     @Override
                     public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        headsUpView.setY((int) valueAnimator.getAnimatedValue());
+                        if (headsUpView != null)
+                            headsUpView.setY((int) valueAnimator.getAnimatedValue());
                     }
                 });
                 animator.start();
@@ -327,7 +329,7 @@ public class StatusService extends Service {
                         offsetX = 0;
                         break;
                     default:
-                        headsUpView.setX(event.getX() - offsetX);
+                        if (headsUpView != null) headsUpView.setX(event.getX() - offsetX);
                         shouldFireClickEvent = Math.abs(event.getX() - offsetX) < StaticUtils.getPixelsFromDp(StatusService.this, 8);
                 }
 
@@ -399,10 +401,12 @@ public class StatusService extends Service {
 
                 Drawable actionIcon = action.getIcon(this);
                 if (actionIcon != null)
-                    ((CustomImageView) button.findViewById(R.id.icon)).setImageDrawable(actionIcon);
+                    ImageUtils.tintDrawable((CustomImageView) button.findViewById(R.id.icon), actionIcon, color);
                 else button.findViewById(R.id.icon).setVisibility(View.GONE);
 
-                ((TextView) button.findViewById(R.id.title)).setText(action.getTitle());
+                TextView title = (TextView) button.findViewById(R.id.title);
+                title.setText(action.getTitle());
+                title.setTextColor(color);
 
                 PendingIntent intent = action.getActionIntent();
                 if (intent != null) {
