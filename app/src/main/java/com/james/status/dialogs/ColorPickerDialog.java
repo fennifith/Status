@@ -1,5 +1,6 @@
 package com.james.status.dialogs;
 
+import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Color;
@@ -58,6 +59,9 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> {
                 int color = getPreference();
                 color = Color.argb(255, i, Color.green(color), Color.blue(color));
                 setColor(color);
+
+                findViewById(R.id.reset).setVisibility(getDefaultPreference() != null && color != getDefaultPreference() ? View.VISIBLE : View.GONE);
+                setPreference(color);
             }
 
             @Override
@@ -77,6 +81,9 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> {
                 int color = getPreference();
                 color = Color.argb(255, Color.red(color), i, Color.blue(color));
                 setColor(color);
+
+                findViewById(R.id.reset).setVisibility(getDefaultPreference() != null && color != getDefaultPreference() ? View.VISIBLE : View.GONE);
+                setPreference(color);
             }
 
             @Override
@@ -96,6 +103,9 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> {
                 int color = getPreference();
                 color = Color.argb(255, Color.red(color), Color.green(color), i);
                 setColor(color);
+
+                findViewById(R.id.reset).setVisibility(getDefaultPreference() != null && color != getDefaultPreference() ? View.VISIBLE : View.GONE);
+                setPreference(color);
             }
 
             @Override
@@ -125,6 +135,9 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> {
                     Object tag = v.getTag();
                     if (tag != null && tag instanceof Integer) {
                         setColor((int) tag);
+
+                        findViewById(R.id.reset).setVisibility(getDefaultPreference() != null && (int) tag != getDefaultPreference() ? View.VISIBLE : View.GONE);
+                        setPreference((int) tag);
                     }
                 }
             });
@@ -135,7 +148,12 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> {
         findViewById(R.id.reset).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setColor(getDefaultPreference());
+                int color = getDefaultPreference();
+
+                setColor(color);
+
+                findViewById(R.id.reset).setVisibility(View.GONE);
+                setPreference(color);
             }
         });
 
@@ -164,10 +182,28 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> {
                 public void onAnimationUpdate(ValueAnimator animation) {
                     int color = (int) animation.getAnimatedValue();
 
-                    colorImage.setImageDrawable(new ColorDrawable(color));
-                    colorHex.setText(String.format("#%06X", (0xFFFFFF & color)));
-                    colorHex.setTextColor(ColorUtils.isColorDark(color) ? Color.WHITE : Color.BLACK);
+                    red.setProgress(Color.red(color));
+                    green.setProgress(Color.green(color));
+                    blue.setProgress(Color.blue(color));
+                }
+            });
+            animator.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+                    isTrackingTouch = true;
+                }
 
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    isTrackingTouch = false;
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
                 }
             });
             animator.start();
@@ -178,26 +214,11 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> {
             redInt.setText(String.valueOf(Color.red(color)));
             greenInt.setText(String.valueOf(Color.green(color)));
             blueInt.setText(String.valueOf(Color.blue(color)));
+
+            if (red.getProgress() != Color.red(color)) red.setProgress(Color.red(color));
+            if (green.getProgress() != Color.green(color)) green.setProgress(Color.green(color));
+            if (blue.getProgress() != Color.blue(color)) blue.setProgress(Color.blue(color));
         }
-
-        if (red.getProgress() != Color.red(color)) {
-            red.setProgress(Color.red(color));
-            redInt.setText(String.valueOf(Color.red(color)));
-        }
-
-        if (green.getProgress() != Color.green(color)) {
-            green.setProgress(Color.green(color));
-            greenInt.setText(String.valueOf(Color.green(color)));
-        }
-
-        if (blue.getProgress() != Color.blue(color)) {
-            blue.setProgress(Color.blue(color));
-            blueInt.setText(String.valueOf(Color.blue(color)));
-        }
-
-        findViewById(R.id.reset).setVisibility(getDefaultPreference() != null && color != getDefaultPreference() ? View.VISIBLE : View.GONE);
-
-        setPreference(color);
     }
 
     @Override

@@ -25,16 +25,15 @@ import com.james.status.views.CustomImageView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
 public class AppColorPreviewAdapter extends RecyclerView.Adapter<AppColorPreviewAdapter.ViewHolder> {
 
     private Context context;
     private ArrayList<ActivityColorData> apps;
     private Gson gson;
-    private Set<String> jsons;
+    private List<String> jsons;
 
     private OnSizeChangedListener listener;
 
@@ -115,8 +114,8 @@ public class AppColorPreviewAdapter extends RecyclerView.Adapter<AppColorPreview
     public void reload() {
         apps = new ArrayList<>();
 
-        jsons = PreferenceUtils.getStringSetPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_COLORED_APPS);
-        if (jsons == null) jsons = new HashSet<>();
+        jsons = PreferenceUtils.getStringListPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_COLORED_APPS);
+        if (jsons == null) jsons = new ArrayList<>();
 
         new Thread() {
             @Override

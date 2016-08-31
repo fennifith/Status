@@ -23,8 +23,10 @@ public class IconData<T extends BroadcastReceiver> {
         this.context = context;
 
         if (identifier != null)
-            resource = PreferenceUtils.getIntegerArrayPreference(context, identifier);
-        if (resource == null) resource = getDefaultIconResource();
+            resource = PreferenceUtils.getResourceIntPreference(context, identifier, "drawable");
+
+        if (resource == null)
+            resource = getDefaultIconResource();
     }
 
     public Context getContext() {

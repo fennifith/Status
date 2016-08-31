@@ -27,7 +27,6 @@ import com.james.status.services.StatusService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class StaticUtils {
 
@@ -151,7 +150,7 @@ public class StaticUtils {
 
     @Nullable
     public static Boolean isStatusBarFullscreen(Context context, String packageName) {
-        Set<String> apps = PreferenceUtils.getStringSetPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_FULLSCREEN_APPS);
+        List<String> apps = PreferenceUtils.getStringListPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_FULLSCREEN_APPS);
         if (apps != null) {
             Gson gson = new Gson();
             for (String app : apps) {

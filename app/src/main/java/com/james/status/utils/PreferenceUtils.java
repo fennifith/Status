@@ -2,10 +2,12 @@ package com.james.status.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PreferenceUtils {
 
@@ -77,8 +79,9 @@ public class PreferenceUtils {
     }
 
     @Nullable
-    public static int[] getIntegerArrayPreference(Context context, PreferenceIdentifier identifier) {
+    public static int[] getResourceIntPreference(Context context, PreferenceIdentifier identifier, String resourceType) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        Resources resources = context.getResources();
 
         if (prefs.contains(identifier.toString() + "-length")) {
             int length = prefs.getInt(identifier.toString() + "-length", 0);
@@ -86,7 +89,7 @@ public class PreferenceUtils {
 
             for (int i = 0; i < length; i++) {
                 if (prefs.contains(identifier.toString() + "-" + i))
-                    value[i] = prefs.getInt(identifier.toString() + "-" + i, 0);
+                    value[i] = resources.getIdentifier(prefs.getString(identifier.toString() + "-" + i, null), resourceType, context.getPackageName());
                 else return null;
             }
 
@@ -122,12 +125,21 @@ public class PreferenceUtils {
     }
 
     @Nullable
-    public static Set<String> getStringSetPreference(Context context, PreferenceIdentifier identifier) {
+    public static List<String> getStringListPreference(Context context, PreferenceIdentifier identifier) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        if (prefs.contains(identifier.toString()))
-            return prefs.getStringSet(identifier.toString(), null);
-        else
-            return null;
+
+        if (prefs.contains(identifier.toString() + "-length")) {
+            int length = prefs.getInt(identifier.toString() + "-length", 0);
+            List<String> value = new ArrayList<>();
+
+            for (int i = 0; i < length; i++) {
+                if (prefs.contains(identifier.toString() + "-" + i))
+                    value.add(prefs.getString(identifier.toString() + "-" + i, null));
+                else return null;
+            }
+
+            return value;
+        } else return null;
     }
 
     public static void putPreference(Context context, PreferenceIdentifier identifier, boolean object) {
@@ -138,13 +150,14 @@ public class PreferenceUtils {
         PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(identifier.toString(), object).apply();
     }
 
-    public static void putPreference(Context context, PreferenceIdentifier identifier, int[] object) {
+    public static void putResourcePreference(Context context, PreferenceIdentifier identifier, int[] object) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        Resources resources = context.getResources();
 
         prefs.edit().putInt(identifier.toString() + "-length", object.length).apply();
 
         for (int i = 0; i < object.length; i++) {
-            prefs.edit().putInt(identifier.toString() + "-" + i, object[i]).apply();
+            prefs.edit().putString(identifier.toString() + "-" + i, resources.getResourceEntryName(object[i])).apply();
         }
     }
 
@@ -160,7 +173,13 @@ public class PreferenceUtils {
         PreferenceManager.getDefaultSharedPreferences(context).edit().putLong(identifier.toString(), object).apply();
     }
 
-    public static void putPreference(Context context, PreferenceIdentifier identifier, Set<String> object) {
-        PreferenceManager.getDefaultSharedPreferences(context).edit().putStringSet(identifier.toString(), object).apply();
+    public static void putPreference(Context context, PreferenceIdentifier identifier, List<String> object) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+        prefs.edit().putInt(identifier.toString() + "-length", object.size()).apply();
+
+        for (int i = 0; i < object.size(); i++) {
+            prefs.edit().putString(identifier.toString() + "-" + i, object.get(i)).apply();
+        }
     }
 }

@@ -135,13 +135,10 @@ public class StatusService extends Service {
                 if (statusView != null) {
                     statusView.setLockscreen(keyguardManager.isKeyguardLocked());
 
-                    Boolean isStatusColorAuto = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_AUTO);
-                    if (isStatusColorAuto == null || isStatusColorAuto) {
-                        if (intent.hasExtra(EXTRA_IS_HOME_SCREEN) && intent.getBooleanExtra(EXTRA_IS_HOME_SCREEN, false))
-                            statusView.setHomeScreen();
-                        else if (intent.hasExtra(EXTRA_COLOR) && headsUpView == null)
-                            statusView.setColor(intent.getIntExtra(EXTRA_COLOR, Color.BLACK));
-                    }
+                    if (intent.hasExtra(EXTRA_IS_HOME_SCREEN) && intent.getBooleanExtra(EXTRA_IS_HOME_SCREEN, false))
+                        statusView.setHomeScreen();
+                    else if (intent.hasExtra(EXTRA_COLOR) && headsUpView == null)
+                        statusView.setColor(intent.getIntExtra(EXTRA_COLOR, Color.BLACK));
 
                     statusView.setSystemShowing(intent.getBooleanExtra(EXTRA_IS_SYSTEM_FULLSCREEN, statusView.isSystemShowing()));
                     statusView.setFullscreen(intent.getBooleanExtra(EXTRA_IS_FULLSCREEN, isFullscreen()));

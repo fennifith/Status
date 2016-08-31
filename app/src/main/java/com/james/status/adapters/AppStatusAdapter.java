@@ -10,7 +10,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
@@ -22,15 +21,13 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.james.status.R;
 import com.james.status.data.AppStatusData;
-import com.james.status.utils.ColorUtils;
 import com.james.status.utils.PreferenceUtils;
 import com.james.status.views.CustomImageView;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 public class AppStatusAdapter extends RecyclerView.Adapter<AppStatusAdapter.ViewHolder> {
 
@@ -38,7 +35,7 @@ public class AppStatusAdapter extends RecyclerView.Adapter<AppStatusAdapter.View
     private PackageManager packageManager;
     private ArrayList<AppStatusData> apps;
     private Gson gson;
-    private Set<String> jsons;
+    private List<String> jsons;
 
     public AppStatusAdapter(final Context context) {
         this.context = context;
@@ -46,8 +43,8 @@ public class AppStatusAdapter extends RecyclerView.Adapter<AppStatusAdapter.View
         apps = new ArrayList<>();
         gson = new Gson();
 
-        jsons = PreferenceUtils.getStringSetPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_FULLSCREEN_APPS);
-        if (jsons == null) jsons = new HashSet<>();
+        jsons = PreferenceUtils.getStringListPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_FULLSCREEN_APPS);
+        if (jsons == null) jsons = new ArrayList<>();
 
         new Thread() {
             @Override
@@ -143,7 +140,7 @@ public class AppStatusAdapter extends RecyclerView.Adapter<AppStatusAdapter.View
     }
 
     private void overwrite(@NonNull AppStatusData app) {
-        Set<String> jsons = new HashSet<>();
+        List<String> jsons = new ArrayList<>();
         for (String json : this.jsons) {
             AppStatusData data = gson.fromJson(json, AppStatusData.class);
             if (!data.packageName.matches(app.packageName)) {

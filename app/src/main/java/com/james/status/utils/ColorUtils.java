@@ -17,7 +17,7 @@ import android.support.v4.content.res.ResourcesCompat;
 import com.google.gson.Gson;
 import com.james.status.data.ActivityColorData;
 
-import java.util.Set;
+import java.util.List;
 
 public class ColorUtils {
 
@@ -93,7 +93,7 @@ public class ColorUtils {
     }
 
     public static Integer getStatusBarColor(Context context, ComponentName componentName, @ColorInt Integer defaultColor) {
-        Set<String> apps = PreferenceUtils.getStringSetPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_COLORED_APPS);
+        List<String> apps = PreferenceUtils.getStringListPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_COLORED_APPS);
         if (apps != null) {
             Gson gson = new Gson();
             for (String app : apps) {

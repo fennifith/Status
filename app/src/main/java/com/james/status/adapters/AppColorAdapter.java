@@ -32,9 +32,7 @@ import com.james.status.views.CustomImageView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHolder> {
 
@@ -42,7 +40,7 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
     private PackageManager packageManager;
     private List<ActivityColorData> apps;
     private Gson gson;
-    private Set<String> jsons;
+    private List<String> jsons;
     private String packageName;
 
     public AppColorAdapter(final Context context, final String packageName) {
@@ -52,8 +50,8 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
         apps = new ArrayList<>();
         gson = new Gson();
 
-        jsons = PreferenceUtils.getStringSetPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_COLORED_APPS);
-        if (jsons == null) jsons = new HashSet<>();
+        jsons = PreferenceUtils.getStringListPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_COLORED_APPS);
+        if (jsons == null) jsons = new ArrayList<>();
 
         new Thread() {
             @Override
@@ -67,8 +65,10 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
                     return;
                 }
 
-                for (ActivityInfo activity : packageInfo.activities) {
-                    loadedApps.add(new ActivityColorData(packageManager, activity));
+                if (packageInfo.activities != null) {
+                    for (ActivityInfo activity : packageInfo.activities) {
+                        loadedApps.add(new ActivityColorData(packageManager, activity));
+                    }
                 }
 
                 new Handler(context.getMainLooper()).post(new Runnable() {
@@ -226,7 +226,7 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
     }
 
     private void overwrite(@NonNull ActivityColorData app) {
-        Set<String> jsons = new HashSet<>();
+        List<String> jsons = new ArrayList<>();
         for (String json : this.jsons) {
             ActivityColorData data = gson.fromJson(json, ActivityColorData.class);
             if (!data.packageName.matches(app.packageName) || !(data.name.matches(app.name))) {

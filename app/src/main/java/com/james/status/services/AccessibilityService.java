@@ -5,6 +5,7 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
@@ -30,9 +31,7 @@ import com.james.status.utils.PreferenceUtils;
 import com.james.status.utils.StaticUtils;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class AccessibilityService extends android.accessibilityservice.AccessibilityService {
 
@@ -86,8 +85,8 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                             public void onPreference(PreferenceDialog dialog, Integer preference) {
                                 Gson gson = new Gson();
 
-                                Set<String> jsons = PreferenceUtils.getStringSetPreference(AccessibilityService.this, PreferenceUtils.PreferenceIdentifier.STATUS_COLORED_APPS);
-                                if (jsons == null) jsons = new HashSet<>();
+                                List<String> jsons = PreferenceUtils.getStringListPreference(AccessibilityService.this, PreferenceUtils.PreferenceIdentifier.STATUS_COLORED_APPS);
+                                if (jsons == null) jsons = new ArrayList<>();
 
                                 ActivityColorData app = (ActivityColorData) dialog.getTag();
                                 app.color = preference;
@@ -185,15 +184,15 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
 
                         Intent homeIntent = new Intent(Intent.ACTION_MAIN);
                         homeIntent.addCategory(Intent.CATEGORY_HOME);
-                        String homePackageName = packageManager.resolveActivity(homeIntent, PackageManager.MATCH_DEFAULT_ONLY).activityInfo.packageName;
+                        ActivityInfo homeInfo = packageManager.resolveActivity(homeIntent, PackageManager.MATCH_DEFAULT_ONLY).activityInfo;
 
-                        if (packageName.toString().contains(homePackageName) || packageName.toString().matches(homePackageName)) {
+                        if (packageName.toString().matches(homeInfo.packageName) && className.toString().matches(homeInfo.name)) {
                             setStatusBar(null, true, StaticUtils.isStatusBarFullscreen(AccessibilityService.this, packageName.toString()), false);
                             notificationManager.cancel(NOTIFICATION_ID);
                             return;
                         }
 
-                        Set<String> apps = PreferenceUtils.getStringSetPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_COLORED_APPS);
+                        List<String> apps = PreferenceUtils.getStringListPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_COLORED_APPS);
                         if (apps != null) {
                             Gson gson = new Gson();
                             for (String app : apps) {
@@ -204,6 +203,12 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                                     return;
                                 }
                             }
+                        }
+
+                        Boolean isColorAuto = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_AUTO);
+                        if (isColorAuto != null && !isColorAuto) {
+                            setStatusBar(getDefaultColor(), null, StaticUtils.isStatusBarFullscreen(AccessibilityService.this, packageName.toString()), false);
+                            return;
                         }
 
                         new Thread() {

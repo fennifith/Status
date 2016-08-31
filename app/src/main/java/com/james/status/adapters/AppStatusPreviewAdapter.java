@@ -2,7 +2,6 @@ package com.james.status.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -22,16 +21,15 @@ import com.james.status.views.CustomImageView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
 public class AppStatusPreviewAdapter extends RecyclerView.Adapter<AppStatusPreviewAdapter.ViewHolder> {
 
     private Context context;
     private ArrayList<AppStatusData> apps;
     private Gson gson;
-    private Set<String> jsons;
+    private List<String> jsons;
 
     private OnSizeChangedListener listener;
 
@@ -82,8 +80,8 @@ public class AppStatusPreviewAdapter extends RecyclerView.Adapter<AppStatusPrevi
     public void reload() {
         apps = new ArrayList<>();
 
-        jsons = PreferenceUtils.getStringSetPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_FULLSCREEN_APPS);
-        if (jsons == null) jsons = new HashSet<>();
+        jsons = PreferenceUtils.getStringListPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_FULLSCREEN_APPS);
+        if (jsons == null) jsons = new ArrayList<>();
 
         new Thread() {
             @Override

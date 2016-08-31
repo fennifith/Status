@@ -24,7 +24,7 @@ public class IconPreferenceData extends PreferenceData {
     public IconPreferenceData(Context context, Identifier identifier, List<IconStyleData> iconStyles, OnPreferenceChangeListener listener) {
         super(context, identifier, listener);
 
-        int[] resource = PreferenceUtils.getIntegerArrayPreference(context, getIdentifier().getPreference());
+        int[] resource = PreferenceUtils.getResourceIntPreference(context, getIdentifier().getPreference(), "drawable");
         if (resource != null) {
             for (IconStyleData style : iconStyles) {
                 if (Arrays.equals(style.resource, resource)) iconStyle = style;
@@ -57,7 +57,8 @@ public class IconPreferenceData extends PreferenceData {
                             ((IconStyleImageView) holder.v.findViewById(R.id.icon)).setIconStyle(preference);
 
                             IconPreferenceData.this.iconStyle = preference;
-                            PreferenceUtils.putPreference(getContext(), getIdentifier().getPreference(), iconStyle.resource);
+
+                            PreferenceUtils.putResourcePreference(getContext(), getIdentifier().getPreference(), iconStyle.resource);
                             onPreferenceChange();
                         }
                     }
