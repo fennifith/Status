@@ -100,6 +100,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
 
                             @Override
                             public void onCancel(PreferenceDialog dialog) {
+                                notificationManager.cancel(NOTIFICATION_ID);
                             }
                         });
 
@@ -172,33 +173,54 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
 
                                 notifications.clear();
                             }
-                        } else if (packageName.toString().equals("com.android.systemui")) {
+
+                            return;
+                        }
+
+                        if (packageName.toString().equals("com.android.systemui")) {
                             setStatusBar(getDefaultColor(), null, false, false);
                             notificationManager.cancel(NOTIFICATION_ID);
-                        } else {
-                            Intent homeIntent = new Intent(Intent.ACTION_MAIN);
-                            homeIntent.addCategory(Intent.CATEGORY_HOME);
-                            String homePackageName = packageManager.resolveActivity(homeIntent, PackageManager.MATCH_DEFAULT_ONLY).activityInfo.packageName;
+                            return;
+                        }
 
-                            if (packageName.toString().contains(homePackageName) || packageName.toString().matches(homePackageName)) {
-                                setStatusBar(null, true, StaticUtils.isStatusBarFullscreen(AccessibilityService.this, packageName.toString()), false);
-                                notificationManager.cancel(NOTIFICATION_ID);
-                                return;
+                        Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+                        homeIntent.addCategory(Intent.CATEGORY_HOME);
+                        String homePackageName = packageManager.resolveActivity(homeIntent, PackageManager.MATCH_DEFAULT_ONLY).activityInfo.packageName;
+
+                        if (packageName.toString().contains(homePackageName) || packageName.toString().matches(homePackageName)) {
+                            setStatusBar(null, true, StaticUtils.isStatusBarFullscreen(AccessibilityService.this, packageName.toString()), false);
+                            notificationManager.cancel(NOTIFICATION_ID);
+                            return;
+                        }
+
+                        Set<String> apps = PreferenceUtils.getStringSetPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_COLORED_APPS);
+                        if (apps != null) {
+                            Gson gson = new Gson();
+                            for (String app : apps) {
+                                ActivityColorData data = gson.fromJson(app, ActivityColorData.class);
+                                if (packageName.toString().matches(data.packageName) && (data.name == null || className.toString().matches(data.name)) && data.color != null) {
+                                    setStatusBar(data.color, null, StaticUtils.isStatusBarFullscreen(AccessibilityService.this, packageName.toString()), false);
+                                    notificationManager.cancel(NOTIFICATION_ID);
+                                    return;
+                                }
                             }
+                        }
 
-                            new Thread() {
-                                @Override
-                                public void run() {
-                                    final Integer color = ColorUtils.getStatusBarColor(AccessibilityService.this, new ComponentName(packageName.toString(), className.toString()), null);
+                        new Thread() {
+                            @Override
+                            public void run() {
+                                final Integer color = ColorUtils.getPrimaryColor(AccessibilityService.this, new ComponentName(packageName.toString(), className.toString()));
 
-                                    new Handler(getMainLooper()).post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            Integer statusBarColor;
+                                new Handler(getMainLooper()).post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Integer statusBarColor;
 
-                                            if (color == null) {
-                                                statusBarColor = getDefaultColor();
+                                        if (color == null) {
+                                            statusBarColor = getDefaultColor();
 
+                                            Boolean notification = PreferenceUtils.getBooleanPreference(AccessibilityService.this, PreferenceUtils.PreferenceIdentifier.STATUS_COLORED_APPS_NOTIFICATIONS);
+                                            if (notification == null || notification) {
                                                 Intent intent = new Intent(ACTION_NOTIFY_COLOR);
                                                 intent.setClass(AccessibilityService.this, AccessibilityService.class);
                                                 intent.putExtra(EXTRA_COMPONENT, new ComponentName(packageName.toString(), className.toString()));
@@ -211,17 +233,17 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                                                         .setContentIntent(PendingIntent.getService(AccessibilityService.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT))
                                                         .build()
                                                 );
-                                            } else {
-                                                statusBarColor = color;
-                                                notificationManager.cancel(NOTIFICATION_ID);
                                             }
-
-                                            setStatusBar(statusBarColor, null, StaticUtils.isStatusBarFullscreen(AccessibilityService.this, packageName.toString()), false);
+                                        } else {
+                                            statusBarColor = color;
+                                            notificationManager.cancel(NOTIFICATION_ID);
                                         }
-                                    });
-                                }
-                            }.start();
-                        }
+
+                                        setStatusBar(statusBarColor, null, StaticUtils.isStatusBarFullscreen(AccessibilityService.this, packageName.toString()), false);
+                                    }
+                                });
+                            }
+                        }.start();
                     }
             }
         }

@@ -84,14 +84,13 @@
             android:textAllCaps="true"
             android:textSize="16sp"
             android:text="@string/action_cancel"
-            android:textColor="?android:textColorPrimary"
+            android:textColor="@color/colorAccent"
             android:background="?attr/selectableItemBackground"
             android:id="@+id/cancel"
             android:paddingLeft="12dp"
             android:paddingRight="12dp"
             android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:textStyle="bold" />
+            android:paddingBottom="8dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -99,14 +98,13 @@
             android:textAllCaps="true"
             android:textSize="16sp"
             android:text="@string/action_ok"
-            android:textColor="?android:textColorPrimary"
+            android:textColor="@color/colorAccent"
             android:background="?attr/selectableItemBackground"
             android:id="@+id/confirm"
             android:paddingLeft="12dp"
             android:paddingRight="12dp"
             android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:textStyle="bold" />
+            android:paddingBottom="8dp" />
 
     </LinearLayout>
 

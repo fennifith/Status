@@ -89,7 +89,8 @@ public class MainActivity extends AppCompatActivity {
                         this,
                         new PreferenceData.Identifier(
                                 PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_AUTO,
-                                getString(R.string.preference_bar_color_auto), getString(R.string.preference_bar_color_auto_desc),
+                                getString(R.string.preference_bar_color_auto),
+                                getString(R.string.preference_bar_color_auto_desc),
                                 PreferenceData.Identifier.SectionIdentifier.COLORS
                         ),
                         true,
@@ -116,6 +117,17 @@ public class MainActivity extends AppCompatActivity {
                         }
                 ),
                 new AppsColorPreferenceData(this),
+                new BooleanPreferenceData(
+                        this,
+                        new PreferenceData.Identifier(
+                                PreferenceUtils.PreferenceIdentifier.STATUS_COLORED_APPS_NOTIFICATIONS,
+                                getString(R.string.preference_color_notification),
+                                getString(R.string.preference_color_notification_desc),
+                                PreferenceData.Identifier.SectionIdentifier.COLORS
+                        ),
+                        true,
+                        null
+                ),
                 new BooleanPreferenceData(
                         this,
                         new PreferenceData.Identifier(

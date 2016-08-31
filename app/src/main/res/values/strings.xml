@@ -82,8 +82,10 @@
     <string name="preference_ringer_icon">Ringer Icon Style</string>
     <string name="preference_icon_padding">Horizontal Icon Padding (dp)</string>
     <string name="preference_icon_scale">Icon Scale (dp)</string>
+    <string name="preference_color_notification">Screen-Specific Color Notifications</string>
+    <string name="preference_color_notification_desc">The app will show a notification as a shortcut to set the color for an app if the a color has not been found.</string>
 
-    <string name="notification_color">Set App Color</string>
+    <string name="notification_color">Set Screen-Specific Color</string>
     <string name="notification_color_desc">Status couldn\'t find a color to use for this application, so it\'s reverted to the default color. You can specify a color to use by clicking this notification.</string>
 
     <string name="unit_dp">dp</string>
