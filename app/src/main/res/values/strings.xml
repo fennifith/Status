@@ -37,6 +37,10 @@
     <string name="permissions_name">Additional permissions</string>
     <string name="permissions_desc">This app needs a few additional permissions in order to access parts of the phone relevant to the status bar.</string>
 
+    <string name="tab_settings">Settings</string>
+    <string name="tab_icons">Icons</string>
+    <string name="tab_apps">Apps</string>
+
     <string name="preference_show_clock">Show Clock</string>
     <string name="preference_24h">Use 24 Hour Time Format</string>
     <string name="preference_24h_desc">The clock will show in a 24 hour time format if this is turned on.</string>
