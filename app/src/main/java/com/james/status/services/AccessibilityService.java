@@ -73,7 +73,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                         ActivityColorData data;
                         try {
                             data = new ActivityColorData(packageManager, packageManager.getActivityInfo(component, PackageManager.GET_META_DATA));
-                        } catch (PackageManager.NameNotFoundException e) {
+                        } catch (PackageManager.NameNotFoundException | NullPointerException e) {
                             e.printStackTrace();
                             break;
                         }

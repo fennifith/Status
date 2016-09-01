@@ -110,7 +110,7 @@ public class StaticUtils {
             for (String permission : info.requestedPermissions) {
                 if (ContextCompat.checkSelfPermission(activity, permission) != PackageManager.PERMISSION_GRANTED) {
                     Log.wtf("Permission", permission);
-                    if (!permission.matches(Manifest.permission.SYSTEM_ALERT_WINDOW) && !permission.matches(Manifest.permission.GET_TASKS))
+                    if (permission.length() > 0 && !permission.matches(Manifest.permission.SYSTEM_ALERT_WINDOW) && !permission.matches(Manifest.permission.GET_TASKS))
                         unrequestedPermissions.add(permission);
                 }
             }
