@@ -22,17 +22,27 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <com.james.status.views.CustomImageView
+                <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:scaleType="centerCrop"
-                    android:id="@+id/header" />
+                    android:layout_weight="1">
 
-                <android.support.design.widget.TabLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/tabLayout" />
+                    <com.james.status.views.CustomImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:id="@+id/header" />
+
+                    <android.support.design.widget.TabLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        app:tabTextColor="@color/textColorSecondaryInverse"
+                        app:tabSelectedTextColor="@color/textColorPrimaryInverse"
+                        android:background="@null"
+                        android:id="@+id/tabLayout" />
+
+                </FrameLayout>
 
                 <android.support.v7.widget.SwitchCompat
                     android:id="@+id/serviceEnabled"
@@ -65,6 +75,7 @@
     <android.support.v4.view.ViewPager
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:id="@+id/viewPager" />
 
 </android.support.design.widget.CoordinatorLayout>

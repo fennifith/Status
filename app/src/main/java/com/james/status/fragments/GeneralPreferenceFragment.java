@@ -39,7 +39,6 @@ public class GeneralPreferenceFragment extends SimpleFragment {
 
         RecyclerView recycler = (RecyclerView) v.findViewById(R.id.recycler);
         recycler.setLayoutManager(new GridLayoutManager(getContext(), 1));
-        recycler.setNestedScrollingEnabled(false);
 
         List<PreferenceData> preferences = new ArrayList<>();
 
