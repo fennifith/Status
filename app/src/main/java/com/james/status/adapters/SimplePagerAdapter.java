@@ -32,4 +32,8 @@ public class SimplePagerAdapter extends FragmentStatePagerAdapter {
     public CharSequence getPageTitle(int position) {
         return fragments[position].getTitle(context);
     }
+
+    public void filter(int position, String filter) {
+        fragments[position].filter(filter);
+    }
 }

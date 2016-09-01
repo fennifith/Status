@@ -3,6 +3,7 @@ package com.james.status.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,8 @@ public class AppPreferenceFragment extends SimpleFragment {
         View v = inflater.inflate(R.layout.fragment_recycler, container, false);
 
         RecyclerView recycler = (RecyclerView) v.findViewById(R.id.recycler);
+        recycler.setLayoutManager(new GridLayoutManager(getContext(), 1));
+        recycler.setNestedScrollingEnabled(false);
 
         return v;
     }
