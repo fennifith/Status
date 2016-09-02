@@ -47,15 +47,15 @@ public class AppData implements Parcelable {
         in.readTypedList(activities, ActivityData.CREATOR);
     }
 
-    public static final Creator<ActivityColorData> CREATOR = new Creator<ActivityColorData>() {
+    public static final Creator<AppData> CREATOR = new Creator<AppData>() {
         @Override
-        public ActivityColorData createFromParcel(Parcel in) {
-            return new ActivityColorData(in);
+        public AppData createFromParcel(Parcel in) {
+            return new AppData(in);
         }
 
         @Override
-        public ActivityColorData[] newArray(int size) {
-            return new ActivityColorData[size];
+        public AppData[] newArray(int size) {
+            return new AppData[size];
         }
     };
 

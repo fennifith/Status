@@ -1,6 +1,7 @@
 package com.james.status.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -8,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
@@ -15,10 +17,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.james.status.R;
+import com.james.status.activities.AppSettingActivity;
 import com.james.status.data.AppData;
+import com.james.status.dialogs.ColorPickerDialog;
+import com.james.status.dialogs.PreferenceDialog;
+import com.james.status.utils.ColorUtils;
 import com.james.status.views.CustomImageView;
 
 import java.util.ArrayList;
@@ -113,11 +120,62 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
         holder.v.findViewById(R.id.color).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: set the color preference
+                new Thread() {
+                    @Override
+                    public void run() {
+                        AppData app = getApp(holder.getAdapterPosition());
+                        if (app == null) return;
+
+                        final Integer color = ColorUtils.getPrimaryColor(context, app.getComponentName());
+
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                AppData app = getApp(holder.getAdapterPosition());
+                                if (app == null) return;
+
+                                new ColorPickerDialog(context).setTag(app).setPreference(app.getIntegerPreference(context, AppData.PreferenceIdentifier.COLOR)).setDefaultPreference(color != null ? color : Color.BLACK).setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
+                                    @Override
+                                    public void onPreference(PreferenceDialog dialog, Integer preference) {
+                                        Object tag = dialog.getTag();
+                                        if (tag != null && tag instanceof AppData)
+                                            ((AppData) tag).putPreference(context, AppData.PreferenceIdentifier.COLOR, preference);
+
+                                        ((ImageView) holder.v.findViewById(R.id.colorView)).setImageDrawable(new ColorDrawable(preference));
+                                    }
+
+                                    @Override
+                                    public void onCancel(PreferenceDialog dialog) {
+                                    }
+                                }).show();
+                            }
+                        });
+                    }
+                }.start();
             }
         });
 
-        //TODO: set the color indicator
+        final Integer color = app.getIntegerPreference(context, AppData.PreferenceIdentifier.COLOR);
+        if (color != null) {
+            ((ImageView) holder.v.findViewById(R.id.colorView)).setImageDrawable(new ColorDrawable(color));
+        } else {
+            new Thread() {
+                @Override
+                public void run() {
+                    AppData app = getApp(holder.getAdapterPosition());
+                    if (app == null) return;
+
+                    final Integer color = ColorUtils.getPrimaryColor(context, app.getComponentName());
+
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            ((ImageView) holder.v.findViewById(R.id.colorView)).setImageDrawable(new ColorDrawable(color != null ? color : Color.BLACK));
+                        }
+                    });
+                }
+            }.start();
+        }
 
         SwitchCompat fullscreenSwitch = (SwitchCompat) holder.v.findViewById(R.id.fullscreenSwitch);
         fullscreenSwitch.setOnCheckedChangeListener(null);
@@ -148,6 +206,15 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
                 if (app == null) return;
 
                 app.putSpecificPreference(context, AppData.PreferenceIdentifier.NOTIFICATIONS, isChecked);
+            }
+        });
+
+        holder.v.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, AppSettingActivity.class);
+                intent.putExtra(AppSettingActivity.EXTRA_APP, getApp(holder.getAdapterPosition()));
+                context.startActivity(intent);
             }
         });
     }

@@ -15,8 +15,6 @@ import android.view.ViewGroup;
 import com.james.status.R;
 import com.james.status.adapters.PreferenceSectionAdapter;
 import com.james.status.data.IconStyleData;
-import com.james.status.data.preference.AppsColorPreferenceData;
-import com.james.status.data.preference.AppsStatusPreferenceData;
 import com.james.status.data.preference.BooleanPreferenceData;
 import com.james.status.data.preference.ColorPreferenceData;
 import com.james.status.data.preference.IconPreferenceData;
@@ -74,7 +72,6 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                             }
                         }
                 ),
-                new AppsColorPreferenceData(getContext()),
                 new BooleanPreferenceData(
                         getContext(),
                         new PreferenceData.Identifier(
@@ -97,7 +94,6 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                         true,
                         null
                 ),
-                new AppsStatusPreferenceData(getContext()),
                 new BooleanPreferenceData(
                         getContext(),
                         new PreferenceData.Identifier(
