@@ -13,7 +13,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
-import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
 import android.view.Gravity;
@@ -41,7 +40,6 @@ import com.james.status.data.icon.NetworkIconData;
 import com.james.status.data.icon.RingerIconData;
 import com.james.status.data.icon.TimeIconData;
 import com.james.status.data.icon.WifiIconData;
-import com.james.status.utils.ColorUtils;
 import com.james.status.utils.ImageUtils;
 import com.james.status.utils.PreferenceUtils;
 import com.james.status.utils.StaticUtils;
@@ -339,13 +337,9 @@ public class StatusService extends Service {
 
         headsUpHandler.postDelayed(headsUpRunnable, HEADS_UP_DURATION);
 
-        Integer color = PreferenceUtils.getIntegerPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR);
-        if (color == null) color = Color.BLACK;
-        if (!ColorUtils.isColorDark(color)) color = ColorUtils.darkColor(color);
-
         CustomImageView icon = (CustomImageView) headsUpView.findViewById(R.id.icon);
         Drawable drawable = notification.getIcon(this);
-        if (drawable != null) ImageUtils.tintDrawable(icon, drawable, color);
+        if (drawable != null) ImageUtils.tintDrawable(icon, drawable, notification.color);
 
         CustomImageView largeIcon = (CustomImageView) headsUpView.findViewById(R.id.largeIcon);
         Drawable largeDrawable = notification.getLargeIcon(this);
@@ -353,20 +347,7 @@ public class StatusService extends Service {
 
         TextView name = (TextView) headsUpView.findViewById(R.id.name);
         name.setText(notification.getName(this));
-        name.setTextColor(color);
-
-        notification.getColor(this, new NotificationData.OnColorListener() {
-            @Override
-            public void onColor(String key, @ColorInt int color) {
-                if (headsUpView != null && headsUpNotification != null && headsUpNotification.getKey().matches(key)) {
-                    CustomImageView icon = (CustomImageView) headsUpView.findViewById(R.id.icon);
-                    if (icon.getDrawable() != null)
-                        ImageUtils.tintDrawable(icon, icon.getDrawable(), color);
-
-                    ((TextView) headsUpView.findViewById(R.id.name)).setTextColor(color);
-                }
-            }
-        });
+        name.setTextColor(notification.color);
 
         ((TextView) headsUpView.findViewById(R.id.title)).setText(notification.title);
         ((TextView) headsUpView.findViewById(R.id.subtitle)).setText(notification.subtitle);
@@ -401,12 +382,12 @@ public class StatusService extends Service {
 
                 Drawable actionIcon = action.getIcon(this);
                 if (actionIcon != null)
-                    ImageUtils.tintDrawable((CustomImageView) button.findViewById(R.id.icon), actionIcon, color);
+                    ImageUtils.tintDrawable((CustomImageView) button.findViewById(R.id.icon), actionIcon, notification.color);
                 else button.findViewById(R.id.icon).setVisibility(View.GONE);
 
                 TextView title = (TextView) button.findViewById(R.id.title);
                 title.setText(action.getTitle());
-                title.setTextColor(color);
+                title.setTextColor(notification.color);
 
                 PendingIntent intent = action.getActionIntent();
                 if (intent != null) {

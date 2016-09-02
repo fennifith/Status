@@ -12,16 +12,13 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.util.TypedValue;
 
-import com.google.gson.Gson;
 import com.james.status.activities.StartActivity;
-import com.james.status.data.AppStatusData;
 import com.james.status.services.AccessibilityService;
 import com.james.status.services.StatusService;
 
@@ -148,40 +145,8 @@ public class StaticUtils {
         return false;
     }
 
-    @Nullable
-    public static Boolean isStatusBarFullscreen(Context context, String packageName) {
-        List<String> apps = PreferenceUtils.getStringListPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_FULLSCREEN_APPS);
-        if (apps != null) {
-            Gson gson = new Gson();
-            for (String app : apps) {
-                AppStatusData data = gson.fromJson(app, AppStatusData.class);
-                if (packageName.matches(data.packageName) && data.isFullscreen) return true;
-            }
-        }
-
-        return null;
-    }
-
     public static boolean shouldUseCompatNotifications(Context context) {
         Boolean enabled = PreferenceUtils.getBooleanPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_NOTIFICATIONS_COMPAT);
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2 || (enabled != null && enabled);
-    }
-
-    public static int getSignalStrength(int dbm, int ecio) {
-        int dbmLevel, ecioLevel;
-
-        if (dbm >= -75) dbmLevel = 4;
-        else if (dbm >= -85) dbmLevel = 3;
-        else if (dbm >= -95) dbmLevel = 2;
-        else if (dbm >= -100) dbmLevel = 1;
-        else return dbmLevel = 0;
-
-        if (ecio >= -90) ecioLevel = 4;
-        else if (ecio >= -110) ecioLevel = 3;
-        else if (ecio >= -130) ecioLevel = 2;
-        else if (ecio >= -150) ecioLevel = 1;
-        else ecioLevel = 0;
-
-        return (dbmLevel < ecioLevel) ? dbmLevel : ecioLevel;
     }
 }

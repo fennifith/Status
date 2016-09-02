@@ -3,7 +3,6 @@ package com.james.status.data;
 import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.PendingIntent;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -16,8 +15,6 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.service.notification.StatusBarNotification;
@@ -26,7 +23,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.NotificationCompat;
 
-import com.james.status.utils.ColorUtils;
 import com.james.status.utils.PreferenceUtils;
 
 public class NotificationData implements Parcelable {
@@ -147,25 +143,6 @@ public class NotificationData implements Parcelable {
             drawable = unloadedLargeIcon.loadDrawable(context);
 
         return drawable;
-    }
-
-    public void getColor(final Context context, final OnColorListener onColorListener) {
-        if (color != Color.BLACK) {
-            onColorListener.onColor(getKey(), color);
-        } else {
-            new Thread() {
-                @Override
-                public void run() {
-                    final Integer color = ColorUtils.getStatusBarColor(context, new ComponentName(packageName, packageName), Color.BLACK);
-                    new Handler(Looper.getMainLooper()).post(new Runnable() {
-                        @Override
-                        public void run() {
-                            onColorListener.onColor(getKey(), color != null ? color : Color.BLACK);
-                        }
-                    });
-                }
-            }.start();
-        }
     }
 
     public ActionData[] getActions() {

@@ -9,7 +9,6 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
-import android.os.Handler;
 import android.os.Parcelable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
@@ -170,16 +169,6 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                             return;
                         }
 
-                        Intent homeIntent = new Intent(Intent.ACTION_MAIN);
-                        homeIntent.addCategory(Intent.CATEGORY_HOME);
-                        ActivityInfo homeInfo = packageManager.resolveActivity(homeIntent, PackageManager.MATCH_DEFAULT_ONLY).activityInfo;
-
-                        if (packageName.toString().matches(homeInfo.packageName) && className.toString().matches(homeInfo.name)) {
-                            setStatusBar(null, true, StaticUtils.isStatusBarFullscreen(AccessibilityService.this, packageName.toString()), false);
-                            notificationManager.cancel(NOTIFICATION_ID);
-                            return;
-                        }
-
                         AppData.ActivityData data;
                         try {
                             data = new AppData.ActivityData(packageManager, packageManager.getActivityInfo(new ComponentName(packageName.toString(), className.toString()), PackageManager.GET_META_DATA));
@@ -188,60 +177,57 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                             return;
                         }
 
+                        Boolean isFullscreen = data.getBooleanPreference(this, AppData.PreferenceIdentifier.FULLSCREEN);
+
+                        Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+                        homeIntent.addCategory(Intent.CATEGORY_HOME);
+                        ActivityInfo homeInfo = packageManager.resolveActivity(homeIntent, PackageManager.MATCH_DEFAULT_ONLY).activityInfo;
+
+                        if (packageName.toString().matches(homeInfo.packageName)) {
+                            setStatusBar(null, true, isFullscreen, false);
+                            notificationManager.cancel(NOTIFICATION_ID);
+                            return;
+                        }
+
                         Integer color = data.getIntegerPreference(this, AppData.PreferenceIdentifier.COLOR);
                         if (color != null) {
-                            setStatusBar(color, null, StaticUtils.isStatusBarFullscreen(AccessibilityService.this, packageName.toString()), false);
+                            setStatusBar(color, null, isFullscreen, false);
                         }
 
                         Boolean isColorAuto = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_AUTO);
                         if (isColorAuto != null && !isColorAuto) {
-                            setStatusBar(getDefaultColor(), null, StaticUtils.isStatusBarFullscreen(AccessibilityService.this, packageName.toString()), false);
+                            setStatusBar(getDefaultColor(), null, isFullscreen, false);
                             return;
                         }
 
                         if (packageName.toString().matches("com.james.status")) {
-                            setStatusBar(ContextCompat.getColor(this, R.color.colorPrimaryDark), null, StaticUtils.isStatusBarFullscreen(AccessibilityService.this, packageName.toString()), false);
+                            setStatusBar(ContextCompat.getColor(this, R.color.colorPrimaryDark), null, isFullscreen, false);
                             return;
                         }
 
-                        new Thread() {
-                            @Override
-                            public void run() {
-                                final Integer color = ColorUtils.getPrimaryColor(AccessibilityService.this, new ComponentName(packageName.toString(), className.toString()));
+                        color = ColorUtils.getPrimaryColor(AccessibilityService.this, new ComponentName(packageName.toString(), className.toString()));
 
-                                new Handler(getMainLooper()).post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Integer statusBarColor;
+                        if (color == null) {
+                            color = getDefaultColor();
 
-                                        if (color == null) {
-                                            statusBarColor = getDefaultColor();
+                            Boolean notification = PreferenceUtils.getBooleanPreference(AccessibilityService.this, PreferenceUtils.PreferenceIdentifier.STATUS_COLORED_APPS_NOTIFICATIONS);
+                            if (notification == null || notification) {
+                                Intent intent = new Intent(ACTION_NOTIFY_COLOR);
+                                intent.setClass(AccessibilityService.this, AccessibilityService.class);
+                                intent.putExtra(EXTRA_COMPONENT, new ComponentName(packageName.toString(), className.toString()));
 
-                                            Boolean notification = PreferenceUtils.getBooleanPreference(AccessibilityService.this, PreferenceUtils.PreferenceIdentifier.STATUS_COLORED_APPS_NOTIFICATIONS);
-                                            if (notification == null || notification) {
-                                                Intent intent = new Intent(ACTION_NOTIFY_COLOR);
-                                                intent.setClass(AccessibilityService.this, AccessibilityService.class);
-                                                intent.putExtra(EXTRA_COMPONENT, new ComponentName(packageName.toString(), className.toString()));
-
-                                                notificationManager.notify(NOTIFICATION_ID, new NotificationCompat.Builder(AccessibilityService.this)
-                                                        .setSmallIcon(R.mipmap.ic_colorize)
-                                                        .setColor(ContextCompat.getColor(AccessibilityService.this, R.color.colorAccent))
-                                                        .setContentTitle(getString(R.string.notification_color))
-                                                        .setContentText(getString(R.string.notification_color_desc))
-                                                        .setContentIntent(PendingIntent.getService(AccessibilityService.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT))
-                                                        .build()
-                                                );
-                                            }
-                                        } else {
-                                            statusBarColor = color;
-                                            notificationManager.cancel(NOTIFICATION_ID);
-                                        }
-
-                                        setStatusBar(statusBarColor, null, StaticUtils.isStatusBarFullscreen(AccessibilityService.this, packageName.toString()), false);
-                                    }
-                                });
+                                notificationManager.notify(NOTIFICATION_ID, new NotificationCompat.Builder(AccessibilityService.this)
+                                        .setSmallIcon(R.mipmap.ic_colorize)
+                                        .setColor(ContextCompat.getColor(AccessibilityService.this, R.color.colorAccent))
+                                        .setContentTitle(getString(R.string.notification_color))
+                                        .setContentText(getString(R.string.notification_color_desc))
+                                        .setContentIntent(PendingIntent.getService(AccessibilityService.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT))
+                                        .build()
+                                );
                             }
-                        }.start();
+                        } else notificationManager.cancel(NOTIFICATION_ID);
+
+                        setStatusBar(color, null, isFullscreen, false);
                     }
             }
         }

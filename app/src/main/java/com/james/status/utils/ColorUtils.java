@@ -14,11 +14,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.res.ResourcesCompat;
 
-import com.google.gson.Gson;
-import com.james.status.data.ActivityColorData;
-
-import java.util.List;
-
 public class ColorUtils {
 
     public static boolean isColorDark(int color) {
@@ -90,22 +85,6 @@ public class ColorUtils {
         }
 
         return null;
-    }
-
-    public static Integer getStatusBarColor(Context context, ComponentName componentName, @ColorInt Integer defaultColor) {
-        List<String> apps = PreferenceUtils.getStringListPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_COLORED_APPS);
-        if (apps != null) {
-            Gson gson = new Gson();
-            for (String app : apps) {
-                ActivityColorData data = gson.fromJson(app, ActivityColorData.class);
-                if (componentName.getPackageName().matches(data.packageName) && (data.name == null || componentName.getClassName().matches(data.name)) && data.color != null) {
-                    return data.color;
-                }
-            }
-        }
-
-        Integer color = getPrimaryColor(context, componentName);
-        return color != null ? color : defaultColor;
     }
 
     public static Integer getStatusBarColor(String packageName, Resources resources, int style) {
