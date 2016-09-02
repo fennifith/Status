@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.james.status.R;
+import com.james.status.adapters.AppAdapter;
 
 public class AppPreferenceFragment extends SimpleFragment {
 
@@ -20,6 +21,7 @@ public class AppPreferenceFragment extends SimpleFragment {
 
         RecyclerView recycler = (RecyclerView) v.findViewById(R.id.recycler);
         recycler.setLayoutManager(new GridLayoutManager(getContext(), 1));
+        recycler.setAdapter(new AppAdapter(getContext()));
 
         return v;
     }

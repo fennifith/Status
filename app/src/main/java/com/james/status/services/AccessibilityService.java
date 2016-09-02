@@ -19,9 +19,8 @@ import android.support.v7.app.NotificationCompat;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
 
-import com.google.gson.Gson;
 import com.james.status.R;
-import com.james.status.data.ActivityColorData;
+import com.james.status.data.AppData;
 import com.james.status.data.NotificationData;
 import com.james.status.dialogs.ColorPickerDialog;
 import com.james.status.dialogs.PreferenceDialog;
@@ -70,9 +69,9 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                             component = intent.getParcelableExtra(EXTRA_COMPONENT);
                         else break;
 
-                        ActivityColorData data;
+                        AppData.ActivityData data;
                         try {
-                            data = new ActivityColorData(packageManager, packageManager.getActivityInfo(component, PackageManager.GET_META_DATA));
+                            data = new AppData.ActivityData(packageManager, packageManager.getActivityInfo(component, PackageManager.GET_META_DATA));
                         } catch (PackageManager.NameNotFoundException | NullPointerException e) {
                             e.printStackTrace();
                             break;
@@ -81,18 +80,9 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                         PreferenceDialog dialog = new ColorPickerDialog(this).setDefaultPreference(defaultColor).setTag(data).setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
                             @Override
                             public void onPreference(PreferenceDialog dialog, Integer preference) {
-                                Gson gson = new Gson();
+                                AppData.ActivityData activity = (AppData.ActivityData) dialog.getTag();
+                                activity.putPreference(AccessibilityService.this, AppData.PreferenceIdentifier.COLOR, preference);
 
-                                List<String> jsons = PreferenceUtils.getStringListPreference(AccessibilityService.this, PreferenceUtils.PreferenceIdentifier.STATUS_COLORED_APPS);
-                                if (jsons == null) jsons = new ArrayList<>();
-
-                                ActivityColorData app = (ActivityColorData) dialog.getTag();
-                                app.color = preference;
-
-                                jsons.add(gson.toJson(app));
-
-                                PreferenceUtils.putPreference(AccessibilityService.this, PreferenceUtils.PreferenceIdentifier.STATUS_COLORED_APPS, jsons);
-                                setStatusBar(preference, null, null, null);
                             }
 
                             @Override
@@ -190,17 +180,17 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                             return;
                         }
 
-                        List<String> apps = PreferenceUtils.getStringListPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_COLORED_APPS);
-                        if (apps != null) {
-                            Gson gson = new Gson();
-                            for (String app : apps) {
-                                ActivityColorData data = gson.fromJson(app, ActivityColorData.class);
-                                if (packageName.toString().matches(data.packageName) && (data.name == null || className.toString().matches(data.name)) && data.color != null) {
-                                    setStatusBar(data.color, null, StaticUtils.isStatusBarFullscreen(AccessibilityService.this, packageName.toString()), false);
-                                    notificationManager.cancel(NOTIFICATION_ID);
-                                    return;
-                                }
-                            }
+                        AppData.ActivityData data;
+                        try {
+                            data = new AppData.ActivityData(packageManager, packageManager.getActivityInfo(new ComponentName(packageName.toString(), className.toString()), PackageManager.GET_META_DATA));
+                        } catch (PackageManager.NameNotFoundException | NullPointerException e) {
+                            e.printStackTrace();
+                            return;
+                        }
+
+                        Integer color = data.getIntegerPreference(this, AppData.PreferenceIdentifier.COLOR);
+                        if (color != null) {
+                            setStatusBar(color, null, StaticUtils.isStatusBarFullscreen(AccessibilityService.this, packageName.toString()), false);
                         }
 
                         Boolean isColorAuto = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_AUTO);
