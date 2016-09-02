@@ -115,4 +115,7 @@
 
     <string name="vuk_name">Vukašin Anđelković</string>
     <string name="vuk_desc">The great lord of Material Design, yeah he makes icons and stuff.</string>
+    <string name="preference_status_color">Status Bar Color</string>
+    <string name="preference_fullscreen">Fullscreen</string>
+    <string name="preference_notifications">Notifications</string>
 </resources>

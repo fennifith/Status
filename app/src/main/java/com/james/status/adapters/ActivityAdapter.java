@@ -34,7 +34,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHolder> {
+public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHolder> {
 
     private Context context;
     private PackageManager packageManager;
@@ -43,7 +43,7 @@ public class AppColorAdapter extends RecyclerView.Adapter<AppColorAdapter.ViewHo
     private List<String> jsons;
     private String packageName;
 
-    public AppColorAdapter(final Context context, final String packageName) {
+    public ActivityAdapter(final Context context, final String packageName) {
         this.context = context;
         this.packageName = packageName;
         packageManager = context.getPackageManager();

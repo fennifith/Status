@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.james.status.R;
-import com.james.status.adapters.AppColorPreviewAdapter;
 import com.james.status.dialogs.AppColorDialog;
 import com.james.status.utils.PreferenceUtils;
 

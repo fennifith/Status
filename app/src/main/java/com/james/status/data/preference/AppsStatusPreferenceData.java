@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.james.status.R;
-import com.james.status.adapters.AppStatusPreviewAdapter;
 import com.james.status.dialogs.AppStatusDialog;
 import com.james.status.utils.PreferenceUtils;
 
