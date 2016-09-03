@@ -19,7 +19,7 @@ public class AppPreferenceFragment extends SimpleFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_padded_recycler, container, false);
+        View v = inflater.inflate(R.layout.fragment_apps, container, false);
 
         RecyclerView recycler = (RecyclerView) v.findViewById(R.id.recycler);
         recycler.setLayoutManager(new GridLayoutManager(getContext(), 1));

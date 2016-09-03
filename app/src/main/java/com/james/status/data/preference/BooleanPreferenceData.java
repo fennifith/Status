@@ -11,11 +11,11 @@ import android.widget.TextView;
 import com.james.status.R;
 import com.james.status.utils.PreferenceUtils;
 
-public class BooleanPreferenceData extends PreferenceData {
+public class BooleanPreferenceData extends PreferenceData<Boolean> {
 
     public boolean value;
 
-    public BooleanPreferenceData(Context context, Identifier identifier, boolean defaultValue, OnPreferenceChangeListener listener) {
+    public BooleanPreferenceData(Context context, Identifier identifier, boolean defaultValue, OnPreferenceChangeListener<Boolean> listener) {
         super(context, identifier, listener);
 
         Boolean value = PreferenceUtils.getBooleanPreference(getContext(), identifier.getPreference());
@@ -42,17 +42,16 @@ public class BooleanPreferenceData extends PreferenceData {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 value = b;
-                PreferenceUtils.putPreference(getContext(), getIdentifier().getPreference(), b);
-                onPreferenceChange();
+
+                PreferenceUtils.PreferenceIdentifier identifier = getIdentifier().getPreference();
+                if (identifier != null)
+                    PreferenceUtils.putPreference(getContext(), getIdentifier().getPreference(), b);
+                onPreferenceChange(b);
             }
         });
 
         String subtitle = identifier.getSubtitle();
         if (subtitle.length() > 0) subtitleView.setText(subtitle);
         else subtitleView.setVisibility(View.GONE);
-    }
-
-    public interface OnChangeListener {
-        void onPreferenceChange(boolean preference);
     }
 }

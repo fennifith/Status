@@ -8,7 +8,12 @@ import android.content.IntentFilter;
 import android.support.graphics.drawable.VectorDrawableCompat;
 
 import com.james.status.R;
+import com.james.status.data.IconStyleData;
 import com.james.status.utils.StaticUtils;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class BluetoothIconData extends IconData<BluetoothIconData.BluetoothReceiver> {
 
@@ -41,11 +46,25 @@ public class BluetoothIconData extends IconData<BluetoothIconData.BluetoothRecei
     }
 
     @Override
-    public int[] getDefaultIconResource() {
-        return new int[]{
-                R.drawable.ic_bluetooth,
-                R.drawable.ic_bluetooth_connected
-        };
+    public String getTitle() {
+        return getContext().getString(R.string.icon_bluetooth);
+    }
+
+    @Override
+    public List<IconStyleData> getIconStyles() {
+        List<IconStyleData> styles = new ArrayList<>();
+
+        styles.addAll(
+                Arrays.asList(
+                        new IconStyleData(
+                                getContext().getString(R.string.icon_style_default),
+                                R.drawable.ic_bluetooth,
+                                R.drawable.ic_bluetooth_connected
+                        )
+                )
+        );
+
+        return styles;
     }
 
     public class BluetoothReceiver extends BroadcastReceiver {

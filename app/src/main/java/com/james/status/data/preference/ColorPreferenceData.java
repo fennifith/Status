@@ -16,11 +16,11 @@ import com.james.status.dialogs.PreferenceDialog;
 import com.james.status.utils.PreferenceUtils;
 import com.james.status.views.CustomImageView;
 
-public class ColorPreferenceData extends PreferenceData {
+public class ColorPreferenceData extends PreferenceData<Integer> {
 
     public int value;
 
-    public ColorPreferenceData(Context context, Identifier identifier, @ColorInt int defaultValue, OnPreferenceChangeListener listener) {
+    public ColorPreferenceData(Context context, Identifier identifier, @ColorInt int defaultValue, OnPreferenceChangeListener<Integer> listener) {
         super(context, identifier, listener);
 
         Integer value = PreferenceUtils.getIntegerPreference(getContext(), identifier.getPreference());
@@ -49,8 +49,11 @@ public class ColorPreferenceData extends PreferenceData {
                     public void onPreference(PreferenceDialog dialog, Integer color) {
                         value = color;
                         ((CustomImageView) holder.v.findViewById(R.id.color)).transition(new ColorDrawable(color));
-                        PreferenceUtils.putPreference(getContext(), getIdentifier().getPreference(), (int) color);
-                        onPreferenceChange();
+
+                        PreferenceUtils.PreferenceIdentifier identifier = getIdentifier().getPreference();
+                        if (identifier != null)
+                            PreferenceUtils.putPreference(getContext(), getIdentifier().getPreference(), color);
+                        onPreferenceChange(color);
                     }
 
                     @Override

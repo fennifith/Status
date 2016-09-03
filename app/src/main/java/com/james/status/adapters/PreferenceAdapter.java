@@ -7,14 +7,14 @@ import android.view.ViewGroup;
 
 import com.james.status.data.preference.PreferenceData;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class PreferenceAdapter extends RecyclerView.Adapter<PreferenceData.ViewHolder> {
 
     Context context;
-    ArrayList<PreferenceData> datas;
+    List<PreferenceData> datas;
 
-    public PreferenceAdapter(Context context, ArrayList<PreferenceData> datas) {
+    public PreferenceAdapter(Context context, List<PreferenceData> datas) {
         this.context = context;
         this.datas = datas;
     }

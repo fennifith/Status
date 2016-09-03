@@ -22,9 +22,7 @@ public class PreferenceUtils {
         STATUS_COLOR_AUTO,
         STATUS_COLOR,
         STATUS_HOME_TRANSPARENT,
-        STATUS_COLORED_APPS,
         STATUS_COLORED_APPS_NOTIFICATIONS,
-        STATUS_FULLSCREEN_APPS,
         STATUS_DARK_ICONS,
         STATUS_LOCKSCREEN_EXPAND,
         STATUS_ICON_PADDING,
@@ -53,6 +51,8 @@ public class PreferenceUtils {
 
     @Nullable
     public static Object getPreference(Context context, PreferenceIdentifier identifier) {
+        if (context == null || identifier == null) return null;
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         if (prefs.contains(identifier.toString()))
             return prefs.getAll().get(identifier.toString());
@@ -62,6 +62,8 @@ public class PreferenceUtils {
 
     @Nullable
     public static Boolean getBooleanPreference(Context context, PreferenceIdentifier identifier) {
+        if (context == null || identifier == null) return null;
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         if (prefs.contains(identifier.toString()))
             return prefs.getBoolean(identifier.toString(), false);
@@ -71,6 +73,8 @@ public class PreferenceUtils {
 
     @Nullable
     public static Integer getIntegerPreference(Context context, PreferenceIdentifier identifier) {
+        if (context == null || identifier == null) return null;
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         if (prefs.contains(identifier.toString()))
             return prefs.getInt(identifier.toString(), 0);
@@ -80,6 +84,8 @@ public class PreferenceUtils {
 
     @Nullable
     public static int[] getResourceIntPreference(Context context, PreferenceIdentifier identifier, String resourceType) {
+        if (context == null || identifier == null || resourceType == null) return null;
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         Resources resources = context.getResources();
 
@@ -99,6 +105,8 @@ public class PreferenceUtils {
 
     @Nullable
     public static String getStringPreference(Context context, PreferenceIdentifier identifier) {
+        if (context == null || identifier == null) return null;
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         if (prefs.contains(identifier.toString()))
             return prefs.getString(identifier.toString(), null);
@@ -108,6 +116,8 @@ public class PreferenceUtils {
 
     @Nullable
     public static Float getFloatPreference(Context context, PreferenceIdentifier identifier) {
+        if (context == null || identifier == null) return null;
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         if (prefs.contains(identifier.toString()))
             return prefs.getFloat(identifier.toString(), 0f);
@@ -117,6 +127,8 @@ public class PreferenceUtils {
 
     @Nullable
     public static Long getLongPreference(Context context, PreferenceIdentifier identifier) {
+        if (context == null || identifier == null) return null;
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         if (prefs.contains(identifier.toString()))
             return prefs.getLong(identifier.toString(), 0);
@@ -126,6 +138,8 @@ public class PreferenceUtils {
 
     @Nullable
     public static List<String> getStringListPreference(Context context, PreferenceIdentifier identifier) {
+        if (context == null || identifier == null) return null;
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         if (prefs.contains(identifier.toString() + "-length")) {

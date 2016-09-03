@@ -4,6 +4,8 @@ import android.content.Context;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 
+import com.james.status.R;
+
 //HAH IT'S A ICON DATA FOR THE DATA ICON GET IT BECAUSE THEIR NAMES ARE THE SAME BUT REVERSED YEAH IT'S SO FUNNY HAHHAHAHAHAHAHAH I KNOW RIGHT IT'S REALLY HILARIOUS I'M LITERALLY DYING OF LAUGHTER
 public class DataIconData extends IconData {
 
@@ -73,6 +75,11 @@ public class DataIconData extends IconData {
     @Override
     public void unregister() {
         isRegistered = false;
+    }
+
+    @Override
+    public String getTitle() {
+        return getContext().getString(R.string.icon_data);
     }
 
     private class DataListener extends PhoneStateListener {

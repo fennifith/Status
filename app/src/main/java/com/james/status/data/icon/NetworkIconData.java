@@ -7,6 +7,11 @@ import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
 
 import com.james.status.R;
+import com.james.status.data.IconStyleData;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class NetworkIconData extends IconData {
 
@@ -34,14 +39,44 @@ public class NetworkIconData extends IconData {
     }
 
     @Override
-    public int[] getDefaultIconResource() {
-        return new int[]{
-                R.drawable.ic_signal_0,
-                R.drawable.ic_signal_1,
-                R.drawable.ic_signal_2,
-                R.drawable.ic_signal_3,
-                R.drawable.ic_signal_4
-        };
+    public String getTitle() {
+        return getContext().getString(R.string.icon_network);
+    }
+
+    @Override
+    public List<IconStyleData> getIconStyles() {
+        List<IconStyleData> styles = new ArrayList<>();
+
+        styles.addAll(
+                Arrays.asList(
+                        new IconStyleData(
+                                getContext().getString(R.string.icon_style_default),
+                                R.drawable.ic_signal_0,
+                                R.drawable.ic_signal_1,
+                                R.drawable.ic_signal_2,
+                                R.drawable.ic_signal_3,
+                                R.drawable.ic_signal_4
+                        ),
+                        new IconStyleData(
+                                getContext().getString(R.string.icon_style_square),
+                                R.drawable.ic_signal_square_0,
+                                R.drawable.ic_signal_square_1,
+                                R.drawable.ic_signal_square_2,
+                                R.drawable.ic_signal_square_3,
+                                R.drawable.ic_signal_square_4
+                        ),
+                        new IconStyleData(
+                                getContext().getString(R.string.icon_style_retro),
+                                R.drawable.ic_signal_retro_0,
+                                R.drawable.ic_signal_retro_1,
+                                R.drawable.ic_signal_retro_2,
+                                R.drawable.ic_signal_retro_3,
+                                R.drawable.ic_signal_retro_4
+                        )
+                )
+        );
+
+        return styles;
     }
 
     private class NetworkListener extends PhoneStateListener {

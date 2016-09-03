@@ -135,6 +135,14 @@ public class StaticUtils {
         return false;
     }
 
+    public static void updateStatusService(Context context) {
+        if (isStatusServiceRunning(context)) {
+            Intent intent = new Intent(StatusService.ACTION_START);
+            intent.setClass(context, StatusService.class);
+            context.startService(intent);
+        }
+    }
+
     public static boolean isAccessibilityServiceRunning(Context context) {
         ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {

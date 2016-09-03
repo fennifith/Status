@@ -65,7 +65,7 @@
     <string name="preference_dark_icons">Dark Icons</string>
     <string name="preference_dark_icons_desc">Darkens the status bar icons on light backgrounds.</string>
     <string name="preference_show_battery_icon">Show Battery Icon</string>
-    <string name="preference_battery_icon">Battery Icon Style</string>
+    <string name="preference_icon_style">Icon Style</string>
     <string name="preference_show_network_icon">Show Network Icon</string>
     <string name="preference_network_icon">Network Icon Style</string>
     <string name="preference_dual_sim">Dual Sim</string>
@@ -88,6 +88,18 @@
     <string name="preference_icon_scale">Icon Scale (dp)</string>
     <string name="preference_color_notification">Screen-Specific Color Notifications</string>
     <string name="preference_color_notification_desc">The app will show a notification as a shortcut to set the color for an app if the a color has not been found.</string>
+    <string name="preference_center_gravity">Center Icon</string>
+    <string name="preference_center_gravity_desc">This will move the icon to the center of the status bar.</string>
+
+    <string name="icon_clock">Clock</string>
+    <string name="icon_battery">Battery Icon</string>
+    <string name="icon_network">Network Icon</string>
+    <string name="icon_data">Data Indicator</string>
+    <string name="icon_wifi">WiFi Icon</string>
+    <string name="icon_bluetooth">Bluetooth Icon</string>
+    <string name="icon_airplane">Airplane Mode Icon</string>
+    <string name="icon_alarm">Alarm Icon</string>
+    <string name="icon_ringer">Ringer Volume Icon</string>
 
     <string name="notification_color">Set Screen-Specific Color</string>
     <string name="notification_color_desc">Status couldn\'t find a color to use for this application, so it\'s reverted to the default color. You can specify a color to use by clicking this notification.</string>

@@ -17,15 +17,14 @@ import com.james.status.views.IconStyleImageView;
 import java.util.Arrays;
 import java.util.List;
 
-public class IconPreferenceData extends PreferenceData {
+public class IconPreferenceData extends PreferenceData<IconStyleData> {
 
     private IconStyleData iconStyle;
     private List<IconStyleData> iconStyles;
 
-    public IconPreferenceData(Context context, Identifier identifier, List<IconStyleData> iconStyles, OnPreferenceChangeListener listener) {
+    public IconPreferenceData(Context context, Identifier identifier, int[] resource, List<IconStyleData> iconStyles, OnPreferenceChangeListener<IconStyleData> listener) {
         super(context, identifier, listener);
 
-        int[] resource = PreferenceUtils.getResourceIntPreference(context, getIdentifier().getPreference(), "drawable");
         if (resource != null) {
             for (IconStyleData style : iconStyles) {
                 if (Arrays.equals(style.resource, resource)) iconStyle = style;
@@ -60,8 +59,10 @@ public class IconPreferenceData extends PreferenceData {
 
                             IconPreferenceData.this.iconStyle = preference;
 
-                            PreferenceUtils.putResourcePreference(getContext(), getIdentifier().getPreference(), iconStyle.resource);
-                            onPreferenceChange();
+                            PreferenceUtils.PreferenceIdentifier identifier = getIdentifier().getPreference();
+                            if (identifier != null)
+                                PreferenceUtils.putResourcePreference(getContext(), getIdentifier().getPreference(), iconStyle.resource);
+                            onPreferenceChange(preference);
                         }
                     }
 

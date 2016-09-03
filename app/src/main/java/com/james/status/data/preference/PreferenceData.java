@@ -9,11 +9,11 @@ import android.view.ViewGroup;
 
 import com.james.status.utils.PreferenceUtils;
 
-public class PreferenceData {
+public class PreferenceData<T> {
 
     private final Context context;
     private final Identifier identifier;
-    private final OnPreferenceChangeListener listener;
+    private final OnPreferenceChangeListener<T> listener;
 
     public PreferenceData(Context context, Identifier identifier) {
         this.context = context;
@@ -21,7 +21,7 @@ public class PreferenceData {
         listener = null;
     }
 
-    public PreferenceData(Context context, Identifier identifier, OnPreferenceChangeListener listener) {
+    public PreferenceData(Context context, Identifier identifier, OnPreferenceChangeListener<T> listener) {
         this.context = context;
         this.identifier = identifier;
         this.listener = listener;
@@ -42,12 +42,12 @@ public class PreferenceData {
     public void onBindViewHolder(ViewHolder holder, int position) {
     }
 
-    public void onPreferenceChange() {
-        if (listener != null) listener.onPreferenceChange();
+    public void onPreferenceChange(T preference) {
+        if (listener != null) listener.onPreferenceChange(preference);
     }
 
-    public interface OnPreferenceChangeListener {
-        void onPreferenceChange();
+    public interface OnPreferenceChangeListener<T> {
+        void onPreferenceChange(T preference);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -65,6 +65,15 @@ public class PreferenceData {
         private String title, subtitle;
         private PreferenceUtils.PreferenceIdentifier identifier;
         private SectionIdentifier sectionIdentifier;
+
+        public Identifier(@Nullable String title) {
+            this.title = title;
+        }
+
+        public Identifier(@Nullable String title, @Nullable String subtitle) {
+            this.title = title;
+            this.subtitle = subtitle;
+        }
 
         public Identifier(PreferenceUtils.PreferenceIdentifier identifier, @Nullable String title, SectionIdentifier sectionIdentifier) {
             this.identifier = identifier;
@@ -100,15 +109,7 @@ public class PreferenceData {
         public enum SectionIdentifier {
             COLORS,
             ICONS,
-            NOTIFICATIONS,
-            CLOCK,
-            BATTERY,
-            NETWORK,
-            WIFI,
-            GPS,
-            BLUETOOTH,
-            AIRPLANE_MODE,
-            RINGER
+            NOTIFICATIONS
         }
     }
 }

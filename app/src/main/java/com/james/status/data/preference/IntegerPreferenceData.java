@@ -12,12 +12,12 @@ import com.james.status.dialogs.IntegerPickerDialog;
 import com.james.status.dialogs.PreferenceDialog;
 import com.james.status.utils.PreferenceUtils;
 
-public class IntegerPreferenceData extends PreferenceData {
+public class IntegerPreferenceData extends PreferenceData<Integer> {
 
     int preference;
     String unit;
 
-    public IntegerPreferenceData(Context context, Identifier identifier, int defaultValue, String unit, OnPreferenceChangeListener listener) {
+    public IntegerPreferenceData(Context context, Identifier identifier, int defaultValue, String unit, OnPreferenceChangeListener<Integer> listener) {
         super(context, identifier, listener);
 
         Integer preference = PreferenceUtils.getIntegerPreference(context, identifier.getPreference());
@@ -43,8 +43,11 @@ public class IntegerPreferenceData extends PreferenceData {
                     @Override
                     public void onPreference(PreferenceDialog dialog, Integer preference) {
                         IntegerPreferenceData.this.preference = preference;
-                        PreferenceUtils.putPreference(getContext(), getIdentifier().getPreference(), preference);
-                        onPreferenceChange();
+
+                        PreferenceUtils.PreferenceIdentifier identifier = getIdentifier().getPreference();
+                        if (identifier != null)
+                            PreferenceUtils.putPreference(getContext(), getIdentifier().getPreference(), preference);
+                        onPreferenceChange(preference);
                     }
 
                     @Override

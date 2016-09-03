@@ -12,6 +12,18 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.graphics.drawable.VectorDrawableCompat;
 
+import com.james.status.R;
+import com.james.status.data.IconStyleData;
+import com.james.status.data.preference.BooleanPreferenceData;
+import com.james.status.data.preference.IconPreferenceData;
+import com.james.status.data.preference.IntegerPreferenceData;
+import com.james.status.data.preference.PreferenceData;
+import com.james.status.utils.StaticUtils;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class IconData<T extends BroadcastReceiver> {
 
     private Context context;
@@ -101,7 +113,9 @@ public class IconData<T extends BroadcastReceiver> {
     }
 
     public int[] getDefaultIconResource() {
-        return null;
+        List<IconStyleData> iconStyles = getIconStyles();
+        if (iconStyles.size() > 0) return iconStyles.get(0).resource;
+        else return null;
     }
 
     public int getIconResource() {
@@ -110,6 +124,24 @@ public class IconData<T extends BroadcastReceiver> {
 
     public int getIconResource(int level) {
         return resource[Math.abs(level % resource.length)];
+    }
+
+    public int getIconPadding() {
+        Integer padding = getIntegerPreference(PreferenceIdentifier.ICON_PADDING);
+        if (padding == null) padding = 2;
+        return padding;
+    }
+
+    public int getIconScale() {
+        Integer scale = getIntegerPreference(PreferenceIdentifier.ICON_SCALE);
+        if (scale == null) scale = 24;
+        return scale;
+    }
+
+    public boolean isCentered() {
+        Boolean isCenter = getBooleanPreference(PreferenceIdentifier.CENTER_GRAVITY);
+        if (isCenter == null) isCenter = false;
+        return isCenter;
     }
 
     @Nullable
@@ -132,6 +164,86 @@ public class IconData<T extends BroadcastReceiver> {
 
     public String getFakeText() {
         return "";
+    }
+
+    public String getTitle() {
+        return getClass().getSimpleName();
+    }
+
+    public List<PreferenceData> getPreferences() {
+        List<PreferenceData> preferences = new ArrayList<>();
+
+        preferences.addAll(Arrays.asList(
+                new BooleanPreferenceData(
+                        getContext(),
+                        new PreferenceData.Identifier(
+                                getContext().getString(R.string.preference_center_gravity),
+                                getContext().getString(R.string.preference_center_gravity_desc)
+                        ),
+                        isCentered(),
+                        new PreferenceData.OnPreferenceChangeListener<Boolean>() {
+                            @Override
+                            public void onPreferenceChange(Boolean preference) {
+                                putPreference(PreferenceIdentifier.CENTER_GRAVITY, preference);
+                                StaticUtils.updateStatusService(getContext());
+                            }
+                        }
+                ),
+                new IntegerPreferenceData(
+                        getContext(),
+                        new PreferenceData.Identifier(
+                                getContext().getString(R.string.preference_icon_padding)
+                        ),
+                        getIconPadding(),
+                        getContext().getString(R.string.unit_dp),
+                        new PreferenceData.OnPreferenceChangeListener<Integer>() {
+                            @Override
+                            public void onPreferenceChange(Integer preference) {
+                                putPreference(PreferenceIdentifier.ICON_PADDING, preference);
+                                StaticUtils.updateStatusService(getContext());
+                            }
+                        }
+                ),
+                new IntegerPreferenceData(
+                        getContext(),
+                        new PreferenceData.Identifier(
+                                getContext().getString(R.string.preference_icon_scale)
+                        ),
+                        getIconScale(),
+                        getContext().getString(R.string.unit_dp),
+                        new PreferenceData.OnPreferenceChangeListener<Integer>() {
+                            @Override
+                            public void onPreferenceChange(Integer preference) {
+                                putPreference(PreferenceIdentifier.ICON_SCALE, preference);
+                                StaticUtils.updateStatusService(getContext());
+                            }
+                        }
+                )
+        ));
+
+        if (hasDrawable()) {
+            preferences.add(new IconPreferenceData(
+                    getContext(),
+                    new PreferenceData.Identifier(
+                            getTitle() + " " + getContext().getString(R.string.preference_icon_style)
+                    ),
+                    getResourceIntPreference(PreferenceIdentifier.ICON_STYLE, "drawable"),
+                    getIconStyles(),
+                    new PreferenceData.OnPreferenceChangeListener<IconStyleData>() {
+                        @Override
+                        public void onPreferenceChange(IconStyleData preference) {
+                            putPreference(PreferenceIdentifier.ICON_STYLE, preference.resource);
+                            StaticUtils.updateStatusService(getContext());
+                        }
+                    }
+            ));
+        }
+
+        return preferences;
+    }
+
+    public List<IconStyleData> getIconStyles() {
+        return new ArrayList<>();
     }
 
     @Nullable
@@ -220,6 +332,8 @@ public class IconData<T extends BroadcastReceiver> {
         CENTER_GRAVITY,
         TEXT_VISIBILITY,
         TEXT_FORMAT,
-        ICON_STYLE
+        ICON_STYLE,
+        ICON_PADDING,
+        ICON_SCALE
     }
 }
