@@ -8,21 +8,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <android.support.design.widget.CollapsingToolbarLayout
+        <android.support.v7.widget.Toolbar
             android:layout_width="match_parent"
-            android:layout_height="184dp"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:titleEnabled="false">
-
-            <android.support.v7.widget.Toolbar
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                android:layout_gravity="bottom"
-                app:layout_collapseMode="pin"
-                android:id="@+id/toolbar" />
-
-        </android.support.design.widget.CollapsingToolbarLayout>
+            android:layout_height="?attr/actionBarSize"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            android:id="@+id/toolbar" />
 
     </android.support.design.widget.AppBarLayout>
 
@@ -40,16 +30,16 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="42dp"
+                android:layout_height="56dp"
                 android:background="?attr/selectableItemBackground"
                 android:orientation="horizontal"
                 android:id="@+id/color">
 
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_height="42dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="center_vertical|start"
+                    android:layout_gravity="center_vertical"
                     android:paddingLeft="12dp"
                     android:paddingRight="12dp"
                     android:text="@string/preference_status_color"
@@ -73,7 +63,7 @@
 
             <android.support.v7.widget.SwitchCompat
                 android:layout_width="match_parent"
-                android:layout_height="42dp"
+                android:layout_height="56dp"
                 android:gravity="center_vertical|start"
                 android:paddingLeft="12dp"
                 android:paddingRight="12dp"
@@ -88,7 +78,7 @@
 
             <android.support.v7.widget.SwitchCompat
                 android:layout_width="match_parent"
-                android:layout_height="42dp"
+                android:layout_height="56dp"
                 android:gravity="center_vertical|start"
                 android:paddingLeft="12dp"
                 android:paddingRight="12dp"

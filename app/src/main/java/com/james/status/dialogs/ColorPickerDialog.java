@@ -46,19 +46,12 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> {
         blue = (AppCompatSeekBar) findViewById(R.id.blue);
         blueInt = (TextView) findViewById(R.id.blueInt);
 
-        int color = getPreference();
-
-        red.setProgress(Color.red(color));
-        green.setProgress(Color.green(color));
-        blue.setProgress(Color.blue(color));
-        setColor(color);
-
         red.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 int color = getPreference();
                 color = Color.argb(255, i, Color.green(color), Color.blue(color));
-                setColor(color);
+                setColor(color, false);
 
                 findViewById(R.id.reset).setVisibility(getDefaultPreference() != null && color != getDefaultPreference() ? View.VISIBLE : View.GONE);
                 setPreference(color);
@@ -80,7 +73,7 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> {
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 int color = getPreference();
                 color = Color.argb(255, Color.red(color), i, Color.blue(color));
-                setColor(color);
+                setColor(color, false);
 
                 findViewById(R.id.reset).setVisibility(getDefaultPreference() != null && color != getDefaultPreference() ? View.VISIBLE : View.GONE);
                 setPreference(color);
@@ -102,7 +95,7 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> {
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 int color = getPreference();
                 color = Color.argb(255, Color.red(color), Color.green(color), i);
-                setColor(color);
+                setColor(color, false);
 
                 findViewById(R.id.reset).setVisibility(getDefaultPreference() != null && color != getDefaultPreference() ? View.VISIBLE : View.GONE);
                 setPreference(color);
@@ -119,6 +112,8 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> {
             }
         });
 
+        setColor(getPreference(), false);
+
         LinearLayout presetLayout = (LinearLayout) findViewById(R.id.colors);
         LayoutInflater inflater = LayoutInflater.from(getContext());
 
@@ -134,7 +129,7 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> {
                 public void onClick(View v) {
                     Object tag = v.getTag();
                     if (tag != null && tag instanceof Integer) {
-                        setColor((int) tag);
+                        setColor((int) tag, true);
 
                         findViewById(R.id.reset).setVisibility(getDefaultPreference() != null && (int) tag != getDefaultPreference() ? View.VISIBLE : View.GONE);
                         setPreference((int) tag);
@@ -150,7 +145,7 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> {
             public void onClick(View v) {
                 int color = getDefaultPreference();
 
-                setColor(color);
+                setColor(color, true);
 
                 findViewById(R.id.reset).setVisibility(View.GONE);
                 setPreference(color);
@@ -172,8 +167,8 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> {
         });
     }
 
-    private void setColor(@ColorInt int color) {
-        if (!isTrackingTouch && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+    private void setColor(@ColorInt int color, boolean animate) {
+        if (!isTrackingTouch && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && animate) {
             ValueAnimator animator = ValueAnimator.ofArgb(getPreference(), color);
             animator.setDuration(250);
             animator.setInterpolator(new DecelerateInterpolator());

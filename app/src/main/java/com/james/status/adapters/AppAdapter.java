@@ -27,6 +27,7 @@ import com.james.status.data.AppData;
 import com.james.status.dialogs.ColorPickerDialog;
 import com.james.status.dialogs.PreferenceDialog;
 import com.james.status.utils.ColorUtils;
+import com.james.status.utils.ImageUtils;
 import com.james.status.views.CustomImageView;
 
 import java.util.ArrayList;
@@ -130,7 +131,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
                         AppData app = getApp(holder.getAdapterPosition());
                         if (app == null) return;
 
-                        final Integer color = ColorUtils.getPrimaryColor(context, app.getComponentName());
+                        final int color = app.getColor(context), defaultColor = app.getDefaultColor(context);
 
                         new Handler(Looper.getMainLooper()).post(new Runnable() {
                             @Override
@@ -138,20 +139,23 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
                                 AppData app = getApp(holder.getAdapterPosition());
                                 if (app == null) return;
 
-                                new ColorPickerDialog(context).setTag(app).setPreference(app.getIntegerPreference(context, AppData.PreferenceIdentifier.COLOR)).setDefaultPreference(color != null ? color : Color.BLACK).setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
+                                PreferenceDialog dialog = new ColorPickerDialog(context).setTag(app).setPreference(color).setDefaultPreference(defaultColor).setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
                                     @Override
                                     public void onPreference(PreferenceDialog dialog, Integer preference) {
                                         Object tag = dialog.getTag();
                                         if (tag != null && tag instanceof AppData)
                                             ((AppData) tag).putPreference(context, AppData.PreferenceIdentifier.COLOR, preference);
 
-                                        ((ImageView) holder.v.findViewById(R.id.colorView)).setImageDrawable(new ColorDrawable(preference));
+                                        notifyItemChanged(holder.getAdapterPosition());
                                     }
 
                                     @Override
                                     public void onCancel(PreferenceDialog dialog) {
                                     }
-                                }).show();
+                                });
+
+                                dialog.setTitle(app.label);
+                                dialog.show();
                             }
                         });
                     }
@@ -159,37 +163,27 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
             }
         });
 
-        final Integer color = app.getIntegerPreference(context, AppData.PreferenceIdentifier.COLOR);
-        if (color != null) {
-            ((ImageView) holder.v.findViewById(R.id.colorView)).setImageDrawable(new ColorDrawable(color));
+        new Thread() {
+            @Override
+            public void run() {
+                AppData app = getApp(holder.getAdapterPosition());
+                if (app == null) return;
 
-            holder.v.findViewById(R.id.titleBar).setBackgroundColor(color);
-            ((TextView) holder.v.findViewById(R.id.appName)).setTextColor(ContextCompat.getColor(context, ColorUtils.isColorDark(color) ? R.color.textColorPrimaryInverse : R.color.textColorPrimary));
-            ((TextView) holder.v.findViewById(R.id.appPackage)).setTextColor(ContextCompat.getColor(context, ColorUtils.isColorDark(color) ? R.color.textColorSecondaryInverse : R.color.textColorSecondary));
-        } else {
-            new Thread() {
-                @Override
-                public void run() {
-                    AppData app = getApp(holder.getAdapterPosition());
-                    if (app == null) return;
+                final int color = app.getColor(context);
 
-                    final Integer color = ColorUtils.getPrimaryColor(context, app.getComponentName());
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((ImageView) holder.v.findViewById(R.id.colorView)).setImageDrawable(new ColorDrawable(color));
 
-                    new Handler(Looper.getMainLooper()).post(new Runnable() {
-                        @Override
-                        public void run() {
-                            int someColor = color != null ? color : Color.BLACK;
-
-                            ((ImageView) holder.v.findViewById(R.id.colorView)).setImageDrawable(new ColorDrawable(someColor));
-
-                            holder.v.findViewById(R.id.titleBar).setBackgroundColor(someColor);
-                            ((TextView) holder.v.findViewById(R.id.appName)).setTextColor(ContextCompat.getColor(context, ColorUtils.isColorDark(someColor) ? R.color.textColorPrimaryInverse : R.color.textColorPrimary));
-                            ((TextView) holder.v.findViewById(R.id.appPackage)).setTextColor(ContextCompat.getColor(context, ColorUtils.isColorDark(someColor) ? R.color.textColorSecondaryInverse : R.color.textColorSecondary));
-                        }
-                    });
-                }
-            }.start();
-        }
+                        holder.v.findViewById(R.id.titleBar).setBackgroundColor(color);
+                        ((TextView) holder.v.findViewById(R.id.appName)).setTextColor(ContextCompat.getColor(context, ColorUtils.isColorDark(color) ? R.color.textColorPrimaryInverse : R.color.textColorPrimary));
+                        ((TextView) holder.v.findViewById(R.id.appPackage)).setTextColor(ContextCompat.getColor(context, ColorUtils.isColorDark(color) ? R.color.textColorSecondaryInverse : R.color.textColorSecondary));
+                        ImageUtils.tintDrawable(((CustomImageView) holder.v.findViewById(R.id.launchIcon)), ImageUtils.getVectorDrawable(context, R.drawable.ic_launch), ColorUtils.isColorDark(color) ? Color.WHITE : Color.BLACK);
+                    }
+                });
+            }
+        }.start();
 
         SwitchCompat fullscreenSwitch = (SwitchCompat) holder.v.findViewById(R.id.fullscreenSwitch);
         fullscreenSwitch.setOnCheckedChangeListener(null);

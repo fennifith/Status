@@ -59,9 +59,6 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                         startService(i);
                         break;
                     case ACTION_NOTIFY_COLOR:
-                        Integer defaultColor = PreferenceUtils.getIntegerPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR);
-                        if (defaultColor == null) defaultColor = Color.BLACK;
-
                         ComponentName component;
 
                         if (intent.hasExtra(EXTRA_COMPONENT))
@@ -76,7 +73,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                             break;
                         }
 
-                        PreferenceDialog dialog = new ColorPickerDialog(this).setDefaultPreference(defaultColor).setTag(data).setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
+                        PreferenceDialog dialog = new ColorPickerDialog(this).setDefaultPreference(data.getDefaultColor(this)).setTag(data).setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
                             @Override
                             public void onPreference(PreferenceDialog dialog, Integer preference) {
                                 AppData.ActivityData activity = (AppData.ActivityData) dialog.getTag();

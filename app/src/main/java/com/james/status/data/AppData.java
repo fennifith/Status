@@ -7,10 +7,15 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
+import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
+
+import com.james.status.utils.ColorUtils;
+import com.james.status.utils.PreferenceUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -72,6 +77,28 @@ public class AppData implements Parcelable {
         parcel.writeString(packageName);
         parcel.writeString(name);
         parcel.writeTypedList(activities);
+    }
+
+    @ColorInt
+    public int getColor(Context context) {
+        Integer color = getIntegerPreference(context, PreferenceIdentifier.COLOR);
+        if (color == null) color = getDefaultColor(context);
+
+        return color;
+    }
+
+    @ColorInt
+    public int getDefaultColor(Context context) {
+        Integer color = null;
+
+        Boolean isAuto = PreferenceUtils.getBooleanPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_AUTO);
+        if (isAuto == null || isAuto)
+            color = ColorUtils.getPrimaryColor(context, getComponentName());
+        if (color == null)
+            color = PreferenceUtils.getIntegerPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR);
+        if (color == null) color = Color.BLACK;
+
+        return color;
     }
 
     public void setTag(String key, Object value) {
@@ -199,6 +226,28 @@ public class AppData implements Parcelable {
 
         public ComponentName getComponentName() {
             return new ComponentName(packageName, name != null ? name : packageName);
+        }
+
+        @ColorInt
+        public int getColor(Context context) {
+            Integer color = getIntegerPreference(context, PreferenceIdentifier.COLOR);
+            if (color == null) color = getDefaultColor(context);
+
+            return color;
+        }
+
+        @ColorInt
+        public int getDefaultColor(Context context) {
+            Integer color = null;
+
+            Boolean isAuto = PreferenceUtils.getBooleanPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_AUTO);
+            if (isAuto == null || isAuto)
+                color = ColorUtils.getPrimaryColor(context, getComponentName());
+            if (color == null)
+                color = PreferenceUtils.getIntegerPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR);
+            if (color == null) color = Color.BLACK;
+
+            return color;
         }
 
         @Nullable

@@ -117,7 +117,7 @@ public class StatusView extends FrameLayout {
             Boolean isVisible = iconData.getBooleanPreference(IconData.PreferenceIdentifier.VISIBILITY);
             if (isVisible != null && !isVisible) continue;
 
-            final View item = getIconView();
+            final View item = getIconView(iconData.getIconPadding(), iconData.getIconScale());
             item.setTag(iconData);
 
             iconData.setDrawableListener(new IconData.DrawableListener() {
@@ -158,8 +158,7 @@ public class StatusView extends FrameLayout {
             item.findViewById(R.id.icon).setVisibility(iconData.hasDrawable() ? View.VISIBLE : View.GONE);
             item.findViewById(R.id.text).setVisibility(iconData.hasText() ? View.VISIBLE : View.GONE);
 
-            Boolean isCenter = iconData.getBooleanPreference(IconData.PreferenceIdentifier.CENTER_GRAVITY);
-            if (isCenter != null && isCenter) statusCenterIconLayout.addView(item, 0);
+            if (iconData.isCentered()) statusCenterIconLayout.addView(item, 0);
             else statusIconLayout.addView(item, 0);
         }
     }
@@ -435,6 +434,41 @@ public class StatusView extends FrameLayout {
 
                         ViewGroup.LayoutParams layoutParams = iconView.getLayoutParams();
                         if (layoutParams != null) layoutParams.height = (int) valueAnimator.getAnimatedValue();
+                        else
+                            layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, (int) valueAnimator.getAnimatedValue());
+                        iconView.setLayoutParams(layoutParams);
+                    }
+                });
+                animator.start();
+            }
+        });
+
+        return v;
+    }
+
+    private View getIconView(int padding, final int scale) {
+        final View v = LayoutInflater.from(getContext()).inflate(R.layout.item_icon, this, false);
+
+        float iconPaddingDp = StaticUtils.getPixelsFromDp(getContext(), padding);
+        v.setPadding((int) iconPaddingDp, 0, (int) iconPaddingDp, 0);
+
+        v.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                ValueAnimator animator = ValueAnimator.ofInt(0, (int) StaticUtils.getPixelsFromDp(getContext(), scale));
+                animator.setDuration(150);
+                animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                        v.setAlpha(valueAnimator.getAnimatedFraction());
+
+                        View iconView = v.findViewById(R.id.icon);
+
+                        ViewGroup.LayoutParams layoutParams = iconView.getLayoutParams();
+                        if (layoutParams != null)
+                            layoutParams.height = (int) valueAnimator.getAnimatedValue();
                         else
                             layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, (int) valueAnimator.getAnimatedValue());
                         iconView.setLayoutParams(layoutParams);
