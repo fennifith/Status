@@ -29,8 +29,10 @@ public class AppData implements Parcelable {
         name = info.name;
 
         activities = new ArrayList<>();
-        for (ActivityInfo activityInfo : packageInfo.activities) {
-            activities.add(new ActivityData(manager, activityInfo));
+        if (packageInfo.activities != null) {
+            for (ActivityInfo activityInfo : packageInfo.activities) {
+                activities.add(new ActivityData(manager, activityInfo));
+            }
         }
     }
 

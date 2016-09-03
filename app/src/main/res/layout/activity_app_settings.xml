@@ -10,14 +10,15 @@
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll|enterAlways"
+            android:layout_height="92dp"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:titleEnabled="false">
 
             <android.support.v7.widget.Toolbar
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:layout_gravity="top"
+                android:titleTextColor="@color/textColorPrimaryInverse"
                 app:layout_collapseMode="pin"
                 android:id="@+id/toolbar" />
 
@@ -33,18 +34,20 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="64dp"
+                android:layout_height="42dp"
                 android:background="?attr/selectableItemBackground"
                 android:orientation="horizontal"
                 android:id="@+id/color">
 
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_height="52dp"
+                    android:layout_height="42dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical|start"
                     android:paddingLeft="12dp"
@@ -68,51 +71,35 @@
 
             </LinearLayout>
 
-            <LinearLayout
+            <android.support.v7.widget.SwitchCompat
                 android:layout_width="match_parent"
-                android:layout_height="64dp"
-                android:orientation="horizontal">
+                android:layout_height="42dp"
+                android:gravity="center_vertical|start"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:text="@string/preference_fullscreen"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="16sp"
+                android:singleLine="true"
+                android:lines="1"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:id="@+id/fullscreenSwitch" />
 
-                <android.support.v7.widget.SwitchCompat
-                    android:layout_width="0dp"
-                    android:layout_height="52dp"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical|start"
-                    android:paddingLeft="12dp"
-                    android:paddingRight="12dp"
-                    android:text="@string/preference_fullscreen"
-                    android:textColor="?android:textColorPrimary"
-                    android:textSize="16sp"
-                    android:singleLine="true"
-                    android:lines="1"
-                    android:maxLines="1"
-                    android:ellipsize="end"
-                    android:id="@+id/fullscreenSwitch" />
-
-            </LinearLayout>
-
-            <LinearLayout
+            <android.support.v7.widget.SwitchCompat
                 android:layout_width="match_parent"
-                android:layout_height="64dp"
-                android:orientation="horizontal">
-
-                <android.support.v7.widget.SwitchCompat
-                    android:layout_width="0dp"
-                    android:layout_height="52dp"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical|start"
-                    android:paddingLeft="12dp"
-                    android:paddingRight="12dp"
-                    android:text="@string/preference_notifications"
-                    android:textColor="?android:textColorPrimary"
-                    android:textSize="16sp"
-                    android:singleLine="true"
-                    android:lines="1"
-                    android:maxLines="1"
-                    android:ellipsize="end"
-                    android:id="@+id/notificationSwitch" />
-
-            </LinearLayout>
+                android:layout_height="42dp"
+                android:gravity="center_vertical|start"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:text="@string/preference_notifications"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="16sp"
+                android:singleLine="true"
+                android:lines="1"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:id="@+id/notificationSwitch" />
 
             <android.support.v7.widget.RecyclerView
                 android:layout_width="match_parent"

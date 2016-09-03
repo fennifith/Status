@@ -11,6 +11,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -43,7 +44,9 @@ public class AppSettingActivity extends AppCompatActivity {
         SwitchCompat notificationSwitch = (SwitchCompat) findViewById(R.id.notificationSwitch);
 
         toolbar.setTitle(app.label);
-        toolbar.setSubtitle(app.packageName);
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         findViewById(R.id.color).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,5 +119,16 @@ public class AppSettingActivity extends AppCompatActivity {
         recycler.setLayoutManager(new GridLayoutManager(this, 1));
         recycler.setNestedScrollingEnabled(false);
         recycler.setAdapter(new ActivityAdapter(this, app.activities));
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

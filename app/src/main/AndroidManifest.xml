@@ -33,6 +33,8 @@
 
         <activity android:name=".activities.MainActivity"/>
 
+        <activity android:name=".activities.AppSettingActivity" />
+
         <activity android:name=".activities.StartActivity"/>
 
         <activity android:name=".activities.AboutActivity" />
