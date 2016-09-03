@@ -225,7 +225,7 @@ public class IconData<T extends BroadcastReceiver> {
             preferences.add(new IconPreferenceData(
                     getContext(),
                     new PreferenceData.Identifier(
-                            getTitle() + " " + getContext().getString(R.string.preference_icon_style)
+                            getContext().getString(R.string.preference_icon_style)
                     ),
                     getResourceIntPreference(PreferenceIdentifier.ICON_STYLE, "drawable"),
                     getIconStyles(),

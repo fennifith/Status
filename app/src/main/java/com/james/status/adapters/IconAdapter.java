@@ -51,8 +51,6 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
                 IconData icon = getIcon(holder.getAdapterPosition());
                 if (icon == null) return;
 
-                holder.v.findViewById(R.id.recycler).setVisibility(isChecked ? View.VISIBLE : View.GONE);
-
                 icon.putPreference(IconData.PreferenceIdentifier.VISIBILITY, isChecked);
                 StaticUtils.updateStatusService(context);
 
