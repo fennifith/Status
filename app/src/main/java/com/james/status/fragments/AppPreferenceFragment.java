@@ -14,16 +14,25 @@ import com.james.status.adapters.AppAdapter;
 
 public class AppPreferenceFragment extends SimpleFragment {
 
+    private AppAdapter adapter;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_recycler, container, false);
+        View v = inflater.inflate(R.layout.fragment_padded_recycler, container, false);
 
         RecyclerView recycler = (RecyclerView) v.findViewById(R.id.recycler);
         recycler.setLayoutManager(new GridLayoutManager(getContext(), 1));
-        recycler.setAdapter(new AppAdapter(getContext()));
+
+        adapter = new AppAdapter(getContext());
+        recycler.setAdapter(adapter);
 
         return v;
+    }
+
+    @Override
+    public void filter(@Nullable String filter) {
+        adapter.filter(filter);
     }
 
     @Override

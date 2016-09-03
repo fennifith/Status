@@ -7,7 +7,6 @@ import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
 
 import com.james.status.R;
-import com.james.status.utils.PreferenceUtils;
 
 public class NetworkIconData extends IconData {
 
@@ -16,7 +15,7 @@ public class NetworkIconData extends IconData {
     private boolean isRegistered;
 
     public NetworkIconData(Context context) {
-        super(context, PreferenceUtils.PreferenceIdentifier.STYLE_NETWORK_ICON);
+        super(context);
         telephonyManager = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
     }
 

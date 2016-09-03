@@ -30,6 +30,8 @@ import java.util.List;
 
 public class GeneralPreferenceFragment extends SimpleFragment {
 
+    private PreferenceSectionAdapter adapter;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -677,7 +679,7 @@ public class GeneralPreferenceFragment extends SimpleFragment {
             );
         }
 
-        PreferenceSectionAdapter adapter = new PreferenceSectionAdapter(getContext(), preferences);
+        adapter = new PreferenceSectionAdapter(getContext(), preferences);
         recycler.setAdapter(adapter);
 
         return v;
@@ -689,6 +691,11 @@ public class GeneralPreferenceFragment extends SimpleFragment {
             intent.setClass(getContext(), StatusService.class);
             getContext().startService(intent);
         }
+    }
+
+    @Override
+    public void filter(@Nullable String filter) {
+        adapter.filter(filter);
     }
 
     @Override

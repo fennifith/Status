@@ -8,13 +8,12 @@ import android.content.IntentFilter;
 import android.support.graphics.drawable.VectorDrawableCompat;
 
 import com.james.status.R;
-import com.james.status.utils.PreferenceUtils;
 import com.james.status.utils.StaticUtils;
 
 public class BluetoothIconData extends IconData<BluetoothIconData.BluetoothReceiver> {
 
     public BluetoothIconData(Context context) {
-        super(context, PreferenceUtils.PreferenceIdentifier.STYLE_BLUETOOTH_ICON);
+        super(context);
     }
 
     @Override

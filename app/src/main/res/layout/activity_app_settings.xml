@@ -10,15 +10,15 @@
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:layout_width="match_parent"
-            android:layout_height="92dp"
+            android:layout_height="184dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:titleEnabled="false">
 
             <android.support.v7.widget.Toolbar
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:layout_gravity="top"
-                android:titleTextColor="@color/textColorPrimaryInverse"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                android:layout_gravity="bottom"
                 app:layout_collapseMode="pin"
                 android:id="@+id/toolbar" />
 
@@ -104,6 +104,8 @@
             <android.support.v7.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:padding="4dp"
                 android:id="@+id/recycler" />
 
         </LinearLayout>

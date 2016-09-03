@@ -9,7 +9,6 @@ import android.content.IntentFilter;
 import android.support.graphics.drawable.VectorDrawableCompat;
 
 import com.james.status.R;
-import com.james.status.utils.PreferenceUtils;
 
 @TargetApi(21)
 public class AlarmIconData extends IconData<AlarmIconData.AlarmReceiver> {
@@ -17,7 +16,7 @@ public class AlarmIconData extends IconData<AlarmIconData.AlarmReceiver> {
     private AlarmManager alarmManager;
 
     public AlarmIconData(Context context) {
-        super(context, PreferenceUtils.PreferenceIdentifier.STYLE_ALARM_ICON);
+        super(context);
         alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
     }
 

@@ -8,14 +8,13 @@ import android.media.AudioManager;
 import android.support.graphics.drawable.VectorDrawableCompat;
 
 import com.james.status.R;
-import com.james.status.utils.PreferenceUtils;
 
 public class RingerIconData extends IconData<RingerIconData.RingerReceiver> {
 
     AudioManager audioManager;
 
     public RingerIconData(Context context) {
-        super(context, PreferenceUtils.PreferenceIdentifier.STYLE_RINGER_ICON);
+        super(context);
         audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
     }
 

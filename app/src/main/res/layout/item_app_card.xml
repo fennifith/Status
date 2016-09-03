@@ -20,9 +20,11 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 android:minHeight="72dp"
                 android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:id="@+id/titleBar">
 
                 <com.james.status.views.SquareImageView
                     android:layout_width="36dp"
@@ -55,7 +57,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/textColorSecondary"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:singleLine="true"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:ellipsize="end" />
 
                 </LinearLayout>
 

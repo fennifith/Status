@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
@@ -37,11 +38,12 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
 
     private Context context;
     private PackageManager packageManager;
-    private List<AppData> apps;
+    private List<AppData> originalApps, apps;
 
     public AppAdapter(final Context context) {
         this.context = context;
         packageManager = context.getPackageManager();
+        originalApps = new ArrayList<>();
         apps = new ArrayList<>();
 
         new Thread() {
@@ -58,7 +60,8 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
                         continue;
                     }
 
-                    loadedApps.add(new AppData(packageManager, applicationInfo, packageInfo));
+                    if (packageInfo.activities != null && packageInfo.activities.length > 0)
+                        loadedApps.add(new AppData(packageManager, applicationInfo, packageInfo));
                 }
 
                 new Handler(context.getMainLooper()).post(new Runnable() {
@@ -71,6 +74,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
                             }
                         });
 
+                        originalApps = loadedApps;
                         apps = loadedApps;
                         notifyDataSetChanged();
                     }
@@ -158,6 +162,10 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
         final Integer color = app.getIntegerPreference(context, AppData.PreferenceIdentifier.COLOR);
         if (color != null) {
             ((ImageView) holder.v.findViewById(R.id.colorView)).setImageDrawable(new ColorDrawable(color));
+
+            holder.v.findViewById(R.id.titleBar).setBackgroundColor(color);
+            ((TextView) holder.v.findViewById(R.id.appName)).setTextColor(ContextCompat.getColor(context, ColorUtils.isColorDark(color) ? R.color.textColorPrimaryInverse : R.color.textColorPrimary));
+            ((TextView) holder.v.findViewById(R.id.appPackage)).setTextColor(ContextCompat.getColor(context, ColorUtils.isColorDark(color) ? R.color.textColorSecondaryInverse : R.color.textColorSecondary));
         } else {
             new Thread() {
                 @Override
@@ -170,7 +178,13 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
-                            ((ImageView) holder.v.findViewById(R.id.colorView)).setImageDrawable(new ColorDrawable(color != null ? color : Color.BLACK));
+                            int someColor = color != null ? color : Color.BLACK;
+
+                            ((ImageView) holder.v.findViewById(R.id.colorView)).setImageDrawable(new ColorDrawable(someColor));
+
+                            holder.v.findViewById(R.id.titleBar).setBackgroundColor(someColor);
+                            ((TextView) holder.v.findViewById(R.id.appName)).setTextColor(ContextCompat.getColor(context, ColorUtils.isColorDark(someColor) ? R.color.textColorPrimaryInverse : R.color.textColorPrimary));
+                            ((TextView) holder.v.findViewById(R.id.appPackage)).setTextColor(ContextCompat.getColor(context, ColorUtils.isColorDark(someColor) ? R.color.textColorSecondaryInverse : R.color.textColorSecondary));
                         }
                     });
                 }
@@ -228,6 +242,26 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
     @Override
     public int getItemCount() {
         return apps.size();
+    }
+
+    public void filter(@Nullable String string) {
+        if (string != null) {
+            List<AppData> newApps = new ArrayList<>();
+            for (AppData app : originalApps) {
+                if (app.name != null && app.name.toLowerCase().contains(string.toLowerCase())) {
+                    newApps.add(app);
+                    continue;
+                }
+
+                if (app.packageName != null && app.packageName.toLowerCase().contains(string.toLowerCase())) {
+                    newApps.add(app);
+                }
+            }
+
+            apps = newApps;
+            notifyDataSetChanged();
+
+        } else apps = originalApps;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

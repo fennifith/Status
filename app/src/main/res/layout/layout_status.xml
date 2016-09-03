@@ -21,8 +21,25 @@
             android:layout_weight="1"
             android:orientation="horizontal"
             android:layout_gravity="center_vertical"
-            android:gravity="center_vertical"
+            android:gravity="center_vertical|start"
             android:id="@+id/notificationIcons" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:orientation="horizontal"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:id="@+id/statusCenterIcons" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="24dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical|end"
+            android:id="@+id/statusIcons" />
 
     </LinearLayout>
 

@@ -34,7 +34,6 @@ import com.james.status.data.icon.AlarmIconData;
 import com.james.status.data.icon.BatteryIconData;
 import com.james.status.data.icon.BluetoothIconData;
 import com.james.status.data.icon.DataIconData;
-import com.james.status.data.icon.DualNetworkIconData;
 import com.james.status.data.icon.IconData;
 import com.james.status.data.icon.NetworkIconData;
 import com.james.status.data.icon.RingerIconData;
@@ -47,6 +46,7 @@ import com.james.status.views.CustomImageView;
 import com.james.status.views.StatusView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class StatusService extends Service {
@@ -214,40 +214,7 @@ public class StatusService extends Service {
             });
         }
 
-        List<IconData> icons = new ArrayList<>();
-
-        Boolean showClock = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.SHOW_CLOCK);
-        if (showClock == null || showClock) icons.add(new TimeIconData(this));
-
-        Boolean battery = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.SHOW_BATTERY_ICON);
-        if (battery == null || battery) icons.add(new BatteryIconData(this));
-
-        Boolean network = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.SHOW_NETWORK_ICON);
-        if (network == null || network) icons.add(new NetworkIconData(this));
-
-        Boolean dualSim = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.SHOW_NETWORK_DUAL_SIM);
-        if (dualSim != null && dualSim) icons.add(new DualNetworkIconData(this));
-
-        Boolean data = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.SHOW_DATA);
-        if (data == null || data) icons.add(new DataIconData(this));
-
-        Boolean wifi = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.SHOW_WIFI_ICON);
-        if (wifi == null || wifi) icons.add(new WifiIconData(this));
-
-        Boolean bluetooth = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.SHOW_BLUETOOTH_ICON);
-        if (bluetooth == null || bluetooth) icons.add(new BluetoothIconData(this));
-
-        Boolean airplane = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.SHOW_AIRPLANE_MODE_ICON);
-        if (airplane == null || airplane) icons.add(new AirplaneModeIconData(this));
-
-        Boolean alarm = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.SHOW_ALARM_ICON);
-        if ((alarm == null || alarm) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            icons.add(new AlarmIconData(this));
-
-        Boolean ringer = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.SHOW_RINGER_ICON);
-        if (ringer == null || ringer) icons.add(new RingerIconData(this));
-
-        statusView.setIcons(icons);
+        statusView.setIcons(getIcons(this));
         statusView.register();
 
         if (StaticUtils.isAccessibilityServiceRunning(this)) {
@@ -478,5 +445,22 @@ public class StatusService extends Service {
             }
         });
         animator.start();
+    }
+
+    public static List<IconData> getIcons(Context context) {
+        List<IconData> icons = new ArrayList<>();
+        icons.addAll(Arrays.asList(
+                new TimeIconData(context),
+                new BatteryIconData(context),
+                new NetworkIconData(context),
+                new DataIconData(context),
+                new WifiIconData(context),
+                new BluetoothIconData(context),
+                new AirplaneModeIconData(context),
+                new AlarmIconData(context),
+                new RingerIconData(context)
+        ));
+
+        return icons;
     }
 }

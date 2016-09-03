@@ -192,6 +192,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                         Integer color = data.getIntegerPreference(this, AppData.PreferenceIdentifier.COLOR);
                         if (color != null) {
                             setStatusBar(color, null, isFullscreen, false);
+                            return;
                         }
 
                         Boolean isColorAuto = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_AUTO);

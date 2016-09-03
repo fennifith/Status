@@ -8,12 +8,11 @@ import android.support.graphics.drawable.VectorDrawableCompat;
 import android.telephony.TelephonyManager;
 
 import com.james.status.R;
-import com.james.status.utils.PreferenceUtils;
 
 public class AirplaneModeIconData extends IconData<AirplaneModeIconData.AirplaneModeReceiver> {
 
     public AirplaneModeIconData(Context context) {
-        super(context, PreferenceUtils.PreferenceIdentifier.STYLE_AIRPLANE_MODE_ICON);
+        super(context);
     }
 
     @Override

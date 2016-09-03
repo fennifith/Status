@@ -8,14 +8,13 @@ import android.net.wifi.WifiManager;
 import android.support.graphics.drawable.VectorDrawableCompat;
 
 import com.james.status.R;
-import com.james.status.utils.PreferenceUtils;
 
 public class WifiIconData extends IconData<WifiIconData.WifiReceiver> {
 
     WifiManager wifiManager;
 
     public WifiIconData(Context context) {
-        super(context, PreferenceUtils.PreferenceIdentifier.STYLE_WIFI_ICON);
+        super(context);
         wifiManager = (WifiManager) getContext().getSystemService(Context.WIFI_SERVICE);
     }
 

@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.ColorInt;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.james.status.R;
@@ -27,8 +28,9 @@ public class ColorPreferenceData extends PreferenceData {
         this.value = value;
     }
 
-    public static ViewHolder getViewHolder(Context context) {
-        return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_preference_color, null));
+    @Override
+    public ViewHolder getViewHolder(LayoutInflater inflater, ViewGroup parent) {
+        return new ViewHolder(inflater.inflate(R.layout.item_preference_color, parent, false));
     }
 
     @Override

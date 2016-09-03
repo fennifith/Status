@@ -37,8 +37,7 @@ import java.util.List;
 
 public class StatusView extends FrameLayout {
 
-    private LinearLayout status;
-    private LinearLayout notificationIconLayout;
+    private LinearLayout status, notificationIconLayout, statusIconLayout, statusCenterIconLayout;
 
     @ColorInt
     private Integer color;
@@ -72,6 +71,8 @@ public class StatusView extends FrameLayout {
         status.getLayoutParams().height = StaticUtils.getStatusBarHeight(getContext());
 
         notificationIconLayout = (LinearLayout) v.findViewById(R.id.notificationIcons);
+        statusIconLayout = (LinearLayout) v.findViewById(R.id.statusIcons);
+        statusCenterIconLayout = (LinearLayout) v.findViewById(R.id.statusCenterIcons);
 
         Boolean isNotifications = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.SHOW_NOTIFICATIONS);
         if (isNotifications != null && !isNotifications)
@@ -90,19 +91,32 @@ public class StatusView extends FrameLayout {
     }
 
     public void setIcons(List<IconData> icons) {
-        for (int i = (status.getChildCount() - 1); i >= 0; i--) {
-            View child = status.getChildAt(i);
+        for (int i = (statusIconLayout.getChildCount() - 1); i >= 0; i--) {
+            View child = statusIconLayout.getChildAt(i);
             Object tag = child.getTag();
 
             if (tag != null && tag instanceof IconData) {
                 ((IconData) tag).unregister();
-                status.removeViewAt(i);
+                statusIconLayout.removeViewAt(i);
+            }
+        }
+
+        for (int i = (statusCenterIconLayout.getChildCount() - 1); i >= 0; i--) {
+            View child = statusCenterIconLayout.getChildAt(i);
+            Object tag = child.getTag();
+
+            if (tag != null && tag instanceof IconData) {
+                ((IconData) tag).unregister();
+                statusCenterIconLayout.removeViewAt(i);
             }
         }
 
         this.icons = icons;
 
         for (final IconData iconData : icons) {
+            Boolean isVisible = iconData.getBooleanPreference(IconData.PreferenceIdentifier.VISIBILITY);
+            if (isVisible != null && !isVisible) continue;
+
             final View item = getIconView();
             item.setTag(iconData);
 
@@ -144,7 +158,115 @@ public class StatusView extends FrameLayout {
             item.findViewById(R.id.icon).setVisibility(iconData.hasDrawable() ? View.VISIBLE : View.GONE);
             item.findViewById(R.id.text).setVisibility(iconData.hasText() ? View.VISIBLE : View.GONE);
 
-            status.addView(item, 1);
+            Boolean isCenter = iconData.getBooleanPreference(IconData.PreferenceIdentifier.CENTER_GRAVITY);
+            if (isCenter != null && isCenter) statusCenterIconLayout.addView(item, 0);
+            else statusIconLayout.addView(item, 0);
+        }
+    }
+
+    public void setIcons(List<IconData> icons, boolean isFaked) {
+        for (int i = (statusIconLayout.getChildCount() - 1); i >= 0; i--) {
+            View child = statusIconLayout.getChildAt(i);
+            Object tag = child.getTag();
+
+            if (tag != null && tag instanceof IconData) {
+                ((IconData) tag).unregister();
+                statusIconLayout.removeViewAt(i);
+            }
+        }
+
+        for (int i = (statusCenterIconLayout.getChildCount() - 1); i >= 0; i--) {
+            View child = statusCenterIconLayout.getChildAt(i);
+            Object tag = child.getTag();
+
+            if (tag != null && tag instanceof IconData) {
+                ((IconData) tag).unregister();
+                statusCenterIconLayout.removeViewAt(i);
+            }
+        }
+
+        this.icons = icons;
+
+        for (final IconData iconData : icons) {
+            Boolean isVisible = iconData.getBooleanPreference(IconData.PreferenceIdentifier.VISIBILITY);
+            if (isVisible != null && !isVisible) continue;
+
+            final View item = getIconView();
+            item.setTag(iconData);
+
+            if (isFaked) {
+                CustomImageView iconView = (CustomImageView) item.findViewById(R.id.icon);
+
+                Drawable drawable = iconData.getFakeDrawable();
+
+                if (drawable != null) {
+                    item.setVisibility(View.VISIBLE);
+                    iconView.setVisibility(View.VISIBLE);
+
+                    ImageUtils.tintDrawable(iconView, drawable, isDarkMode ? Color.BLACK : Color.WHITE);
+                } else {
+                    iconView.setVisibility(View.GONE);
+                    if (!iconData.hasText()) item.setVisibility(View.GONE);
+                }
+
+                String text = iconData.getFakeText();
+
+                TextView textView = (TextView) item.findViewById(R.id.text);
+                if (text != null) {
+                    item.setVisibility(View.VISIBLE);
+                    textView.setVisibility(View.VISIBLE);
+
+                    textView.setText(text);
+
+                    if (isDarkMode) textView.setTextColor(Color.BLACK);
+                    else textView.setTextColor(Color.WHITE);
+                } else {
+                    textView.setVisibility(View.GONE);
+                    if (!iconData.hasDrawable()) item.setVisibility(View.GONE);
+                }
+            } else {
+                iconData.setDrawableListener(new IconData.DrawableListener() {
+                    @Override
+                    public void onUpdate(@Nullable Drawable drawable) {
+                        CustomImageView iconView = (CustomImageView) item.findViewById(R.id.icon);
+                        if (drawable != null) {
+                            item.setVisibility(View.VISIBLE);
+                            iconView.setVisibility(View.VISIBLE);
+
+                            ImageUtils.tintDrawable(iconView, drawable, isDarkMode ? Color.BLACK : Color.WHITE);
+                        } else {
+                            iconView.setVisibility(View.GONE);
+                            if (!iconData.hasText()) item.setVisibility(View.GONE);
+                        }
+                    }
+                });
+
+                iconData.setTextListener(new IconData.TextListener() {
+                    @Override
+                    public void onUpdate(@Nullable String text) {
+                        TextView textView = (TextView) item.findViewById(R.id.text);
+                        if (text != null) {
+                            item.setVisibility(View.VISIBLE);
+                            textView.setVisibility(View.VISIBLE);
+
+                            textView.setText(text);
+
+                            if (isDarkMode) textView.setTextColor(Color.BLACK);
+                            else textView.setTextColor(Color.WHITE);
+                        } else {
+                            textView.setVisibility(View.GONE);
+                            if (!iconData.hasDrawable()) item.setVisibility(View.GONE);
+                        }
+                    }
+                });
+            }
+
+            item.findViewById(R.id.icon).setVisibility(iconData.hasDrawable() ? View.VISIBLE : View.GONE);
+            item.findViewById(R.id.text).setVisibility(iconData.hasText() ? View.VISIBLE : View.GONE);
+
+            Boolean isCenter = iconData.getBooleanPreference(IconData.PreferenceIdentifier.CENTER_GRAVITY);
+            if (isCenter != null && isCenter) statusCenterIconLayout.addView(item, 0);
+            else statusIconLayout.addView(item, 0);
         }
     }
 

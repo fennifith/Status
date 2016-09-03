@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
@@ -47,7 +48,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
         if (activity == null) return;
 
         ((TextView) holder.v.findViewById(R.id.appName)).setText(activity.label);
-        ((TextView) holder.v.findViewById(R.id.appPackage)).setText(activity.packageName);
+        ((TextView) holder.v.findViewById(R.id.appPackage)).setText(activity.name);
 
         ((CustomImageView) holder.v.findViewById(R.id.icon)).setImageDrawable(new ColorDrawable(Color.TRANSPARENT));
 
@@ -115,6 +116,10 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
         Integer color = activity.getIntegerPreference(context, AppData.PreferenceIdentifier.COLOR);
         if (color != null) {
             ((ImageView) holder.v.findViewById(R.id.colorView)).setImageDrawable(new ColorDrawable(color));
+
+            holder.v.findViewById(R.id.titleBar).setBackgroundColor(color);
+            ((TextView) holder.v.findViewById(R.id.appName)).setTextColor(ContextCompat.getColor(context, ColorUtils.isColorDark(color) ? R.color.textColorPrimaryInverse : R.color.textColorPrimary));
+            ((TextView) holder.v.findViewById(R.id.appPackage)).setTextColor(ContextCompat.getColor(context, ColorUtils.isColorDark(color) ? R.color.textColorSecondaryInverse : R.color.textColorSecondary));
         } else {
             new Thread() {
                 @Override
@@ -127,7 +132,13 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
-                            ((ImageView) holder.v.findViewById(R.id.colorView)).setImageDrawable(new ColorDrawable(color != null ? color : Color.BLACK));
+                            int someColor = color != null ? color : Color.BLACK;
+
+                            ((ImageView) holder.v.findViewById(R.id.colorView)).setImageDrawable(new ColorDrawable(someColor));
+
+                            holder.v.findViewById(R.id.titleBar).setBackgroundColor(someColor);
+                            ((TextView) holder.v.findViewById(R.id.appName)).setTextColor(ContextCompat.getColor(context, ColorUtils.isColorDark(someColor) ? R.color.textColorPrimaryInverse : R.color.textColorPrimary));
+                            ((TextView) holder.v.findViewById(R.id.appPackage)).setTextColor(ContextCompat.getColor(context, ColorUtils.isColorDark(someColor) ? R.color.textColorSecondaryInverse : R.color.textColorSecondary));
                         }
                     });
                 }

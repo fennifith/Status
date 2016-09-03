@@ -11,7 +11,6 @@ import android.telephony.TelephonyManager;
 import android.widget.Toast;
 
 import com.james.status.R;
-import com.james.status.utils.PreferenceUtils;
 
 import java.lang.reflect.Field;
 
@@ -23,7 +22,7 @@ public class DualNetworkIconData extends IconData {
     private boolean isRegistered;
 
     public DualNetworkIconData(Context context) {
-        super(context, PreferenceUtils.PreferenceIdentifier.STYLE_NETWORK_ICON);
+        super(context);
 
         telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1)

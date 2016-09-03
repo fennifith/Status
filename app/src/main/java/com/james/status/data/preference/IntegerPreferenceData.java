@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.james.status.R;
@@ -26,8 +27,9 @@ public class IntegerPreferenceData extends PreferenceData {
         this.unit = unit;
     }
 
-    public static ViewHolder getViewHolder(Context context) {
-        return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_preference_text, null));
+    @Override
+    public ViewHolder getViewHolder(LayoutInflater inflater, ViewGroup parent) {
+        return new ViewHolder(inflater.inflate(R.layout.item_preference_text, parent, false));
     }
 
     @Override

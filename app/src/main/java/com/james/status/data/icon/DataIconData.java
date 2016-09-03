@@ -13,7 +13,7 @@ public class DataIconData extends IconData {
     private boolean isRegistered;
 
     public DataIconData(Context context) {
-        super(context, null);
+        super(context);
 
         telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         dataListener = new DataListener();
@@ -27,6 +27,11 @@ public class DataIconData extends IconData {
     @Override
     public boolean hasText() {
         return true;
+    }
+
+    @Override
+    public String getFakeText() {
+        return "4G";
     }
 
     @Override
