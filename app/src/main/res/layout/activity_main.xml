@@ -12,63 +12,59 @@
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:layout_width="match_parent"
-            android:layout_height="288dp"
+            android:layout_height="wrap_content"
             app:contentScrim="@color/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:titleEnabled="false">
 
+            <com.james.status.views.CustomImageView
+                android:layout_width="match_parent"
+                android:layout_height="198dp"
+                android:scaleType="centerCrop"
+                app:layout_collapseMode="parallax"
+                android:id="@+id/header" />
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@color/colorPrimary"
+            android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1">
-
-                    <com.james.status.views.CustomImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:id="@+id/header" />
-
-                    <android.support.design.widget.TabLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom"
-                        app:tabTextColor="@color/textColorSecondaryInverse"
-                        app:tabSelectedTextColor="@color/textColorPrimaryInverse"
-                        android:background="@null"
-                        android:id="@+id/tabLayout" />
-
-                </FrameLayout>
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_weight="1"
+                    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                    app:title="@string/app_name" />
 
                 <android.support.v7.widget.SwitchCompat
                     android:id="@+id/serviceEnabled"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="16dp"
-                    android:paddingLeft="12dp"
-                    android:paddingRight="12dp"
-                    android:paddingTop="16dp"
-                    android:text="@string/service_start_stop"
-                    android:textColor="?android:textColorSecondary"
-                    android:textStyle="bold"
-                    android:textSize="16sp"
-                    android:background="?android:colorBackground" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginEnd="8dp" />
 
             </LinearLayout>
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
+            <android.support.design.widget.TabLayout
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                app:layout_collapseMode="pin"
-                app:title="@string/app_name" />
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                app:tabTextColor="@color/textColorSecondaryInverse"
+                app:tabSelectedTextColor="@color/textColorPrimaryInverse"
+                android:background="@null"
+                android:id="@+id/tabLayout" />
 
-        </android.support.design.widget.CollapsingToolbarLayout>
+        </LinearLayout>
 
     </android.support.design.widget.AppBarLayout>
 
