@@ -15,16 +15,18 @@ import com.james.status.data.icon.IconData;
 import com.james.status.services.StatusService;
 import com.james.status.utils.StaticUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
 
     private Context context;
-    private List<IconData> icons;
+    private List<IconData> originalIcons, icons;
 
     public IconAdapter(Context context) {
         this.context = context;
-        icons = StatusService.getIcons(context);
+        originalIcons = StatusService.getIcons(context);
+        icons = originalIcons;
     }
 
     @Override
@@ -75,6 +77,19 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
     private IconData getIcon(int position) {
         if (position < 0 || position >= icons.size()) return null;
         else return icons.get(position);
+    }
+
+    public void filter(@Nullable String filter) {
+        if (filter != null) {
+            List<IconData> newIcons = new ArrayList<>();
+
+            for (IconData icon : originalIcons) {
+                if (icon.getTitle().toLowerCase().contains(filter))
+                    newIcons.add(icon);
+            }
+
+            icons = newIcons;
+        } else icons = originalIcons;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

@@ -138,7 +138,7 @@ public class GeneralPreferenceFragment extends SimpleFragment {
 
     @Override
     public void filter(@Nullable String filter) {
-        adapter.filter(filter);
+        if (adapter != null) adapter.filter(filter);
     }
 
     @Override

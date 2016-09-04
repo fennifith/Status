@@ -14,6 +14,8 @@ import com.james.status.adapters.IconAdapter;
 
 public class IconPreferenceFragment extends SimpleFragment {
 
+    IconAdapter adapter;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -21,7 +23,9 @@ public class IconPreferenceFragment extends SimpleFragment {
 
         RecyclerView recycler = (RecyclerView) v.findViewById(R.id.recycler);
         recycler.setLayoutManager(new GridLayoutManager(getContext(), 1));
-        recycler.setAdapter(new IconAdapter(getContext()));
+
+        adapter = new IconAdapter(getContext());
+        recycler.setAdapter(adapter);
 
         return v;
     }
@@ -29,5 +33,10 @@ public class IconPreferenceFragment extends SimpleFragment {
     @Override
     public String getTitle(Context context) {
         return context.getString(R.string.tab_icons);
+    }
+
+    @Override
+    public void filter(@Nullable String filter) {
+        if (adapter != null) adapter.filter(filter);
     }
 }
