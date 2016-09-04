@@ -91,7 +91,8 @@ public class IconData<T extends BroadcastReceiver> {
     }
 
     public boolean hasText() {
-        return false;
+        Boolean hasText = getBooleanPreference(PreferenceIdentifier.TEXT_VISIBILITY);
+        return hasText != null && hasText;
     }
 
     public T getReceiver() {
