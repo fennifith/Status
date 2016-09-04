@@ -2,11 +2,13 @@ package com.james.status.services;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.support.v7.app.NotificationCompat;
 
+import com.james.status.data.AppData;
 import com.james.status.data.NotificationData;
 import com.james.status.utils.PreferenceUtils;
 import com.james.status.utils.StaticUtils;
@@ -23,6 +25,7 @@ public class NotificationService extends NotificationListenerService {
             EXTRA_NOTIFICATION = "com.james.status.EXTRA_NOTIFICATION";
 
     private boolean isConnected, shouldSendOnConnect;
+    private PackageManager packageManager;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -51,6 +54,7 @@ public class NotificationService extends NotificationListenerService {
     @Override
     public void onListenerConnected() {
         super.onListenerConnected();
+        packageManager = getPackageManager();
         isConnected = true;
 
         if (shouldSendOnConnect) {
@@ -68,7 +72,20 @@ public class NotificationService extends NotificationListenerService {
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
         Boolean enabled = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED);
-        if (enabled != null && enabled && !StaticUtils.shouldUseCompatNotifications(this)) {
+
+        AppData app = null;
+        try {
+            app = new AppData(packageManager, packageManager.getApplicationInfo(sbn.getPackageName(), PackageManager.GET_META_DATA), packageManager.getPackageInfo(sbn.getPackageName(), PackageManager.GET_ACTIVITIES));
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        Boolean isEnabled = null;
+        if (app != null)
+            isEnabled = app.getSpecificBooleanPreference(this, AppData.PreferenceIdentifier.NOTIFICATIONS);
+        if (isEnabled == null) isEnabled = true;
+
+        if (enabled != null && enabled && isEnabled && !StaticUtils.shouldUseCompatNotifications(this)) {
             NotificationData notification = new NotificationData(sbn, getKey(sbn));
 
             Intent intent = new Intent(StatusService.ACTION_NOTIFICATION_ADDED);
@@ -103,6 +120,18 @@ public class NotificationService extends NotificationListenerService {
         Boolean enabled = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED);
         if (enabled != null && enabled && !StaticUtils.shouldUseCompatNotifications(this)) {
             for (StatusBarNotification sbn : getNotifications()) {
+                AppData app = null;
+                try {
+                    app = new AppData(packageManager, packageManager.getApplicationInfo(sbn.getPackageName(), PackageManager.GET_META_DATA), packageManager.getPackageInfo(sbn.getPackageName(), PackageManager.GET_ACTIVITIES));
+                } catch (PackageManager.NameNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+                Boolean isEnabled = null;
+                if (app != null)
+                    isEnabled = app.getSpecificBooleanPreference(this, AppData.PreferenceIdentifier.NOTIFICATIONS);
+                if (isEnabled != null && !isEnabled) continue;
+
                 NotificationData notification = new NotificationData(sbn, getKey(sbn));
                 notification.priority = NotificationCompat.PRIORITY_DEFAULT;
 

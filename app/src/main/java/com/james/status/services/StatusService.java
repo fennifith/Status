@@ -46,7 +46,6 @@ import com.james.status.views.CustomImageView;
 import com.james.status.views.StatusView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class StatusService extends Service {
@@ -449,17 +448,16 @@ public class StatusService extends Service {
 
     public static List<IconData> getIcons(Context context) {
         List<IconData> icons = new ArrayList<>();
-        icons.addAll(Arrays.asList(
-                new TimeIconData(context),
-                new BatteryIconData(context),
-                new NetworkIconData(context),
-                new DataIconData(context),
-                new WifiIconData(context),
-                new BluetoothIconData(context),
-                new AirplaneModeIconData(context),
-                new AlarmIconData(context),
-                new RingerIconData(context)
-        ));
+        icons.add(new TimeIconData(context));
+        icons.add(new BatteryIconData(context));
+        icons.add(new NetworkIconData(context));
+        icons.add(new DataIconData(context));
+        icons.add(new WifiIconData(context));
+        icons.add(new BluetoothIconData(context));
+        icons.add(new AirplaneModeIconData(context));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            icons.add(new AlarmIconData(context));
+        icons.add(new RingerIconData(context));
 
         return icons;
     }

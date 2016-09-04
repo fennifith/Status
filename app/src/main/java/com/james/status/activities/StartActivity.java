@@ -1,7 +1,9 @@
 package com.james.status.activities;
 
+import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -17,20 +19,20 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.james.status.R;
-import com.james.status.utils.PreferenceUtils;
 import com.james.status.utils.StaticUtils;
 
 import java.util.ArrayList;
 
+import me.drozdzynski.library.steppers.OnCancelAction;
 import me.drozdzynski.library.steppers.OnFinishAction;
 import me.drozdzynski.library.steppers.SteppersItem;
 import me.drozdzynski.library.steppers.SteppersView;
 
 public class StartActivity extends AppCompatActivity {
 
-    public static final int REQUEST_ACCESSIBILITY = 7369, REQUEST_NOTIFICATION = 2285, REQUEST_PERMISSIONS = 9374;
+    public static final int REQUEST_ACCESSIBILITY = 7369, REQUEST_NOTIFICATION = 2285, REQUEST_PERMISSIONS = 9374, REQUEST_OVERLAY = 7451;
 
-    SteppersItem accessibilityStep, notificationStep, permissionsStep;
+    SteppersItem accessibilityStep, notificationStep, permissionsStep, overlayStep;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,12 @@ public class StartActivity extends AppCompatActivity {
             @Override
             public void onFinish() {
                 finish();
+            }
+        });
+        steppersViewConfig.setOnCancelAction(new OnCancelAction() {
+            @Override
+            public void onCancel() {
+                System.exit(0);
             }
         });
 
@@ -89,6 +97,14 @@ public class StartActivity extends AppCompatActivity {
             permissionsStep.setPositiveButtonEnable(StaticUtils.isPermissionsGranted(this));
 
             steps.add(permissionsStep);
+
+            overlayStep = new SteppersItem();
+            overlayStep.setLabel(getString(R.string.overlay_name));
+            overlayStep.setSubLabel(getString(R.string.overlay_desc));
+            overlayStep.setFragment(new OverlayStepFragment());
+            overlayStep.setPositiveButtonEnable(StaticUtils.canDrawOverlays(this));
+
+            steps.add(overlayStep);
         }
 
         steppersView.setConfig(steppersViewConfig);
@@ -105,11 +121,13 @@ public class StartActivity extends AppCompatActivity {
             notificationStep.setPositiveButtonEnable(StaticUtils.isNotificationGranted(this));
         if (permissionsStep != null)
             permissionsStep.setPositiveButtonEnable(StaticUtils.isPermissionsGranted(this));
+        if (overlayStep != null)
+            overlayStep.setPositiveButtonEnable(StaticUtils.canDrawOverlays(this));
     }
 
     @Override
     public void onBackPressed() {
-        if (!StaticUtils.isAccessibilityGranted(this) || !StaticUtils.isNotificationGranted(this) || !StaticUtils.isPermissionsGranted(this))
+        if (!StaticUtils.isAccessibilityGranted(this) || !StaticUtils.isNotificationGranted(this) || !StaticUtils.isPermissionsGranted(this) || !StaticUtils.canDrawOverlays(this))
             System.exit(0);
         else super.onBackPressed();
     }
@@ -124,12 +142,13 @@ public class StartActivity extends AppCompatActivity {
                     accessibilityStep.setPositiveButtonEnable(StaticUtils.isAccessibilityGranted(this));
                 break;
             case REQUEST_NOTIFICATION:
-                if (notificationStep != null)
+                if (notificationStep != null) {
                     notificationStep.setPositiveButtonEnable(StaticUtils.isNotificationGranted(this));
+                }
                 break;
-            case REQUEST_PERMISSIONS:
-                if (permissionsStep != null)
-                    permissionsStep.setPositiveButtonEnable(StaticUtils.isPermissionsGranted(this));
+            case REQUEST_OVERLAY:
+                if (overlayStep != null)
+                    overlayStep.setPositiveButtonEnable(StaticUtils.canDrawOverlays(this));
                 break;
         }
     }
@@ -163,7 +182,7 @@ public class StartActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             LinearLayout linearLayout = new LinearLayout(inflater.getContext());
 
-            if (!StaticUtils.shouldUseCompatNotifications(getContext())) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
                 Button button = new Button(inflater.getContext());
                 button.setText(R.string.action_access_grant);
                 button.setOnClickListener(new View.OnClickListener() {
@@ -181,25 +200,7 @@ public class StartActivity extends AppCompatActivity {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new AlertDialog.Builder(getContext())
-                            .setTitle(R.string.notifications_compat)
-                            .setMessage(R.string.notifications_compat_desc)
-                            .setPositiveButton(R.string.action_enable, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int i) {
-                                    PreferenceUtils.putPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_NOTIFICATIONS_COMPAT, true);
-                                    dialog.dismiss();
-                                }
-                            })
-                            .setNegativeButton(R.string.action_disable, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    PreferenceUtils.putPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_NOTIFICATIONS_COMPAT, false);
-                                    dialog.dismiss();
-                                }
-                            })
-                            .create()
-                            .show();
+                    startActivityForResult(new Intent(getActivity(), NotificationCompatActivity.class), REQUEST_NOTIFICATION);
                 }
             });
 
@@ -218,7 +219,25 @@ public class StartActivity extends AppCompatActivity {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    StaticUtils.isPermissionsGranted(getActivity(), true);
+                    StaticUtils.requestPermissions(getActivity());
+                }
+            });
+
+            return button;
+        }
+    }
+
+    @TargetApi(23)
+    public static class OverlayStepFragment extends Fragment {
+        @Nullable
+        @Override
+        public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            Button button = new Button(inflater.getContext());
+            button.setText(R.string.action_access_grant);
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getActivity().getPackageName())), REQUEST_OVERLAY);
                 }
             });
 

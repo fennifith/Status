@@ -28,6 +28,7 @@ import com.james.status.dialogs.ColorPickerDialog;
 import com.james.status.dialogs.PreferenceDialog;
 import com.james.status.utils.ColorUtils;
 import com.james.status.utils.ImageUtils;
+import com.james.status.utils.StaticUtils;
 import com.james.status.views.CustomImageView;
 
 import java.util.ArrayList;
@@ -214,6 +215,8 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
                 if (app == null) return;
 
                 app.putSpecificPreference(context, AppData.PreferenceIdentifier.NOTIFICATIONS, isChecked);
+
+                StaticUtils.updateStatusService(context);
             }
         });
 

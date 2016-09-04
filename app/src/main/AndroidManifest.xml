@@ -37,6 +37,10 @@
 
         <activity android:name=".activities.StartActivity"/>
 
+        <activity
+            android:name=".activities.NotificationCompatActivity"
+            android:theme="@style/AppTheme.Transparent" />
+
         <activity android:name=".activities.AboutActivity" />
 
         <service android:name=".services.StatusService" />

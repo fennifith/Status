@@ -160,12 +160,6 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                             return;
                         }
 
-                        if (packageName.toString().equals("com.android.systemui")) {
-                            setStatusBar(getDefaultColor(), null, false, false);
-                            notificationManager.cancel(NOTIFICATION_ID);
-                            return;
-                        }
-
                         AppData.ActivityData data;
                         try {
                             data = new AppData.ActivityData(packageManager, packageManager.getActivityInfo(new ComponentName(packageName.toString(), className.toString()), PackageManager.GET_META_DATA));
@@ -198,7 +192,15 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                             return;
                         }
 
+                        if (packageName.toString().equals("com.android.systemui")) {
+                            //prevents the creation of some pretty nasty looking color schemes below Lollipop
+                            setStatusBar(getDefaultColor(), null, false, false);
+                            notificationManager.cancel(NOTIFICATION_ID);
+                            return;
+                        }
+
                         if (packageName.toString().matches("com.james.status")) {
+                            //prevents recursive heads up notifications
                             setStatusBar(ContextCompat.getColor(this, R.color.colorPrimaryDark), null, isFullscreen, false);
                             return;
                         }

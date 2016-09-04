@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
@@ -66,7 +65,7 @@ public class StaticUtils {
         return shouldUseCompatNotifications(context);
     }
 
-    private static boolean canDrawOverlays(Context context) {
+    public static boolean canDrawOverlays(Context context) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return true;
         else return Settings.canDrawOverlays(context);
     }
@@ -84,7 +83,7 @@ public class StaticUtils {
             for (String permission : info.requestedPermissions) {
                 if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
                     Log.wtf("Permission", permission);
-                    if (((!permission.matches(Manifest.permission.SYSTEM_ALERT_WINDOW) || !canDrawOverlays(context))) && !permission.matches(Manifest.permission.GET_TASKS))
+                    if (!permission.matches(Manifest.permission.SYSTEM_ALERT_WINDOW) && !permission.matches(Manifest.permission.GET_TASKS))
                         return false;
                 }
             }
@@ -93,13 +92,13 @@ public class StaticUtils {
         return true;
     }
 
-    public static boolean isPermissionsGranted(Activity activity, boolean shouldRequestPermissions) {
+    public static void requestPermissions(Activity activity) {
         PackageInfo info;
         try {
             info = activity.getPackageManager().getPackageInfo(activity.getPackageName(), PackageManager.GET_PERMISSIONS);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
-            return false;
+            return;
         }
 
         if (info.requestedPermissions != null) {
@@ -112,17 +111,8 @@ public class StaticUtils {
                 }
             }
 
-            if (shouldRequestPermissions) {
-                ActivityCompat.requestPermissions(activity, unrequestedPermissions.toArray(new String[unrequestedPermissions.size()]), StartActivity.REQUEST_PERMISSIONS);
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (!canDrawOverlays(activity))
-                        activity.startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + activity.getPackageName())), StartActivity.REQUEST_PERMISSIONS);
-                }
-            }
+            ActivityCompat.requestPermissions(activity, unrequestedPermissions.toArray(new String[unrequestedPermissions.size()]), StartActivity.REQUEST_PERMISSIONS);
         }
-
-        return isPermissionsGranted(activity);
     }
 
     public static boolean isStatusServiceRunning(Context context) {
