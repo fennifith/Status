@@ -111,7 +111,8 @@ public class StaticUtils {
                 }
             }
 
-            ActivityCompat.requestPermissions(activity, unrequestedPermissions.toArray(new String[unrequestedPermissions.size()]), StartActivity.REQUEST_PERMISSIONS);
+            if (unrequestedPermissions.size() > 0)
+                ActivityCompat.requestPermissions(activity, unrequestedPermissions.toArray(new String[unrequestedPermissions.size()]), StartActivity.REQUEST_PERMISSIONS);
         }
     }
 
