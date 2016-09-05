@@ -15,14 +15,12 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.NotificationCompat;
-import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
 
 import com.james.status.R;
+import com.james.status.activities.AppSettingActivity;
 import com.james.status.data.AppData;
 import com.james.status.data.NotificationData;
-import com.james.status.dialogs.ColorPickerDialog;
-import com.james.status.dialogs.PreferenceDialog;
 import com.james.status.utils.ColorUtils;
 import com.james.status.utils.PreferenceUtils;
 import com.james.status.utils.StaticUtils;
@@ -65,31 +63,18 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                             component = intent.getParcelableExtra(EXTRA_COMPONENT);
                         else break;
 
-                        AppData.ActivityData data;
+                        AppData data;
                         try {
-                            data = new AppData.ActivityData(packageManager, packageManager.getActivityInfo(component, PackageManager.GET_META_DATA));
+                            data = new AppData(packageManager, packageManager.getApplicationInfo(component.getPackageName(), PackageManager.GET_META_DATA), packageManager.getPackageInfo(component.getPackageName(), PackageManager.GET_ACTIVITIES));
                         } catch (PackageManager.NameNotFoundException | NullPointerException e) {
                             e.printStackTrace();
                             break;
                         }
 
-                        PreferenceDialog dialog = new ColorPickerDialog(this).setDefaultPreference(data.getDefaultColor(this)).setTag(data).setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
-                            @Override
-                            public void onPreference(PreferenceDialog dialog, Integer preference) {
-                                AppData.ActivityData activity = (AppData.ActivityData) dialog.getTag();
-                                activity.putPreference(AccessibilityService.this, AppData.PreferenceIdentifier.COLOR, preference);
-
-                            }
-
-                            @Override
-                            public void onCancel(PreferenceDialog dialog) {
-                                notificationManager.cancel(NOTIFICATION_ID);
-                            }
-                        });
-
-                        dialog.setTitle(data.label);
-                        dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-                        dialog.show();
+                        Intent appSettingIntent = new Intent(this, AppSettingActivity.class);
+                        appSettingIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        appSettingIntent.putExtra(AppSettingActivity.EXTRA_APP, data);
+                        startActivity(appSettingIntent);
                         break;
                 }
             }
