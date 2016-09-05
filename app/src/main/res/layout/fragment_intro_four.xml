@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <com.james.status.views.SquareImageView
+            android:layout_width="24dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            app:srcCompat="@drawable/ic_search"
+            android:id="@+id/search" />
+
+        <android.support.v7.widget.AppCompatEditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/action_search"
+            android:textColorHint="@color/textColorSecondary"
+            android:minWidth="128dp"
+            android:clickable="false"
+            android:focusable="false"
+            android:id="@+id/editText" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="42dp"
+        android:layout_marginRight="42dp"
+        android:gravity="center_horizontal"
+        android:text="@string/tutorial_search"
+        android:textColor="@color/textColorPrimary"
+        android:textSize="20sp"
+        android:id="@+id/title" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="42dp"
+        android:layout_marginRight="42dp"
+        android:gravity="center_horizontal"
+        android:text="@string/tutorial_search_desc"
+        android:textColor="@color/textColorSecondary"
+        android:textSize="14sp"
+        android:id="@+id/subtitle" />
+
+</LinearLayout>

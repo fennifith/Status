@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:animateLayoutChanges="true">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:id="@+id/junk">
+
+            <com.james.status.views.CustomImageView
+                android:layout_width="18dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/ic_alarm"
+                android:padding="1dp" />
+
+            <com.james.status.views.CustomImageView
+                android:layout_width="18dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/ic_gps_searching"
+                android:padding="1dp" />
+
+            <com.james.status.views.CustomImageView
+                android:layout_width="18dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/ic_bluetooth_connected"
+                android:padding="1dp" />
+
+        </LinearLayout>
+
+        <com.james.status.views.CustomImageView
+            android:layout_width="18dp"
+            android:layout_height="25dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:scaleType="centerInside"
+            app:srcCompat="@drawable/ic_wifi_3"
+            android:padding="1dp"
+            android:id="@+id/wifi" />
+
+        <com.james.status.views.CustomImageView
+            android:layout_width="18dp"
+            android:layout_height="25dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:scaleType="centerInside"
+            app:srcCompat="@drawable/ic_signal_2"
+            android:padding="1dp"
+            android:id="@+id/signal" />
+
+        <com.james.status.views.CustomImageView
+            android:layout_width="18dp"
+            android:layout_height="25dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:scaleType="centerInside"
+            app:srcCompat="@drawable/ic_battery_charging_90"
+            android:padding="1dp"
+            android:id="@+id/battery" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="42dp"
+        android:layout_marginRight="42dp"
+        android:gravity="center_horizontal"
+        android:text="@string/tutorial_junk"
+        android:textColor="@color/textColorPrimary"
+        android:textSize="20sp"
+        android:id="@+id/title" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="42dp"
+        android:layout_marginRight="42dp"
+        android:gravity="center_horizontal"
+        android:text="@string/tutorial_junk_desc"
+        android:textColor="@color/textColorSecondary"
+        android:textSize="14sp"
+        android:id="@+id/subtitle" />
+
+</LinearLayout>

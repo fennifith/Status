@@ -35,6 +35,8 @@
 
         <activity android:name=".activities.AppSettingActivity" />
 
+        <activity android:name=".activities.IntroActivity" />
+
         <activity android:name=".activities.StartActivity"/>
 
         <activity

@@ -12,4 +12,13 @@ public class SimpleFragment extends Fragment {
 
     public void filter(@Nullable String filter) {
     }
+
+    public void onSelect() {
+    }
+
+    public void onEnterScroll(float offset) {
+    }
+
+    public void onExitScroll(float offset) {
+    }
 }

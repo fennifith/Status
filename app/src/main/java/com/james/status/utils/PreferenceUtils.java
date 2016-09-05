@@ -23,7 +23,8 @@ public class PreferenceUtils {
         STATUS_LOCKSCREEN_EXPAND,
         STATUS_ICON_PADDING,
         STATUS_ICON_SCALE,
-        SHOW_NOTIFICATIONS
+        SHOW_NOTIFICATIONS,
+        SHOW_TUTORIAL
     }
 
     @Nullable

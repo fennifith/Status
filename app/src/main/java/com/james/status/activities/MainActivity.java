@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        adapter = new SimplePagerAdapter(this, getSupportFragmentManager(), new GeneralPreferenceFragment(), new IconPreferenceFragment(), new AppPreferenceFragment());
+        adapter = new SimplePagerAdapter(this, getSupportFragmentManager(), viewPager, new GeneralPreferenceFragment(), new IconPreferenceFragment(), new AppPreferenceFragment());
         viewPager.setAdapter(adapter);
 
         tabLayout.setupWithViewPager(viewPager);
@@ -117,6 +117,9 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_setup:
                 startActivity(new Intent(this, StartActivity.class));
+                break;
+            case R.id.action_tutorial:
+                startActivity(new Intent(this, IntroActivity.class));
                 break;
             case R.id.action_about:
                 startActivity(new Intent(this, AboutActivity.class));

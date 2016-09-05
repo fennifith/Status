@@ -21,6 +21,7 @@
     <string name="action_enable">Enable</string>
     <string name="action_disable">Disable</string>
     <string name="action_reset">Reset</string>
+    <string name="action_tutorial">Show Tutorial</string>
 
     <string name="service_name">Status Service</string>
     <string name="service_name_general">Accessibility Service</string>
@@ -117,6 +118,14 @@
     <string name="icon_style_square">Square</string>
     <string name="icon_style_retro">Retro</string>
     <string name="icon_style_pixel">Pixelated</string>
+
+    <string name="tutorial_junk">Clean Design</string>
+    <string name="tutorial_junk_desc">Status minimizes the amount of space taken up by status icons, and you can specify icons to remove if you don\'t need them.</string>
+    <string name="tutorial_themes">Icon Theming</string>
+    <string name="tutorial_themes_desc">Customize the look of your status bar with a bunch of different icons to choose from.</string>
+    <string name="tutorial_search">Search</string>
+    <string name="tutorial_search_desc">Find the exact setting you want to change by using the app\'s search bar.</string>
+    <string name="tutorial_finish">Start the app!</string>
 
     <string name="red">Red</string>
     <string name="green">Green</string>

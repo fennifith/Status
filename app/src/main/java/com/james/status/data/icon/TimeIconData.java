@@ -103,8 +103,30 @@ public class TimeIconData extends IconData<TimeIconData.TimeReceiver> {
                         new PreferenceData.OnPreferenceChangeListener<Boolean>() {
                             @Override
                             public void onPreferenceChange(Boolean preference) {
-                                if (preference && !format.contains("a")) format += " a";
-                                else format = format.replace(" a", "");
+                                if (preference && !format.contains("a")) {
+                                    if (format.contains(",")) {
+                                        format = format.substring(0, format.indexOf(",")) + " a" + format.substring(format.indexOf(","), format.length());
+                                    } else format += " a";
+                                } else format = format.replace(" a", "");
+
+                                putPreference(PreferenceIdentifier.TEXT_FORMAT, format);
+                                StaticUtils.updateStatusService(getContext());
+                            }
+                        }
+                ),
+                new BooleanPreferenceData(
+                        getContext(),
+                        new PreferenceData.Identifier(
+                                getContext().getString(R.string.preference_date),
+                                getContext().getString(R.string.preference_date_desc)
+                        ),
+                        format.contains(", EEE MMM d"),
+                        new PreferenceData.OnPreferenceChangeListener<Boolean>() {
+                            @Override
+                            public void onPreferenceChange(Boolean preference) {
+                                if (preference && !format.contains(", EEE MMM d"))
+                                    format += ", EEE MMM d";
+                                else format = format.replace(", EEE MMM d", "");
 
                                 putPreference(PreferenceIdentifier.TEXT_FORMAT, format);
                                 StaticUtils.updateStatusService(getContext());
