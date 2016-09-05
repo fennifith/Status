@@ -45,6 +45,7 @@ public class DataIconData extends IconData {
         if (telephonyManager.getDataState() != TelephonyManager.DATA_DISCONNECTED) {
             switch (telephonyManager.getNetworkType()) {
                 case TelephonyManager.NETWORK_TYPE_GPRS:
+                case 16:
                 case TelephonyManager.NETWORK_TYPE_EDGE:
                 case TelephonyManager.NETWORK_TYPE_CDMA:
                 case TelephonyManager.NETWORK_TYPE_1xRTT:
@@ -60,9 +61,11 @@ public class DataIconData extends IconData {
                 case TelephonyManager.NETWORK_TYPE_EVDO_B:
                 case TelephonyManager.NETWORK_TYPE_EHRPD:
                 case TelephonyManager.NETWORK_TYPE_HSPAP:
+                case 17:
                     onTextUpdate("3G");
                     break;
                 case TelephonyManager.NETWORK_TYPE_LTE:
+                case 18:
                     onTextUpdate("4G");
                     break;
                 default:
@@ -90,8 +93,9 @@ public class DataIconData extends IconData {
             if (isRegistered) {
                 if (state == TelephonyManager.DATA_DISCONNECTED) onTextUpdate(null);
                 else {
-                    switch (networkType) {
+                    switch (telephonyManager.getNetworkType()) {
                         case TelephonyManager.NETWORK_TYPE_GPRS:
+                        case 16:
                         case TelephonyManager.NETWORK_TYPE_EDGE:
                         case TelephonyManager.NETWORK_TYPE_CDMA:
                         case TelephonyManager.NETWORK_TYPE_1xRTT:
@@ -107,9 +111,11 @@ public class DataIconData extends IconData {
                         case TelephonyManager.NETWORK_TYPE_EVDO_B:
                         case TelephonyManager.NETWORK_TYPE_EHRPD:
                         case TelephonyManager.NETWORK_TYPE_HSPAP:
+                        case 17:
                             onTextUpdate("3G");
                             break;
                         case TelephonyManager.NETWORK_TYPE_LTE:
+                        case 18:
                             onTextUpdate("4G");
                             break;
                         default:

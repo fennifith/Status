@@ -89,6 +89,7 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
             }
 
             icons = newIcons;
+            notifyDataSetChanged();
         } else icons = originalIcons;
     }
 

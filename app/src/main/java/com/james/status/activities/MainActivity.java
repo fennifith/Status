@@ -18,6 +18,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.james.status.R;
+import com.james.status.Status;
 import com.james.status.adapters.SimplePagerAdapter;
 import com.james.status.fragments.AppPreferenceFragment;
 import com.james.status.fragments.GeneralPreferenceFragment;
@@ -28,17 +29,18 @@ import com.james.status.utils.StaticUtils;
 
 public class MainActivity extends AppCompatActivity {
 
-    AppBarLayout appbar;
-    TabLayout tabLayout;
-    SwitchCompat service;
+    private Status status;
 
-    ViewPager viewPager;
-    SimplePagerAdapter adapter;
+    private AppBarLayout appbar;
+    private ViewPager viewPager;
+    private SimplePagerAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        status = (Status) getApplicationContext();
 
         if (!StaticUtils.isAccessibilityGranted(this) || !StaticUtils.isNotificationGranted(this) || !StaticUtils.isPermissionsGranted(this))
             startActivity(new Intent(this, StartActivity.class));
@@ -48,8 +50,8 @@ public class MainActivity extends AppCompatActivity {
         Glide.with(this).load("https://theandroidmaster.github.io/images/headers/status_bg.png").into((ImageView) findViewById(R.id.header));
 
         appbar = (AppBarLayout) findViewById(R.id.appbar);
-        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-        service = (SwitchCompat) findViewById(R.id.serviceEnabled);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        SwitchCompat service = (SwitchCompat) findViewById(R.id.serviceEnabled);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
 
         Boolean enabled = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED);
@@ -126,5 +128,11 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        status.onActivityResult(requestCode, resultCode, data);
     }
 }

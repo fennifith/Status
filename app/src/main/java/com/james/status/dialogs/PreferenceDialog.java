@@ -18,7 +18,7 @@ public class PreferenceDialog<T> extends AppCompatDialog {
         setOnDismissListener(new OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
-                if (hasListener()) getListener().onCancel(PreferenceDialog.this);
+                cancel();
             }
         });
     }

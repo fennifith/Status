@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiManager;
 import android.support.graphics.drawable.VectorDrawableCompat;
 
@@ -37,7 +38,8 @@ public class WifiIconData extends IconData<WifiIconData.WifiReceiver> {
     public void register() {
         super.register();
 
-        if (wifiManager.getWifiState() == WifiManager.WIFI_STATE_ENABLED) {
+        SupplicantState supplicantState = wifiManager.getConnectionInfo().getSupplicantState();
+        if (supplicantState != SupplicantState.DISCONNECTED && supplicantState != SupplicantState.INACTIVE && supplicantState != SupplicantState.UNINITIALIZED && supplicantState != SupplicantState.INVALID) {
             int level = WifiManager.calculateSignalLevel(wifiManager.getConnectionInfo().getRssi(), 4);
             onDrawableUpdate(VectorDrawableCompat.create(getContext().getResources(), getIconResource(level), getContext().getTheme()));
         } else onDrawableUpdate(null);
@@ -87,7 +89,8 @@ public class WifiIconData extends IconData<WifiIconData.WifiReceiver> {
     public class WifiReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (wifiManager.getWifiState() == WifiManager.WIFI_STATE_ENABLED) {
+            SupplicantState supplicantState = wifiManager.getConnectionInfo().getSupplicantState();
+            if (supplicantState != SupplicantState.DISCONNECTED && supplicantState != SupplicantState.UNINITIALIZED && supplicantState != SupplicantState.INVALID) {
                 int level = WifiManager.calculateSignalLevel(wifiManager.getConnectionInfo().getRssi(), 4);
                 onDrawableUpdate(VectorDrawableCompat.create(getContext().getResources(), getIconResource(level), getContext().getTheme()));
             } else onDrawableUpdate(null);
