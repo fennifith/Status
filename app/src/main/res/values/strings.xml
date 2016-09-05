@@ -56,7 +56,7 @@
     <string name="preference_show_notifications">Show Notifications</string>
     <string name="preference_heads_up">Show Heads-Up Overlays</string>
     <string name="preference_heads_up_desc">Notifications will \'peek\' from the top of the screen whenever an important notification is received. If you are on Android M or higher, you may want to disable the system heads up notifications to prevent annoying things from happening. Unfortunately it is not possible to disable them on Android L.</string>
-    <string name="preference_heads_up_duration">Heads-Up Duration</string>
+    <string name="preference_heads_up_duration">Heads-Up Overlay Duration (seconds)</string>
     <string name="preference_heads_up_duration_desc">Set the amount of time for the app to show a heads-up notification for.</string>
     <string name="preference_battery_percent">Display Battery Percent</string>
     <string name="preference_battery_percent_desc">Shows the battery percentage next to the icon in the status bar.</string>
@@ -112,6 +112,7 @@
     <string name="notification_color_desc">Status couldn\'t find a color to use for this application, so it\'s reverted to the default color. You can specify a color to use by clicking this notification.</string>
 
     <string name="unit_dp">dp</string>
+    <string name="unit_seconds">" seconds"</string>
 
     <string name="icon_style_default">Default</string>
     <string name="icon_style_circle">Circle</string>

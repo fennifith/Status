@@ -15,6 +15,7 @@ import com.james.status.R;
 import com.james.status.adapters.PreferenceSectionAdapter;
 import com.james.status.data.preference.BooleanPreferenceData;
 import com.james.status.data.preference.ColorPreferenceData;
+import com.james.status.data.preference.IntegerPreferenceData;
 import com.james.status.data.preference.PreferenceData;
 import com.james.status.utils.PreferenceUtils;
 import com.james.status.utils.StaticUtils;
@@ -126,6 +127,18 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                                 PreferenceData.Identifier.SectionIdentifier.NOTIFICATIONS
                         ),
                         Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP,
+                        null
+                ),
+                new IntegerPreferenceData(
+                        getContext(),
+                        new PreferenceData.Identifier(
+                                PreferenceUtils.PreferenceIdentifier.STATUS_HEADS_UP_DURATION,
+                                getString(R.string.preference_heads_up_duration),
+                                getString(R.string.preference_heads_up_duration_desc),
+                                PreferenceData.Identifier.SectionIdentifier.NOTIFICATIONS
+                        ),
+                        11,
+                        getString(R.string.unit_seconds),
                         null
                 )
         ));

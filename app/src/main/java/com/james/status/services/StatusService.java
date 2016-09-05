@@ -62,8 +62,6 @@ public class StatusService extends Service {
             EXTRA_IS_FULLSCREEN = "com.james.status.EXTRA_IS_FULLSCREEN",
             EXTRA_IS_HOME_SCREEN = "com.james.status.EXTRA_IS_HOME_SCREEN";
 
-    private static final int HEADS_UP_DURATION = 11000;
-
     private StatusView statusView;
     private View fullscreenView;
     private View headsUpView;
@@ -76,6 +74,7 @@ public class StatusService extends Service {
     private NotificationData headsUpNotification;
 
     private boolean shouldFireClickEvent = true;
+    private int headsUpDuration = 11000;
 
     @Override
     public void onCreate() {
@@ -106,6 +105,9 @@ public class StatusService extends Service {
         Boolean enabled = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED);
         if (enabled == null || !enabled) stopSelf();
         else setUp();
+
+        Integer duration = PreferenceUtils.getIntegerPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_HEADS_UP_DURATION);
+        if (duration != null) headsUpDuration = duration * 1000;
     }
 
     @Nullable
@@ -151,7 +153,10 @@ public class StatusService extends Service {
                     statusView.setSystemShowing(true);
                     headsUpNotification = notification;
 
-                    headsUpHandler.postDelayed(headsUpDisabledRunnable, HEADS_UP_DURATION);
+                    Integer duration = PreferenceUtils.getIntegerPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_HEADS_UP_DURATION);
+                    if (duration != null) headsUpDuration = duration * 1000;
+
+                    headsUpHandler.postDelayed(headsUpDisabledRunnable, headsUpDuration);
                 }
 
                 statusView.addNotification(notification);
@@ -301,7 +306,10 @@ public class StatusService extends Service {
             }
         });
 
-        headsUpHandler.postDelayed(headsUpRunnable, HEADS_UP_DURATION);
+        Integer duration = PreferenceUtils.getIntegerPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_HEADS_UP_DURATION);
+        if (duration != null) headsUpDuration = duration * 1000;
+
+        headsUpHandler.postDelayed(headsUpRunnable, headsUpDuration);
 
         CustomImageView icon = (CustomImageView) headsUpView.findViewById(R.id.icon);
         Drawable drawable = notification.getIcon(this);
