@@ -58,7 +58,8 @@ public class BatteryIconData extends IconData {
 
             onDrawableUpdate(VectorDrawableCompat.create(getContext().getResources(), getIconResource(iconLevel), getContext().getTheme()));
 
-            if (hasText()) onTextUpdate(String.valueOf(((double) level / scale) * 100) + "%");
+            if (hasText())
+                onTextUpdate(String.valueOf(((double) level / scale) * 100).replace(".0", "") + "%");
         }
     }
 
@@ -193,7 +194,8 @@ public class BatteryIconData extends IconData {
 
             onDrawableUpdate(VectorDrawableCompat.create(getContext().getResources(), getIconResource(iconLevel), getContext().getTheme()));
 
-            if (hasText()) onTextUpdate(String.valueOf(((double) level / scale) * 100) + "%");
+            if (hasText())
+                onTextUpdate(String.valueOf(((double) level / scale) * 100).replace(".0", "") + "%");
         }
     }
 }
