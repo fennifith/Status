@@ -2,6 +2,7 @@ package com.james.status.dialogs;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.TextView;
 
@@ -9,9 +10,12 @@ import com.james.status.R;
 
 public class IntegerPickerDialog extends PreferenceDialog<Integer> {
 
-    String unit;
+    private String unit;
 
-    TextView scale;
+    @Nullable
+    private Integer min, max;
+
+    private TextView scale;
 
     public IntegerPickerDialog(Context context, String unit) {
         super(context);
@@ -41,6 +45,9 @@ public class IntegerPickerDialog extends PreferenceDialog<Integer> {
                 Integer preference = getPreference();
                 if (preference != null) {
                     preference++;
+                    if (min != null) preference = Math.max(min, preference);
+                    if (max != null) preference = Math.min(max, preference);
+
                     setPreference(preference);
 
                     scale.setText(String.valueOf(preference));
@@ -54,6 +61,9 @@ public class IntegerPickerDialog extends PreferenceDialog<Integer> {
                 Integer preference = getPreference();
                 if (preference != null) {
                     preference--;
+                    if (min != null) preference = Math.max(min, preference);
+                    if (max != null) preference = Math.min(max, preference);
+
                     setPreference(preference);
 
                     scale.setText(String.valueOf(preference));
@@ -74,5 +84,11 @@ public class IntegerPickerDialog extends PreferenceDialog<Integer> {
                 confirm();
             }
         });
+    }
+
+    public IntegerPickerDialog setMinMax(@Nullable Integer min, @Nullable Integer max) {
+        this.min = min;
+        this.max = max;
+        return this;
     }
 }

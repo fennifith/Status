@@ -139,6 +139,8 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                         ),
                         11,
                         getString(R.string.unit_seconds),
+                        0,
+                        20,
                         null
                 )
         ));

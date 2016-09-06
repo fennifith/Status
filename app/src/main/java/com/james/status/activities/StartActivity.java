@@ -12,10 +12,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.james.status.R;
@@ -163,7 +163,7 @@ public class StartActivity extends AppCompatActivity {
         @Nullable
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            Button button = new Button(inflater.getContext());
+            AppCompatButton button = new AppCompatButton(inflater.getContext());
             button.setText(R.string.action_access_grant);
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -183,7 +183,7 @@ public class StartActivity extends AppCompatActivity {
             LinearLayout linearLayout = new LinearLayout(inflater.getContext());
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                Button button = new Button(inflater.getContext());
+                AppCompatButton button = new AppCompatButton(inflater.getContext());
                 button.setText(R.string.action_access_grant);
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -195,7 +195,7 @@ public class StartActivity extends AppCompatActivity {
                 linearLayout.addView(button);
             }
 
-            Button button = new Button(inflater.getContext());
+            AppCompatButton button = new AppCompatButton(inflater.getContext());
             button.setText(R.string.notifications_compat);
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -214,7 +214,7 @@ public class StartActivity extends AppCompatActivity {
         @Nullable
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            Button button = new Button(inflater.getContext());
+            AppCompatButton button = new AppCompatButton(inflater.getContext());
             button.setText(R.string.action_access_grant);
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -232,7 +232,7 @@ public class StartActivity extends AppCompatActivity {
         @Nullable
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            Button button = new Button(inflater.getContext());
+            AppCompatButton button = new AppCompatButton(inflater.getContext());
             button.setText(R.string.action_access_grant);
             button.setOnClickListener(new View.OnClickListener() {
                 @Override

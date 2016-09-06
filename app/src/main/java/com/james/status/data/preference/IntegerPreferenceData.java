@@ -2,6 +2,7 @@ package com.james.status.data.preference;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,10 @@ public class IntegerPreferenceData extends PreferenceData<Integer> {
     int preference;
     String unit;
 
-    public IntegerPreferenceData(Context context, Identifier identifier, int defaultValue, String unit, OnPreferenceChangeListener<Integer> listener) {
+    @Nullable
+    Integer min, max;
+
+    public IntegerPreferenceData(Context context, Identifier identifier, int defaultValue, String unit, @Nullable Integer min, @Nullable Integer max, OnPreferenceChangeListener<Integer> listener) {
         super(context, identifier, listener);
 
         Integer preference = PreferenceUtils.getIntegerPreference(context, identifier.getPreference());
@@ -25,6 +29,8 @@ public class IntegerPreferenceData extends PreferenceData<Integer> {
 
         this.preference = preference;
         this.unit = unit;
+        this.min = min;
+        this.max = max;
     }
 
     @Override
@@ -39,7 +45,7 @@ public class IntegerPreferenceData extends PreferenceData<Integer> {
         holder.v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Dialog dialog = new IntegerPickerDialog(getContext(), unit).setPreference(preference).setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
+                Dialog dialog = new IntegerPickerDialog(getContext(), unit).setMinMax(min, max).setPreference(preference).setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
                     @Override
                     public void onPreference(PreferenceDialog dialog, Integer preference) {
                         IntegerPreferenceData.this.preference = preference;

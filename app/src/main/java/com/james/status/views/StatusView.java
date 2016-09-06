@@ -131,7 +131,7 @@ public class StatusView extends FrameLayout {
                         ImageUtils.tintDrawable(iconView, drawable, isDarkMode ? Color.BLACK : Color.WHITE);
                     } else {
                         iconView.setVisibility(View.GONE);
-                        if (!iconData.hasText()) item.setVisibility(View.GONE);
+                        if (iconData.getText() == null) item.setVisibility(View.GONE);
                     }
                 }
             });
@@ -150,7 +150,7 @@ public class StatusView extends FrameLayout {
                         else textView.setTextColor(Color.WHITE);
                     } else {
                         textView.setVisibility(View.GONE);
-                        if (!iconData.hasDrawable()) item.setVisibility(View.GONE);
+                        if (iconData.getDrawable() == null) item.setVisibility(View.GONE);
                     }
                 }
             });

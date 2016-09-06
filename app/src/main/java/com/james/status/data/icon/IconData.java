@@ -197,6 +197,8 @@ public class IconData<T extends BroadcastReceiver> {
                         ),
                         getIconPadding(),
                         getContext().getString(R.string.unit_dp),
+                        null,
+                        null,
                         new PreferenceData.OnPreferenceChangeListener<Integer>() {
                             @Override
                             public void onPreferenceChange(Integer preference) {
@@ -212,6 +214,8 @@ public class IconData<T extends BroadcastReceiver> {
                         ),
                         getIconScale(),
                         getContext().getString(R.string.unit_dp),
+                        0,
+                        null,
                         new PreferenceData.OnPreferenceChangeListener<Integer>() {
                             @Override
                             public void onPreferenceChange(Integer preference) {
