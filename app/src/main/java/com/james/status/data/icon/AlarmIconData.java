@@ -1,11 +1,12 @@
 package com.james.status.data.icon;
 
-import android.annotation.TargetApi;
 import android.app.AlarmManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
+import android.provider.Settings;
 import android.support.graphics.drawable.VectorDrawableCompat;
 
 import com.james.status.R;
@@ -15,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@TargetApi(21)
 public class AlarmIconData extends IconData<AlarmIconData.AlarmReceiver> {
 
     private AlarmManager alarmManager;
@@ -32,13 +32,23 @@ public class AlarmIconData extends IconData<AlarmIconData.AlarmReceiver> {
 
     @Override
     public IntentFilter getIntentFilter() {
-        return new IntentFilter(AlarmManager.ACTION_NEXT_ALARM_CLOCK_CHANGED);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            return new IntentFilter(AlarmManager.ACTION_NEXT_ALARM_CLOCK_CHANGED);
+        else
+            return new IntentFilter("android.intent.action.ALARM_CHANGED");
     }
 
     @Override
     public void register() {
         super.register();
-        if (alarmManager.getNextAlarmClock() != null)
+
+        Object alarm = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            alarm = alarmManager.getNextAlarmClock();
+        else
+            alarm = Settings.System.getString(getContext().getContentResolver(), android.provider.Settings.System.NEXT_ALARM_FORMATTED);
+
+        if (alarm != null)
             onDrawableUpdate(VectorDrawableCompat.create(getContext().getResources(), getIconResource(), getContext().getTheme()));
     }
 
@@ -71,7 +81,13 @@ public class AlarmIconData extends IconData<AlarmIconData.AlarmReceiver> {
     public class AlarmReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (alarmManager.getNextAlarmClock() != null)
+            Object alarm = null;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                alarm = alarmManager.getNextAlarmClock();
+            else
+                alarm = Settings.System.getString(getContext().getContentResolver(), android.provider.Settings.System.NEXT_ALARM_FORMATTED);
+
+            if (alarm != null)
                 onDrawableUpdate(VectorDrawableCompat.create(getContext().getResources(), getIconResource(), getContext().getTheme()));
             else onDrawableUpdate(null);
         }

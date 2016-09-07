@@ -463,8 +463,7 @@ public class StatusService extends Service {
         icons.add(new WifiIconData(context));
         icons.add(new BluetoothIconData(context));
         icons.add(new AirplaneModeIconData(context));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            icons.add(new AlarmIconData(context));
+        icons.add(new AlarmIconData(context));
         icons.add(new RingerIconData(context));
 
         return icons;

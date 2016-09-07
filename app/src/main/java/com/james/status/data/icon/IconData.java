@@ -226,7 +226,7 @@ public class IconData<T extends BroadcastReceiver> {
                 )
         ));
 
-        if (hasDrawable()) {
+        if (hasDrawable() && getIconStyles().size() > 1) {
             preferences.add(new IconPreferenceData(
                     getContext(),
                     new PreferenceData.Identifier(
