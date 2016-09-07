@@ -24,7 +24,7 @@
                 android:minHeight="200dp"
                 android:minWidth="300dp" />
 
-            <TextView
+            <android.support.v7.widget.AppCompatEditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
@@ -158,11 +158,13 @@
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="42dp"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:id="@+id/colors"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
                 android:gravity="center_vertical"
                 android:animateLayoutChanges="true">
 
@@ -185,8 +187,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
+                    android:layout_margin="8dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     app:srcCompat="@drawable/ic_image"
                     android:id="@+id/image" />

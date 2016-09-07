@@ -40,8 +40,8 @@ public class StatusView extends FrameLayout {
     private LinearLayout status, notificationIconLayout, statusIconLayout, statusCenterIconLayout;
 
     @ColorInt
-    private Integer color;
-    private boolean isSystemShowing, isDarkMode, isFullscreen;
+    private Integer color, iconColor;
+    private boolean isSystemShowing, isFullscreen;
     private ArrayMap<String, NotificationData> notifications;
 
     private List<IconData> icons;
@@ -128,7 +128,7 @@ public class StatusView extends FrameLayout {
                         item.setVisibility(View.VISIBLE);
                         iconView.setVisibility(View.VISIBLE);
 
-                        ImageUtils.tintDrawable(iconView, drawable, isDarkMode ? Color.BLACK : Color.WHITE);
+                        ImageUtils.tintDrawable(iconView, drawable, iconColor);
                     } else {
                         iconView.setVisibility(View.GONE);
                         if (iconData.getText() == null) item.setVisibility(View.GONE);
@@ -146,8 +146,7 @@ public class StatusView extends FrameLayout {
 
                         textView.setText(text);
 
-                        if (isDarkMode) textView.setTextColor(Color.BLACK);
-                        else textView.setTextColor(Color.WHITE);
+                        textView.setTextColor(iconColor);
                     } else {
                         textView.setVisibility(View.GONE);
                         if (iconData.getDrawable() == null) item.setVisibility(View.GONE);
@@ -204,7 +203,7 @@ public class StatusView extends FrameLayout {
             Drawable drawable = notification.getIcon(getContext());
 
             if (drawable != null) {
-                ImageUtils.tintDrawable((CustomImageView) v.findViewById(R.id.icon), drawable, isDarkMode ? Color.BLACK : Color.WHITE);
+                ImageUtils.tintDrawable((CustomImageView) v.findViewById(R.id.icon), drawable, iconColor);
 
                 notificationIconLayout.addView(v);
 
@@ -322,8 +321,11 @@ public class StatusView extends FrameLayout {
 
     public void setColor(@ColorInt int color) {
         if (this.color == null) this.color = Color.BLACK;
+        color = Color.argb(255, Color.red(color), Color.green(color), Color.blue(color));
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        Boolean isIconTint = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_TINTED_ICONS);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && (isIconTint == null || !isIconTint)) {
             ValueAnimator animator = ValueAnimator.ofArgb(this.color, color);
             animator.setDuration(150);
             animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -337,9 +339,22 @@ public class StatusView extends FrameLayout {
             });
             animator.start();
         } else {
-            if (status != null)
-                status.setBackgroundColor(Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
-            setDarkMode(!ColorUtils.isColorDark(color));
+            if (isIconTint != null && isIconTint) {
+                if (status != null) {
+                    int backgroundColor = getDefaultColor();
+
+                    Boolean isDarkModeEnabled = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_DARK_ICONS);
+                    if (isDarkModeEnabled != null && !isDarkModeEnabled) iconColor = color;
+                    else
+                        iconColor = ColorUtils.isColorDark(backgroundColor) ? ColorUtils.lightColor(color) : ColorUtils.darkColor(color);
+
+                    setIconTint(status, iconColor);
+                    status.setBackgroundColor(backgroundColor);
+                }
+            } else {
+                if (status != null) status.setBackgroundColor(color);
+                setDarkMode(!ColorUtils.isColorDark(color));
+            }
         }
 
         this.color = color;
@@ -347,6 +362,13 @@ public class StatusView extends FrameLayout {
 
     @ColorInt
     public int getColor() {
+        return color;
+    }
+
+    @ColorInt
+    private int getDefaultColor() {
+        Integer color = PreferenceUtils.getIntegerPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_COLOR);
+        if (color == null) color = Color.BLACK;
         return color;
     }
 
@@ -369,17 +391,16 @@ public class StatusView extends FrameLayout {
 
     public void setDarkMode(boolean isDarkMode) {
         Boolean isDarkModeEnabled = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_DARK_ICONS);
-
-        if (this.isDarkMode != isDarkMode && (isDarkModeEnabled == null || isDarkModeEnabled)) {
-            setDarkView(status, isDarkMode ? Color.BLACK : Color.WHITE);
-            this.isDarkMode = isDarkMode;
+        if (isDarkModeEnabled == null || isDarkModeEnabled) {
+            iconColor = isDarkMode ? Color.BLACK : Color.WHITE;
+            setIconTint(status, iconColor);
         }
     }
 
-    private void setDarkView(View view, int color) {
+    private void setIconTint(View view, int color) {
         if (view instanceof LinearLayout) {
             for (int i = 0; i < ((LinearLayout) view).getChildCount(); i++) {
-                setDarkView(((LinearLayout) view).getChildAt(i), color);
+                setIconTint(((LinearLayout) view).getChildAt(i), color);
             }
         } else if (view instanceof TextView) {
             ((TextView) view).setTextColor(color);

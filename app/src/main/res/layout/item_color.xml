@@ -6,7 +6,7 @@
     <com.james.status.views.CircleImageView
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:layout_margin="4dp"
+        android:layout_margin="8dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:src="@android:color/black"
         android:id="@+id/color" />

@@ -106,6 +106,22 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                 new BooleanPreferenceData(
                         getContext(),
                         new PreferenceData.Identifier(
+                                PreferenceUtils.PreferenceIdentifier.STATUS_TINTED_ICONS,
+                                getString(R.string.preference_tinted_icons),
+                                getString(R.string.preference_tinted_icons_desc),
+                                PreferenceData.Identifier.SectionIdentifier.ICONS
+                        ),
+                        false,
+                        new PreferenceData.OnPreferenceChangeListener<Boolean>() {
+                            @Override
+                            public void onPreferenceChange(Boolean preference) {
+                                StaticUtils.updateStatusService(getContext());
+                            }
+                        }
+                ),
+                new BooleanPreferenceData(
+                        getContext(),
+                        new PreferenceData.Identifier(
                                 PreferenceUtils.PreferenceIdentifier.SHOW_NOTIFICATIONS,
                                 getString(R.string.preference_show_notifications),
                                 PreferenceData.Identifier.SectionIdentifier.NOTIFICATIONS

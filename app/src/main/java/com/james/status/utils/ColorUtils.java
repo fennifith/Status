@@ -20,18 +20,18 @@ public class ColorUtils {
         return (0.299 * Color.red(color) + 0.587 * Color.green(color) + 0.114 * Color.blue(color)) / 255 < 0.5;
     }
 
-    public static int darkColor(int color) {
-        float[] hsv = new float[3];
-        Color.colorToHSV(color, hsv);
-        hsv[2] *= 0.8f;
-        return Color.HSVToColor(hsv);
+    @ColorInt
+    public static int darkColor(@ColorInt int color) {
+        return Color.argb(255, addToColorPart(Color.red(color), -70), addToColorPart(Color.green(color), -70), addToColorPart(Color.blue(color), -70));
     }
 
-    public static int lightColor(int color) {
-        float[] hsv = new float[3];
-        Color.colorToHSV(color, hsv);
-        hsv[2] /= 0.8f;
-        return Color.HSVToColor(hsv);
+    @ColorInt
+    public static int lightColor(@ColorInt int color) {
+        return Color.argb(255, addToColorPart(Color.red(color), 70), addToColorPart(Color.green(color), 70), addToColorPart(Color.blue(color), 70));
+    }
+
+    private static int addToColorPart(int colorPart, int variable) {
+        return Math.max(0, Math.min(255, colorPart + variable));
     }
 
     public static int muteColor(int color, int variant) {

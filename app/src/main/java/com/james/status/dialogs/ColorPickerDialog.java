@@ -10,7 +10,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatSeekBar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
@@ -28,10 +31,13 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> {
 
     private Status status;
     private Status.OnColorPickedListener listener;
+    private TextWatcher textWatcher;
 
     private CustomImageView colorImage;
-    private TextView colorHex, redInt, greenInt, blueInt;
+    private AppCompatEditText colorHex;
+    private TextView redInt, greenInt, blueInt;
     private AppCompatSeekBar red, green, blue;
+    private View reset;
 
     private boolean isTrackingTouch;
 
@@ -47,7 +53,7 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> {
         status = (Status) getContext().getApplicationContext();
 
         colorImage = (CustomImageView) findViewById(R.id.color);
-        colorHex = (TextView) findViewById(R.id.colorHex);
+        colorHex = (AppCompatEditText) findViewById(R.id.colorHex);
         red = (AppCompatSeekBar) findViewById(R.id.red);
         redInt = (TextView) findViewById(R.id.redInt);
         green = (AppCompatSeekBar) findViewById(R.id.green);
@@ -55,14 +61,36 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> {
         blue = (AppCompatSeekBar) findViewById(R.id.blue);
         blueInt = (TextView) findViewById(R.id.blueInt);
 
+        reset = findViewById(R.id.reset);
+
+        textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                try {
+                    int color = Color.parseColor(colorHex.getText().toString());
+                    setColor(color, true);
+                    setPreference(color);
+                } catch (Exception ignored) {
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        };
+
+        colorHex.addTextChangedListener(textWatcher);
+
         red.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 int color = getPreference();
                 color = Color.argb(255, i, Color.green(color), Color.blue(color));
                 setColor(color, false);
-
-                findViewById(R.id.reset).setVisibility(getDefaultPreference() != null && color != getDefaultPreference() ? View.VISIBLE : View.GONE);
                 setPreference(color);
             }
 
@@ -83,8 +111,6 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> {
                 int color = getPreference();
                 color = Color.argb(255, Color.red(color), i, Color.blue(color));
                 setColor(color, false);
-
-                findViewById(R.id.reset).setVisibility(getDefaultPreference() != null && color != getDefaultPreference() ? View.VISIBLE : View.GONE);
                 setPreference(color);
             }
 
@@ -105,8 +131,6 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> {
                 int color = getPreference();
                 color = Color.argb(255, Color.red(color), Color.green(color), i);
                 setColor(color, false);
-
-                findViewById(R.id.reset).setVisibility(getDefaultPreference() != null && color != getDefaultPreference() ? View.VISIBLE : View.GONE);
                 setPreference(color);
             }
 
@@ -139,8 +163,6 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> {
                     Object tag = v.getTag();
                     if (tag != null && tag instanceof Integer) {
                         setColor((int) tag, true);
-
-                        findViewById(R.id.reset).setVisibility(getDefaultPreference() != null && (int) tag != getDefaultPreference() ? View.VISIBLE : View.GONE);
                         setPreference((int) tag);
                     }
                 }
@@ -154,8 +176,6 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> {
             public void onColorPicked(@Nullable Integer color) {
                 if (color != null) {
                     setColor(color, false);
-
-                    findViewById(R.id.reset).setVisibility(getDefaultPreference() != null && color != getDefaultPreference() ? View.VISIBLE : View.GONE);
                     setPreference(color);
                 }
 
@@ -171,14 +191,11 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> {
             }
         });
 
-        findViewById(R.id.reset).setOnClickListener(new View.OnClickListener() {
+        reset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int color = getDefaultPreference();
-
                 setColor(color, true);
-
-                findViewById(R.id.reset).setVisibility(View.GONE);
                 setPreference(color);
             }
         });
@@ -235,8 +252,10 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> {
             animator.start();
         } else {
             colorImage.setImageDrawable(new ColorDrawable(color));
+            colorHex.removeTextChangedListener(textWatcher);
             colorHex.setText(String.format("#%06X", (0xFFFFFF & color)));
             colorHex.setTextColor(ColorUtils.isColorDark(color) ? Color.WHITE : Color.BLACK);
+            colorHex.addTextChangedListener(textWatcher);
             redInt.setText(String.valueOf(Color.red(color)));
             greenInt.setText(String.valueOf(Color.green(color)));
             blueInt.setText(String.valueOf(Color.blue(color)));
@@ -248,7 +267,14 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> {
     }
 
     @Override
-    public void show() {
-        super.show();
+    public PreferenceDialog setPreference(@ColorInt Integer preference) {
+        Integer defaultPreference = getDefaultPreference();
+        if (preference != null && defaultPreference != null && reset != null) {
+            if (preference.equals(defaultPreference))
+                reset.setVisibility(View.GONE);
+            else reset.setVisibility(View.VISIBLE);
+        }
+
+        return super.setPreference(preference);
     }
 }
