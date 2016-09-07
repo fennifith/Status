@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
@@ -36,6 +37,7 @@ import com.james.status.data.icon.BluetoothIconData;
 import com.james.status.data.icon.DataIconData;
 import com.james.status.data.icon.IconData;
 import com.james.status.data.icon.NetworkIconData;
+import com.james.status.data.icon.NfcIconData;
 import com.james.status.data.icon.RingerIconData;
 import com.james.status.data.icon.TimeIconData;
 import com.james.status.data.icon.WifiIconData;
@@ -463,6 +465,8 @@ public class StatusService extends Service {
         icons.add(new WifiIconData(context));
         icons.add(new BluetoothIconData(context));
         icons.add(new AirplaneModeIconData(context));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 && context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_NFC))
+            icons.add(new NfcIconData(context));
         icons.add(new AlarmIconData(context));
         icons.add(new RingerIconData(context));
 
