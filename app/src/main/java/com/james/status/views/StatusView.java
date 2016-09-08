@@ -342,6 +342,10 @@ public class StatusView extends FrameLayout {
             if (isIconTint != null && isIconTint) {
                 if (status != null) {
                     int backgroundColor = getDefaultColor();
+                    if (color == backgroundColor) {
+                        if (color == Color.BLACK) color = Color.WHITE;
+                        else if (color == Color.WHITE) color = Color.BLACK;
+                    }
 
                     Boolean isDarkModeEnabled = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_DARK_ICONS);
                     if (isDarkModeEnabled != null && !isDarkModeEnabled) iconColor = color;
