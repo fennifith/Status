@@ -110,6 +110,7 @@
     <string name="icon_alarm">Alarm Icon</string>
     <string name="icon_ringer">Ringer Volume Icon</string>
     <string name="icon_nfc">NFC Icon</string>
+    <string name="icon_headphone">Headphones Icon</string>
 
     <string name="notification_color">Set Screen-Specific Color</string>
     <string name="notification_color_desc">Status couldn\'t find a color to use for this application, so it\'s reverted to the default color. You can specify a color to use by clicking this notification.</string>

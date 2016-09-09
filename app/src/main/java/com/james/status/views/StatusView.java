@@ -9,7 +9,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.support.graphics.drawable.VectorDrawableCompat;
@@ -27,6 +26,7 @@ import android.widget.TextView;
 import com.james.status.R;
 import com.james.status.data.NotificationData;
 import com.james.status.data.icon.IconData;
+import com.james.status.utils.ColorAnimator;
 import com.james.status.utils.ColorUtils;
 import com.james.status.utils.ImageUtils;
 import com.james.status.utils.PreferenceUtils;
@@ -325,40 +325,40 @@ public class StatusView extends FrameLayout {
 
         Boolean isIconTint = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_TINTED_ICONS);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && (isIconTint == null || !isIconTint)) {
-            ValueAnimator animator = ValueAnimator.ofArgb(this.color, color);
-            animator.setDuration(150);
-            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        if (isIconTint == null || !isIconTint) {
+            new ColorAnimator(this.color, color).setDuration(150).setColorUpdateListener(new ColorAnimator.ColorUpdateListener() {
                 @Override
-                public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    int color = (int) valueAnimator.getAnimatedValue();
-                    if (status != null)
+                public void onColorUpdate(ColorAnimator animator, @ColorInt int color) {
+                    if (status != null) {
                         status.setBackgroundColor(Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
-                    setDarkMode(!ColorUtils.isColorDark(color));
-                }
-            });
-            animator.start();
-        } else {
-            if (isIconTint != null && isIconTint) {
-                if (status != null) {
-                    int backgroundColor = getDefaultColor();
-                    if (color == backgroundColor) {
-                        if (color == Color.BLACK) color = Color.WHITE;
-                        else if (color == Color.WHITE) color = Color.BLACK;
+                        if (animator.getAnimatedFraction() == 1)
+                            setDarkMode(!ColorUtils.isColorDark(color));
                     }
-
-                    Boolean isDarkModeEnabled = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_DARK_ICONS);
-                    if (isDarkModeEnabled != null && !isDarkModeEnabled) iconColor = color;
-                    else
-                        iconColor = ColorUtils.isColorDark(backgroundColor) ? ColorUtils.lightColor(color) : ColorUtils.darkColor(color);
-
-                    setIconTint(status, iconColor);
-                    status.setBackgroundColor(backgroundColor);
                 }
-            } else {
-                if (status != null) status.setBackgroundColor(color);
-                setDarkMode(!ColorUtils.isColorDark(color));
+            }).start();
+        } else if (status != null) {
+            int backgroundColor = getDefaultColor();
+            if (color == backgroundColor) {
+                if (color == Color.BLACK) color = Color.WHITE;
+                else if (color == Color.WHITE) color = Color.BLACK;
             }
+
+            status.setBackgroundColor(backgroundColor);
+
+            Boolean isDarkModeEnabled = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_DARK_ICONS);
+            if (isDarkModeEnabled == null || isDarkModeEnabled)
+                color = ColorUtils.isColorDark(backgroundColor) ? ColorUtils.lightColor(color) : ColorUtils.darkColor(color);
+
+            new ColorAnimator(this.color, color).setDuration(150).setColorUpdateListener(new ColorAnimator.ColorUpdateListener() {
+                @Override
+                public void onColorUpdate(ColorAnimator animator, @ColorInt int color) {
+                    if (status != null) {
+                        setIconTint(status, Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
+                    }
+                }
+            }).start();
+
+            iconColor = color;
         }
 
         this.color = color;

@@ -1,12 +1,10 @@
 package com.james.status.dialogs;
 
 import android.animation.Animator;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
@@ -16,7 +14,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -24,6 +21,7 @@ import android.widget.TextView;
 import com.james.status.R;
 import com.james.status.Status;
 import com.james.status.activities.ImagePickerActivity;
+import com.james.status.utils.ColorAnimator;
 import com.james.status.utils.ColorUtils;
 import com.james.status.views.CustomImageView;
 
@@ -216,21 +214,15 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> {
     }
 
     private void setColor(@ColorInt int color, boolean animate) {
-        if (!isTrackingTouch && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && animate) {
-            ValueAnimator animator = ValueAnimator.ofArgb(getPreference(), color);
-            animator.setDuration(250);
-            animator.setInterpolator(new DecelerateInterpolator());
-            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        if (!isTrackingTouch && animate) {
+            new ColorAnimator(getPreference(), color).setDuration(250).setColorUpdateListener(new ColorAnimator.ColorUpdateListener() {
                 @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    int color = (int) animation.getAnimatedValue();
-
+                public void onColorUpdate(ColorAnimator animator, @ColorInt int color) {
                     red.setProgress(Color.red(color));
                     green.setProgress(Color.green(color));
                     blue.setProgress(Color.blue(color));
                 }
-            });
-            animator.addListener(new Animator.AnimatorListener() {
+            }).setAnimatorListener(new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationStart(Animator animation) {
                     isTrackingTouch = true;
@@ -248,8 +240,7 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> {
                 @Override
                 public void onAnimationRepeat(Animator animation) {
                 }
-            });
-            animator.start();
+            }).start();
         } else {
             colorImage.setImageDrawable(new ColorDrawable(color));
             colorHex.removeTextChangedListener(textWatcher);

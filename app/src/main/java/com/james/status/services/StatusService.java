@@ -35,6 +35,7 @@ import com.james.status.data.icon.AlarmIconData;
 import com.james.status.data.icon.BatteryIconData;
 import com.james.status.data.icon.BluetoothIconData;
 import com.james.status.data.icon.DataIconData;
+import com.james.status.data.icon.HeadphoneIconData;
 import com.james.status.data.icon.IconData;
 import com.james.status.data.icon.NetworkIconData;
 import com.james.status.data.icon.NfcIconData;
@@ -469,6 +470,7 @@ public class StatusService extends Service {
             icons.add(new NfcIconData(context));
         icons.add(new AlarmIconData(context));
         icons.add(new RingerIconData(context));
+        icons.add(new HeadphoneIconData(context));
 
         return icons;
     }
