@@ -17,11 +17,8 @@ import java.util.List;
 
 public class HeadphoneIconData extends IconData<HeadphoneIconData.HeadphoneReceiver> {
 
-    private AudioManager manager;
-
     public HeadphoneIconData(Context context) {
         super(context);
-        manager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
     }
 
     @Override

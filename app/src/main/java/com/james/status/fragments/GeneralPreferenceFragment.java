@@ -126,7 +126,7 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                                 getString(R.string.preference_show_notifications),
                                 PreferenceData.Identifier.SectionIdentifier.NOTIFICATIONS
                         ),
-                        true,
+                        false,
                         new PreferenceData.OnPreferenceChangeListener<Boolean>() {
                             @Override
                             public void onPreferenceChange(Boolean preference) {

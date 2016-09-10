@@ -61,7 +61,7 @@
     <string name="preference_battery_percent">Display Battery Percent</string>
     <string name="preference_battery_percent_desc">Shows the battery percentage next to the icon in the status bar.</string>
     <string name="preference_bar_color_auto">Resource-Based Colors</string>
-    <string name="preference_bar_color_auto_desc">Picks the status bar color from the current application.</string>
+    <string name="preference_bar_color_auto_desc">Picks the status bar color from the current application. This may cause a significant decrease in performance depending on the device.</string>
     <string name="preference_bar_color_chooser">Default Status Bar Color</string>
     <string name="preference_app_colors">Screen-Specific Colors</string>
     <string name="preference_app_colors_desc">Set the color for the status bar to use on a specific screen. This will override any other color options provided the \'automatic status bar coloring\' option is enabled.</string>

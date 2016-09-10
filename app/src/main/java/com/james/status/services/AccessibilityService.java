@@ -57,6 +57,9 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                         startService(i);
                         break;
                     case ACTION_NOTIFY_COLOR:
+                        if (notificationManager != null)
+                            notificationManager.cancel(NOTIFICATION_ID);
+
                         ComponentName component;
 
                         if (intent.hasExtra(EXTRA_COMPONENT))
@@ -196,7 +199,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                             color = getDefaultColor();
 
                             Boolean notification = PreferenceUtils.getBooleanPreference(AccessibilityService.this, PreferenceUtils.PreferenceIdentifier.STATUS_COLORED_APPS_NOTIFICATIONS);
-                            if (notification == null || notification) {
+                            if (notification != null && notification) {
                                 Intent intent = new Intent(ACTION_NOTIFY_COLOR);
                                 intent.setClass(AccessibilityService.this, AccessibilityService.class);
                                 intent.putExtra(EXTRA_COMPONENT, new ComponentName(packageName.toString(), className.toString()));
@@ -245,5 +248,11 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
 
     @Override
     public void onInterrupt() {
+    }
+
+    @Override
+    public void onDestroy() {
+        if (notificationManager != null) notificationManager.cancel(NOTIFICATION_ID);
+        super.onDestroy();
     }
 }
