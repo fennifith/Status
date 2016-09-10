@@ -88,6 +88,8 @@ public class StatusView extends FrameLayout {
             if (statusBarColor != null) setColor(statusBarColor);
         } else if (color != null) setColor(color);
         else setColor(Color.BLACK);
+
+        if (iconColor == null) iconColor = Color.WHITE;
     }
 
     public void setIcons(List<IconData> icons) {
@@ -396,8 +398,18 @@ public class StatusView extends FrameLayout {
     public void setDarkMode(boolean isDarkMode) {
         Boolean isDarkModeEnabled = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_DARK_ICONS);
         if (isDarkModeEnabled == null || isDarkModeEnabled) {
-            iconColor = isDarkMode ? Color.BLACK : Color.WHITE;
-            setIconTint(status, iconColor);
+            int color = isDarkMode ? Color.BLACK : Color.WHITE;
+
+            new ColorAnimator(iconColor, color).setDuration(150).setColorUpdateListener(new ColorAnimator.ColorUpdateListener() {
+                @Override
+                public void onColorUpdate(ColorAnimator animator, @ColorInt int color) {
+                    if (status != null) {
+                        setIconTint(status, Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
+                    }
+                }
+            }).start();
+
+            iconColor = color;
         }
     }
 

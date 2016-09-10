@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.os.Build;
-import android.widget.Toast;
+import android.support.graphics.drawable.VectorDrawableCompat;
 
 import com.james.status.R;
 import com.james.status.data.IconStyleData;
@@ -17,7 +17,7 @@ import java.util.List;
 
 public class HeadphoneIconData extends IconData<HeadphoneIconData.HeadphoneReceiver> {
 
-    AudioManager manager;
+    private AudioManager manager;
 
     public HeadphoneIconData(Context context) {
         super(context);
@@ -69,11 +69,9 @@ public class HeadphoneIconData extends IconData<HeadphoneIconData.HeadphoneRecei
     public class HeadphoneReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.hasExtra("state") && intent.getIntExtra("state", 0) == 1)
-                onDrawableUpdate(getDrawable());
+            if (intent.getIntExtra("state", 0) == 1)
+                onDrawableUpdate(VectorDrawableCompat.create(getContext().getResources(), getIconResource(intent.getIntExtra("microphone", 0)), getContext().getTheme()));
             else onDrawableUpdate(null);
-
-            Toast.makeText(context, "received", Toast.LENGTH_SHORT).show();
         }
     }
 }
