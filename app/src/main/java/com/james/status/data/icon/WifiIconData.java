@@ -4,8 +4,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.wifi.SupplicantState;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.support.graphics.drawable.VectorDrawableCompat;
 
 import com.james.status.R;
@@ -18,10 +21,12 @@ import java.util.List;
 public class WifiIconData extends IconData<WifiIconData.WifiReceiver> {
 
     WifiManager wifiManager;
+    ConnectivityManager connectivityManager;
 
     public WifiIconData(Context context) {
         super(context);
         wifiManager = (WifiManager) getContext().getSystemService(Context.WIFI_SERVICE);
+        connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
     }
 
     @Override
@@ -38,11 +43,10 @@ public class WifiIconData extends IconData<WifiIconData.WifiReceiver> {
     public void register() {
         super.register();
 
-        SupplicantState supplicantState = wifiManager.getConnectionInfo().getSupplicantState();
-        if (supplicantState != SupplicantState.DISCONNECTED && supplicantState != SupplicantState.INACTIVE && supplicantState != SupplicantState.UNINITIALIZED && supplicantState != SupplicantState.INVALID) {
+        if (isWifiConnected()) {
             int level = WifiManager.calculateSignalLevel(wifiManager.getConnectionInfo().getRssi(), 4);
             onDrawableUpdate(VectorDrawableCompat.create(getContext().getResources(), getIconResource(level), getContext().getTheme()));
-        } else onDrawableUpdate(null);
+        }
     }
 
     @Override
@@ -86,11 +90,25 @@ public class WifiIconData extends IconData<WifiIconData.WifiReceiver> {
         return styles;
     }
 
+    private boolean isWifiConnected() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            for (Network network : connectivityManager.getAllNetworks()) {
+                NetworkInfo networkInfo = connectivityManager.getNetworkInfo(network);
+                if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI && networkInfo.isConnectedOrConnecting())
+                    return true;
+            }
+        } else {
+            NetworkInfo networkInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            return networkInfo.isConnectedOrConnecting();
+        }
+
+        return false;
+    }
+
     public class WifiReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            SupplicantState supplicantState = wifiManager.getConnectionInfo().getSupplicantState();
-            if (supplicantState != SupplicantState.DISCONNECTED && supplicantState != SupplicantState.UNINITIALIZED && supplicantState != SupplicantState.INVALID) {
+            if (isWifiConnected()) {
                 int level = WifiManager.calculateSignalLevel(wifiManager.getConnectionInfo().getRssi(), 4);
                 onDrawableUpdate(VectorDrawableCompat.create(getContext().getResources(), getIconResource(level), getContext().getTheme()));
             } else onDrawableUpdate(null);
