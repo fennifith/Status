@@ -101,7 +101,12 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                                 PreferenceData.Identifier.SectionIdentifier.ICONS
                         ),
                         true,
-                        null
+                        new PreferenceData.OnPreferenceChangeListener<Boolean>() {
+                            @Override
+                            public void onPreferenceChange(Boolean preference) {
+                                StaticUtils.updateStatusService(getContext());
+                            }
+                        }
                 ),
                 new BooleanPreferenceData(
                         getContext(),
@@ -128,7 +133,12 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                                 PreferenceData.Identifier.SectionIdentifier.ANIMATIONS
                         ),
                         true,
-                        null
+                        new PreferenceData.OnPreferenceChangeListener<Boolean>() {
+                            @Override
+                            public void onPreferenceChange(Boolean preference) {
+                                StaticUtils.updateStatusService(getContext());
+                            }
+                        }
                 ),
                 new BooleanPreferenceData(
                         getContext(),
@@ -139,7 +149,12 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                                 PreferenceData.Identifier.SectionIdentifier.ANIMATIONS
                         ),
                         true,
-                        null
+                        new PreferenceData.OnPreferenceChangeListener<Boolean>() {
+                            @Override
+                            public void onPreferenceChange(Boolean preference) {
+                                StaticUtils.updateStatusService(getContext());
+                            }
+                        }
                 ),
                 new BooleanPreferenceData(
                         getContext(),
@@ -148,7 +163,7 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                                 getString(R.string.preference_show_notifications),
                                 PreferenceData.Identifier.SectionIdentifier.NOTIFICATIONS
                         ),
-                        false,
+                        true,
                         new PreferenceData.OnPreferenceChangeListener<Boolean>() {
                             @Override
                             public void onPreferenceChange(Boolean preference) {
