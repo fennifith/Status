@@ -40,7 +40,7 @@ public class StatusView extends FrameLayout {
     private LinearLayout status, notificationIconLayout, statusIconLayout, statusCenterIconLayout;
 
     @ColorInt
-    private Integer color, iconColor;
+    private Integer color, iconColor = Color.WHITE;
     private boolean isSystemShowing, isFullscreen;
     private ArrayMap<String, NotificationData> notifications;
 
@@ -88,8 +88,6 @@ public class StatusView extends FrameLayout {
             if (statusBarColor != null) setColor(statusBarColor);
         } else if (color != null) setColor(color);
         else setColor(Color.BLACK);
-
-        if (iconColor == null) iconColor = Color.WHITE;
     }
 
     public void setIcons(List<IconData> icons) {
@@ -333,11 +331,11 @@ public class StatusView extends FrameLayout {
                 public void onColorUpdate(ColorAnimator animator, @ColorInt int color) {
                     if (status != null) {
                         status.setBackgroundColor(Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
-                        if (animator.getAnimatedFraction() == 1)
-                            setDarkMode(!ColorUtils.isColorDark(color));
                     }
                 }
             }).start();
+
+            setDarkMode(!ColorUtils.isColorDark(color));
         } else if (status != null) {
             int backgroundColor = getDefaultColor();
             if (color == backgroundColor) {
