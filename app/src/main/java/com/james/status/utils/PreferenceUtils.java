@@ -25,6 +25,8 @@ public class PreferenceUtils {
         STATUS_ICON_PADDING,
         STATUS_ICON_SCALE,
         STATUS_HEADS_UP_DURATION,
+        STATUS_BACKGROUND_ANIMATIONS,
+        STATUS_ICON_ANIMATIONS,
         SHOW_NOTIFICATIONS,
         SHOW_TUTORIAL
     }

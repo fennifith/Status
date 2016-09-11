@@ -109,6 +109,7 @@ public class PreferenceData<T> {
         public enum SectionIdentifier {
             COLORS,
             ICONS,
+            ANIMATIONS,
             NOTIFICATIONS
         }
     }

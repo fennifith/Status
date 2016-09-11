@@ -117,21 +117,26 @@ public class StatusView extends FrameLayout {
             Boolean isVisible = iconData.getBooleanPreference(IconData.PreferenceIdentifier.VISIBILITY);
             if (isVisible != null && !isVisible) continue;
 
-            final View item = getIconView(iconData.getIconPadding(), iconData.getIconScale());
+            final View item = getIconView(iconData.getIconPadding());
             item.setTag(iconData);
 
             iconData.setDrawableListener(new IconData.DrawableListener() {
                 @Override
                 public void onUpdate(@Nullable Drawable drawable) {
                     CustomImageView iconView = (CustomImageView) item.findViewById(R.id.icon);
+
                     if (drawable != null) {
-                        item.setVisibility(View.VISIBLE);
+                        if (item.getVisibility() == View.GONE || iconView.getDrawable() == null) {
+                            setIconVisibility(item, null, (int) StaticUtils.getPixelsFromDp(getContext(), iconData.getIconScale()), true);
+                        }
+
                         iconView.setVisibility(View.VISIBLE);
 
                         ImageUtils.tintDrawable(iconView, drawable, iconColor);
                     } else {
                         iconView.setVisibility(View.GONE);
-                        if (iconData.getText() == null) item.setVisibility(View.GONE);
+                        if (iconData.getText() == null && item.getVisibility() == View.VISIBLE)
+                            setIconVisibility(item, null, null, false);
                     }
                 }
             });
@@ -140,16 +145,18 @@ public class StatusView extends FrameLayout {
                 @Override
                 public void onUpdate(@Nullable String text) {
                     TextView textView = (TextView) item.findViewById(R.id.text);
+
                     if (text != null) {
-                        item.setVisibility(View.VISIBLE);
+                        if (item.getVisibility() == View.GONE)
+                            setIconVisibility(item, null, (int) StaticUtils.getPixelsFromDp(getContext(), iconData.getIconScale()), true);
+
                         textView.setVisibility(View.VISIBLE);
-
                         textView.setText(text);
-
                         textView.setTextColor(iconColor);
                     } else {
                         textView.setVisibility(View.GONE);
-                        if (iconData.getDrawable() == null) item.setVisibility(View.GONE);
+                        if (iconData.getDrawable() == null && item.getVisibility() == View.VISIBLE)
+                            setIconVisibility(item, null, null, false);
                     }
                 }
             });
@@ -217,7 +224,7 @@ public class StatusView extends FrameLayout {
             for (int i = 0; i < notificationIconLayout.getChildCount(); i++) {
                 View child = notificationIconLayout.getChildAt(i);
                 if (((String) child.getTag()).matches(notification.getKey()) && notifications.containsKey(notification.getKey())) {
-                    removeIconView(notificationIconLayout.getChildAt(i), notificationIconLayout);
+                    setIconVisibility(notificationIconLayout.getChildAt(i), notificationIconLayout, null, false);
                     notifications.remove(notification.getKey());
                 }
             }
@@ -238,39 +245,8 @@ public class StatusView extends FrameLayout {
     }
 
     public void setSystemShowing(boolean isSystemShowing) {
-        if (this.isFullscreen != isSystemShowing || this.isSystemShowing != isSystemShowing) {
-            if (isSystemShowing) {
-                ValueAnimator animator = ValueAnimator.ofFloat(getY(), -StaticUtils.getStatusBarHeight(getContext()));
-                animator.setDuration(150);
-                animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        float y = (float) valueAnimator.getAnimatedValue();
-                        setY(y);
-                    }
-                });
-                animator.addListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animator) {
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animator) {
-                        setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onAnimationCancel(Animator animator) {
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator animator) {
-                    }
-                });
-                animator.start();
-            }
-        }
-
+        if ((this.isFullscreen != isSystemShowing || this.isSystemShowing != isSystemShowing) && isSystemShowing)
+            setStatusBarVisibility(false);
         this.isSystemShowing = isSystemShowing;
     }
 
@@ -280,7 +256,20 @@ public class StatusView extends FrameLayout {
 
     public void setFullscreen(boolean isFullscreen) {
         if (((getVisibility() == View.GONE) != isFullscreen) && !isSystemShowing) {
-            ValueAnimator animator = ValueAnimator.ofFloat(getY(), isFullscreen ? -StaticUtils.getStatusBarHeight(getContext()) : 0f);
+            setStatusBarVisibility(!isFullscreen);
+        }
+
+        this.isFullscreen = isFullscreen;
+    }
+
+    public boolean isFullscreen() {
+        return isFullscreen;
+    }
+
+    private void setStatusBarVisibility(final boolean visible) {
+        Boolean isAnimations = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_BACKGROUND_ANIMATIONS);
+        if (isAnimations == null || isAnimations) {
+            ValueAnimator animator = ValueAnimator.ofFloat(getY(), visible ? 0 : -StaticUtils.getStatusBarHeight(getContext()));
             animator.setDuration(150);
             animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
@@ -292,11 +281,12 @@ public class StatusView extends FrameLayout {
             animator.addListener(new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationStart(Animator animator) {
+                    if (visible) setVisibility(View.VISIBLE);
                 }
 
                 @Override
                 public void onAnimationEnd(Animator animator) {
-                    if (StatusView.this.isFullscreen) setVisibility(View.GONE);
+                    if (!visible) setVisibility(View.GONE);
                 }
 
                 @Override
@@ -308,15 +298,10 @@ public class StatusView extends FrameLayout {
                 }
             });
             animator.start();
-
-            if (!isFullscreen) setVisibility(View.VISIBLE);
+        } else {
+            if (visible) setVisibility(View.VISIBLE);
+            else setVisibility(View.GONE);
         }
-
-        this.isFullscreen = isFullscreen;
-    }
-
-    public boolean isFullscreen() {
-        return isFullscreen;
     }
 
     public void setColor(@ColorInt int color) {
@@ -326,14 +311,18 @@ public class StatusView extends FrameLayout {
         Boolean isIconTint = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_TINTED_ICONS);
 
         if (isIconTint == null || !isIconTint) {
-            new ColorAnimator(this.color, color).setDuration(150).setColorUpdateListener(new ColorAnimator.ColorUpdateListener() {
-                @Override
-                public void onColorUpdate(ColorAnimator animator, @ColorInt int color) {
-                    if (status != null) {
-                        status.setBackgroundColor(Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
+            Boolean isAnimations = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_BACKGROUND_ANIMATIONS);
+            if (isAnimations == null || isAnimations) {
+                new ColorAnimator(this.color, color).setDuration(150).setColorUpdateListener(new ColorAnimator.ColorUpdateListener() {
+                    @Override
+                    public void onColorUpdate(ColorAnimator animator, @ColorInt int color) {
+                        if (status != null) {
+                            status.setBackgroundColor(Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
+                        }
                     }
-                }
-            }).start();
+                }).start();
+            } else
+                status.setBackgroundColor(Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
 
             setDarkMode(!ColorUtils.isColorDark(color));
         } else if (status != null) {
@@ -349,14 +338,18 @@ public class StatusView extends FrameLayout {
             if (isDarkModeEnabled == null || isDarkModeEnabled)
                 color = ColorUtils.isColorDark(backgroundColor) ? ColorUtils.lightColor(color) : ColorUtils.darkColor(color);
 
-            new ColorAnimator(this.color, color).setDuration(150).setColorUpdateListener(new ColorAnimator.ColorUpdateListener() {
-                @Override
-                public void onColorUpdate(ColorAnimator animator, @ColorInt int color) {
-                    if (status != null) {
-                        setIconTint(status, Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
+            Boolean isAnimations = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_ICON_ANIMATIONS);
+            if (isAnimations == null || isAnimations) {
+                new ColorAnimator(this.color, color).setDuration(150).setColorUpdateListener(new ColorAnimator.ColorUpdateListener() {
+                    @Override
+                    public void onColorUpdate(ColorAnimator animator, @ColorInt int color) {
+                        if (status != null) {
+                            setIconTint(status, Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
+                        }
                     }
-                }
-            }).start();
+                }).start();
+            } else
+                setIconTint(status, Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
 
             iconColor = color;
         }
@@ -398,14 +391,18 @@ public class StatusView extends FrameLayout {
         if (isDarkModeEnabled == null || isDarkModeEnabled) {
             int color = isDarkMode ? Color.BLACK : Color.WHITE;
 
-            new ColorAnimator(iconColor, color).setDuration(150).setColorUpdateListener(new ColorAnimator.ColorUpdateListener() {
-                @Override
-                public void onColorUpdate(ColorAnimator animator, @ColorInt int color) {
-                    if (status != null) {
-                        setIconTint(status, Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
+            Boolean isAnimations = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_ICON_ANIMATIONS);
+            if (isAnimations == null || isAnimations) {
+                new ColorAnimator(iconColor, color).setDuration(150).setColorUpdateListener(new ColorAnimator.ColorUpdateListener() {
+                    @Override
+                    public void onColorUpdate(ColorAnimator animator, @ColorInt int color) {
+                        if (status != null) {
+                            setIconTint(status, Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
+                        }
                     }
-                }
-            }).start();
+                }).start();
+            } else
+                setIconTint(status, Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
 
             iconColor = color;
         }
@@ -455,89 +452,98 @@ public class StatusView extends FrameLayout {
             public void onGlobalLayout() {
                 getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
+                //TODO: add a setting for this
                 Integer iconScale = PreferenceUtils.getIntegerPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_ICON_SCALE);
                 if (iconScale == null) iconScale = 24;
 
-                ValueAnimator animator = ValueAnimator.ofInt(0, (int) StaticUtils.getPixelsFromDp(getContext(), iconScale));
-                animator.setDuration(150);
-                animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        v.setAlpha(valueAnimator.getAnimatedFraction());
-
-                        View iconView = v.findViewById(R.id.icon);
-
-                        ViewGroup.LayoutParams layoutParams = iconView.getLayoutParams();
-                        if (layoutParams != null) layoutParams.height = (int) valueAnimator.getAnimatedValue();
-                        else
-                            layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, (int) valueAnimator.getAnimatedValue());
-                        iconView.setLayoutParams(layoutParams);
-                    }
-                });
-                animator.start();
+                setIconVisibility(v, null, (int) StaticUtils.getPixelsFromDp(getContext(), iconScale), true);
             }
         });
 
         return v;
     }
 
-    private View getIconView(int padding, final int scale) {
+    private View getIconView(int padding) {
         final View v = LayoutInflater.from(getContext()).inflate(R.layout.item_icon, this, false);
 
         float iconPaddingDp = StaticUtils.getPixelsFromDp(getContext(), padding);
         v.setPadding((int) iconPaddingDp, 0, (int) iconPaddingDp, 0);
 
-        v.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                getViewTreeObserver().removeOnGlobalLayoutListener(this);
+        return v;
+    }
 
-                ValueAnimator animator = ValueAnimator.ofInt(0, (int) StaticUtils.getPixelsFromDp(getContext(), scale));
-                animator.setDuration(150);
-                animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        v.setAlpha(valueAnimator.getAnimatedFraction());
+    private void setIconVisibility(final View child, @Nullable final ViewGroup parent, @Nullable Integer scale, final boolean visible) {
+        if (scale == null) {
+            Integer iconScale = PreferenceUtils.getIntegerPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_ICON_SCALE);
+            if (iconScale == null) iconScale = 24;
 
-                        View iconView = v.findViewById(R.id.icon);
+            scale = (int) StaticUtils.getPixelsFromDp(getContext(), iconScale);
+        }
 
+        Boolean isAnimationEnabled = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_ICON_ANIMATIONS);
+        if (isAnimationEnabled == null || isAnimationEnabled) {
+            ValueAnimator animator = ValueAnimator.ofInt(visible ? 0 : child.getHeight(), visible ? scale : 0);
+            animator.setDuration(250);
+            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    child.setAlpha(valueAnimator.getAnimatedFraction());
+
+                    View iconView = child.findViewById(R.id.icon);
+
+                    if (iconView != null) {
                         ViewGroup.LayoutParams layoutParams = iconView.getLayoutParams();
                         if (layoutParams != null)
                             layoutParams.height = (int) valueAnimator.getAnimatedValue();
                         else
                             layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, (int) valueAnimator.getAnimatedValue());
+
                         iconView.setLayoutParams(layoutParams);
                     }
-                });
-                animator.start();
-            }
-        });
-
-        return v;
-    }
-
-    private void removeIconView(final View child, final ViewGroup parent) {
-        ValueAnimator animator = ValueAnimator.ofInt(child.getHeight(), 0);
-        animator.setDuration(150);
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                child.setAlpha(valueAnimator.getAnimatedFraction());
-
-                View iconView = child.findViewById(R.id.icon);
-
-                if (iconView != null) {
-                    ViewGroup.LayoutParams layoutParams = iconView.getLayoutParams();
-                    if (layoutParams != null)
-                        layoutParams.height = (int) valueAnimator.getAnimatedValue();
-                    else
-                        layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, (int) valueAnimator.getAnimatedValue());
-                    iconView.setLayoutParams(layoutParams);
+                }
+            });
+            animator.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+                    if (visible) child.setVisibility(View.VISIBLE);
                 }
 
-                if (valueAnimator.getAnimatedFraction() == 1) parent.removeView(child);
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    if (!visible) {
+                        child.setVisibility(View.GONE);
+                        if (parent != null) parent.removeView(child);
+                    }
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+                }
+            });
+            animator.start();
+        } else {
+            View iconView = child.findViewById(R.id.icon);
+
+            if (iconView != null) {
+                ViewGroup.LayoutParams layoutParams = iconView.getLayoutParams();
+                if (layoutParams != null)
+                    layoutParams.height = visible ? scale : 0;
+                else
+                    layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, visible ? scale : 0);
+
+                iconView.setLayoutParams(layoutParams);
             }
-        });
-        animator.start();
+
+            if (visible) {
+                child.setVisibility(View.VISIBLE);
+            } else {
+                child.setVisibility(View.GONE);
+                if (parent != null) parent.removeView(child);
+            }
+        }
     }
 }

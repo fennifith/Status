@@ -41,9 +41,8 @@ public class WifiIconData extends IconData<WifiIconData.WifiReceiver> {
     public void register() {
         super.register();
 
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI && networkInfo.isConnected()) {
-            int level = WifiManager.calculateSignalLevel(wifiManager.getConnectionInfo().getRssi(), 4);
+        int level = WifiManager.calculateSignalLevel(wifiManager.getConnectionInfo().getRssi(), 4);
+        if (level > 0) { //temporary fix, cannot determine wifi connection without BroadcastReceiver for some reason
             onDrawableUpdate(VectorDrawableCompat.create(getContext().getResources(), getIconResource(level), getContext().getTheme()));
         }
     }

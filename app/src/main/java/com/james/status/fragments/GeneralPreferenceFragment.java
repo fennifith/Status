@@ -122,6 +122,28 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                 new BooleanPreferenceData(
                         getContext(),
                         new PreferenceData.Identifier(
+                                PreferenceUtils.PreferenceIdentifier.STATUS_BACKGROUND_ANIMATIONS,
+                                getString(R.string.preference_background_animations),
+                                getString(R.string.preference_background_animations_desc),
+                                PreferenceData.Identifier.SectionIdentifier.ANIMATIONS
+                        ),
+                        true,
+                        null
+                ),
+                new BooleanPreferenceData(
+                        getContext(),
+                        new PreferenceData.Identifier(
+                                PreferenceUtils.PreferenceIdentifier.STATUS_ICON_ANIMATIONS,
+                                getString(R.string.preference_icon_animations),
+                                getString(R.string.preference_icon_animations_desc),
+                                PreferenceData.Identifier.SectionIdentifier.ANIMATIONS
+                        ),
+                        true,
+                        null
+                ),
+                new BooleanPreferenceData(
+                        getContext(),
+                        new PreferenceData.Identifier(
                                 PreferenceUtils.PreferenceIdentifier.SHOW_NOTIFICATIONS,
                                 getString(R.string.preference_show_notifications),
                                 PreferenceData.Identifier.SectionIdentifier.NOTIFICATIONS
