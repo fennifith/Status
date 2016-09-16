@@ -143,6 +143,8 @@
     <string name="green">Green</string>
     <string name="blue">Blue</string>
 
+    <string name="empty">Nothing here…</string>
+
     <string name="james_name">James Fenn</string>
     <string name="james_desc">Android developer and professional cabbage eater.</string>
 

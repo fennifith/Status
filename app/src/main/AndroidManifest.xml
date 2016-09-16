@@ -45,6 +45,8 @@
             android:name=".activities.IntroActivity"
             android:theme="@style/AppTheme.Splash" />
 
+        <activity android:name=".activities.FaqActivity" />
+
         <activity
             android:name=".activities.StartActivity"
             android:theme="@style/AppTheme.Splash" />

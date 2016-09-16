@@ -2,8 +2,6 @@ package com.james.status.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -42,47 +40,19 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
     private PackageManager packageManager;
     private List<AppData> originalApps, apps;
 
-    public AppAdapter(final Context context) {
+    public AppAdapter(final Context context, List<AppData> apps) {
         this.context = context;
         packageManager = context.getPackageManager();
-        originalApps = new ArrayList<>();
-        apps = new ArrayList<>();
 
-        new Thread() {
+        Collections.sort(apps, new Comparator<AppData>() {
             @Override
-            public void run() {
-                final List<AppData> loadedApps = new ArrayList<>();
-
-                for (ApplicationInfo applicationInfo : packageManager.getInstalledApplications(PackageManager.GET_META_DATA)) {
-                    PackageInfo packageInfo;
-
-                    try {
-                        packageInfo = packageManager.getPackageInfo(applicationInfo.packageName, PackageManager.GET_ACTIVITIES);
-                    } catch (PackageManager.NameNotFoundException e) {
-                        continue;
-                    }
-
-                    if (packageInfo.activities != null && packageInfo.activities.length > 0)
-                        loadedApps.add(new AppData(packageManager, applicationInfo, packageInfo));
-                }
-
-                new Handler(context.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Collections.sort(loadedApps, new Comparator<AppData>() {
-                            @Override
-                            public int compare(AppData lhs, AppData rhs) {
-                                return lhs.label.compareToIgnoreCase(rhs.label);
-                            }
-                        });
-
-                        originalApps = loadedApps;
-                        apps = loadedApps;
-                        notifyDataSetChanged();
-                    }
-                });
+            public int compare(AppData lhs, AppData rhs) {
+                return lhs.label.compareToIgnoreCase(rhs.label);
             }
-        }.start();
+        });
+
+        originalApps = apps;
+        this.apps = apps;
     }
 
     @Override
