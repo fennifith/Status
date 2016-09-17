@@ -44,15 +44,18 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
         this.context = context;
         packageManager = context.getPackageManager();
 
-        Collections.sort(apps, new Comparator<AppData>() {
+        originalApps = new ArrayList<>();
+        originalApps.addAll(apps);
+
+        Collections.sort(originalApps, new Comparator<AppData>() {
             @Override
             public int compare(AppData lhs, AppData rhs) {
                 return lhs.label.compareToIgnoreCase(rhs.label);
             }
         });
 
-        originalApps = apps;
-        this.apps = apps;
+        this.apps = new ArrayList<>();
+        this.apps.addAll(originalApps);
     }
 
     @Override
@@ -212,23 +215,20 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
     }
 
     public void filter(@Nullable String string) {
-        if (string != null) {
-            List<AppData> newApps = new ArrayList<>();
+        apps.clear();
+
+        if (string == null || string.length() < 1) {
+            apps.addAll(originalApps);
+        } else {
+            string = string.toLowerCase();
+
             for (AppData app : originalApps) {
-                if (app.name != null && app.name.toLowerCase().contains(string.toLowerCase())) {
-                    newApps.add(app);
-                    continue;
-                }
-
-                if (app.packageName != null && app.packageName.toLowerCase().contains(string.toLowerCase())) {
-                    newApps.add(app);
-                }
+                if ((app.label != null && (app.label.toLowerCase().contains(string) || string.contains(app.label.toLowerCase()))) || (app.name != null && (app.name.toLowerCase().contains(string) || string.contains(app.name.toLowerCase()))))
+                    apps.add(app);
             }
+        }
 
-            apps = newApps;
-            notifyDataSetChanged();
-
-        } else apps = originalApps;
+        notifyDataSetChanged();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

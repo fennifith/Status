@@ -21,6 +21,7 @@ import com.james.status.R;
 import com.james.status.Status;
 import com.james.status.adapters.SimplePagerAdapter;
 import com.james.status.fragments.AppPreferenceFragment;
+import com.james.status.fragments.FaqFragment;
 import com.james.status.fragments.GeneralPreferenceFragment;
 import com.james.status.fragments.IconPreferenceFragment;
 import com.james.status.services.StatusService;
@@ -75,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        adapter = new SimplePagerAdapter(this, getSupportFragmentManager(), viewPager, new GeneralPreferenceFragment(), new IconPreferenceFragment(), new AppPreferenceFragment());
+        adapter = new SimplePagerAdapter(this, getSupportFragmentManager(), viewPager, new GeneralPreferenceFragment(), new IconPreferenceFragment(), new AppPreferenceFragment(), new FaqFragment());
         viewPager.setAdapter(adapter);
 
         tabLayout.setupWithViewPager(viewPager);

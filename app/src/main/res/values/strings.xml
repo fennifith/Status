@@ -45,6 +45,7 @@
     <string name="tab_settings">Settings</string>
     <string name="tab_icons">Icons</string>
     <string name="tab_apps">Apps</string>
+    <string name="tab_faqs">FAQs</string>
 
     <string name="preference_show_clock">Show Clock</string>
     <string name="preference_24h">Use 24 Hour Time Format</string>

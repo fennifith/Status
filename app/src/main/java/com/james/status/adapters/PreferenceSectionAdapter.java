@@ -25,8 +25,12 @@ public class PreferenceSectionAdapter extends RecyclerView.Adapter<PreferenceSec
 
     public PreferenceSectionAdapter(Context context, List<PreferenceData> datas) {
         this.context = context;
-        this.datas = datas;
-        originalDatas = datas;
+
+        originalDatas = new ArrayList<>();
+        originalDatas.addAll(datas);
+
+        this.datas = new ArrayList<>();
+        this.datas.addAll(originalDatas);
 
         sections = new ArrayList<>();
         for (PreferenceData data : datas) {

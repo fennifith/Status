@@ -26,7 +26,9 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
     public IconAdapter(Context context) {
         this.context = context;
         originalIcons = StatusService.getIcons(context);
-        icons = originalIcons;
+
+        icons = new ArrayList<>();
+        icons.addAll(originalIcons);
     }
 
     @Override
@@ -80,17 +82,18 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
     }
 
     public void filter(@Nullable String filter) {
-        if (filter != null) {
-            List<IconData> newIcons = new ArrayList<>();
+        icons.clear();
 
+        if (filter == null || filter.length() < 1) {
+            icons.addAll(originalIcons);
+        } else {
             for (IconData icon : originalIcons) {
                 if (icon.getTitle().toLowerCase().contains(filter))
-                    newIcons.add(icon);
+                    icons.add(icon);
             }
+        }
 
-            icons = newIcons;
-            notifyDataSetChanged();
-        } else icons = originalIcons;
+        notifyDataSetChanged();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
