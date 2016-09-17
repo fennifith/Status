@@ -94,16 +94,19 @@
     <string name="preference_alarm_icon">Alarm Clock Icon Style</string>
     <string name="preference_show_ringer_icon">Show Ringer Icon</string>
     <string name="preference_ringer_icon">Ringer Icon Style</string>
-    <string name="preference_icon_padding">Horizontal Icon Padding (dp)</string>
+    <string name="preference_icon_padding">Horizontal Padding (dp)</string>
     <string name="preference_icon_scale">Icon Scale (dp)</string>
+    <string name="preference_text_size">Text Size (sp)</string>
     <string name="preference_color_notification">Screen-Specific Color Notifications</string>
     <string name="preference_color_notification_desc">The app will show a notification as a shortcut to set the color for an app if the a color has not been found.</string>
-    <string name="preference_center_gravity">Center Icon</string>
-    <string name="preference_center_gravity_desc">This will move the icon to the center of the status bar.</string>
+    <string name="preference_center_gravity">Show in Center</string>
+    <string name="preference_center_gravity_desc">This will center the element inside of the status bar.</string>
     <string name="preference_background_animations">Background Color Animations</string>
     <string name="preference_background_animations_desc">This option allows you to enable or disable animating of the status bar background color. This may impact performance on slower devices.</string>
     <string name="preference_icon_animations">Icon Animations</string>
     <string name="preference_icon_animations_desc">This option lets you toggle the icon animations, which can drastically affect performance on slower devices if there are a lot of icons displaying at once.</string>
+    <string name="preference_show_drawable">Show/Hide Icon</string>
+    <string name="preference_show_text">Display Text</string>
 
     <string name="icon_clock">Clock</string>
     <string name="icon_battery">Battery Icon</string>
@@ -121,6 +124,7 @@
     <string name="notification_color_desc">Status couldn\'t find a color to use for this application, so it\'s reverted to the default color. You can specify a color to use by clicking this notification.</string>
 
     <string name="unit_dp">dp</string>
+    <string name="unit_sp">sp</string>
     <string name="unit_seconds">" seconds"</string>
 
     <string name="icon_style_default">Default</string>

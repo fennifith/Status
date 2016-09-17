@@ -17,6 +17,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.util.TypedValue;
 
+import com.james.status.Status;
 import com.james.status.activities.StartActivity;
 import com.james.status.services.AccessibilityService;
 import com.james.status.services.StatusService;
@@ -132,6 +133,8 @@ public class StaticUtils {
             intent.setClass(context, StatusService.class);
             context.startService(intent);
         }
+
+        ((Status) context.getApplicationContext()).onPreferenceChanged();
     }
 
     public static boolean isAccessibilityServiceRunning(Context context) {

@@ -9,9 +9,6 @@ import android.support.graphics.drawable.VectorDrawableCompat;
 
 import com.james.status.R;
 import com.james.status.data.IconStyleData;
-import com.james.status.data.preference.BooleanPreferenceData;
-import com.james.status.data.preference.PreferenceData;
-import com.james.status.utils.StaticUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,6 +21,11 @@ public class BatteryIconData extends IconData {
     public BatteryIconData(Context context) {
         super(context);
         receiver = new BatteryReceiver();
+    }
+
+    @Override
+    public boolean canHazText() {
+        return true;
     }
 
     @Override
@@ -155,29 +157,6 @@ public class BatteryIconData extends IconData {
         );
 
         return styles;
-    }
-
-    @Override
-    public List<PreferenceData> getPreferences() {
-        List<PreferenceData> preferences = super.getPreferences();
-
-        preferences.add(new BooleanPreferenceData(
-                getContext(),
-                new PreferenceData.Identifier(
-                        getContext().getString(R.string.preference_battery_percent),
-                        getContext().getString(R.string.preference_battery_percent_desc)
-                ),
-                hasText(),
-                new PreferenceData.OnPreferenceChangeListener<Boolean>() {
-                    @Override
-                    public void onPreferenceChange(Boolean preference) {
-                        putPreference(PreferenceIdentifier.TEXT_VISIBILITY, preference);
-                        StaticUtils.updateStatusService(getContext());
-                    }
-                }
-        ));
-
-        return preferences;
     }
 
     public class BatteryReceiver extends BroadcastReceiver {

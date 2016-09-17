@@ -86,8 +86,24 @@ public class IconData<T extends BroadcastReceiver> {
         }
     }
 
-    public boolean hasDrawable() {
+    public boolean isVisible() {
+        Boolean isVisible = getBooleanPreference(PreferenceIdentifier.VISIBILITY);
+        return (isVisible == null || isVisible) && (hasText() || hasDrawable());
+    }
+
+    public boolean canHazDrawable() {
+        //i can haz drawable resource
         return true;
+    }
+
+    public boolean hasDrawable() {
+        Boolean hasDrawable = getBooleanPreference(PreferenceIdentifier.ICON_VISIBILITY);
+        return hasDrawable == null || hasDrawable;
+    }
+
+    public boolean canHazText() {
+        //u can not haz text tho
+        return false;
     }
 
     public boolean hasText() {
@@ -139,6 +155,12 @@ public class IconData<T extends BroadcastReceiver> {
         return scale;
     }
 
+    public float getTextSize() {
+        Integer size = getIntegerPreference(PreferenceIdentifier.TEXT_SIZE);
+        if (size == null) size = 14;
+        return size;
+    }
+
     public boolean isCentered() {
         Boolean isCenter = getBooleanPreference(PreferenceIdentifier.CENTER_GRAVITY);
         if (isCenter == null) isCenter = false;
@@ -174,6 +196,40 @@ public class IconData<T extends BroadcastReceiver> {
     public List<PreferenceData> getPreferences() {
         List<PreferenceData> preferences = new ArrayList<>();
 
+        if (canHazDrawable() && (hasText() || !hasDrawable())) {
+            preferences.add(new BooleanPreferenceData(
+                    getContext(),
+                    new PreferenceData.Identifier(
+                            getContext().getString(R.string.preference_show_drawable)
+                    ),
+                    hasDrawable(),
+                    new PreferenceData.OnPreferenceChangeListener<Boolean>() {
+                        @Override
+                        public void onPreferenceChange(Boolean preference) {
+                            putPreference(PreferenceIdentifier.ICON_VISIBILITY, preference);
+                            StaticUtils.updateStatusService(getContext());
+                        }
+                    }
+            ));
+        }
+
+        if (canHazText() && (hasDrawable() || !hasText())) {
+            preferences.add(new BooleanPreferenceData(
+                    getContext(),
+                    new PreferenceData.Identifier(
+                            getContext().getString(R.string.preference_show_text)
+                    ),
+                    hasText(),
+                    new PreferenceData.OnPreferenceChangeListener<Boolean>() {
+                        @Override
+                        public void onPreferenceChange(Boolean preference) {
+                            putPreference(PreferenceIdentifier.TEXT_VISIBILITY, preference);
+                            StaticUtils.updateStatusService(getContext());
+                        }
+                    }
+            ));
+        }
+
         preferences.addAll(Arrays.asList(
                 new BooleanPreferenceData(
                         getContext(),
@@ -206,25 +262,48 @@ public class IconData<T extends BroadcastReceiver> {
                                 StaticUtils.updateStatusService(getContext());
                             }
                         }
-                ),
-                new IntegerPreferenceData(
-                        getContext(),
-                        new PreferenceData.Identifier(
-                                getContext().getString(R.string.preference_icon_scale)
-                        ),
-                        getIconScale(),
-                        getContext().getString(R.string.unit_dp),
-                        0,
-                        null,
-                        new PreferenceData.OnPreferenceChangeListener<Integer>() {
-                            @Override
-                            public void onPreferenceChange(Integer preference) {
-                                putPreference(PreferenceIdentifier.ICON_SCALE, preference);
-                                StaticUtils.updateStatusService(getContext());
-                            }
-                        }
                 )
         ));
+
+        if (hasDrawable()) {
+            preferences.add(new IntegerPreferenceData(
+                    getContext(),
+                    new PreferenceData.Identifier(
+                            getContext().getString(R.string.preference_icon_scale)
+                    ),
+                    getIconScale(),
+                    getContext().getString(R.string.unit_dp),
+                    0,
+                    null,
+                    new PreferenceData.OnPreferenceChangeListener<Integer>() {
+                        @Override
+                        public void onPreferenceChange(Integer preference) {
+                            putPreference(PreferenceIdentifier.ICON_SCALE, preference);
+                            StaticUtils.updateStatusService(getContext());
+                        }
+                    }
+            ));
+        }
+
+        if (hasText()) {
+            preferences.add(new IntegerPreferenceData(
+                    getContext(),
+                    new PreferenceData.Identifier(
+                            getContext().getString(R.string.preference_text_size)
+                    ),
+                    (int) getTextSize(),
+                    getContext().getString(R.string.unit_sp),
+                    0,
+                    null,
+                    new PreferenceData.OnPreferenceChangeListener<Integer>() {
+                        @Override
+                        public void onPreferenceChange(Integer preference) {
+                            putPreference(PreferenceIdentifier.TEXT_SIZE, preference);
+                            StaticUtils.updateStatusService(getContext());
+                        }
+                    }
+            ));
+        }
 
         if (hasDrawable() && getIconStyles().size() > 1) {
             preferences.add(new IconPreferenceData(
@@ -337,6 +416,8 @@ public class IconData<T extends BroadcastReceiver> {
         CENTER_GRAVITY,
         TEXT_VISIBILITY,
         TEXT_FORMAT,
+        TEXT_SIZE,
+        ICON_VISIBILITY,
         ICON_STYLE,
         ICON_PADDING,
         ICON_SCALE

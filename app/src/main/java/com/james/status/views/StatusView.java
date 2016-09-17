@@ -14,6 +14,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.graphics.Palette;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -123,8 +124,7 @@ public class StatusView extends FrameLayout {
         this.icons = icons;
 
         for (final IconData iconData : icons) {
-            Boolean isVisible = iconData.getBooleanPreference(IconData.PreferenceIdentifier.VISIBILITY);
-            if (isVisible != null && !isVisible) continue;
+            if (!iconData.isVisible()) continue;
 
             final View item = getIconView(iconData.getIconPadding());
             item.setTag(iconData);
@@ -164,6 +164,8 @@ public class StatusView extends FrameLayout {
                     }
                 }
             });
+
+            ((TextView) item.findViewById(R.id.text)).setTextSize(TypedValue.COMPLEX_UNIT_SP, iconData.getTextSize());
 
             if (!iconData.hasDrawable()) item.findViewById(R.id.icon).setVisibility(View.GONE);
             if (!iconData.hasText()) item.findViewById(R.id.icon).setVisibility(View.GONE);
