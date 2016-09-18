@@ -31,7 +31,7 @@
     <string name="service_desc">This service needs to be enabled in order to detect window changes to update the status bar.</string>
 
     <string name="notifications_compat">Compatibility Mode</string>
-    <string name="notifications_compat_desc">On some versions of android the app cannot use the standard notification listener API to display the notification icons. I have found a way to detect them through the accessibility service, however it cannot detect when a notification has been dismissed. Thus, it removes all notifications whenever the notification panel is opened. If you do not like this, you can either check for a firmware update or disable the notifications in the settings menu.</string>
+    <string name="notifications_compat_desc">On some versions of android the app cannot use the standard notification listener API to display the notification icons. I have found a way to detect them through the accessibility service, however it cannot detect when a notification has been dismissed. Thus, it removes all notifications whenever the notification panel is opened. If you do not like this, you can either check for a firmware update or disable the notifications in the settings menu. Please note: this setting will break the notification icons on some devices. It is recommended not to enable this feature on versions of android that are newer than Lollipop.</string>
 
     <string name="service_start_stop">Status Bar Service</string>
 
