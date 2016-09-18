@@ -136,6 +136,8 @@
     <string name="icon_style_retro">Retro</string>
     <string name="icon_style_pixel">Pixelated</string>
 
+    <string name="tutorial_enable">Enable the Status Bar</string>
+    <string name="tutorial_enable_desc">This switch allows you to enable and disable the customized status bar. Turn it on to try it!</string>
     <string name="tutorial_junk">Clean Design</string>
     <string name="tutorial_junk_desc">Status minimizes the amount of space taken up by status icons, and you can specify icons to remove if you don\'t need them.</string>
     <string name="tutorial_themes">Icon Theming</string>

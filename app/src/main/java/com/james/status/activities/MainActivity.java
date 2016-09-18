@@ -17,6 +17,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.getkeepsafe.taptargetview.TapTargetView;
 import com.james.status.R;
 import com.james.status.Status;
 import com.james.status.adapters.SimplePagerAdapter;
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Status status;
 
+    private SwitchCompat service;
     private AppBarLayout appbar;
     private ViewPager viewPager;
     private SimplePagerAdapter adapter;
@@ -52,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
         appbar = (AppBarLayout) findViewById(R.id.appbar);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-        SwitchCompat service = (SwitchCompat) findViewById(R.id.serviceEnabled);
+        service = (SwitchCompat) findViewById(R.id.serviceEnabled);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
 
         Boolean enabled = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED);
@@ -80,6 +82,33 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
 
         tabLayout.setupWithViewPager(viewPager);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (StaticUtils.isAccessibilityGranted(this) && StaticUtils.isNotificationGranted(this) && StaticUtils.isPermissionsGranted(this) && !StaticUtils.isStatusServiceRunning(this)) {
+            new TapTargetView.Builder(this)
+                    .title(R.string.tutorial_enable)
+                    .description(R.string.tutorial_enable_desc)
+                    .outerCircleColor(R.color.colorAccent)
+                    .dimColor(android.R.color.black)
+                    .drawShadow(false)
+                    .listener(new TapTargetView.Listener() {
+                        @Override
+                        public void onTargetClick(TapTargetView view) {
+                            service.performClick();
+                            view.dismiss(true);
+                        }
+
+                        @Override
+                        public void onTargetLongClick(TapTargetView view) {
+                        }
+                    })
+                    .cancelable(true)
+                    .showFor(service);
+        }
     }
 
     @Override
@@ -122,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(this, StartActivity.class));
                 break;
             case R.id.action_tutorial:
-                startActivity(new Intent(this, IntroActivity.class));
+                //TODO: do something
                 break;
             case R.id.action_about:
                 startActivity(new Intent(this, AboutActivity.class));

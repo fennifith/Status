@@ -33,4 +33,5 @@ dependencies {
         transitive = true
     }
     compile 'me.drozdzynski.library.steppers:steppers:0.3.3-SNAPSHOT'
+    compile 'com.getkeepsafe.taptargetview:taptargetview:1.0.1'
 }

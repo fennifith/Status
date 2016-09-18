@@ -70,10 +70,17 @@ public class NotificationData implements Parcelable {
         }
 
         Object parcelable = extras.getParcelable(NotificationCompat.EXTRA_LARGE_ICON);
-        if (parcelable instanceof Bitmap) {
-            largeIcon = (Bitmap) parcelable;
-        } else if (parcelable instanceof Icon) {
-            unloadedLargeIcon = (Icon) parcelable;
+        if (parcelable != null) {
+            if (parcelable instanceof Bitmap) {
+                largeIcon = (Bitmap) parcelable;
+            } else {
+                try {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && parcelable instanceof Icon) { //throws a ClassNotFoundException? :P
+                        unloadedLargeIcon = (Icon) parcelable;
+                    }
+                } catch (Exception ignored) {
+                }
+            }
         }
 
         if (largeIcon == null)
