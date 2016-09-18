@@ -60,14 +60,17 @@ public class AppPreferenceFragment extends SimpleFragment {
                         apps.add(new AppData(packageManager, applicationInfo, packageInfo));
                 }
 
-                new Handler(getContext().getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        adapter = new AppAdapter(getContext(), apps);
-                        recycler.setAdapter(adapter);
-                        progressBar.setVisibility(View.GONE);
-                    }
-                });
+                Context context = getContext();
+                if (context != null) {
+                    new Handler(context.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            adapter = new AppAdapter(getContext(), apps);
+                            recycler.setAdapter(adapter);
+                            progressBar.setVisibility(View.GONE);
+                        }
+                    });
+                }
             }
         }.start();
 

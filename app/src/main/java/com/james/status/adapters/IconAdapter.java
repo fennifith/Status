@@ -25,10 +25,7 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
 
     public IconAdapter(Context context) {
         this.context = context;
-        originalIcons = StatusService.getIcons(context);
-
-        icons = new ArrayList<>();
-        icons.addAll(originalIcons);
+        setIcons(StatusService.getIcons(context));
     }
 
     @Override
@@ -40,6 +37,8 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
     public void onBindViewHolder(final ViewHolder holder, int position) {
         IconData icon = getIcon(position);
         if (icon == null) return;
+
+        icon.putPreference(IconData.PreferenceIdentifier.POSITION, position);
 
         AppCompatCheckBox checkBox = (AppCompatCheckBox) holder.v.findViewById(R.id.iconCheckBox);
         checkBox.setText(icon.getTitle());
@@ -94,6 +93,20 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
         }
 
         notifyDataSetChanged();
+    }
+
+    public List<IconData> getIcons() {
+        List<IconData> icons = new ArrayList<>();
+        icons.addAll(originalIcons);
+        return icons;
+    }
+
+    public void setIcons(List<IconData> icons) {
+        originalIcons = new ArrayList<>();
+        originalIcons.addAll(icons);
+
+        this.icons = new ArrayList<>();
+        this.icons.addAll(originalIcons);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

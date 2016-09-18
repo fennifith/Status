@@ -49,6 +49,8 @@ import com.james.status.views.CustomImageView;
 import com.james.status.views.StatusView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class StatusService extends Service {
@@ -471,6 +473,13 @@ public class StatusService extends Service {
         icons.add(new AlarmIconData(context));
         icons.add(new RingerIconData(context));
         icons.add(new HeadphoneIconData(context));
+
+        Collections.sort(icons, new Comparator<IconData>() {
+            @Override
+            public int compare(IconData lhs, IconData rhs) {
+                return lhs.getPosition() - rhs.getPosition();
+            }
+        });
 
         return icons;
     }

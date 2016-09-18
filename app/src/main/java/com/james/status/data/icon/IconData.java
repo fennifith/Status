@@ -161,6 +161,12 @@ public class IconData<T extends BroadcastReceiver> {
         return size;
     }
 
+    public int getPosition() {
+        Integer position = getIntegerPreference(PreferenceIdentifier.POSITION);
+        if (position == null) position = 0;
+        return position;
+    }
+
     public boolean isCentered() {
         Boolean isCenter = getBooleanPreference(PreferenceIdentifier.CENTER_GRAVITY);
         if (isCenter == null) isCenter = false;
@@ -413,6 +419,7 @@ public class IconData<T extends BroadcastReceiver> {
 
     public enum PreferenceIdentifier {
         VISIBILITY,
+        POSITION,
         CENTER_GRAVITY,
         TEXT_VISIBILITY,
         TEXT_FORMAT,
