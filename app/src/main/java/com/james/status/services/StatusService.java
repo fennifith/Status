@@ -1,6 +1,7 @@
 package com.james.status.services;
 
 import android.animation.ValueAnimator;
+import android.app.AlarmManager;
 import android.app.KeyguardManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -14,6 +15,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewCompat;
 import android.view.Gravity;
@@ -124,6 +126,12 @@ public class StatusService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Boolean enabled = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED);
+        if (enabled == null || !enabled) {
+            stopSelf();
+            return START_STICKY;
+        }
+
         if (intent == null) return START_STICKY;
         String action = intent.getAction();
         if (action == null) return START_STICKY;
@@ -185,6 +193,18 @@ public class StatusService extends Service {
         return START_STICKY;
     }
 
+    @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
+            Intent intent = new Intent(ACTION_UPDATE);
+            intent.setClass(this, StatusService.class);
+
+            PendingIntent pendingIntent = PendingIntent.getService(getApplicationContext(), 1, intent, PendingIntent.FLAG_ONE_SHOT);
+
+            AlarmManager manager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+            manager.set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + 1000, pendingIntent);
+        } else super.onTaskRemoved(rootIntent);
+    }
 
     public void setUp() {
         if (statusView == null || statusView.getParent() == null) {

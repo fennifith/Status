@@ -171,6 +171,24 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                             }
                         }
                 ),
+                new IntegerPreferenceData(
+                        getContext(),
+                        new PreferenceData.Identifier(
+                                PreferenceUtils.PreferenceIdentifier.STATUS_ICON_SCALE,
+                                getString(R.string.preference_notification_icon_size),
+                                PreferenceData.Identifier.SectionIdentifier.NOTIFICATIONS
+                        ),
+                        24,
+                        getString(R.string.unit_dp),
+                        0,
+                        null,
+                        new PreferenceData.OnPreferenceChangeListener<Integer>() {
+                            @Override
+                            public void onPreferenceChange(Integer preference) {
+                                StaticUtils.updateStatusService(getContext());
+                            }
+                        }
+                ),
                 new BooleanPreferenceData(
                         getContext(),
                         new PreferenceData.Identifier(

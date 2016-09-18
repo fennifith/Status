@@ -18,7 +18,6 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -220,6 +219,11 @@ public class StatusView extends FrameLayout {
                 ImageUtils.tintDrawable((CustomImageView) v.findViewById(R.id.icon), drawable, iconColor);
 
                 notificationIconLayout.addView(v);
+
+                Integer iconScale = PreferenceUtils.getIntegerPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_ICON_SCALE);
+                if (iconScale == null) iconScale = 24;
+
+                setIconVisibility(v, null, (int) StaticUtils.getPixelsFromDp(getContext(), iconScale), true);
 
                 notifications.put(notification.getKey(), notification);
             }
@@ -446,19 +450,6 @@ public class StatusView extends FrameLayout {
 
         v.setPadding((int) iconPaddingDp, 0, (int) iconPaddingDp, 0);
 
-        v.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                getViewTreeObserver().removeOnGlobalLayoutListener(this);
-
-                //TODO: add a setting for this
-                Integer iconScale = PreferenceUtils.getIntegerPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_ICON_SCALE);
-                if (iconScale == null) iconScale = 24;
-
-                setIconVisibility(v, null, (int) StaticUtils.getPixelsFromDp(getContext(), iconScale), true);
-            }
-        });
-
         return v;
     }
 
@@ -472,12 +463,7 @@ public class StatusView extends FrameLayout {
     }
 
     private void setIconVisibility(final View child, @Nullable final ViewGroup parent, @Nullable Integer scale, final boolean visible) {
-        if (scale == null) {
-            Integer iconScale = PreferenceUtils.getIntegerPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_ICON_SCALE);
-            if (iconScale == null) iconScale = 24;
-
-            scale = (int) StaticUtils.getPixelsFromDp(getContext(), iconScale);
-        }
+        if (scale == null) scale = (int) StaticUtils.getPixelsFromDp(getContext(), 24);
 
         if (visible && child.getVisibility() == View.VISIBLE) return;
         else if (!visible && child.getVisibility() == View.GONE) return;
