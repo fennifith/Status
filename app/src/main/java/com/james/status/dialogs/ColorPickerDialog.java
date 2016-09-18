@@ -35,7 +35,7 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> {
     private AppCompatEditText colorHex;
     private TextView redInt, greenInt, blueInt;
     private AppCompatSeekBar red, green, blue;
-    private View reset;
+    private View reset, image;
 
     private boolean isTrackingTouch;
 
@@ -59,6 +59,7 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> {
         blue = (AppCompatSeekBar) findViewById(R.id.blue);
         blueInt = (TextView) findViewById(R.id.blueInt);
 
+        image = findViewById(R.id.image);
         reset = findViewById(R.id.reset);
 
         textWatcher = new TextWatcher() {
@@ -181,7 +182,7 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> {
             }
         };
 
-        findViewById(R.id.image).setOnClickListener(new View.OnClickListener() {
+        image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 status.addListener(listener);

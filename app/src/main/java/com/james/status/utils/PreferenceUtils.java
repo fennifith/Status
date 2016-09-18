@@ -27,8 +27,7 @@ public class PreferenceUtils {
         STATUS_HEADS_UP_DURATION,
         STATUS_BACKGROUND_ANIMATIONS,
         STATUS_ICON_ANIMATIONS,
-        SHOW_NOTIFICATIONS,
-        SHOW_TUTORIAL
+        SHOW_NOTIFICATIONS
     }
 
     @Nullable

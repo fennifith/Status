@@ -1,6 +1,6 @@
 <resources>
 
-    <style name="AppTheme.Splash" parent="Theme.AppCompat.NoActionBar">
+    <style name="AppTheme.Splash" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">#F5F5F5</item>
         <item name="colorPrimaryDark">#E0E0E0</item>
         <item name="colorAccent">@color/colorPrimaryDark</item>

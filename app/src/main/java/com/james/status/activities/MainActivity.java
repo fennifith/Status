@@ -1,7 +1,9 @@
 package com.james.status.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
@@ -34,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
     private Status status;
 
     private SwitchCompat service;
+    private SearchView searchView;
+
     private AppBarLayout appbar;
     private ViewPager viewPager;
     private SimplePagerAdapter adapter;
@@ -68,6 +72,27 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent(StatusService.ACTION_START);
                     intent.setClass(MainActivity.this, StatusService.class);
                     startService(intent);
+
+                    if (StaticUtils.shouldShowTutorial(MainActivity.this, "search")) {
+                        new TapTargetView.Builder(MainActivity.this)
+                                .title(R.string.tutorial_search)
+                                .description(R.string.tutorial_search_desc)
+                                .outerCircleColor(R.color.colorPrimary)
+                                .dimColor(android.R.color.black)
+                                .drawShadow(false)
+                                .listener(new TapTargetView.Listener() {
+                                    @Override
+                                    public void onTargetClick(TapTargetView view) {
+                                        view.dismiss(true);
+                                    }
+
+                                    @Override
+                                    public void onTargetLongClick(TapTargetView view) {
+                                    }
+                                })
+                                .cancelable(true)
+                                .showFor(searchView);
+                    }
                 } else {
                     PreferenceUtils.putPreference(MainActivity.this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED, false);
 
@@ -88,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        if (StaticUtils.isAccessibilityGranted(this) && StaticUtils.isNotificationGranted(this) && StaticUtils.isPermissionsGranted(this) && !StaticUtils.isStatusServiceRunning(this)) {
+        if (StaticUtils.isAccessibilityGranted(this) && StaticUtils.isNotificationGranted(this) && StaticUtils.isPermissionsGranted(this) && !StaticUtils.isStatusServiceRunning(this) && StaticUtils.shouldShowTutorial(this, "enable")) {
             new TapTargetView.Builder(this)
                     .title(R.string.tutorial_enable)
                     .description(R.string.tutorial_enable_desc)
@@ -115,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
+        searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -151,7 +176,13 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(this, StartActivity.class));
                 break;
             case R.id.action_tutorial:
-                //TODO: do something
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+                SharedPreferences.Editor editor = prefs.edit();
+                for (String key : prefs.getAll().keySet()) {
+                    if (key.startsWith("tutorial")) editor.remove(key);
+                }
+
+                editor.apply();
                 break;
             case R.id.action_about:
                 startActivity(new Intent(this, AboutActivity.class));

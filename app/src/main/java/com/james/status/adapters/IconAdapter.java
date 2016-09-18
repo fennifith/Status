@@ -1,6 +1,6 @@
 package com.james.status.adapters;
 
-import android.content.Context;
+import android.app.Activity;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.GridLayoutManager;
@@ -20,17 +20,18 @@ import java.util.List;
 
 public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
 
-    private Context context;
+    private Activity activity;
     private List<IconData> originalIcons, icons;
+    public AppCompatCheckBox checkBoxView;
 
-    public IconAdapter(Context context) {
-        this.context = context;
-        setIcons(StatusService.getIcons(context));
+    public IconAdapter(Activity activity) {
+        this.activity = activity;
+        setIcons(StatusService.getIcons(activity));
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_icon_preference, parent, false));
+        return new ViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_icon_preference, parent, false));
     }
 
     @Override
@@ -42,6 +43,8 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
 
         AppCompatCheckBox checkBox = (AppCompatCheckBox) holder.v.findViewById(R.id.iconCheckBox);
         checkBox.setText(icon.getTitle());
+
+        checkBoxView = checkBox;
 
         checkBox.setOnCheckedChangeListener(null);
 
@@ -55,7 +58,7 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
                 if (icon == null) return;
 
                 icon.putPreference(IconData.PreferenceIdentifier.VISIBILITY, isChecked);
-                StaticUtils.updateStatusService(context);
+                StaticUtils.updateStatusService(activity);
 
                 notifyItemChanged(holder.getAdapterPosition());
             }
@@ -64,9 +67,9 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
         RecyclerView recycler = (RecyclerView) holder.v.findViewById(R.id.recycler);
         recycler.setVisibility(isVisible == null || isVisible ? View.VISIBLE : View.GONE);
 
-        recycler.setLayoutManager(new GridLayoutManager(context, 1));
+        recycler.setLayoutManager(new GridLayoutManager(activity, 1));
         recycler.setNestedScrollingEnabled(false);
-        recycler.setAdapter(new PreferenceAdapter(context, icon.getPreferences()));
+        recycler.setAdapter(new PreferenceAdapter(activity, icon.getPreferences()));
     }
 
     @Override

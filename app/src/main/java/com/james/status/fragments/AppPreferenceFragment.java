@@ -14,9 +14,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import com.getkeepsafe.taptargetview.TapTargetView;
 import com.james.status.R;
 import com.james.status.adapters.AppAdapter;
 import com.james.status.data.AppData;
+import com.james.status.utils.StaticUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +31,8 @@ public class AppPreferenceFragment extends SimpleFragment {
     private AppAdapter adapter;
     private List<AppData> apps;
     private PackageManager packageManager;
+
+    private boolean isSelected;
 
     @Nullable
     @Override
@@ -74,7 +78,52 @@ public class AppPreferenceFragment extends SimpleFragment {
             }
         }.start();
 
+        recycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (adapter != null && adapter.iconView != null && newState == RecyclerView.SCROLL_STATE_IDLE && isSelected) {
+                    if (StaticUtils.shouldShowTutorial(getContext(), "activities")) {
+                        new TapTargetView.Builder(getActivity())
+                                .title(R.string.tutorial_activities)
+                                .description(R.string.tutorial_activities_desc)
+                                .outerCircleColor(R.color.colorPrimary)
+                                .dimColor(android.R.color.black)
+                                .drawShadow(false)
+                                .listener(new TapTargetView.Listener() {
+                                    @Override
+                                    public void onTargetClick(TapTargetView view) {
+                                        view.dismiss(true);
+                                        adapter.iconView.performClick();
+                                    }
+
+                                    @Override
+                                    public void onTargetLongClick(TapTargetView view) {
+                                    }
+                                })
+                                .cancelable(true)
+                                .showFor(adapter.iconView);
+                    }
+                }
+            }
+        });
+
         return v;
+    }
+
+    @Override
+    public void onSelect() {
+        isSelected = true;
+    }
+
+    @Override
+    public void onEnterScroll(float offset) {
+        isSelected = offset == 0;
+    }
+
+    @Override
+    public void onExitScroll(float offset) {
+        isSelected = offset == 0;
     }
 
     @Override

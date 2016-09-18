@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.getkeepsafe.taptargetview.TapTargetView;
 import com.james.status.R;
 import com.james.status.Status;
 import com.james.status.adapters.IconAdapter;
@@ -20,10 +21,12 @@ import java.util.List;
 
 public class IconPreferenceFragment extends SimpleFragment {
 
+    private RecyclerView recycler;
     private IconAdapter adapter;
     private Status.OnPreferenceChangedListener listener;
     private Status status;
     private String filter;
+    private boolean isSelected;
 
     @Nullable
     @Override
@@ -31,10 +34,10 @@ public class IconPreferenceFragment extends SimpleFragment {
         View v = inflater.inflate(R.layout.fragment_icons, container, false);
         status = (Status) getContext().getApplicationContext();
 
-        RecyclerView recycler = (RecyclerView) v.findViewById(R.id.recycler);
+        recycler = (RecyclerView) v.findViewById(R.id.recycler);
         recycler.setLayoutManager(new GridLayoutManager(getContext(), 1));
 
-        adapter = new IconAdapter(getContext());
+        adapter = new IconAdapter(getActivity());
         recycler.setAdapter(adapter);
 
         new ItemTouchHelper(new ItemTouchHelper.Callback() {
@@ -78,12 +81,75 @@ public class IconPreferenceFragment extends SimpleFragment {
 
         status.addListener(listener);
 
+        recycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (adapter != null && adapter.checkBoxView != null && newState == RecyclerView.SCROLL_STATE_IDLE && isSelected) {
+                    if (StaticUtils.shouldShowTutorial(getContext(), "disableicon")) {
+                        new TapTargetView.Builder(getActivity())
+                                .title(R.string.tutorial_icon_switch)
+                                .description(R.string.tutorial_icon_switch_desc)
+                                .outerCircleColor(R.color.colorAccent)
+                                .dimColor(android.R.color.black)
+                                .drawShadow(false)
+                                .listener(new TapTargetView.Listener() {
+                                    @Override
+                                    public void onTargetClick(TapTargetView view) {
+                                        view.dismiss(true);
+                                    }
+
+                                    @Override
+                                    public void onTargetLongClick(TapTargetView view) {
+                                    }
+                                })
+                                .cancelable(true)
+                                .showFor(adapter.checkBoxView);
+                    } else if (StaticUtils.shouldShowTutorial(getContext(), "moveicon", 1)) {
+                        new TapTargetView.Builder(getActivity())
+                                .title(R.string.tutorial_icon_order)
+                                .description(R.string.tutorial_icon_order_desc)
+                                .outerCircleColor(R.color.colorAccent)
+                                .dimColor(android.R.color.black)
+                                .drawShadow(false)
+                                .listener(new TapTargetView.Listener() {
+                                    @Override
+                                    public void onTargetClick(TapTargetView view) {
+                                        view.dismiss(true);
+                                    }
+
+                                    @Override
+                                    public void onTargetLongClick(TapTargetView view) {
+                                    }
+                                })
+                                .cancelable(true)
+                                .showFor(adapter.checkBoxView);
+                    }
+                }
+            }
+        });
+
         return v;
     }
 
     @Override
     public String getTitle(Context context) {
         return context.getString(R.string.tab_icons);
+    }
+
+    @Override
+    public void onSelect() {
+        isSelected = true;
+    }
+
+    @Override
+    public void onEnterScroll(float offset) {
+        isSelected = offset == 0;
+    }
+
+    @Override
+    public void onExitScroll(float offset) {
+        isSelected = offset == 0;
     }
 
     @Override

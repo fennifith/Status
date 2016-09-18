@@ -39,8 +39,9 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
     private Context context;
     private PackageManager packageManager;
     private List<AppData> originalApps, apps;
+    public View iconView;
 
-    public AppAdapter(final Context context, List<AppData> apps) {
+    public AppAdapter(Context context, List<AppData> apps) {
         this.context = context;
         packageManager = context.getPackageManager();
 
@@ -67,6 +68,8 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
     public void onBindViewHolder(final ViewHolder holder, int position) {
         AppData app = getApp(position);
         if (app == null) return;
+
+        iconView = holder.v.findViewById(R.id.launchIcon);
 
         ((TextView) holder.v.findViewById(R.id.appName)).setText(app.label);
         ((TextView) holder.v.findViewById(R.id.appPackage)).setText(app.packageName);

@@ -7,9 +7,11 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationManagerCompat;
@@ -31,6 +33,17 @@ public class StaticUtils {
         int resId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (resId > 0) return context.getResources().getDimensionPixelSize(resId);
         else return 0;
+    }
+
+    public static boolean shouldShowTutorial(Context context, String tutorialName) {
+        return shouldShowTutorial(context, tutorialName, 0);
+    }
+
+    public static boolean shouldShowTutorial(Context context, String tutorialName, int limit) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        int shown = prefs.getInt("tutorial" + tutorialName, 0);
+        prefs.edit().putInt("tutorial" + tutorialName, shown + 1).apply();
+        return limit == shown;
     }
 
     public static int getNavigationBarHeight(Context context) {
