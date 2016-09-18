@@ -13,8 +13,8 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.james.status.R;
-import com.mikepenz.aboutlibraries.Libs;
-import com.mikepenz.aboutlibraries.LibsBuilder;
+import com.james.status.dialogs.LicenseDialog;
+
 
 public class AboutActivity extends AppCompatActivity {
 
@@ -26,8 +26,6 @@ public class AboutActivity extends AppCompatActivity {
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
-
-        Glide.with(this).load("https://theandroidmaster.github.io/images/headers/status_bg.png").into((ImageView) findViewById(R.id.header));
 
         Glide.with(this).load("https://theandroidmaster.github.io/images/headers/rocks.jpg").into((ImageView) findViewById(R.id.jamesImage));
 
@@ -94,7 +92,7 @@ public class AboutActivity extends AppCompatActivity {
         findViewById(R.id.libraries).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new LibsBuilder().withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR).start(AboutActivity.this);
+                new LicenseDialog(AboutActivity.this).show();
             }
         });
     }

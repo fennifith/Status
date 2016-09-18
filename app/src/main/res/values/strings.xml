@@ -17,12 +17,14 @@
     <string name="action_twitter">Twitter</string>
     <string name="action_website">Website</string>
     <string name="action_github">GitHub</string>
-    <string name="action_libraries">View Libraries</string>
+    <string name="action_libraries">Open Source Licenses</string>
     <string name="action_enable">Enable</string>
     <string name="action_disable">Disable</string>
     <string name="action_reset">Reset</string>
     <string name="action_tutorial">Reset Tutorial</string>
     <string name="action_pick_image_color">Pick Color from Image</string>
+    <string name="action_community">Help Forum</string>
+    <string name="action_dismiss">Dismiss</string>
 
     <string name="service_name">Status Service</string>
     <string name="service_name_general">Accessibility Service</string>
@@ -168,4 +170,22 @@
     <string name="preference_status_color">Primary Color</string>
     <string name="preference_fullscreen">Fullscreen</string>
     <string name="preference_notifications">Notifications</string>
+
+    <string-array name="libraries">
+        <item>
+            <a href="https://github.com/bumptech/glide">Glide</a>
+            <i>BSD, part MIT and Apache 2.0</i>
+            <p>\nGlide is a fast and efficient open source media management and image loading framework for Android that wraps media decoding, memory and disk caching, and resource pooling into a simple and easy to use interface.</p>
+        </item>
+        <item>
+            <a href="https://github.com/drozdzynski/Steppers">Steppers</a>
+            <i>Apache License, Version 2.0</i>
+            <p>\nSteppers is a view library for Android based on Material Design guidelines.</p>
+        </item>
+        <item>
+            <a href="https://github.com/KeepSafe/TapTargetView">TapTargetView</a>
+            <i>Apache License, Version 2.0</i>
+            <p>\nAn implementation of tap targets from the Material Design guidelines for feature discovery</p>
+        </item>
+    </string-array>
 </resources>

@@ -1,6 +1,8 @@
 package com.james.status.fragments;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -26,7 +28,9 @@ import java.util.List;
 
 public class FaqFragment extends SimpleFragment {
 
-    private static final String FAQ_URL = "https://theandroidmaster.github.io/apps/status/faq.json";
+    private static final String
+            FAQ_URL = "https://theandroidmaster.github.io/apps/status/faq.json",
+            COMMUNITY_URL = "https://plus.google.com/communities/100021389226995148571";
 
     private RecyclerView recycler;
     private ProgressBar progressBar;
@@ -37,13 +41,14 @@ public class FaqFragment extends SimpleFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_apps, container, false);
+        View v = inflater.inflate(R.layout.fragment_faqs, container, false);
 
         recycler = (RecyclerView) v.findViewById(R.id.recycler);
         progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
         emptyView = v.findViewById(R.id.empty);
 
         recycler.setLayoutManager(new GridLayoutManager(getContext(), 1));
+        recycler.setNestedScrollingEnabled(false);
         faqs = new ArrayList<>();
 
         new Thread() {
@@ -90,6 +95,13 @@ public class FaqFragment extends SimpleFragment {
                 });
             }
         }.start();
+
+        v.findViewById(R.id.community).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(COMMUNITY_URL)));
+            }
+        });
 
         return v;
     }

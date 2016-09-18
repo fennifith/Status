@@ -113,7 +113,6 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-
         View v;
 
         public ViewHolder(View v) {

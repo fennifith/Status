@@ -51,11 +51,14 @@
 
         <activity android:name=".activities.AboutActivity" />
 
-        <service android:name=".services.StatusService" />
+        <service
+            android:name=".services.StatusService"
+            android:process=":service" />
 
         <service
             android:name=".services.AccessibilityService"
             android:label="@string/service_name"
+            android:process=":service"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
 
             <intent-filter>
@@ -70,6 +73,7 @@
 
         <service android:name=".services.NotificationService"
             android:label="@string/service_name"
+            android:process=":service"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
             <intent-filter>
                 <action android:name="android.service.notification.NotificationListenerService" />
