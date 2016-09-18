@@ -35,6 +35,7 @@ import com.james.status.data.icon.AlarmIconData;
 import com.james.status.data.icon.BatteryIconData;
 import com.james.status.data.icon.BluetoothIconData;
 import com.james.status.data.icon.DataIconData;
+import com.james.status.data.icon.GpsIconData;
 import com.james.status.data.icon.HeadphoneIconData;
 import com.james.status.data.icon.IconData;
 import com.james.status.data.icon.NetworkIconData;
@@ -467,6 +468,7 @@ public class StatusService extends Service {
         icons.add(new DataIconData(context));
         icons.add(new WifiIconData(context));
         icons.add(new BluetoothIconData(context));
+        icons.add(new GpsIconData(context));
         icons.add(new AirplaneModeIconData(context));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 && context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_NFC))
             icons.add(new NfcIconData(context));

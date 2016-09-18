@@ -116,6 +116,7 @@
     <string name="icon_data">Data Indicator</string>
     <string name="icon_wifi">WiFi Icon</string>
     <string name="icon_bluetooth">Bluetooth Icon</string>
+    <string name="icon_gps">Gps Icon</string>
     <string name="icon_airplane">Airplane Mode Icon</string>
     <string name="icon_alarm">Alarm Icon</string>
     <string name="icon_ringer">Ringer Volume Icon</string>
