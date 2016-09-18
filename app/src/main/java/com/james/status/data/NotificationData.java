@@ -69,7 +69,13 @@ public class NotificationData implements Parcelable {
             if (unloadedIcon == null) unloadedIcon = notification.getSmallIcon();
         }
 
-        largeIcon = extras.getParcelable(NotificationCompat.EXTRA_LARGE_ICON);
+        Object parcelable = extras.getParcelable(NotificationCompat.EXTRA_LARGE_ICON);
+        if (parcelable instanceof Bitmap) {
+            largeIcon = (Bitmap) parcelable;
+        } else if (parcelable instanceof Icon) {
+            unloadedLargeIcon = (Icon) parcelable;
+        }
+
         if (largeIcon == null)
             largeIcon = extras.getParcelable(NotificationCompat.EXTRA_LARGE_ICON_BIG);
         if (largeIcon == null && Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
