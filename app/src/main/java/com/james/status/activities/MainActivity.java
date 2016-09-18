@@ -15,6 +15,7 @@ import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private SearchView searchView;
 
     private AppBarLayout appbar;
+    private TabLayout tabLayout;
     private ViewPager viewPager;
     private SimplePagerAdapter adapter;
 
@@ -57,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         Glide.with(this).load("https://theandroidmaster.github.io/images/headers/status_bg.png").into((ImageView) findViewById(R.id.header));
 
         appbar = (AppBarLayout) findViewById(R.id.appbar);
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         service = (SwitchCompat) findViewById(R.id.serviceEnabled);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
 
@@ -72,27 +74,6 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent(StatusService.ACTION_START);
                     intent.setClass(MainActivity.this, StatusService.class);
                     startService(intent);
-
-                    if (StaticUtils.shouldShowTutorial(MainActivity.this, "search")) {
-                        new TapTargetView.Builder(MainActivity.this)
-                                .title(R.string.tutorial_search)
-                                .description(R.string.tutorial_search_desc)
-                                .outerCircleColor(R.color.colorPrimary)
-                                .dimColor(android.R.color.black)
-                                .drawShadow(false)
-                                .listener(new TapTargetView.Listener() {
-                                    @Override
-                                    public void onTargetClick(TapTargetView view) {
-                                        view.dismiss(true);
-                                    }
-
-                                    @Override
-                                    public void onTargetLongClick(TapTargetView view) {
-                                    }
-                                })
-                                .cancelable(true)
-                                .showFor(searchView);
-                    }
                 } else {
                     PreferenceUtils.putPreference(MainActivity.this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED, false);
 
@@ -133,6 +114,45 @@ public class MainActivity extends AppCompatActivity {
                     })
                     .cancelable(true)
                     .showFor(service);
+        } else if (searchView != null && StaticUtils.shouldShowTutorial(MainActivity.this, "search", 1)) {
+            new TapTargetView.Builder(MainActivity.this)
+                    .title(R.string.tutorial_search)
+                    .description(R.string.tutorial_search_desc)
+                    .outerCircleColor(R.color.colorPrimary)
+                    .dimColor(android.R.color.black)
+                    .drawShadow(false)
+                    .listener(new TapTargetView.Listener() {
+                        @Override
+                        public void onTargetClick(TapTargetView view) {
+                            view.dismiss(true);
+                        }
+
+                        @Override
+                        public void onTargetLongClick(TapTargetView view) {
+                        }
+                    })
+                    .cancelable(true)
+                    .showFor(searchView);
+        } else if (tabLayout != null && viewPager != null && viewPager.getCurrentItem() != 3 && StaticUtils.shouldShowTutorial(MainActivity.this, "faqs", 2)) {
+            new TapTargetView.Builder(MainActivity.this)
+                    .title(R.string.tutorial_faq)
+                    .description(R.string.tutorial_faq_desc)
+                    .outerCircleColor(R.color.colorPrimary)
+                    .dimColor(android.R.color.black)
+                    .drawShadow(false)
+                    .listener(new TapTargetView.Listener() {
+                        @Override
+                        public void onTargetClick(TapTargetView view) {
+                            view.dismiss(true);
+                            viewPager.setCurrentItem(3, true);
+                        }
+
+                        @Override
+                        public void onTargetLongClick(TapTargetView view) {
+                        }
+                    })
+                    .cancelable(true)
+                    .showFor(((ViewGroup) tabLayout.getChildAt(0)).getChildAt(3));
         }
     }
 

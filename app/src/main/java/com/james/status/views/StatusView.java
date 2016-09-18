@@ -380,7 +380,7 @@ public class StatusView extends FrameLayout {
                 Boolean transparent = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_HOME_TRANSPARENT);
                 if (transparent == null || transparent) {
                     status.setBackground(new BitmapDrawable(getResources(), background));
-                    setDarkMode(ColorUtils.isColorDark(color));
+                    setDarkMode(!ColorUtils.isColorDark(color));
                     StatusView.this.color = color;
                 } else setColor(color);
             } else setColor(Color.BLACK);

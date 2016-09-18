@@ -474,6 +474,11 @@ public class StatusService extends Service {
         icons.add(new RingerIconData(context));
         icons.add(new HeadphoneIconData(context));
 
+        for (IconData icon : icons) {
+            if (icon.getIntegerPreference(IconData.PreferenceIdentifier.POSITION) == null)
+                icon.putPreference(IconData.PreferenceIdentifier.POSITION, icons.indexOf(icon));
+        }
+
         Collections.sort(icons, new Comparator<IconData>() {
             @Override
             public int compare(IconData lhs, IconData rhs) {

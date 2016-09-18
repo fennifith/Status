@@ -140,6 +140,8 @@
     <string name="tutorial_enable_desc">This switch allows you to enable and disable the customized status bar. Turn it on to try it!</string>
     <string name="tutorial_search">Search</string>
     <string name="tutorial_search_desc">Find the exact setting you want to change by using the app\'s search bar.</string>
+    <string name="tutorial_faq">Need help?</string>
+    <string name="tutorial_faq_desc">The FAQ section is always being updated and contains almost all the issues users have encountered using the app.</string>
     <string name="tutorial_image_picker">Image Color Picker</string>
     <string name="tutorial_image_picker_desc">Can\'t get the right color? Try picking a color from an image instead!</string>
     <string name="tutorial_icon_switch">Don\'t like an icon?</string>
