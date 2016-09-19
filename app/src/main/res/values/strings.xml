@@ -94,7 +94,8 @@
     <string name="preference_airplane_mode_icon">Airplane Mode Icon Style</string>
     <string name="preference_show_alarm_icon">Show Alarm Clock Icon</string>
     <string name="preference_alarm_icon">Alarm Clock Icon Style</string>
-    <string name="preference_show_ringer_icon">Show Ringer Icon</string>
+    <string name="preference_show_ringer_icon">Show Ringer Icon</string>Left="16dp"
+    android:paddingRight="16dp"
     <string name="preference_ringer_icon">Ringer Icon Style</string>
     <string name="preference_icon_padding">Horizontal Padding (dp)</string>
     <string name="preference_icon_scale">Icon Scale (dp)</string>
@@ -110,6 +111,7 @@
     <string name="preference_show_drawable">Show/Hide Icon</string>
     <string name="preference_show_text">Display Text</string>
     <string name="preference_notification_icon_size">Notification Icon Size</string>
+    <string name="preference_time_format">Time Format</string>
 
     <string name="icon_clock">Clock</string>
     <string name="icon_battery">Battery Icon</string>
@@ -158,6 +160,24 @@
     <string name="red">Red</string>
     <string name="green">Green</string>
     <string name="blue">Blue</string>
+
+    <string name="hint_format">
+        \n
+        h - Hours\n
+        HH - Hours (24h)\n
+        kk - Hours (24h)\n
+        mm - Minutes\n
+        ss - Seconds\n
+        SSS - Milliseconds\n
+        a - AM/PM
+        Z - Time Zone
+        \n
+        dd - Day of Month\n
+        EEE - Day of Week\n
+        MM - Month (numeric)\n
+        MMM - Month\n
+        yyyy - Year
+    </string>
 
     <string name="empty">Nothing here…</string>
 

@@ -7,11 +7,10 @@ import android.content.IntentFilter;
 import android.text.format.DateFormat;
 
 import com.james.status.R;
-import com.james.status.data.preference.BooleanPreferenceData;
+import com.james.status.data.preference.FormatPreferenceData;
 import com.james.status.data.preference.PreferenceData;
 import com.james.status.utils.StaticUtils;
 
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -84,65 +83,20 @@ public class TimeIconData extends IconData<TimeIconData.TimeReceiver> {
     public List<PreferenceData> getPreferences() {
         List<PreferenceData> preferences = super.getPreferences();
 
-        preferences.addAll(Arrays.asList(
-                new BooleanPreferenceData(
-                        getContext(),
-                        new PreferenceData.Identifier(
-                                getContext().getString(R.string.preference_24h),
-                                getContext().getString(R.string.preference_24h_desc)
-                        ),
-                        format.contains("kk"),
-                        new PreferenceData.OnPreferenceChangeListener<Boolean>() {
-                            @Override
-                            public void onPreferenceChange(Boolean preference) {
-                                if (preference) format = format.replace("h", "kk");
-                                else format = format.replace("kk", "h");
-
-                                putPreference(PreferenceIdentifier.TEXT_FORMAT, format);
-                                StaticUtils.updateStatusService(getContext());
-                            }
-                        }
+        preferences.add(new FormatPreferenceData(
+                getContext(),
+                new PreferenceData.Identifier(
+                        getContext().getString(R.string.preference_time_format)
                 ),
-                new BooleanPreferenceData(
-                        getContext(),
-                        new PreferenceData.Identifier(
-                                getContext().getString(R.string.preference_ampm),
-                                getContext().getString(R.string.preference_ampm_desc)
-                        ),
-                        format.contains("a"),
-                        new PreferenceData.OnPreferenceChangeListener<Boolean>() {
-                            @Override
-                            public void onPreferenceChange(Boolean preference) {
-                                if (preference && !format.contains("a")) {
-                                    if (format.contains(",")) {
-                                        format = format.substring(0, format.indexOf(",")) + " a" + format.substring(format.indexOf(","), format.length());
-                                    } else format += " a";
-                                } else format = format.replace(" a", "");
-
-                                putPreference(PreferenceIdentifier.TEXT_FORMAT, format);
-                                StaticUtils.updateStatusService(getContext());
-                            }
-                        }
-                ),
-                new BooleanPreferenceData(
-                        getContext(),
-                        new PreferenceData.Identifier(
-                                getContext().getString(R.string.preference_date),
-                                getContext().getString(R.string.preference_date_desc)
-                        ),
-                        format.contains(", EEE MMM d"),
-                        new PreferenceData.OnPreferenceChangeListener<Boolean>() {
-                            @Override
-                            public void onPreferenceChange(Boolean preference) {
-                                if (preference && !format.contains(", EEE MMM d"))
-                                    format += ", EEE MMM d";
-                                else format = format.replace(", EEE MMM d", "");
-
-                                putPreference(PreferenceIdentifier.TEXT_FORMAT, format);
-                                StaticUtils.updateStatusService(getContext());
-                            }
-                        }
-                )
+                format,
+                new PreferenceData.OnPreferenceChangeListener<String>() {
+                    @Override
+                    public void onPreferenceChange(String preference) {
+                        format = preference;
+                        putPreference(PreferenceIdentifier.TEXT_FORMAT, preference);
+                        StaticUtils.updateStatusService(getContext());
+                    }
+                }
         ));
 
         return preferences;
