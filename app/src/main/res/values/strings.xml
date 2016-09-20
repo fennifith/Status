@@ -151,7 +151,7 @@
     <string name="tutorial_image_picker">Image Color Picker</string>
     <string name="tutorial_image_picker_desc">Can\'t get the right color? Try picking a color from an image instead!</string>
     <string name="tutorial_icon_switch">Don\'t like an icon?</string>
-    <string name="tutorial_icon_switch_desc">Enable or disable an icon by clicking the check box next to it\'s name.</string>
+    <string name="tutorial_icon_switch_desc">Enable or disable an icon by clicking the check box next to its name.</string>
     <string name="tutorial_icon_order">Re-order Icons</string>
     <string name="tutorial_icon_order_desc">Change the order of the icons by pressing and holding on the icon\'s name then moving it to the position you want.</string>
     <string name="tutorial_activities">Don\'t want to modify the whole app?</string>
