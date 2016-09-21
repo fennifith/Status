@@ -11,7 +11,6 @@ import com.james.status.R;
 import com.james.status.data.IconStyleData;
 import com.james.status.dialogs.IconPickerDialog;
 import com.james.status.dialogs.PreferenceDialog;
-import com.james.status.utils.PreferenceUtils;
 import com.james.status.views.IconStyleImageView;
 
 import java.util.Arrays;
@@ -58,10 +57,6 @@ public class IconPreferenceData extends PreferenceData<IconStyleData> {
                             ((IconStyleImageView) holder.v.findViewById(R.id.icon)).setIconStyle(preference);
 
                             IconPreferenceData.this.iconStyle = preference;
-
-                            PreferenceUtils.PreferenceIdentifier identifier = getIdentifier().getPreference();
-                            if (identifier != null)
-                                PreferenceUtils.putResourcePreference(getContext(), getIdentifier().getPreference(), iconStyle.resource);
                             onPreferenceChange(preference);
                         }
                     }

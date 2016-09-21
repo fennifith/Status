@@ -2,12 +2,8 @@ package com.james.status.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class PreferenceUtils {
 
@@ -46,10 +42,13 @@ public class PreferenceUtils {
         if (context == null || identifier == null) return null;
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        if (prefs.contains(identifier.toString()))
-            return prefs.getBoolean(identifier.toString(), false);
-        else
-            return null;
+        if (prefs.contains(identifier.toString())) {
+            try {
+                return prefs.getBoolean(identifier.toString(), false);
+            } catch (ClassCastException e) {
+                return null;
+            }
+        } else return null;
     }
 
     @Nullable
@@ -57,30 +56,12 @@ public class PreferenceUtils {
         if (context == null || identifier == null) return null;
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        if (prefs.contains(identifier.toString()))
-            return prefs.getInt(identifier.toString(), 0);
-        else
-            return null;
-    }
-
-    @Nullable
-    public static int[] getResourceIntPreference(Context context, PreferenceIdentifier identifier, String resourceType) {
-        if (context == null || identifier == null || resourceType == null) return null;
-
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        Resources resources = context.getResources();
-
-        if (prefs.contains(identifier.toString() + "-length")) {
-            int length = prefs.getInt(identifier.toString() + "-length", 0);
-            int[] value = new int[length];
-
-            for (int i = 0; i < length; i++) {
-                if (prefs.contains(identifier.toString() + "-" + i))
-                    value[i] = resources.getIdentifier(prefs.getString(identifier.toString() + "-" + i, null), resourceType, context.getPackageName());
-                else return null;
+        if (prefs.contains(identifier.toString())) {
+            try {
+                return prefs.getInt(identifier.toString(), 0);
+            } catch (ClassCastException e) {
+                return null;
             }
-
-            return value;
         } else return null;
     }
 
@@ -89,10 +70,15 @@ public class PreferenceUtils {
         if (context == null || identifier == null) return null;
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        if (prefs.contains(identifier.toString()))
-            return prefs.getString(identifier.toString(), null);
-        else
-            return null;
+        if (prefs.contains(identifier.toString())) {
+            if (prefs.contains(identifier.toString())) {
+                try {
+                    return prefs.getString(identifier.toString(), null);
+                } catch (ClassCastException e) {
+                    return null;
+                }
+            } else return null;
+        } else return null;
     }
 
     @Nullable
@@ -100,10 +86,15 @@ public class PreferenceUtils {
         if (context == null || identifier == null) return null;
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        if (prefs.contains(identifier.toString()))
-            return prefs.getFloat(identifier.toString(), 0f);
-        else
-            return null;
+        if (prefs.contains(identifier.toString())) {
+            if (prefs.contains(identifier.toString())) {
+                try {
+                    return prefs.getFloat(identifier.toString(), 0);
+                } catch (ClassCastException e) {
+                    return null;
+                }
+            } else return null;
+        } else return null;
     }
 
     @Nullable
@@ -111,29 +102,14 @@ public class PreferenceUtils {
         if (context == null || identifier == null) return null;
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        if (prefs.contains(identifier.toString()))
-            return prefs.getLong(identifier.toString(), 0);
-        else
-            return null;
-    }
-
-    @Nullable
-    public static List<String> getStringListPreference(Context context, PreferenceIdentifier identifier) {
-        if (context == null || identifier == null) return null;
-
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-
-        if (prefs.contains(identifier.toString() + "-length")) {
-            int length = prefs.getInt(identifier.toString() + "-length", 0);
-            List<String> value = new ArrayList<>();
-
-            for (int i = 0; i < length; i++) {
-                if (prefs.contains(identifier.toString() + "-" + i))
-                    value.add(prefs.getString(identifier.toString() + "-" + i, null));
-                else return null;
-            }
-
-            return value;
+        if (prefs.contains(identifier.toString())) {
+            if (prefs.contains(identifier.toString())) {
+                try {
+                    return prefs.getLong(identifier.toString(), 0);
+                } catch (ClassCastException e) {
+                    return null;
+                }
+            } else return null;
         } else return null;
     }
 
@@ -143,17 +119,6 @@ public class PreferenceUtils {
 
     public static void putPreference(Context context, PreferenceIdentifier identifier, int object) {
         PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(identifier.toString(), object).apply();
-    }
-
-    public static void putResourcePreference(Context context, PreferenceIdentifier identifier, int[] object) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        Resources resources = context.getResources();
-
-        prefs.edit().putInt(identifier.toString() + "-length", object.length).apply();
-
-        for (int i = 0; i < object.length; i++) {
-            prefs.edit().putString(identifier.toString() + "-" + i, resources.getResourceEntryName(object[i])).apply();
-        }
     }
 
     public static void putPreference(Context context, PreferenceIdentifier identifier, String object) {
@@ -166,15 +131,5 @@ public class PreferenceUtils {
 
     public static void putPreference(Context context, PreferenceIdentifier identifier, long object) {
         PreferenceManager.getDefaultSharedPreferences(context).edit().putLong(identifier.toString(), object).apply();
-    }
-
-    public static void putPreference(Context context, PreferenceIdentifier identifier, List<String> object) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-
-        prefs.edit().putInt(identifier.toString() + "-length", object.size()).apply();
-
-        for (int i = 0; i < object.size(); i++) {
-            prefs.edit().putString(identifier.toString() + "-" + i, object.get(i)).apply();
-        }
     }
 }
