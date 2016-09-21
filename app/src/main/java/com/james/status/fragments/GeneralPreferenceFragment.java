@@ -171,7 +171,7 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                             }
                         }
                 ),
-                new IntegerPreferenceData(
+                /*new IntegerPreferenceData(
                         getContext(),
                         new PreferenceData.Identifier(
                                 PreferenceUtils.PreferenceIdentifier.STATUS_ICON_SCALE,
@@ -188,7 +188,7 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                                 StaticUtils.updateStatusService(getContext());
                             }
                         }
-                ),
+                ),*/
                 new BooleanPreferenceData(
                         getContext(),
                         new PreferenceData.Identifier(

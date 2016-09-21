@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.james.status.R;
 import com.james.status.data.NotificationData;
@@ -222,6 +223,8 @@ public class StatusView extends FrameLayout {
 
                 Integer iconScale = PreferenceUtils.getIntegerPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_ICON_SCALE);
                 if (iconScale == null) iconScale = 24;
+
+                Toast.makeText(getContext(), String.valueOf(iconScale), Toast.LENGTH_SHORT).show();
 
                 setIconVisibility(v, null, (int) StaticUtils.getPixelsFromDp(getContext(), iconScale), true);
 
