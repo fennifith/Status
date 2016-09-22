@@ -12,6 +12,7 @@
         android:layout_height="match_parent"
         android:gravity="center_vertical"
         android:textSize="14sp"
+        android:textColor="@android:color/white"
         android:id="@+id/text" />
 
     <com.james.status.views.CustomImageView

@@ -9,8 +9,14 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.graphics.drawable.VectorDrawableCompat;
+import android.util.TypedValue;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.james.status.R;
 import com.james.status.data.IconStyleData;
@@ -19,12 +25,13 @@ import com.james.status.data.preference.IconPreferenceData;
 import com.james.status.data.preference.IntegerPreferenceData;
 import com.james.status.data.preference.PreferenceData;
 import com.james.status.utils.StaticUtils;
+import com.james.status.views.CustomImageView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class IconData<T extends BroadcastReceiver> {
+public abstract class IconData<T extends BroadcastReceiver> {
 
     private Context context;
     private DrawableListener drawableListener;
@@ -35,6 +42,8 @@ public class IconData<T extends BroadcastReceiver> {
     private Drawable drawable;
     private String text;
 
+    private View v;
+
     public IconData(Context context) {
         this.context = context;
 
@@ -44,49 +53,87 @@ public class IconData<T extends BroadcastReceiver> {
             resource = getDefaultIconResource();
     }
 
-    public Context getContext() {
+    public final Context getContext() {
         return context;
     }
 
-    public void setDrawableListener(DrawableListener drawableListener) {
-        this.drawableListener = drawableListener;
-    }
-
-    public boolean hasDrawableListener() {
+    public final boolean hasDrawableListener() {
         return drawableListener != null;
     }
 
-    public DrawableListener getDrawableListener() {
+    public final DrawableListener getDrawableListener() {
         return drawableListener;
     }
 
-    public void setTextListener(TextListener textListener) {
-        this.textListener = textListener;
+    public final void setDrawableListener(DrawableListener drawableListener) {
+        this.drawableListener = drawableListener;
     }
 
-    public boolean hasTextListener() {
+    public final boolean hasTextListener() {
         return textListener != null;
     }
 
-    public TextListener getTextListener() {
+    public final TextListener getTextListener() {
         return textListener;
     }
 
-    public void onDrawableUpdate(@Nullable Drawable drawable) {
+    public final void setTextListener(TextListener textListener) {
+        this.textListener = textListener;
+    }
+
+    public final void onDrawableUpdate(@Nullable Drawable drawable) {
         if (hasDrawable()) {
+            if (v != null) {
+                CustomImageView iconView = (CustomImageView) v.findViewById(R.id.icon);
+
+                if (iconView != null) {
+                    if (drawable != null) {
+                        v.setVisibility(View.VISIBLE);
+                        iconView.setVisibility(View.VISIBLE);
+
+                        ViewGroup.LayoutParams layoutParams = iconView.getLayoutParams();
+                        if (layoutParams != null)
+                            layoutParams.height = (int) StaticUtils.getPixelsFromDp(getContext(), getIconScale());
+                        else
+                            layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, (int) StaticUtils.getPixelsFromDp(getContext(), getIconScale()));
+
+                        iconView.setLayoutParams(layoutParams);
+                        iconView.setImageDrawable(drawable);
+                    } else {
+                        iconView.setVisibility(View.GONE);
+                        if (getText() == null)
+                            v.setVisibility(View.GONE);
+                    }
+                }
+            }
+
             if (hasDrawableListener()) getDrawableListener().onUpdate(drawable);
             this.drawable = drawable;
         }
     }
 
-    public void onTextUpdate(@Nullable String text) {
+    public final void onTextUpdate(@Nullable String text) {
         if (hasText()) {
+            if (v != null) {
+                TextView textView = (TextView) v.findViewById(R.id.text);
+
+                if (text != null) {
+                    v.setVisibility(View.VISIBLE);
+                    textView.setVisibility(View.VISIBLE);
+                    textView.setText(text);
+                } else {
+                    textView.setVisibility(View.GONE);
+                    if (getDrawable() == null)
+                        v.setVisibility(View.GONE);
+                }
+            }
+
             if (hasTextListener()) getTextListener().onUpdate(text);
             this.text = text;
         }
     }
 
-    public boolean isVisible() {
+    public final boolean isVisible() {
         Boolean isVisible = getBooleanPreference(PreferenceIdentifier.VISIBILITY);
         return (isVisible == null || isVisible) && (hasText() || hasDrawable());
     }
@@ -115,9 +162,13 @@ public class IconData<T extends BroadcastReceiver> {
         return null;
     }
 
+    ;
+
     public IntentFilter getIntentFilter() {
         return new IntentFilter();
     }
+
+    ;
 
     public void register() {
         if (receiver == null) receiver = getReceiver();
@@ -135,39 +186,39 @@ public class IconData<T extends BroadcastReceiver> {
         else return null;
     }
 
-    public int getIconResource() {
+    public final int getIconResource() {
         return resource[0];
     }
 
-    public int getIconResource(int level) {
+    public final int getIconResource(int level) {
         return resource[Math.abs(level % resource.length)];
     }
 
-    public int getIconPadding() {
+    public final int getIconPadding() {
         Integer padding = getIntegerPreference(PreferenceIdentifier.ICON_PADDING);
         if (padding == null) padding = 2;
         return padding;
     }
 
-    public int getIconScale() {
+    public final int getIconScale() {
         Integer scale = getIntegerPreference(PreferenceIdentifier.ICON_SCALE);
         if (scale == null) scale = 24;
         return scale;
     }
 
-    public float getTextSize() {
+    public final float getTextSize() {
         Integer size = getIntegerPreference(PreferenceIdentifier.TEXT_SIZE);
         if (size == null) size = 14;
         return size;
     }
 
-    public int getPosition() {
+    public final int getPosition() {
         Integer position = getIntegerPreference(PreferenceIdentifier.POSITION);
         if (position == null) position = 0;
         return position;
     }
 
-    public boolean isCentered() {
+    public final boolean isCentered() {
         Boolean isCenter = getBooleanPreference(PreferenceIdentifier.CENTER_GRAVITY);
         if (isCenter == null) isCenter = false;
         return isCenter;
@@ -197,6 +248,29 @@ public class IconData<T extends BroadcastReceiver> {
 
     public String getTitle() {
         return getClass().getSimpleName();
+    }
+
+    @LayoutRes
+    public int getIconLayout() {
+        return R.layout.item_icon;
+    }
+
+    public View getIconView() {
+        if (v == null) {
+            v = LayoutInflater.from(getContext()).inflate(getIconLayout(), null);
+            v.setTag(this);
+
+            float iconPaddingDp = StaticUtils.getPixelsFromDp(getContext(), getIconPadding());
+            v.setPadding((int) iconPaddingDp, 0, (int) iconPaddingDp, 0);
+
+            ((TextView) v.findViewById(R.id.text)).setTextSize(TypedValue.COMPLEX_UNIT_SP, getTextSize());
+
+            if (!hasDrawable()) v.findViewById(R.id.icon).setVisibility(View.GONE);
+            if (!hasText()) v.findViewById(R.id.icon).setVisibility(View.GONE);
+            v.setVisibility(View.GONE);
+        }
+
+        return v;
     }
 
     public List<PreferenceData> getPreferences() {
@@ -337,7 +411,7 @@ public class IconData<T extends BroadcastReceiver> {
     }
 
     @Nullable
-    public Boolean getBooleanPreference(PreferenceIdentifier identifier) {
+    public final Boolean getBooleanPreference(PreferenceIdentifier identifier) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         if (prefs.contains(getIdentifierString(identifier))) {
             try {
@@ -345,13 +419,12 @@ public class IconData<T extends BroadcastReceiver> {
             } catch (ClassCastException e) {
                 return null;
             }
-        }
-        else
+        } else
             return null;
     }
 
     @Nullable
-    public Integer getIntegerPreference(PreferenceIdentifier identifier) {
+    public final Integer getIntegerPreference(PreferenceIdentifier identifier) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         if (prefs.contains(getIdentifierString(identifier))) {
             try {
@@ -359,13 +432,12 @@ public class IconData<T extends BroadcastReceiver> {
             } catch (ClassCastException e) {
                 return null;
             }
-        }
-        else
+        } else
             return null;
     }
 
     @Nullable
-    public String getStringPreference(PreferenceIdentifier identifier) {
+    public final String getStringPreference(PreferenceIdentifier identifier) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         if (prefs.contains(getIdentifierString(identifier))) {
             try {
@@ -373,13 +445,12 @@ public class IconData<T extends BroadcastReceiver> {
             } catch (ClassCastException e) {
                 return null;
             }
-        }
-        else
+        } else
             return null;
     }
 
     @Nullable
-    public int[] getResourceIntPreference(PreferenceIdentifier identifier, String resourceType) {
+    public final int[] getResourceIntPreference(PreferenceIdentifier identifier, String resourceType) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         Resources resources = context.getResources();
 
@@ -389,7 +460,7 @@ public class IconData<T extends BroadcastReceiver> {
                 length = prefs.getInt(getIdentifierString(identifier) + "-length", 0);
             } catch (ClassCastException ignored) {
             }
-            
+
             int[] value = new int[length];
 
             for (int i = 0; i < length; i++) {
@@ -402,19 +473,19 @@ public class IconData<T extends BroadcastReceiver> {
         } else return null;
     }
 
-    public void putPreference(PreferenceIdentifier identifier, boolean object) {
+    public final void putPreference(PreferenceIdentifier identifier, boolean object) {
         PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(getIdentifierString(identifier), object).apply();
     }
 
-    public void putPreference(PreferenceIdentifier identifier, int object) {
+    public final void putPreference(PreferenceIdentifier identifier, int object) {
         PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(getIdentifierString(identifier), object).apply();
     }
 
-    public void putPreference(PreferenceIdentifier identifier, String object) {
+    public final void putPreference(PreferenceIdentifier identifier, String object) {
         PreferenceManager.getDefaultSharedPreferences(context).edit().putString(getIdentifierString(identifier), object).apply();
     }
 
-    public void putPreference(PreferenceIdentifier identifier, int[] object) {
+    public final void putPreference(PreferenceIdentifier identifier, int[] object) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         Resources resources = context.getResources();
 
@@ -429,14 +500,6 @@ public class IconData<T extends BroadcastReceiver> {
         return getClass().getName() + "/" + identifier.toString();
     }
 
-    public interface DrawableListener {
-        void onUpdate(@Nullable Drawable drawable);
-    }
-
-    public interface TextListener {
-        void onUpdate(@Nullable String text);
-    }
-
     public enum PreferenceIdentifier {
         VISIBILITY,
         POSITION,
@@ -448,5 +511,13 @@ public class IconData<T extends BroadcastReceiver> {
         ICON_STYLE,
         ICON_PADDING,
         ICON_SCALE
+    }
+
+    public interface DrawableListener {
+        void onUpdate(@Nullable Drawable drawable);
+    }
+
+    public interface TextListener {
+        void onUpdate(@Nullable String text);
     }
 }

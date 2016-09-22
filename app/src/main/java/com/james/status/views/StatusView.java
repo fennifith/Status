@@ -1,6 +1,7 @@
 package com.james.status.views;
 
 import android.animation.Animator;
+import android.animation.LayoutTransition;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.app.WallpaperManager;
@@ -14,7 +15,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.graphics.Palette;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,6 +83,16 @@ public class StatusView extends FrameLayout {
         Boolean isIconAnimations = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_ICON_ANIMATIONS);
         this.isIconAnimations = isIconAnimations != null ? isIconAnimations : true;
 
+        if (this.isIconAnimations) {
+            notificationIconLayout.setLayoutTransition(new LayoutTransition());
+            statusIconLayout.setLayoutTransition(new LayoutTransition());
+            statusCenterIconLayout.setLayoutTransition(new LayoutTransition());
+        } else {
+            notificationIconLayout.setLayoutTransition(null);
+            statusIconLayout.setLayoutTransition(null);
+            statusCenterIconLayout.setLayoutTransition(null);
+        }
+
         Boolean isTintedIcons = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_TINTED_ICONS);
         this.isTintedIcons = isTintedIcons != null ? isTintedIcons : false;
 
@@ -125,50 +135,16 @@ public class StatusView extends FrameLayout {
         for (final IconData iconData : icons) {
             if (!iconData.isVisible()) continue;
 
-            final View item = getIconView(iconData.getIconPadding());
-            item.setTag(iconData);
+            final View item = iconData.getIconView();
 
             iconData.setDrawableListener(new IconData.DrawableListener() {
                 @Override
                 public void onUpdate(@Nullable Drawable drawable) {
                     CustomImageView iconView = (CustomImageView) item.findViewById(R.id.icon);
 
-                    if (drawable != null) {
-                        setIconVisibility(item, null, (int) StaticUtils.getPixelsFromDp(getContext(), iconData.getIconScale()), true);
-
-                        iconView.setVisibility(View.VISIBLE);
-                        ImageUtils.tintDrawable(iconView, drawable, iconColor);
-                    } else {
-                        iconView.setVisibility(View.GONE);
-                        if (iconData.getText() == null)
-                            setIconVisibility(item, null, null, false);
-                    }
+                    if (drawable != null) ImageUtils.tintDrawable(iconView, drawable, iconColor);
                 }
             });
-
-            iconData.setTextListener(new IconData.TextListener() {
-                @Override
-                public void onUpdate(@Nullable String text) {
-                    TextView textView = (TextView) item.findViewById(R.id.text);
-
-                    if (text != null) {
-                        item.setVisibility(View.VISIBLE);
-                        textView.setVisibility(View.VISIBLE);
-                        textView.setText(text);
-                        textView.setTextColor(iconColor);
-                    } else {
-                        textView.setVisibility(View.GONE);
-                        if (iconData.getDrawable() == null)
-                            item.setVisibility(View.GONE);
-                    }
-                }
-            });
-
-            ((TextView) item.findViewById(R.id.text)).setTextSize(TypedValue.COMPLEX_UNIT_SP, iconData.getTextSize());
-
-            if (!iconData.hasDrawable()) item.findViewById(R.id.icon).setVisibility(View.GONE);
-            if (!iconData.hasText()) item.findViewById(R.id.icon).setVisibility(View.GONE);
-            item.setVisibility(View.GONE);
 
             if (iconData.isCentered()) statusCenterIconLayout.addView(item, 0);
             else statusIconLayout.addView(item, 0);
