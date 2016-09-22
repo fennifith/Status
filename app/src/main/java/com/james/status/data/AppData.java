@@ -169,24 +169,33 @@ public class AppData implements Parcelable {
     public enum PreferenceIdentifier {
         NOTIFICATIONS,
         COLOR,
-        FULLSCREEN
+        FULLSCREEN,
+        CACHE_COLOR,
+        CACHE_VERSION
     }
 
     public static class ActivityData implements Parcelable {
 
         public String label, packageName, name;
+        public int version = 0;
         private Map<String, Object> tags;
 
         public ActivityData(PackageManager manager, ActivityInfo info) {
             label = info.loadLabel(manager).toString();
             packageName = info.applicationInfo.packageName;
             name = info.name;
+
+            try {
+                version = manager.getPackageInfo(info.packageName, PackageManager.GET_META_DATA).versionCode;
+            } catch (PackageManager.NameNotFoundException ignored) {
+            }
         }
 
         protected ActivityData(Parcel in) {
             label = in.readString();
             packageName = in.readString();
             name = in.readString();
+            version = in.readInt();
         }
 
         public static final Creator<ActivityData> CREATOR = new Creator<ActivityData>() {
@@ -222,6 +231,7 @@ public class AppData implements Parcelable {
             dest.writeString(label);
             dest.writeString(packageName);
             dest.writeString(name);
+            dest.writeInt(version);
         }
 
         public ComponentName getComponentName() {
@@ -231,6 +241,11 @@ public class AppData implements Parcelable {
         @ColorInt
         public int getColor(Context context) {
             Integer color = getIntegerPreference(context, PreferenceIdentifier.COLOR);
+
+            Integer cacheVersion = getIntegerPreference(context, AppData.PreferenceIdentifier.CACHE_VERSION);
+            if (cacheVersion != null && cacheVersion == version && color == null)
+                color = getIntegerPreference(context, PreferenceIdentifier.CACHE_COLOR);
+
             if (color == null) color = getDefaultColor(context);
 
             return color;

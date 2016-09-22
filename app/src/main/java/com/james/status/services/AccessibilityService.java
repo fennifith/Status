@@ -193,7 +193,19 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                             return;
                         }
 
-                        color = ColorUtils.getPrimaryColor(AccessibilityService.this, new ComponentName(packageName.toString(), className.toString()));
+                        Integer cacheVersion = data.getIntegerPreference(this, AppData.PreferenceIdentifier.CACHE_VERSION);
+                        if (cacheVersion != null && cacheVersion == data.version) {
+                            color = data.getIntegerPreference(this, AppData.PreferenceIdentifier.CACHE_COLOR);
+                        }
+
+                        if (color == null) {
+                            color = ColorUtils.getPrimaryColor(AccessibilityService.this, new ComponentName(packageName.toString(), className.toString()));
+
+                            if (color != null) {
+                                data.putPreference(this, AppData.PreferenceIdentifier.CACHE_COLOR, color);
+                                data.putPreference(this, AppData.PreferenceIdentifier.CACHE_VERSION, data.version);
+                            }
+                        }
 
                         if (color == null) {
                             color = getDefaultColor();
