@@ -127,8 +127,13 @@ public class AppData implements Parcelable {
     @Nullable
     public Boolean getSpecificBooleanPreference(Context context, PreferenceIdentifier identifier) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        if (prefs.contains(getIdentifierString(identifier)))
-            return prefs.getBoolean(getIdentifierString(identifier), false);
+        if (prefs.contains(getIdentifierString(identifier))) {
+            try {
+                return prefs.getBoolean(getIdentifierString(identifier), false);
+            } catch (ClassCastException e) {
+                return null;
+            }
+        }
         else
             return null;
     }
@@ -268,8 +273,13 @@ public class AppData implements Parcelable {
         @Nullable
         public Boolean getBooleanPreference(Context context, PreferenceIdentifier identifier) {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-            if (prefs.contains(getIdentifierString(identifier)))
-                return prefs.getBoolean(getIdentifierString(identifier), false);
+            if (prefs.contains(getIdentifierString(identifier))) {
+                try {
+                    return prefs.getBoolean(getIdentifierString(identifier), false);
+                } catch (ClassCastException e) {
+                    return null;
+                }
+            }
             else
                 return null;
         }
@@ -277,8 +287,13 @@ public class AppData implements Parcelable {
         @Nullable
         public Integer getIntegerPreference(Context context, PreferenceIdentifier identifier) {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-            if (prefs.contains(getIdentifierString(identifier)))
-                return prefs.getInt(getIdentifierString(identifier), 0);
+            if (prefs.contains(getIdentifierString(identifier))) {
+                try {
+                    return prefs.getInt(getIdentifierString(identifier), 0);
+                } catch (ClassCastException e) {
+                    return null;
+                }
+            }
             else
                 return null;
         }

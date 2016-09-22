@@ -19,7 +19,7 @@
 
             <com.james.status.views.CustomImageView
                 android:layout_width="match_parent"
-                android:layout_height="198dp"
+                android:layout_height="188dp"
                 android:scaleType="centerCrop"
                 app:layout_collapseMode="parallax"
                 android:id="@+id/header" />

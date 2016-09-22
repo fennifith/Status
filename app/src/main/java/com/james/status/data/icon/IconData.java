@@ -339,8 +339,13 @@ public class IconData<T extends BroadcastReceiver> {
     @Nullable
     public Boolean getBooleanPreference(PreferenceIdentifier identifier) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        if (prefs.contains(getIdentifierString(identifier)))
-            return prefs.getBoolean(getIdentifierString(identifier), false);
+        if (prefs.contains(getIdentifierString(identifier))) {
+            try {
+                return prefs.getBoolean(getIdentifierString(identifier), false);
+            } catch (ClassCastException e) {
+                return null;
+            }
+        }
         else
             return null;
     }
@@ -348,8 +353,13 @@ public class IconData<T extends BroadcastReceiver> {
     @Nullable
     public Integer getIntegerPreference(PreferenceIdentifier identifier) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        if (prefs.contains(getIdentifierString(identifier)))
-            return prefs.getInt(getIdentifierString(identifier), 0);
+        if (prefs.contains(getIdentifierString(identifier))) {
+            try {
+                return prefs.getInt(getIdentifierString(identifier), 0);
+            } catch (ClassCastException e) {
+                return null;
+            }
+        }
         else
             return null;
     }
@@ -357,8 +367,13 @@ public class IconData<T extends BroadcastReceiver> {
     @Nullable
     public String getStringPreference(PreferenceIdentifier identifier) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        if (prefs.contains(getIdentifierString(identifier)))
-            return prefs.getString(getIdentifierString(identifier), null);
+        if (prefs.contains(getIdentifierString(identifier))) {
+            try {
+                return prefs.getString(getIdentifierString(identifier), null);
+            } catch (ClassCastException e) {
+                return null;
+            }
+        }
         else
             return null;
     }
@@ -369,7 +384,12 @@ public class IconData<T extends BroadcastReceiver> {
         Resources resources = context.getResources();
 
         if (prefs.contains(getIdentifierString(identifier) + "-length")) {
-            int length = prefs.getInt(getIdentifierString(identifier) + "-length", 0);
+            int length = 0;
+            try {
+                length = prefs.getInt(getIdentifierString(identifier) + "-length", 0);
+            } catch (ClassCastException ignored) {
+            }
+            
             int[] value = new int[length];
 
             for (int i = 0; i < length; i++) {
