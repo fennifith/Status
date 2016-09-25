@@ -58,7 +58,7 @@
     <string name="preference_date_desc">Shows the date next to the time in the clock.</string>
     <string name="preference_show_notifications">Show Notifications</string>
     <string name="preference_heads_up">Show Heads-Up Overlays</string>
-    <string name="preference_heads_up_desc">Notifications will \'peek\' from the top of the screen whenever an important notification is received. If you are on Android M or higher, you may want to disable the system heads up notifications to prevent annoying things from happening. Unfortunately it is not possible to disable them on Android L.</string>
+    <string name="preference_heads_up_desc">Notifications will \'peek\' from the top of the screen whenever an important notification is received.</string>
     <string name="preference_heads_up_duration">Heads-Up Overlay Duration (seconds)</string>
     <string name="preference_heads_up_duration_desc">Set the amount of time for the app to show a heads-up notification for.</string>
     <string name="preference_battery_percent">Display Battery Percent</string>
@@ -110,6 +110,7 @@
     <string name="preference_show_text">Display Text</string>
     <string name="preference_notification_icon_size">Notification Icon Size</string>
     <string name="preference_time_format">Time Format</string>
+    <string name="preference_heads_up_layout">Heads Up Notification Style</string>
 
     <string name="icon_notifications">Notifications</string>
     <string name="icon_clock">Clock</string>
@@ -124,6 +125,9 @@
     <string name="icon_ringer">Ringer Volume Icon</string>
     <string name="icon_nfc">NFC Icon</string>
     <string name="icon_headphone">Headphones Icon</string>
+
+    <string name="heads_up_plain">Plain</string>
+    <string name="heads_up_card">Cards</string>
 
     <string name="gravity_center">Center</string>
     <string name="gravity_left">Left</string>

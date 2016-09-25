@@ -20,7 +20,8 @@ public class PreferenceUtils {
         STATUS_LOCKSCREEN_EXPAND,
         STATUS_HEADS_UP_DURATION,
         STATUS_BACKGROUND_ANIMATIONS,
-        STATUS_ICON_ANIMATIONS
+        STATUS_ICON_ANIMATIONS,
+        STATUS_HEADS_UP_LAYOUT
     }
 
     @Nullable

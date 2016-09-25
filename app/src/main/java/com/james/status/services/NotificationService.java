@@ -1,13 +1,17 @@
 package com.james.status.services;
 
 import android.annotation.TargetApi;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.NotificationCompat;
 
+import com.james.status.R;
 import com.james.status.data.AppData;
 import com.james.status.data.NotificationData;
 import com.james.status.data.icon.NotificationsIconData;
@@ -20,13 +24,15 @@ import java.util.Arrays;
 @TargetApi(18)
 public class NotificationService extends NotificationListenerService {
 
-    public static final String
-            ACTION_GET_NOTIFICATIONS = "com.james.status.ACTION_GET_NOTIFICATIONS",
-            ACTION_CANCEL_NOTIFICATION = "com.james.status.ACTION_CANCEL_NOTIFICATION",
-            EXTRA_NOTIFICATION = "com.james.status.EXTRA_NOTIFICATION";
+    public static final String ACTION_GET_NOTIFICATIONS = "com.james.status.ACTION_GET_NOTIFICATIONS";
+    public static final String ACTION_CANCEL_NOTIFICATION = "com.james.status.ACTION_CANCEL_NOTIFICATION";
+    public static final String EXTRA_NOTIFICATION = "com.james.status.EXTRA_NOTIFICATION";
+
+    public static final int BLANK_NOTIFICATION = 254231;
 
     private boolean isConnected, shouldSendOnConnect;
     private PackageManager packageManager;
+    private NotificationManagerCompat notificationManager;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -56,6 +62,7 @@ public class NotificationService extends NotificationListenerService {
     public void onListenerConnected() {
         super.onListenerConnected();
         packageManager = getPackageManager();
+        notificationManager = NotificationManagerCompat.from(this);
         isConnected = true;
 
         if (shouldSendOnConnect) {
@@ -88,6 +95,20 @@ public class NotificationService extends NotificationListenerService {
 
         if (enabled != null && enabled && isEnabled && !StaticUtils.shouldUseCompatNotifications(this)) {
             NotificationData notification = new NotificationData(sbn, getKey(sbn));
+
+            if (notification.shouldShowHeadsUp(this)) {
+                if (!sbn.getPackageName().matches("com.james.status") && sbn.getId() != BLANK_NOTIFICATION) {
+                    notificationManager.notify(BLANK_NOTIFICATION, new Notification.Builder(this)
+                            .setContentTitle("").setContentText("")
+                            .setSmallIcon(R.drawable.transparent)
+                            .setPriority(Notification.PRIORITY_DEFAULT)
+                            .setFullScreenIntent(PendingIntent.getBroadcast(this, 0, new Intent(), 0), true)
+                            .setAutoCancel(true)
+                            .build());
+
+                    notificationManager.cancel(BLANK_NOTIFICATION);
+                } else return;
+            }
 
             Intent intent = new Intent(NotificationsIconData.ACTION_NOTIFICATION_ADDED);
             intent.putExtra(NotificationsIconData.EXTRA_NOTIFICATION, notification);

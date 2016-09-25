@@ -16,7 +16,9 @@ import com.james.status.adapters.PreferenceSectionAdapter;
 import com.james.status.data.preference.BooleanPreferenceData;
 import com.james.status.data.preference.ColorPreferenceData;
 import com.james.status.data.preference.IntegerPreferenceData;
+import com.james.status.data.preference.ListPreferenceData;
 import com.james.status.data.preference.PreferenceData;
+import com.james.status.services.StatusService;
 import com.james.status.utils.PreferenceUtils;
 import com.james.status.utils.StaticUtils;
 
@@ -175,11 +177,29 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                                 getString(R.string.preference_heads_up_duration_desc),
                                 PreferenceData.Identifier.SectionIdentifier.NOTIFICATIONS
                         ),
-                        11,
+                        10,
                         getString(R.string.unit_seconds),
                         0,
                         20,
                         null
+                ),
+                new ListPreferenceData(
+                        getContext(),
+                        new PreferenceData.Identifier(
+                                PreferenceUtils.PreferenceIdentifier.STATUS_HEADS_UP_LAYOUT,
+                                getString(R.string.preference_heads_up_layout),
+                                PreferenceData.Identifier.SectionIdentifier.NOTIFICATIONS
+                        ),
+                        null,
+                        StatusService.HEADSUP_LAYOUT_PLAIN,
+                        new ListPreferenceData.ListPreference(
+                                getString(R.string.heads_up_plain),
+                                StatusService.HEADSUP_LAYOUT_PLAIN
+                        ),
+                        new ListPreferenceData.ListPreference(
+                                getString(R.string.heads_up_card),
+                                StatusService.HEADSUP_LAYOUT_CARD
+                        )
                 )
         ));
 

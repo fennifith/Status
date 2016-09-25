@@ -70,6 +70,9 @@ public class StatusService extends Service {
     public static final String EXTRA_IS_FULLSCREEN = "com.james.status.EXTRA_IS_FULLSCREEN";
     public static final String EXTRA_IS_HOME_SCREEN = "com.james.status.EXTRA_IS_HOME_SCREEN";
 
+    public static final int HEADSUP_LAYOUT_PLAIN = 0;
+    public static final int HEADSUP_LAYOUT_CARD = 1;
+
     private StatusView statusView;
     private View fullscreenView;
     private View headsUpView;
@@ -85,7 +88,7 @@ public class StatusService extends Service {
     private NotificationData headsUpNotification;
 
     private boolean shouldFireClickEvent = true;
-    private int headsUpDuration = 11000;
+    private int headsUpDuration = 10000;
 
     @Override
     public void onCreate() {
@@ -267,15 +270,25 @@ public class StatusService extends Service {
     }
 
     public void showHeadsUp(NotificationData notification) {
-        headsUpView = LayoutInflater.from(this).inflate(R.layout.layout_notification, null);
+        Integer headsUpLayout = PreferenceUtils.getIntegerPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_HEADS_UP_LAYOUT);
+        if (headsUpLayout == null) headsUpLayout = HEADSUP_LAYOUT_PLAIN;
+
+        switch (headsUpLayout) {
+            case HEADSUP_LAYOUT_PLAIN:
+                headsUpView = LayoutInflater.from(this).inflate(R.layout.layout_notification, null);
+                break;
+            case HEADSUP_LAYOUT_CARD:
+                headsUpView = LayoutInflater.from(this).inflate(R.layout.layout_notification_card, null);
+                break;
+        }
 
         ViewCompat.setElevation(headsUpView, StaticUtils.getPixelsFromDp(this, 2));
 
         headsUpView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                if (headsUpView != null)
-                    headsUpView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                if (headsUpView == null) return;
+                headsUpView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
                 ValueAnimator animator = ValueAnimator.ofInt(-headsUpView.getHeight(), 0);
                 animator.setDuration(250);
@@ -403,7 +416,7 @@ public class StatusService extends Service {
 
         WindowManager.LayoutParams params = new WindowManager.LayoutParams(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.TYPE_SYSTEM_ERROR, WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH, PixelFormat.TRANSLUCENT);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
-            params.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
+            params.type = WindowManager.LayoutParams.TYPE_PHONE;
 
         params.gravity = Gravity.TOP;
 

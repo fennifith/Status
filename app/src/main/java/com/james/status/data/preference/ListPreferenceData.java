@@ -62,7 +62,7 @@ public class ListPreferenceData extends PreferenceData<Integer> {
 
                         PreferenceUtils.PreferenceIdentifier identifier = getIdentifier().getPreference();
                         if (identifier != null)
-                            PreferenceUtils.putPreference(getContext(), getIdentifier().getPreference(), preference.id);
+                            PreferenceUtils.putPreference(getContext(), identifier, preference.id);
 
                         onPreferenceChange(preference.id);
                     }
