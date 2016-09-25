@@ -23,6 +23,7 @@ import com.james.status.data.IconStyleData;
 import com.james.status.data.preference.BooleanPreferenceData;
 import com.james.status.data.preference.IconPreferenceData;
 import com.james.status.data.preference.IntegerPreferenceData;
+import com.james.status.data.preference.ListPreferenceData;
 import com.james.status.data.preference.PreferenceData;
 import com.james.status.utils.StaticUtils;
 import com.james.status.views.CustomImageView;
@@ -32,6 +33,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public abstract class IconData<T extends BroadcastReceiver> {
+
+    public static final int LEFT_GRAVITY = -1, CENTER_GRAVITY = 0, RIGHT_GRAVITY = 1;
 
     private Context context;
     private DrawableListener drawableListener;
@@ -101,15 +104,15 @@ public abstract class IconData<T extends BroadcastReceiver> {
                         iconView.setImageDrawable(drawable);
                     } else {
                         iconView.setVisibility(View.GONE);
-                        if (getText() == null)
+                        if (canHazText() && getText() == null)
                             v.setVisibility(View.GONE);
                     }
                 }
             }
-
-            if (hasDrawableListener()) getDrawableListener().onUpdate(drawable);
-            this.drawable = drawable;
         }
+
+        if (hasDrawableListener()) getDrawableListener().onUpdate(drawable);
+        this.drawable = drawable;
     }
 
     public final void onTextUpdate(@Nullable String text) {
@@ -123,7 +126,7 @@ public abstract class IconData<T extends BroadcastReceiver> {
                     textView.setText(text);
                 } else {
                     textView.setVisibility(View.GONE);
-                    if (getDrawable() == null)
+                    if (canHazDrawable() && getDrawable() == null)
                         v.setVisibility(View.GONE);
                 }
             }
@@ -135,7 +138,7 @@ public abstract class IconData<T extends BroadcastReceiver> {
 
     public final boolean isVisible() {
         Boolean isVisible = getBooleanPreference(PreferenceIdentifier.VISIBILITY);
-        return (isVisible == null || isVisible) && (hasText() || hasDrawable());
+        return isVisible == null || isVisible;
     }
 
     public boolean canHazDrawable() {
@@ -145,7 +148,7 @@ public abstract class IconData<T extends BroadcastReceiver> {
 
     public boolean hasDrawable() {
         Boolean hasDrawable = getBooleanPreference(PreferenceIdentifier.ICON_VISIBILITY);
-        return hasDrawable == null || hasDrawable;
+        return canHazDrawable() && (hasDrawable == null || hasDrawable);
     }
 
     public boolean canHazText() {
@@ -155,20 +158,16 @@ public abstract class IconData<T extends BroadcastReceiver> {
 
     public boolean hasText() {
         Boolean hasText = getBooleanPreference(PreferenceIdentifier.TEXT_VISIBILITY);
-        return hasText != null && hasText;
+        return canHazText() && (hasText != null && hasText);
     }
 
     public T getReceiver() {
         return null;
     }
 
-    ;
-
     public IntentFilter getIntentFilter() {
         return new IntentFilter();
     }
-
-    ;
 
     public void register() {
         if (receiver == null) receiver = getReceiver();
@@ -218,10 +217,14 @@ public abstract class IconData<T extends BroadcastReceiver> {
         return position;
     }
 
-    public final boolean isCentered() {
-        Boolean isCenter = getBooleanPreference(PreferenceIdentifier.CENTER_GRAVITY);
-        if (isCenter == null) isCenter = false;
-        return isCenter;
+    public int getDefaultGravity() {
+        return RIGHT_GRAVITY;
+    }
+
+    public final int getGravity() {
+        Integer gravity = getIntegerPreference(PreferenceIdentifier.GRAVITY);
+        if (gravity == null) gravity = getDefaultGravity();
+        return gravity;
     }
 
     @Nullable
@@ -263,10 +266,12 @@ public abstract class IconData<T extends BroadcastReceiver> {
             float iconPaddingDp = StaticUtils.getPixelsFromDp(getContext(), getIconPadding());
             v.setPadding((int) iconPaddingDp, 0, (int) iconPaddingDp, 0);
 
-            ((TextView) v.findViewById(R.id.text)).setTextSize(TypedValue.COMPLEX_UNIT_SP, getTextSize());
+            TextView textView = (TextView) v.findViewById(R.id.text);
+            if (textView != null) textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, getTextSize());
 
-            if (!hasDrawable()) v.findViewById(R.id.icon).setVisibility(View.GONE);
-            if (!hasText()) v.findViewById(R.id.icon).setVisibility(View.GONE);
+            View iconView = v.findViewById(R.id.icon);
+            if (iconView != null && !hasDrawable()) iconView.setVisibility(View.GONE);
+            if (textView != null && !hasText()) textView.setVisibility(View.GONE);
             v.setVisibility(View.GONE);
         }
 
@@ -311,20 +316,31 @@ public abstract class IconData<T extends BroadcastReceiver> {
         }
 
         preferences.addAll(Arrays.asList(
-                new BooleanPreferenceData(
+                new ListPreferenceData(
                         getContext(),
                         new PreferenceData.Identifier(
-                                getContext().getString(R.string.preference_center_gravity),
-                                getContext().getString(R.string.preference_center_gravity_desc)
+                                getContext().getString(R.string.preference_gravity)
                         ),
-                        isCentered(),
-                        new PreferenceData.OnPreferenceChangeListener<Boolean>() {
+                        new PreferenceData.OnPreferenceChangeListener<Integer>() {
                             @Override
-                            public void onPreferenceChange(Boolean preference) {
-                                putPreference(PreferenceIdentifier.CENTER_GRAVITY, preference);
+                            public void onPreferenceChange(Integer preference) {
+                                putPreference(PreferenceIdentifier.GRAVITY, preference);
                                 StaticUtils.updateStatusService(getContext());
                             }
-                        }
+                        },
+                        getGravity(),
+                        new ListPreferenceData.ListPreference(
+                                getContext().getString(R.string.gravity_left),
+                                LEFT_GRAVITY
+                        ),
+                        new ListPreferenceData.ListPreference(
+                                getContext().getString(R.string.gravity_center),
+                                CENTER_GRAVITY
+                        ),
+                        new ListPreferenceData.ListPreference(
+                                getContext().getString(R.string.gravity_right),
+                                RIGHT_GRAVITY
+                        )
                 ),
                 new IntegerPreferenceData(
                         getContext(),
@@ -503,7 +519,7 @@ public abstract class IconData<T extends BroadcastReceiver> {
     public enum PreferenceIdentifier {
         VISIBILITY,
         POSITION,
-        CENTER_GRAVITY,
+        GRAVITY,
         TEXT_VISIBILITY,
         TEXT_FORMAT,
         TEXT_SIZE,

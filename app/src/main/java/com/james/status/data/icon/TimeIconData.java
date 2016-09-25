@@ -54,6 +54,11 @@ public class TimeIconData extends IconData<TimeIconData.TimeReceiver> {
     }
 
     @Override
+    public int getDefaultGravity() {
+        return CENTER_GRAVITY;
+    }
+
+    @Override
     public TimeReceiver getReceiver() {
         return new TimeReceiver();
     }

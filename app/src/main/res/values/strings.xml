@@ -94,16 +94,14 @@
     <string name="preference_airplane_mode_icon">Airplane Mode Icon Style</string>
     <string name="preference_show_alarm_icon">Show Alarm Clock Icon</string>
     <string name="preference_alarm_icon">Alarm Clock Icon Style</string>
-    <string name="preference_show_ringer_icon">Show Ringer Icon</string>Left="16dp"
-    android:paddingRight="16dp"
+    <string name="preference_show_ringer_icon">Show Ringer Icon</string>
     <string name="preference_ringer_icon">Ringer Icon Style</string>
     <string name="preference_icon_padding">Horizontal Padding (dp)</string>
     <string name="preference_icon_scale">Icon Scale (dp)</string>
     <string name="preference_text_size">Text Size (sp)</string>
     <string name="preference_color_notification">Screen-Specific Color Notifications</string>
     <string name="preference_color_notification_desc">The app will show a notification as a shortcut to set the color for an app if the a color has not been found.</string>
-    <string name="preference_center_gravity">Show in Center</string>
-    <string name="preference_center_gravity_desc">This will center the element inside of the status bar.</string>
+    <string name="preference_gravity">Alignment</string>
     <string name="preference_background_animations">Background Color Animations</string>
     <string name="preference_background_animations_desc">This option allows you to enable or disable animating of the status bar background color. This may impact performance on slower devices.</string>
     <string name="preference_icon_animations">Icon Animations</string>
@@ -113,6 +111,7 @@
     <string name="preference_notification_icon_size">Notification Icon Size</string>
     <string name="preference_time_format">Time Format</string>
 
+    <string name="icon_notifications">Notifications</string>
     <string name="icon_clock">Clock</string>
     <string name="icon_battery">Battery Icon</string>
     <string name="icon_network">Network Icon</string>
@@ -125,6 +124,10 @@
     <string name="icon_ringer">Ringer Volume Icon</string>
     <string name="icon_nfc">NFC Icon</string>
     <string name="icon_headphone">Headphones Icon</string>
+
+    <string name="gravity_center">Center</string>
+    <string name="gravity_left">Left</string>
+    <string name="gravity_right">Right</string>
 
     <string name="notification_color">Set Screen-Specific Color</string>
     <string name="notification_color_desc">Status couldn\'t find a color to use for this application, so it\'s reverted to the default color. You can specify a color to use by clicking this notification.</string>

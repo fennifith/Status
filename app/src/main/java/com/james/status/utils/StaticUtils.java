@@ -131,13 +131,20 @@ public class StaticUtils {
     }
 
     public static boolean isStatusServiceRunning(Context context) {
-        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (StatusService.class.getName().equals(service.service.getClassName())) {
-                return true;
+        Boolean isEnabled = PreferenceUtils.getBooleanPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED);
+        if (isEnabled != null && isEnabled) {
+            ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+            for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+                if (StatusService.class.getName().equals(service.service.getClassName())) {
+                    return true;
+                }
             }
-        }
-        return false;
+
+            Intent intent = new Intent(StatusService.ACTION_START);
+            intent.setClass(context, StatusService.class);
+            context.startService(intent);
+            return true;
+        } else return false;
     }
 
     public static void updateStatusService(Context context) {

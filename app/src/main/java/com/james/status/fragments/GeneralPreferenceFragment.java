@@ -159,39 +159,6 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                 new BooleanPreferenceData(
                         getContext(),
                         new PreferenceData.Identifier(
-                                PreferenceUtils.PreferenceIdentifier.SHOW_NOTIFICATIONS,
-                                getString(R.string.preference_show_notifications),
-                                PreferenceData.Identifier.SectionIdentifier.NOTIFICATIONS
-                        ),
-                        true,
-                        new PreferenceData.OnPreferenceChangeListener<Boolean>() {
-                            @Override
-                            public void onPreferenceChange(Boolean preference) {
-                                StaticUtils.updateStatusService(getContext());
-                            }
-                        }
-                ),
-                /*new IntegerPreferenceData(
-                        getContext(),
-                        new PreferenceData.Identifier(
-                                PreferenceUtils.PreferenceIdentifier.STATUS_ICON_SCALE,
-                                getString(R.string.preference_notification_icon_size),
-                                PreferenceData.Identifier.SectionIdentifier.NOTIFICATIONS
-                        ),
-                        24,
-                        getString(R.string.unit_dp),
-                        0,
-                        null,
-                        new PreferenceData.OnPreferenceChangeListener<Integer>() {
-                            @Override
-                            public void onPreferenceChange(Integer preference) {
-                                StaticUtils.updateStatusService(getContext());
-                            }
-                        }
-                ),*/
-                new BooleanPreferenceData(
-                        getContext(),
-                        new PreferenceData.Identifier(
                                 PreferenceUtils.PreferenceIdentifier.STATUS_NOTIFICATIONS_HEADS_UP,
                                 getString(R.string.preference_heads_up),
                                 getString(R.string.preference_heads_up_desc),

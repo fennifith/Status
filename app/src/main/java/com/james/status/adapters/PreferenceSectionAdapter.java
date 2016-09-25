@@ -2,7 +2,6 @@ package com.james.status.adapters;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,7 +11,6 @@ import android.widget.TextView;
 
 import com.james.status.R;
 import com.james.status.data.preference.PreferenceData;
-import com.james.status.utils.StaticUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,8 +57,6 @@ public class PreferenceSectionAdapter extends RecyclerView.Adapter<PreferenceSec
 
         if (items.size() > 0) holder.v.setVisibility(View.VISIBLE);
         else holder.v.setVisibility(View.GONE);
-
-        ViewCompat.setElevation(holder.v.findViewById(R.id.background), StaticUtils.getPixelsFromDp(context, 2));
     }
 
     @Override

@@ -5,8 +5,10 @@ import android.app.AlarmManager;
 import android.app.KeyguardManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
@@ -17,6 +19,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
+import android.support.v4.util.ArrayMap;
 import android.support.v4.view.ViewCompat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -42,6 +45,7 @@ import com.james.status.data.icon.HeadphoneIconData;
 import com.james.status.data.icon.IconData;
 import com.james.status.data.icon.NetworkIconData;
 import com.james.status.data.icon.NfcIconData;
+import com.james.status.data.icon.NotificationsIconData;
 import com.james.status.data.icon.RingerIconData;
 import com.james.status.data.icon.TimeIconData;
 import com.james.status.data.icon.WifiIconData;
@@ -58,17 +62,13 @@ import java.util.List;
 
 public class StatusService extends Service {
 
-    public static final String
-            ACTION_START = "com.james.status.ACTION_START",
-            ACTION_STOP = "com.james.status.ACTION_STOP",
-            ACTION_UPDATE = "com.james.status.ACTION_UPDATE",
-            ACTION_NOTIFICATION_ADDED = "com.james.status.ACTION_NOTIFICATION_ADDED",
-            ACTION_NOTIFICATION_REMOVED = "com.james.status.ACTION_NOTIFICATION_REMOVED",
-            EXTRA_NOTIFICATION = "com.james.status.EXTRA_NOTIFICATION",
-            EXTRA_COLOR = "com.james.status.EXTRA_COLOR",
-            EXTRA_IS_SYSTEM_FULLSCREEN = "com.james.status.EXTRA_IS_SYSTEM_FULLSCREEN",
-            EXTRA_IS_FULLSCREEN = "com.james.status.EXTRA_IS_FULLSCREEN",
-            EXTRA_IS_HOME_SCREEN = "com.james.status.EXTRA_IS_HOME_SCREEN";
+    public static final String ACTION_START = "com.james.status.ACTION_START";
+    public static final String ACTION_STOP = "com.james.status.ACTION_STOP";
+    public static final String ACTION_UPDATE = "com.james.status.ACTION_UPDATE";
+    public static final String EXTRA_COLOR = "com.james.status.EXTRA_COLOR";
+    public static final String EXTRA_IS_SYSTEM_FULLSCREEN = "com.james.status.EXTRA_IS_SYSTEM_FULLSCREEN";
+    public static final String EXTRA_IS_FULLSCREEN = "com.james.status.EXTRA_IS_FULLSCREEN";
+    public static final String EXTRA_IS_HOME_SCREEN = "com.james.status.EXTRA_IS_HOME_SCREEN";
 
     private StatusView statusView;
     private View fullscreenView;
@@ -76,6 +76,9 @@ public class StatusService extends Service {
 
     private KeyguardManager keyguardManager;
     private WindowManager windowManager;
+
+    private NotificationReceiver notificationReceiver;
+    private ArrayMap<String, NotificationData> notifications;
 
     private Handler headsUpHandler;
     private Runnable headsUpRunnable, headsUpDisabledRunnable;
@@ -90,6 +93,8 @@ public class StatusService extends Service {
 
         windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
+
+        notificationReceiver = new NotificationReceiver();
 
         headsUpHandler = new Handler();
         headsUpRunnable = new Runnable() {
@@ -157,38 +162,6 @@ public class StatusService extends Service {
                     statusView.setFullscreen(intent.getBooleanExtra(EXTRA_IS_FULLSCREEN, isFullscreen()));
                 }
                 break;
-            case ACTION_NOTIFICATION_ADDED:
-                NotificationData notification = intent.getParcelableExtra(EXTRA_NOTIFICATION);
-
-                if (!statusView.containsNotification(notification) && notification.shouldShowHeadsUp(this) && headsUpNotification == null) {
-                    showHeadsUp(notification);
-                    headsUpNotification = notification;
-                } else if (notification.shouldHideStatusBar()) {
-                    statusView.setSystemShowing(true);
-                    headsUpNotification = notification;
-
-                    Integer duration = PreferenceUtils.getIntegerPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_HEADS_UP_DURATION);
-                    if (duration != null) headsUpDuration = duration * 1000;
-
-                    headsUpHandler.postDelayed(headsUpDisabledRunnable, headsUpDuration);
-                }
-
-                statusView.addNotification(notification);
-                break;
-            case ACTION_NOTIFICATION_REMOVED:
-                notification = intent.getParcelableExtra(EXTRA_NOTIFICATION);
-                statusView.removeNotification(notification);
-
-                if (headsUpNotification != null && headsUpNotification.equals(notification)) {
-                    if (headsUpView != null && headsUpView.getParent() != null) removeHeadsUpView();
-                    else {
-                        statusView.setSystemShowing(false);
-                        statusView.setFullscreen(isFullscreen());
-                        headsUpHandler.removeCallbacks(headsUpDisabledRunnable);
-                        headsUpNotification = null;
-                    }
-                }
-                break;
         }
         return START_STICKY;
     }
@@ -215,15 +188,9 @@ public class StatusService extends Service {
             params.gravity = Gravity.TOP;
 
             windowManager.addView(statusView, params);
-        }
+        } else statusView.unregister();
 
         statusView.setUp();
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            Intent intent = new Intent(NotificationService.ACTION_GET_NOTIFICATIONS);
-            intent.setClass(this, NotificationService.class);
-            startService(intent);
-        }
 
         if (fullscreenView == null || fullscreenView.getParent() == null) {
             WindowManager.LayoutParams params = new WindowManager.LayoutParams(1, WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, PixelFormat.TRANSPARENT);
@@ -247,6 +214,12 @@ public class StatusService extends Service {
         statusView.setIcons(getIcons(this));
         statusView.register();
 
+        IntentFilter notificationFilter = new IntentFilter();
+        notificationFilter.addAction(NotificationsIconData.ACTION_NOTIFICATION_ADDED);
+        notificationFilter.addAction(NotificationsIconData.ACTION_NOTIFICATION_REMOVED);
+
+        registerReceiver(notificationReceiver, notificationFilter);
+
         if (StaticUtils.isAccessibilityServiceRunning(this)) {
             Intent intent = new Intent(AccessibilityService.ACTION_GET_COLOR);
             intent.setClass(this, AccessibilityService.class);
@@ -264,6 +237,8 @@ public class StatusService extends Service {
 
     @Override
     public void onDestroy() {
+        unregisterReceiver(notificationReceiver);
+
         if (fullscreenView != null) {
             windowManager.removeView(fullscreenView);
             fullscreenView = null;
@@ -276,6 +251,19 @@ public class StatusService extends Service {
         }
 
         super.onDestroy();
+    }
+
+    private boolean containsNotification(NotificationData notification) {
+        if (notifications == null) notifications = new ArrayMap<>();
+        for (NotificationData data : notifications.values()) {
+            if (data.equals(notification)) return true;
+        }
+        return false;
+    }
+
+    public ArrayMap<String, NotificationData> getNotifications() {
+        if (notifications == null) notifications = new ArrayMap<>();
+        return notifications;
     }
 
     public void showHeadsUp(NotificationData notification) {
@@ -427,7 +415,7 @@ public class StatusService extends Service {
         headsUpHandler.removeCallbacks(headsUpRunnable);
 
         ValueAnimator animator = ValueAnimator.ofInt((int) headsUpView.getY(), -headsUpView.getHeight());
-        animator.setDuration(150);
+        animator.setDuration(250);
         animator.setInterpolator(new DecelerateInterpolator());
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -461,7 +449,7 @@ public class StatusService extends Service {
         windowManager.getDefaultDisplay().getSize(size);
 
         ValueAnimator animator = ValueAnimator.ofInt((int) headsUpView.getX(), headsUpView.getX() > 0 ? size.x : -size.x);
-        animator.setDuration(150);
+        animator.setDuration(250);
         animator.setInterpolator(new DecelerateInterpolator());
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -482,6 +470,7 @@ public class StatusService extends Service {
 
     public static List<IconData> getIcons(Context context) {
         List<IconData> icons = new ArrayList<>();
+        icons.add(new NotificationsIconData(context));
         icons.add(new TimeIconData(context));
         icons.add(new BatteryIconData(context));
         icons.add(new NetworkIconData(context));
@@ -509,5 +498,49 @@ public class StatusService extends Service {
         });
 
         return icons;
+    }
+
+    private class NotificationReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent == null) return;
+            String action = intent.getAction();
+            if (action == null) return;
+            switch (action) {
+                case NotificationsIconData.ACTION_NOTIFICATION_ADDED:
+                    NotificationData notification = intent.getParcelableExtra(NotificationsIconData.EXTRA_NOTIFICATION);
+
+                    if (!containsNotification(notification) && notification.shouldShowHeadsUp(StatusService.this) && headsUpNotification == null) {
+                        showHeadsUp(notification);
+                        headsUpNotification = notification;
+                    } else if (notification.shouldHideStatusBar()) {
+                        statusView.setSystemShowing(true);
+                        headsUpNotification = notification;
+
+                        Integer duration = PreferenceUtils.getIntegerPreference(StatusService.this, PreferenceUtils.PreferenceIdentifier.STATUS_HEADS_UP_DURATION);
+                        if (duration != null) headsUpDuration = duration * 1000;
+
+                        headsUpHandler.postDelayed(headsUpDisabledRunnable, headsUpDuration);
+                    }
+
+                    notifications.put(notification.getKey(), notification);
+                    break;
+                case NotificationsIconData.ACTION_NOTIFICATION_REMOVED:
+                    notification = intent.getParcelableExtra(NotificationsIconData.EXTRA_NOTIFICATION);
+                    notifications.remove(notification.getKey());
+
+                    if (headsUpNotification != null && headsUpNotification.equals(notification)) {
+                        if (headsUpView != null && headsUpView.getParent() != null)
+                            removeHeadsUpView();
+                        else {
+                            statusView.setSystemShowing(false);
+                            statusView.setFullscreen(isFullscreen());
+                            headsUpHandler.removeCallbacks(headsUpDisabledRunnable);
+                            headsUpNotification = null;
+                        }
+                    }
+                    break;
+            }
+        }
     }
 }

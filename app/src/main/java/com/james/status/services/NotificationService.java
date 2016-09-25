@@ -10,6 +10,7 @@ import android.support.v7.app.NotificationCompat;
 
 import com.james.status.data.AppData;
 import com.james.status.data.NotificationData;
+import com.james.status.data.icon.NotificationsIconData;
 import com.james.status.utils.PreferenceUtils;
 import com.james.status.utils.StaticUtils;
 
@@ -88,11 +89,9 @@ public class NotificationService extends NotificationListenerService {
         if (enabled != null && enabled && isEnabled && !StaticUtils.shouldUseCompatNotifications(this)) {
             NotificationData notification = new NotificationData(sbn, getKey(sbn));
 
-            Intent intent = new Intent(StatusService.ACTION_NOTIFICATION_ADDED);
-            intent.setClass(this, StatusService.class);
-            intent.putExtra(StatusService.EXTRA_NOTIFICATION, notification);
-
-            startService(intent);
+            Intent intent = new Intent(NotificationsIconData.ACTION_NOTIFICATION_ADDED);
+            intent.putExtra(NotificationsIconData.EXTRA_NOTIFICATION, notification);
+            sendBroadcast(intent);
         }
     }
 
@@ -100,11 +99,9 @@ public class NotificationService extends NotificationListenerService {
     public void onNotificationRemoved(StatusBarNotification sbn) {
         Boolean enabled = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED);
         if (enabled != null && enabled && !StaticUtils.shouldUseCompatNotifications(this)) {
-            Intent intent = new Intent(StatusService.ACTION_NOTIFICATION_REMOVED);
-            intent.setClass(this, StatusService.class);
-            intent.putExtra(StatusService.EXTRA_NOTIFICATION, new NotificationData(sbn, getKey(sbn)));
-
-            startService(intent);
+            Intent intent = new Intent(NotificationsIconData.ACTION_NOTIFICATION_REMOVED);
+            intent.putExtra(NotificationsIconData.EXTRA_NOTIFICATION, new NotificationData(sbn, getKey(sbn)));
+            sendBroadcast(intent);
         }
     }
 
@@ -135,11 +132,10 @@ public class NotificationService extends NotificationListenerService {
                 NotificationData notification = new NotificationData(sbn, getKey(sbn));
                 notification.priority = NotificationCompat.PRIORITY_DEFAULT;
 
-                Intent intent = new Intent(StatusService.ACTION_NOTIFICATION_ADDED);
-                intent.setClass(this, StatusService.class);
-                intent.putExtra(StatusService.EXTRA_NOTIFICATION, notification);
+                Intent intent = new Intent(NotificationsIconData.ACTION_NOTIFICATION_ADDED);
+                intent.putExtra(NotificationsIconData.EXTRA_NOTIFICATION, notification);
 
-                startService(intent);
+                sendBroadcast(intent);
             }
         }
     }

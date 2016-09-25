@@ -21,6 +21,7 @@ import com.james.status.R;
 import com.james.status.activities.AppSettingActivity;
 import com.james.status.data.AppData;
 import com.james.status.data.NotificationData;
+import com.james.status.data.icon.NotificationsIconData;
 import com.james.status.utils.ColorUtils;
 import com.james.status.utils.PreferenceUtils;
 import com.james.status.utils.StaticUtils;
@@ -115,11 +116,9 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                         if (parcelable instanceof Notification) {
                             NotificationData notification = new NotificationData((Notification) parcelable, event.getPackageName().toString());
 
-                            Intent intent = new Intent(StatusService.ACTION_NOTIFICATION_ADDED);
-                            intent.setClass(this, StatusService.class);
-                            intent.putExtra(StatusService.EXTRA_NOTIFICATION, notification);
-
-                            startService(intent);
+                            Intent intent = new Intent(NotificationsIconData.ACTION_NOTIFICATION_ADDED);
+                            intent.putExtra(NotificationsIconData.EXTRA_NOTIFICATION, notification);
+                            sendBroadcast(intent);
 
                             notifications.add(notification);
                         }
@@ -135,11 +134,9 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                             if (StaticUtils.shouldUseCompatNotifications(this)) {
                                 for (NotificationData notification : notifications) {
 
-                                    Intent intent = new Intent(StatusService.ACTION_NOTIFICATION_REMOVED);
-                                    intent.setClass(this, StatusService.class);
-                                    intent.putExtra(StatusService.EXTRA_NOTIFICATION, notification);
-
-                                    startService(intent);
+                                    Intent intent = new Intent(NotificationsIconData.ACTION_NOTIFICATION_REMOVED);
+                                    intent.putExtra(NotificationsIconData.EXTRA_NOTIFICATION, notification);
+                                    sendBroadcast(intent);
                                 }
 
                                 notifications.clear();

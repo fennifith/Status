@@ -12,18 +12,15 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
-import android.support.v4.util.ArrayMap;
 import android.support.v7.graphics.Palette;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.james.status.R;
-import com.james.status.data.NotificationData;
 import com.james.status.data.icon.IconData;
 import com.james.status.utils.ColorAnimator;
 import com.james.status.utils.ColorUtils;
@@ -36,12 +33,11 @@ import java.util.List;
 
 public class StatusView extends FrameLayout {
 
-    private LinearLayout status, notificationIconLayout, statusIconLayout, statusCenterIconLayout;
+    private LinearLayout status, leftLayout, rightLayout, centerLayout;
 
     @ColorInt
     private Integer color, iconColor = Color.WHITE;
     private boolean isSystemShowing, isFullscreen, isAnimations, isIconAnimations, isTintedIcons, isContrastIcons;
-    private ArrayMap<String, NotificationData> notifications;
 
     private List<IconData> icons;
 
@@ -69,13 +65,9 @@ public class StatusView extends FrameLayout {
         status = (LinearLayout) v.findViewById(R.id.status);
         status.getLayoutParams().height = StaticUtils.getStatusBarHeight(getContext());
 
-        notificationIconLayout = (LinearLayout) v.findViewById(R.id.notificationIcons);
-        statusIconLayout = (LinearLayout) v.findViewById(R.id.statusIcons);
-        statusCenterIconLayout = (LinearLayout) v.findViewById(R.id.statusCenterIcons);
-
-        Boolean isNotifications = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.SHOW_NOTIFICATIONS);
-        if (isNotifications != null && !isNotifications)
-            notificationIconLayout.setVisibility(View.INVISIBLE);
+        leftLayout = (LinearLayout) v.findViewById(R.id.notificationIcons);
+        rightLayout = (LinearLayout) v.findViewById(R.id.statusIcons);
+        centerLayout = (LinearLayout) v.findViewById(R.id.statusCenterIcons);
 
         Boolean isAnimations = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_BACKGROUND_ANIMATIONS);
         this.isAnimations = isAnimations != null ? isAnimations : true;
@@ -84,13 +76,13 @@ public class StatusView extends FrameLayout {
         this.isIconAnimations = isIconAnimations != null ? isIconAnimations : true;
 
         if (this.isIconAnimations) {
-            notificationIconLayout.setLayoutTransition(new LayoutTransition());
-            statusIconLayout.setLayoutTransition(new LayoutTransition());
-            statusCenterIconLayout.setLayoutTransition(new LayoutTransition());
+            leftLayout.setLayoutTransition(new LayoutTransition());
+            rightLayout.setLayoutTransition(new LayoutTransition());
+            centerLayout.setLayoutTransition(new LayoutTransition());
         } else {
-            notificationIconLayout.setLayoutTransition(null);
-            statusIconLayout.setLayoutTransition(null);
-            statusCenterIconLayout.setLayoutTransition(null);
+            leftLayout.setLayoutTransition(null);
+            rightLayout.setLayoutTransition(null);
+            centerLayout.setLayoutTransition(null);
         }
 
         Boolean isTintedIcons = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_TINTED_ICONS);
@@ -110,23 +102,33 @@ public class StatusView extends FrameLayout {
     }
 
     public void setIcons(List<IconData> icons) {
-        for (int i = (statusIconLayout.getChildCount() - 1); i >= 0; i--) {
-            View child = statusIconLayout.getChildAt(i);
+        for (int i = (leftLayout.getChildCount() - 1); i >= 0; i--) {
+            View child = leftLayout.getChildAt(i);
             Object tag = child.getTag();
 
             if (tag != null && tag instanceof IconData) {
                 ((IconData) tag).unregister();
-                statusIconLayout.removeViewAt(i);
+                leftLayout.removeViewAt(i);
             }
         }
 
-        for (int i = (statusCenterIconLayout.getChildCount() - 1); i >= 0; i--) {
-            View child = statusCenterIconLayout.getChildAt(i);
+        for (int i = (centerLayout.getChildCount() - 1); i >= 0; i--) {
+            View child = centerLayout.getChildAt(i);
             Object tag = child.getTag();
 
             if (tag != null && tag instanceof IconData) {
                 ((IconData) tag).unregister();
-                statusCenterIconLayout.removeViewAt(i);
+                centerLayout.removeViewAt(i);
+            }
+        }
+
+        for (int i = (rightLayout.getChildCount() - 1); i >= 0; i--) {
+            View child = rightLayout.getChildAt(i);
+            Object tag = child.getTag();
+
+            if (tag != null && tag instanceof IconData) {
+                ((IconData) tag).unregister();
+                rightLayout.removeViewAt(i);
             }
         }
 
@@ -142,12 +144,24 @@ public class StatusView extends FrameLayout {
                 public void onUpdate(@Nullable Drawable drawable) {
                     CustomImageView iconView = (CustomImageView) item.findViewById(R.id.icon);
 
-                    if (drawable != null) ImageUtils.tintDrawable(iconView, drawable, iconColor);
+                    if (drawable != null && iconView != null)
+                        ImageUtils.tintDrawable(iconView, drawable, iconColor);
+                    else if (iconView == null || !iconView.getParent().equals(item))
+                        setIconTint(item, iconColor);
                 }
             });
 
-            if (iconData.isCentered()) statusCenterIconLayout.addView(item, 0);
-            else statusIconLayout.addView(item, 0);
+            switch (iconData.getGravity()) {
+                case IconData.LEFT_GRAVITY:
+                    leftLayout.addView(item, 0);
+                    break;
+                case IconData.CENTER_GRAVITY:
+                    centerLayout.addView(item, 0);
+                    break;
+                case IconData.RIGHT_GRAVITY:
+                    rightLayout.addView(item, 0);
+                    break;
+            }
         }
     }
 
@@ -170,65 +184,6 @@ public class StatusView extends FrameLayout {
                 icon.unregister();
             }
         }
-    }
-
-    public void addNotification(NotificationData notification) {
-        if (notifications == null) notifications = new ArrayMap<>();
-
-        if (notificationIconLayout != null) {
-            for (int i = 0; i < notificationIconLayout.getChildCount(); i++) {
-                View child = notificationIconLayout.getChildAt(i);
-                Object tag = child.getTag();
-
-                if (tag != null && tag instanceof String && ((String) tag).matches(notification.getKey())) {
-                    notificationIconLayout.removeView(child);
-                    notifications.remove(notification.getKey());
-                }
-            }
-
-            View v = getIconView();
-            v.setTag(notification.getKey());
-
-            Drawable drawable = notification.getIcon(getContext());
-
-            if (drawable != null) {
-                ImageUtils.tintDrawable((CustomImageView) v.findViewById(R.id.icon), drawable, iconColor);
-
-                notificationIconLayout.addView(v);
-
-                Integer iconScale = PreferenceUtils.getIntegerPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_ICON_SCALE);
-                if (iconScale == null) iconScale = 24;
-
-                setIconVisibility(v, null, (int) StaticUtils.getPixelsFromDp(getContext(), iconScale), true);
-
-                notifications.put(notification.getKey(), notification);
-            }
-        }
-    }
-
-    public void removeNotification(NotificationData notification) {
-        if (notificationIconLayout != null) {
-            for (int i = 0; i < notificationIconLayout.getChildCount(); i++) {
-                View child = notificationIconLayout.getChildAt(i);
-                if (((String) child.getTag()).matches(notification.getKey()) && notifications.containsKey(notification.getKey())) {
-                    setIconVisibility(notificationIconLayout.getChildAt(i), notificationIconLayout, null, false);
-                    notifications.remove(notification.getKey());
-                }
-            }
-        }
-    }
-
-    public boolean containsNotification(NotificationData notification) {
-        if (notifications == null) notifications = new ArrayMap<>();
-        for (NotificationData data : notifications.values()) {
-            if (data.equals(notification)) return true;
-        }
-        return false;
-    }
-
-    public ArrayMap<String, NotificationData> getNotifications() {
-        if (notifications == null) notifications = new ArrayMap<>();
-        return notifications;
     }
 
     public void setSystemShowing(boolean isSystemShowing) {
@@ -413,100 +368,6 @@ public class StatusView extends FrameLayout {
                     setColor(palette.getDarkVibrantColor(ColorUtils.darkColor(palette.getVibrantColor(Color.BLACK))));
                 }
             });
-        }
-    }
-
-    private View getIconView() {
-        final View v = LayoutInflater.from(getContext()).inflate(R.layout.item_icon, this, false);
-
-        Integer iconPadding = PreferenceUtils.getIntegerPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_ICON_PADDING);
-        if (iconPadding == null) iconPadding = 2;
-
-        float iconPaddingDp = StaticUtils.getPixelsFromDp(getContext(), iconPadding);
-
-        v.setPadding((int) iconPaddingDp, 0, (int) iconPaddingDp, 0);
-
-        return v;
-    }
-
-    private View getIconView(int padding) {
-        final View v = LayoutInflater.from(getContext()).inflate(R.layout.item_icon, this, false);
-
-        float iconPaddingDp = StaticUtils.getPixelsFromDp(getContext(), padding);
-        v.setPadding((int) iconPaddingDp, 0, (int) iconPaddingDp, 0);
-
-        return v;
-    }
-
-    private void setIconVisibility(final View child, @Nullable final ViewGroup parent, @Nullable Integer scale, final boolean visible) {
-        if (scale == null) scale = (int) StaticUtils.getPixelsFromDp(getContext(), 24);
-
-        if (visible && child.getVisibility() == View.VISIBLE) return;
-        else if (!visible && child.getVisibility() == View.GONE) return;
-
-        if (isIconAnimations) {
-            ValueAnimator animator = ValueAnimator.ofInt(visible ? 0 : child.getHeight(), visible ? scale : 0);
-            animator.setDuration(250);
-            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    child.setAlpha(valueAnimator.getAnimatedFraction());
-
-                    View iconView = child.findViewById(R.id.icon);
-
-                    if (iconView != null) {
-                        ViewGroup.LayoutParams layoutParams = iconView.getLayoutParams();
-                        if (layoutParams != null)
-                            layoutParams.height = (int) valueAnimator.getAnimatedValue();
-                        else
-                            layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, (int) valueAnimator.getAnimatedValue());
-
-                        iconView.setLayoutParams(layoutParams);
-                    }
-                }
-            });
-            animator.addListener(new Animator.AnimatorListener() {
-                @Override
-                public void onAnimationStart(Animator animation) {
-                    if (visible) child.setVisibility(View.VISIBLE);
-                }
-
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    if (!visible) {
-                        child.setVisibility(View.GONE);
-                        if (parent != null) parent.removeView(child);
-                    }
-                }
-
-                @Override
-                public void onAnimationCancel(Animator animation) {
-                }
-
-                @Override
-                public void onAnimationRepeat(Animator animation) {
-                }
-            });
-            animator.start();
-        } else {
-            View iconView = child.findViewById(R.id.icon);
-
-            if (iconView != null) {
-                ViewGroup.LayoutParams layoutParams = iconView.getLayoutParams();
-                if (layoutParams != null)
-                    layoutParams.height = visible ? scale : 0;
-                else
-                    layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, visible ? scale : 0);
-
-                iconView.setLayoutParams(layoutParams);
-            }
-
-            if (visible) {
-                child.setVisibility(View.VISIBLE);
-            } else {
-                child.setVisibility(View.GONE);
-                if (parent != null) parent.removeView(child);
-            }
         }
     }
 }
