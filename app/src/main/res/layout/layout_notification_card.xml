@@ -103,7 +103,6 @@
                 android:paddingRight="12dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:background="#EEEEEE"
                 android:id="@+id/actions"
                 android:visibility="gone" />
 
