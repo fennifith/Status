@@ -128,6 +128,8 @@
 
     <string name="heads_up_plain">Plain</string>
     <string name="heads_up_card">Cards</string>
+    <string name="heads_up_condensed">Condensed</string>
+    <string name="heads_up_transparent">Transparent</string>
 
     <string name="gravity_center">Center</string>
     <string name="gravity_left">Left</string>

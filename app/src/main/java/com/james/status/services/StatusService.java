@@ -72,6 +72,8 @@ public class StatusService extends Service {
 
     public static final int HEADSUP_LAYOUT_PLAIN = 0;
     public static final int HEADSUP_LAYOUT_CARD = 1;
+    public static final int HEADSUP_LAYOUT_CONDENSED = 2;
+    public static final int HEADSUP_LAYOUT_TRANSPARENT = 3;
 
     private StatusView statusView;
     private View fullscreenView;
@@ -274,13 +276,21 @@ public class StatusService extends Service {
         if (headsUpLayout == null) headsUpLayout = HEADSUP_LAYOUT_PLAIN;
 
         switch (headsUpLayout) {
-            case HEADSUP_LAYOUT_PLAIN:
-                headsUpView = LayoutInflater.from(this).inflate(R.layout.layout_notification, null);
-                break;
             case HEADSUP_LAYOUT_CARD:
-                headsUpView = LayoutInflater.from(this).inflate(R.layout.layout_notification_card, null);
+                headsUpLayout = R.layout.layout_notification_card;
+                break;
+            case HEADSUP_LAYOUT_CONDENSED:
+                headsUpLayout = R.layout.layout_notification_condensed;
+                break;
+            case HEADSUP_LAYOUT_TRANSPARENT:
+                headsUpLayout = R.layout.layout_notification_transparent;
+                break;
+            default:
+                headsUpLayout = R.layout.layout_notification;
                 break;
         }
+
+        headsUpView = LayoutInflater.from(this).inflate(headsUpLayout, null);
 
         ViewCompat.setElevation(headsUpView, StaticUtils.getPixelsFromDp(this, 2));
 

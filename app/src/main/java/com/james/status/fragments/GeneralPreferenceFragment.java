@@ -199,6 +199,14 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                         new ListPreferenceData.ListPreference(
                                 getString(R.string.heads_up_card),
                                 StatusService.HEADSUP_LAYOUT_CARD
+                        ),
+                        new ListPreferenceData.ListPreference(
+                                getString(R.string.heads_up_condensed),
+                                StatusService.HEADSUP_LAYOUT_CONDENSED
+                        ),
+                        new ListPreferenceData.ListPreference(
+                                getString(R.string.heads_up_transparent),
+                                StatusService.HEADSUP_LAYOUT_TRANSPARENT
                         )
                 )
         ));

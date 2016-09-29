@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/image_gradient_top">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="4dp">
+
+                <com.james.status.views.SquareImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:tint="@color/textColorPrimary"
+                    android:id="@+id/icon" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/textColorPrimary"
+                    android:textSize="14sp"
+                    android:id="@+id/name"
+                    android:singleLine="true"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:ellipsize="end" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:textColor="@color/textColorPrimaryInverse"
+                android:textSize="16sp"
+                android:id="@+id/title"
+                android:singleLine="true"
+                android:lines="1"
+                android:maxLines="1"
+                android:ellipsize="end" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:textColor="@color/textColorSecondaryInverse"
+                android:textSize="14sp"
+                android:id="@+id/subtitle"
+                android:layout_marginBottom="16dp"
+                android:singleLine="true"
+                android:lines="1"
+                android:maxLines="1"
+                android:ellipsize="end" />
+
+        </LinearLayout>
+
+        <com.james.status.views.SquareImageView
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:id="@+id/largeIcon"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:id="@+id/actions"
+        android:visibility="gone" />
+
+</LinearLayout>

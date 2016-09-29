@@ -14,24 +14,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:contentScrim="@color/colorPrimary"
-            app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
+            app:layout_scrollFlags="scroll|enterAlways"
             app:titleEnabled="false">
-
-            <com.james.status.views.CustomImageView
-                android:layout_width="match_parent"
-                android:layout_height="188dp"
-                android:scaleType="centerCrop"
-                app:layout_collapseMode="parallax"
-                android:id="@+id/header" />
-
-        </android.support.design.widget.CollapsingToolbarLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:background="@color/colorPrimary"
-            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -55,16 +39,16 @@
 
             </LinearLayout>
 
-            <android.support.design.widget.TabLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                app:tabTextColor="@color/textColorSecondaryInverse"
-                app:tabSelectedTextColor="@color/textColorPrimaryInverse"
-                android:background="@null"
-                android:id="@+id/tabLayout" />
+        </android.support.design.widget.CollapsingToolbarLayout>
 
-        </LinearLayout>
+        <android.support.design.widget.TabLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            app:tabTextColor="@color/textColorSecondaryInverse"
+            app:tabSelectedTextColor="@color/textColorPrimaryInverse"
+            android:background="@null"
+            android:id="@+id/tabLayout" />
 
     </android.support.design.widget.AppBarLayout>
 

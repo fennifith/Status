@@ -17,9 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
-import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
 import com.getkeepsafe.taptargetview.TapTargetView;
 import com.james.status.R;
 import com.james.status.Status;
@@ -55,8 +53,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(this, StartActivity.class));
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
-
-        Glide.with(this).load("https://theandroidmaster.github.io/images/headers/status_bg.png").into((ImageView) findViewById(R.id.header));
 
         appbar = (AppBarLayout) findViewById(R.id.appbar);
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
@@ -95,6 +91,8 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         if (StaticUtils.isAccessibilityGranted(this) && StaticUtils.isNotificationGranted(this) && StaticUtils.isPermissionsGranted(this) && !StaticUtils.isStatusServiceRunning(this) && StaticUtils.shouldShowTutorial(this, "enable")) {
+            appbar.setExpanded(true, false);
+
             new TapTargetView.Builder(this)
                     .title(R.string.tutorial_enable)
                     .description(R.string.tutorial_enable_desc)
@@ -115,6 +113,8 @@ public class MainActivity extends AppCompatActivity {
                     .cancelable(true)
                     .showFor(service);
         } else if (searchView != null && StaticUtils.shouldShowTutorial(MainActivity.this, "search", 1)) {
+            appbar.setExpanded(true, false);
+
             new TapTargetView.Builder(MainActivity.this)
                     .title(R.string.tutorial_search)
                     .description(R.string.tutorial_search_desc)
