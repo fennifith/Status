@@ -42,6 +42,8 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
     private NotificationManagerCompat notificationManager;
     private List<NotificationData> notifications;
 
+    private AppData.ActivityData activityData;
+
     private int color = Color.BLACK;
 
     @Override
@@ -145,15 +147,15 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                             return;
                         }
 
-                        AppData.ActivityData data;
                         try {
-                            data = new AppData.ActivityData(packageManager, packageManager.getActivityInfo(new ComponentName(packageName.toString(), className.toString()), PackageManager.GET_META_DATA));
+                            activityData = new AppData.ActivityData(packageManager, packageManager.getActivityInfo(new ComponentName(packageName.toString(), className.toString()), PackageManager.GET_META_DATA));
                         } catch (PackageManager.NameNotFoundException | NullPointerException e) {
-                            e.printStackTrace();
+                            if (!activityData.packageName.matches(packageName.toString()) && !activityData.packageName.contains(packageName) && !packageName.toString().contains(activityData.packageName))
+                                setStatusBar(getDefaultColor(), null, null, false);
                             return;
                         }
 
-                        Boolean isFullscreen = data.getBooleanPreference(this, AppData.PreferenceIdentifier.FULLSCREEN);
+                        Boolean isFullscreen = activityData.getBooleanPreference(this, AppData.PreferenceIdentifier.FULLSCREEN);
 
                         Intent homeIntent = new Intent(Intent.ACTION_MAIN);
                         homeIntent.addCategory(Intent.CATEGORY_HOME);
@@ -165,7 +167,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                             return;
                         }
 
-                        Integer color = data.getIntegerPreference(this, AppData.PreferenceIdentifier.COLOR);
+                        Integer color = activityData.getIntegerPreference(this, AppData.PreferenceIdentifier.COLOR);
                         if (color != null) {
                             setStatusBar(color, null, isFullscreen, false);
                             return;
@@ -190,17 +192,17 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                             return;
                         }
 
-                        Integer cacheVersion = data.getIntegerPreference(this, AppData.PreferenceIdentifier.CACHE_VERSION);
-                        if (cacheVersion != null && cacheVersion == data.version) {
-                            color = data.getIntegerPreference(this, AppData.PreferenceIdentifier.CACHE_COLOR);
+                        Integer cacheVersion = activityData.getIntegerPreference(this, AppData.PreferenceIdentifier.CACHE_VERSION);
+                        if (cacheVersion != null && cacheVersion == activityData.version) {
+                            color = activityData.getIntegerPreference(this, AppData.PreferenceIdentifier.CACHE_COLOR);
                         }
 
                         if (color == null) {
                             color = ColorUtils.getPrimaryColor(AccessibilityService.this, new ComponentName(packageName.toString(), className.toString()));
 
                             if (color != null) {
-                                data.putPreference(this, AppData.PreferenceIdentifier.CACHE_COLOR, color);
-                                data.putPreference(this, AppData.PreferenceIdentifier.CACHE_VERSION, data.version);
+                                activityData.putPreference(this, AppData.PreferenceIdentifier.CACHE_COLOR, color);
+                                activityData.putPreference(this, AppData.PreferenceIdentifier.CACHE_VERSION, activityData.version);
                             }
                         }
 
