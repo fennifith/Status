@@ -100,6 +100,24 @@ public class BatteryIconData extends IconData {
                                 R.drawable.ic_battery_charging_full
                         ),
                         new IconStyleData(
+                                getContext().getString(R.string.icon_style_stock),
+                                R.drawable.ic_battery_stock_alert,
+                                R.drawable.ic_battery_stock_20,
+                                R.drawable.ic_battery_stock_30,
+                                R.drawable.ic_battery_stock_50,
+                                R.drawable.ic_battery_stock_60,
+                                R.drawable.ic_battery_stock_80,
+                                R.drawable.ic_battery_stock_90,
+                                R.drawable.ic_battery_stock_full,
+                                R.drawable.ic_battery_stock_charging_20,
+                                R.drawable.ic_battery_stock_charging_30,
+                                R.drawable.ic_battery_stock_charging_50,
+                                R.drawable.ic_battery_stock_charging_60,
+                                R.drawable.ic_battery_stock_charging_80,
+                                R.drawable.ic_battery_stock_charging_90,
+                                R.drawable.ic_battery_stock_charging_full
+                        ),
+                        new IconStyleData(
                                 getContext().getString(R.string.icon_style_circle),
                                 R.drawable.ic_battery_circle_alert,
                                 R.drawable.ic_battery_circle_20,

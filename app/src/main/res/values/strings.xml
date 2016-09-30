@@ -143,6 +143,7 @@
     <string name="unit_seconds">" seconds"</string>
 
     <string name="icon_style_default">Default</string>
+    <string name="icon_style_stock">Stock</string>
     <string name="icon_style_circle">Circle</string>
     <string name="icon_style_circle_outline">Circle Outline</string>
     <string name="icon_style_dish">Dish</string>

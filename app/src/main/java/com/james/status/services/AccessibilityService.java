@@ -150,7 +150,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                         try {
                             activityData = new AppData.ActivityData(packageManager, packageManager.getActivityInfo(new ComponentName(packageName.toString(), className.toString()), PackageManager.GET_META_DATA));
                         } catch (PackageManager.NameNotFoundException | NullPointerException e) {
-                            if (!activityData.packageName.matches(packageName.toString()) && !activityData.packageName.contains(packageName) && !packageName.toString().contains(activityData.packageName))
+                            if (activityData != null && !activityData.packageName.matches(packageName.toString()) && !activityData.packageName.contains(packageName) && !packageName.toString().contains(activityData.packageName))
                                 setStatusBar(getDefaultColor(), null, null, false);
                             return;
                         }
