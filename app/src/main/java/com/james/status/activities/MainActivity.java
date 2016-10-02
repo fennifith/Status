@@ -166,14 +166,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 adapter.filter(viewPager.getCurrentItem(), query);
-                appbar.setExpanded(false);
+                appbar.setExpanded(true);
                 return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
                 adapter.filter(viewPager.getCurrentItem(), newText);
-                appbar.setExpanded(false);
+                appbar.setExpanded(true);
                 return true;
             }
         });
