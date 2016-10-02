@@ -84,6 +84,8 @@ public class ImageUtils {
 
     @Nullable
     public static Bitmap cropBitmapToBar(Context context, Bitmap source) {
+        if (context == null || source == null) return null;
+
         Point size = new Point();
         ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getSize(size);
 

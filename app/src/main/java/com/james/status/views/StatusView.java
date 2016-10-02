@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.LayoutTransition;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
+import android.app.WallpaperInfo;
 import android.app.WallpaperManager;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -40,6 +41,7 @@ public class StatusView extends FrameLayout {
     private boolean isSystemShowing, isFullscreen, isAnimations, isIconAnimations, isTintedIcons, isContrastIcons;
 
     private List<IconData> icons;
+    private WallpaperManager wallpaperManager;
 
     public StatusView(Context context) {
         super(context);
@@ -99,6 +101,8 @@ public class StatusView extends FrameLayout {
             if (statusBarColor != null) setColor(statusBarColor);
         } else if (color != null) setColor(color);
         else setColor(Color.BLACK);
+
+        if (wallpaperManager == null) wallpaperManager = WallpaperManager.getInstance(getContext());
     }
 
     public void setIcons(List<IconData> icons) {
@@ -306,8 +310,14 @@ public class StatusView extends FrameLayout {
     }
 
     public void setHomeScreen() {
-        if (status != null) {
-            Bitmap background = ImageUtils.cropBitmapToBar(getContext(), ImageUtils.drawableToBitmap(WallpaperManager.getInstance(getContext()).getDrawable()));
+        if (status != null && wallpaperManager != null) {
+            Drawable backgroundDrawable;
+            WallpaperInfo wallpaperInfo = wallpaperManager.getWallpaperInfo();
+            if (wallpaperInfo != null)
+                backgroundDrawable = wallpaperInfo.loadThumbnail(getContext().getPackageManager());
+            else backgroundDrawable = wallpaperManager.getDrawable();
+
+            Bitmap background = ImageUtils.cropBitmapToBar(getContext(), ImageUtils.drawableToBitmap(backgroundDrawable));
 
             if (background != null) {
                 int color = ColorUtils.getAverageColor(background);
