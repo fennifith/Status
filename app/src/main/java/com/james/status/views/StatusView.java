@@ -315,7 +315,14 @@ public class StatusView extends FrameLayout {
             WallpaperInfo wallpaperInfo = wallpaperManager.getWallpaperInfo();
             if (wallpaperInfo != null)
                 backgroundDrawable = wallpaperInfo.loadThumbnail(getContext().getPackageManager());
-            else backgroundDrawable = wallpaperManager.getDrawable();
+            else {
+                try {
+                    backgroundDrawable = wallpaperManager.getDrawable();
+                } catch (SecurityException e) {
+                    setColor(getDefaultColor());
+                    return;
+                }
+            }
 
             Bitmap background = ImageUtils.cropBitmapToBar(getContext(), ImageUtils.drawableToBitmap(backgroundDrawable));
 
@@ -328,7 +335,7 @@ public class StatusView extends FrameLayout {
                     setDarkMode(!ColorUtils.isColorDark(color));
                     StatusView.this.color = color;
                 } else setColor(color);
-            } else setColor(Color.BLACK);
+            } else setColor(getDefaultColor());
         }
     }
 

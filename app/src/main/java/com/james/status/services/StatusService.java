@@ -546,11 +546,11 @@ public class StatusService extends Service {
                         headsUpHandler.postDelayed(headsUpDisabledRunnable, headsUpDuration);
                     }
 
-                    notifications.put(notification.getKey(), notification);
+                    getNotifications().put(notification.getKey(), notification);
                     break;
                 case NotificationsIconData.ACTION_NOTIFICATION_REMOVED:
                     notification = intent.getParcelableExtra(NotificationsIconData.EXTRA_NOTIFICATION);
-                    notifications.remove(notification.getKey());
+                    getNotifications().remove(notification.getKey());
 
                     if (headsUpNotification != null && headsUpNotification.equals(notification)) {
                         if (headsUpView != null && headsUpView.getParent() != null)
