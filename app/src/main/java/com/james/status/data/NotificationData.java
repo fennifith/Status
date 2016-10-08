@@ -29,6 +29,7 @@ public class NotificationData implements Parcelable {
 
     public String category, title, subtitle, packageName, key, tag = "";
     public int priority, id, iconRes, color = Color.BLACK;
+    private boolean isAlert;
     private Bitmap largeIcon;
     private Icon unloadedIcon, unloadedLargeIcon;
 
@@ -57,6 +58,8 @@ public class NotificationData implements Parcelable {
         priority = notification.priority;
         this.id = id;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) this.color = notification.color;
+
+        isAlert = notification.vibrate != null || notification.sound != null;
 
         Bundle extras = NotificationCompat.getExtras(notification);
 
@@ -110,7 +113,8 @@ public class NotificationData implements Parcelable {
         id = in.readInt();
         color = in.readInt();
         iconRes = in.readInt();
-        if (in.readInt() == 1) largeIcon = Bitmap.CREATOR.createFromParcel(in);
+        isAlert = in.readByte() == 1;
+        if (in.readByte() == 1) largeIcon = Bitmap.CREATOR.createFromParcel(in);
 
         intent = PendingIntent.readPendingIntentOrNullFromParcel(in);
 
@@ -176,11 +180,11 @@ public class NotificationData implements Parcelable {
 
     public boolean shouldShowHeadsUp(Context context) {
         Boolean headsUp = PreferenceUtils.getBooleanPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_NOTIFICATIONS_HEADS_UP);
-        return (headsUp != null ? headsUp : Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) && (priority >= NotificationCompat.PRIORITY_HIGH || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP);
+        return (headsUp != null ? headsUp : Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) && (priority >= NotificationCompat.PRIORITY_HIGH || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) && isAlert;
     }
 
     public boolean shouldHideStatusBar() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && priority >= NotificationCompat.PRIORITY_HIGH;
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && priority >= NotificationCompat.PRIORITY_HIGH && isAlert;
     }
 
     public String getKey() {
@@ -252,10 +256,11 @@ public class NotificationData implements Parcelable {
         dest.writeInt(id);
         dest.writeInt(color);
         dest.writeInt(iconRes);
+        dest.writeByte((byte) (isAlert ? 1 : 0));
         if (largeIcon != null) {
-            dest.writeInt(1);
+            dest.writeByte((byte) 1);
             largeIcon.writeToParcel(dest, flags);
-        } else dest.writeInt(0);
+        } else dest.writeByte((byte) 0);
 
         PendingIntent.writePendingIntentOrNullToParcel(intent, dest);
 
