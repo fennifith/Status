@@ -1,6 +1,8 @@
 package com.james.status.dialogs;
 
 import android.animation.Animator;
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -21,7 +23,6 @@ import android.widget.TextView;
 import com.james.status.R;
 import com.james.status.Status;
 import com.james.status.activities.ImagePickerActivity;
-import com.james.status.utils.ColorAnimator;
 import com.james.status.utils.ColorUtils;
 import com.james.status.views.CustomImageView;
 
@@ -216,14 +217,18 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> {
 
     private void setColor(@ColorInt int color, boolean animate) {
         if (!isTrackingTouch && animate) {
-            new ColorAnimator(getPreference(), color).setDuration(250).setColorUpdateListener(new ColorAnimator.ColorUpdateListener() {
+            ValueAnimator animator = ValueAnimator.ofObject(new ArgbEvaluator(), getPreference(), color);
+            animator.setDuration(250);
+            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
-                public void onColorUpdate(ColorAnimator animator, @ColorInt int color) {
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    int color = (int) animation.getAnimatedValue();
                     red.setProgress(Color.red(color));
                     green.setProgress(Color.green(color));
                     blue.setProgress(Color.blue(color));
                 }
-            }).setAnimatorListener(new Animator.AnimatorListener() {
+            });
+            animator.addListener(new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationStart(Animator animation) {
                     isTrackingTouch = true;
@@ -241,7 +246,8 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> {
                 @Override
                 public void onAnimationRepeat(Animator animation) {
                 }
-            }).start();
+            });
+            animator.start();
         } else {
             colorImage.setImageDrawable(new ColorDrawable(color));
             colorHex.removeTextChangedListener(textWatcher);

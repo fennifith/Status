@@ -1,6 +1,7 @@
 package com.james.status.views;
 
 import android.animation.Animator;
+import android.animation.ArgbEvaluator;
 import android.animation.LayoutTransition;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
@@ -23,7 +24,6 @@ import android.widget.TextView;
 
 import com.james.status.R;
 import com.james.status.data.icon.IconData;
-import com.james.status.utils.ColorAnimator;
 import com.james.status.utils.ColorUtils;
 import com.james.status.utils.ImageUtils;
 import com.james.status.utils.PreferenceUtils;
@@ -255,14 +255,17 @@ public class StatusView extends FrameLayout {
 
         if (!isTintedIcons) {
             if (isAnimations) {
-                new ColorAnimator(this.color, color).setDuration(150).setColorUpdateListener(new ColorAnimator.ColorUpdateListener() {
+                ValueAnimator animator = ValueAnimator.ofObject(new ArgbEvaluator(), this.color, color);
+                animator.setDuration(150);
+                animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                     @Override
-                    public void onColorUpdate(ColorAnimator animator, @ColorInt int color) {
-                        if (status != null) {
+                    public void onAnimationUpdate(ValueAnimator animation) {
+                        int color = (int) animation.getAnimatedValue();
+                        if (status != null)
                             status.setBackgroundColor(Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
-                        }
                     }
-                }).start();
+                });
+                animator.start();
             } else
                 status.setBackgroundColor(Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
 
@@ -280,14 +283,17 @@ public class StatusView extends FrameLayout {
                 color = ColorUtils.isColorDark(backgroundColor) ? ColorUtils.lightColor(color) : ColorUtils.darkColor(color);
 
             if (isIconAnimations) {
-                new ColorAnimator(this.color, color).setDuration(150).setColorUpdateListener(new ColorAnimator.ColorUpdateListener() {
+                ValueAnimator animator = ValueAnimator.ofObject(new ArgbEvaluator(), this.color, color);
+                animator.setDuration(150);
+                animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                     @Override
-                    public void onColorUpdate(ColorAnimator animator, @ColorInt int color) {
-                        if (status != null) {
+                    public void onAnimationUpdate(ValueAnimator animation) {
+                        int color = (int) animation.getAnimatedValue();
+                        if (status != null)
                             setIconTint(status, Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
-                        }
                     }
-                }).start();
+                });
+                animator.start();
             } else
                 setIconTint(status, Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
 
@@ -344,14 +350,17 @@ public class StatusView extends FrameLayout {
             int color = isDarkMode ? Color.BLACK : Color.WHITE;
 
             if (isIconAnimations) {
-                new ColorAnimator(iconColor, color).setDuration(150).setColorUpdateListener(new ColorAnimator.ColorUpdateListener() {
+                ValueAnimator animator = ValueAnimator.ofObject(new ArgbEvaluator(), iconColor, color);
+                animator.setDuration(150);
+                animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                     @Override
-                    public void onColorUpdate(ColorAnimator animator, @ColorInt int color) {
-                        if (status != null) {
+                    public void onAnimationUpdate(ValueAnimator animation) {
+                        int color = (int) animation.getAnimatedValue();
+                        if (status != null)
                             setIconTint(status, Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
-                        }
                     }
-                }).start();
+                });
+                animator.start();
             } else
                 setIconTint(status, Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
 
