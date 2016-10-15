@@ -2,24 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:background="?attr/selectableItemBackground">
+    android:background="?attr/selectableItemBackground"
+    android:orientation="vertical">
 
-    <android.support.v7.widget.AppCompatRadioButton
-        android:layout_width="0dp"
+    <include layout="@layout/item_radio_button" />
+
+    <LinearLayout
+        android:id="@+id/icons"
+        android:layout_width="match_parent"
         android:layout_height="42dp"
-        android:clickable="false"
-        android:id="@+id/radio"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_weight="1" />
-
-    <com.james.status.views.IconStyleImageView
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:id="@+id/icon"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_gravity="center_vertical" />
+        android:gravity="center_vertical|end"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp" />
 
 </LinearLayout>

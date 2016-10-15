@@ -23,6 +23,17 @@ public class PreferenceDialog<T> extends AppCompatDialog {
         });
     }
 
+    public PreferenceDialog(Context context, int theme) {
+        super(context, theme);
+
+        setOnDismissListener(new OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                cancel();
+            }
+        });
+    }
+
     public void confirm() {
         if (hasListener()) getListener().onPreference(this, getPreference());
         if (isShowing()) dismiss();

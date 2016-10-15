@@ -39,7 +39,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_app_card, null));
+        return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_app_card, parent, false));
     }
 
     @Override

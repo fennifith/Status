@@ -39,7 +39,7 @@ public class PreferenceSectionAdapter extends RecyclerView.Adapter<PreferenceSec
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_preference_section, null));
+        return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_preference_section, parent, false));
     }
 
     @Override

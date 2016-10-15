@@ -1,15 +1,18 @@
 package com.james.status.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.AppCompatRadioButton;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.james.status.R;
 import com.james.status.data.IconStyleData;
-import com.james.status.views.IconStyleImageView;
+import com.james.status.utils.ImageUtils;
+import com.james.status.views.CustomImageView;
 
 import java.util.List;
 
@@ -35,7 +38,7 @@ public class IconStyleAdapter extends RecyclerView.Adapter<IconStyleAdapter.View
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_icon_style, null));
+        return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_icon_style, parent, false));
     }
 
     @Override
@@ -46,7 +49,17 @@ public class IconStyleAdapter extends RecyclerView.Adapter<IconStyleAdapter.View
         button.setText(style.name);
         button.setChecked(style.equals(this.style));
 
-        ((IconStyleImageView) holder.v.findViewById(R.id.icon)).setIconStyle(style);
+        LinearLayout layout = (LinearLayout) holder.v.findViewById(R.id.icons);
+        layout.removeAllViewsInLayout();
+
+        for (int resource : style.resource) {
+            View view = LayoutInflater.from(context).inflate(R.layout.item_icon, layout, false);
+            ImageUtils.tintDrawable((CustomImageView) view.findViewById(R.id.icon), ImageUtils.getVectorDrawable(context, resource), Color.BLACK);
+
+            layout.addView(view);
+        }
+
+        if (layout.getChildCount() < 1) layout.setVisibility(View.GONE);
 
         holder.v.setOnClickListener(new View.OnClickListener() {
             @Override

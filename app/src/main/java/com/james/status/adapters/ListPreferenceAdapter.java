@@ -34,7 +34,7 @@ public class ListPreferenceAdapter extends RecyclerView.Adapter<ListPreferenceAd
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_icon_style, null));
+        return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_radio_button, parent, false));
     }
 
     @Override
