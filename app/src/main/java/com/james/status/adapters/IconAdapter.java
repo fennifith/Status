@@ -22,7 +22,8 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
 
     private Activity activity;
     private List<IconData> originalIcons, icons;
-    public AppCompatCheckBox checkBoxView;
+    private String filter;
+    public View itemView;
 
     public IconAdapter(Activity activity) {
         this.activity = activity;
@@ -39,12 +40,12 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
         IconData icon = getIcon(position);
         if (icon == null) return;
 
+        itemView = holder.v;
+
         icon.putPreference(IconData.PreferenceIdentifier.POSITION, position);
 
-        AppCompatCheckBox checkBox = (AppCompatCheckBox) holder.v.findViewById(R.id.iconCheckBox);
+        final AppCompatCheckBox checkBox = (AppCompatCheckBox) holder.v.findViewById(R.id.iconCheckBox);
         checkBox.setText(icon.getTitle());
-
-        checkBoxView = checkBox;
 
         checkBox.setOnCheckedChangeListener(null);
 
@@ -61,6 +62,44 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
                 StaticUtils.updateStatusService(activity);
 
                 notifyItemChanged(holder.getAdapterPosition());
+            }
+        });
+
+        View moveUp = holder.v.findViewById(R.id.moveUp);
+        moveUp.setVisibility((isVisible == null || isVisible) && position > 0 && filter == null ? View.VISIBLE : View.GONE);
+        moveUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IconData icon = getIcon(holder.getAdapterPosition());
+                if (icon == null) return;
+
+                int position = icons.indexOf(icon);
+                List<IconData> icons = getIcons();
+                icons.remove(icon);
+                icons.add(position - 1, icon);
+
+                setIcons(icons);
+                notifyDataSetChanged();
+                StaticUtils.updateStatusService(activity);
+            }
+        });
+
+        View moveDown = holder.v.findViewById(R.id.moveDown);
+        moveDown.setVisibility((isVisible == null || isVisible) && position < icons.size() - 1 && filter == null ? View.VISIBLE : View.GONE);
+        moveDown.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IconData icon = getIcon(holder.getAdapterPosition());
+                if (icon == null) return;
+
+                int position = icons.indexOf(icon);
+                List<IconData> icons = getIcons();
+                icons.remove(icon);
+                icons.add(position + 1, icon);
+
+                setIcons(icons);
+                notifyDataSetChanged();
+                StaticUtils.updateStatusService(activity);
             }
         });
 
@@ -84,6 +123,7 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
     }
 
     public void filter(@Nullable String filter) {
+        this.filter = filter;
         icons.clear();
 
         if (filter == null || filter.length() < 1) {

@@ -163,7 +163,7 @@
     <string name="tutorial_icon_switch">Don\'t like an icon?</string>
     <string name="tutorial_icon_switch_desc">Enable or disable an icon by clicking the check box next to its name.</string>
     <string name="tutorial_icon_order">Re-order Icons</string>
-    <string name="tutorial_icon_order_desc">Change the order of the icons by pressing and holding on the icon\'s name then moving it to the position you want.</string>
+    <string name="tutorial_icon_order_desc">Change the order of the icons by pressing the up and down buttons next to an icon\'s name.</string>
     <string name="tutorial_activities">Don\'t want to modify the whole app?</string>
     <string name="tutorial_activities_desc">Change individual screens by clicking the \'expand\' button next to an app\'s title.</string>
 

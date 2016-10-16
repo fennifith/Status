@@ -1,6 +1,6 @@
 package com.james.status.activities;
 
-import android.graphics.Color;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,19 +26,24 @@ import com.james.status.utils.ColorUtils;
 public class AppSettingActivity extends AppCompatActivity {
 
     public final static String EXTRA_APP = "com.james.status.EXTRA_APP";
+    public final static String EXTRA_ACTIVITY = "com.james.status.EXTRA_ACTIVITY";
 
     private AppData app;
+    private AppData.ActivityData activity;
     private ImageView colorView;
+
+    private ActivityAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_settings);
 
-        app = getIntent().getParcelableExtra(EXTRA_APP);
+        Intent intent = getIntent();
+        app = intent.getParcelableExtra(EXTRA_APP);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        RecyclerView recycler = (RecyclerView) findViewById(R.id.recycler);
+        final RecyclerView recycler = (RecyclerView) findViewById(R.id.recycler);
         colorView = (ImageView) findViewById(R.id.colorView);
         SwitchCompat fullscreenSwitch = (SwitchCompat) findViewById(R.id.fullscreenSwitch);
         SwitchCompat notificationSwitch = (SwitchCompat) findViewById(R.id.notificationSwitch);
@@ -59,11 +64,12 @@ public class AppSettingActivity extends AppCompatActivity {
                         new Handler(Looper.getMainLooper()).post(new Runnable() {
                             @Override
                             public void run() {
-                                new ColorPickerDialog(AppSettingActivity.this).setPreference(app.getIntegerPreference(AppSettingActivity.this, AppData.PreferenceIdentifier.COLOR)).setDefaultPreference(color != null ? color : Color.BLACK).setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
+                                new ColorPickerDialog(AppSettingActivity.this).setPreference(app.getIntegerPreference(AppSettingActivity.this, AppData.PreferenceIdentifier.COLOR)).setDefaultPreference(color != null ? color : ColorUtils.getDefaultColor(AppSettingActivity.this)).setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
                                     @Override
                                     public void onPreference(PreferenceDialog dialog, Integer preference) {
                                         app.putPreference(AppSettingActivity.this, AppData.PreferenceIdentifier.COLOR, preference);
                                         colorView.setImageDrawable(new ColorDrawable(preference));
+                                        adapter.notifyDataSetChanged();
                                     }
 
                                     @Override
@@ -89,7 +95,7 @@ public class AppSettingActivity extends AppCompatActivity {
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
-                            colorView.setImageDrawable(new ColorDrawable(color != null ? color : Color.BLACK));
+                            colorView.setImageDrawable(new ColorDrawable(color != null ? color : ColorUtils.getDefaultColor(AppSettingActivity.this)));
                         }
                     });
                 }
@@ -118,7 +124,41 @@ public class AppSettingActivity extends AppCompatActivity {
 
         recycler.setLayoutManager(new GridLayoutManager(this, 1));
         recycler.setNestedScrollingEnabled(false);
-        recycler.setAdapter(new ActivityAdapter(this, app.activities));
+
+        adapter = new ActivityAdapter(this, app.activities);
+        recycler.setAdapter(adapter);
+
+        if (intent.hasExtra(EXTRA_ACTIVITY)) {
+            activity = intent.getParcelableExtra(EXTRA_ACTIVITY);
+
+            new Thread() {
+                @Override
+                public void run() {
+                    final Integer color = ColorUtils.getPrimaryColor(AppSettingActivity.this, activity.getComponentName());
+
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (activity == null) return;
+
+                            new ColorPickerDialog(AppSettingActivity.this).setPreference(activity.getIntegerPreference(AppSettingActivity.this, AppData.PreferenceIdentifier.COLOR)).setDefaultPreference(color != null ? color : ColorUtils.getDefaultColor(AppSettingActivity.this)).setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
+                                @Override
+                                public void onPreference(PreferenceDialog dialog, Integer preference) {
+                                    if (activity != null) {
+                                        activity.putPreference(AppSettingActivity.this, AppData.PreferenceIdentifier.COLOR, preference);
+                                        adapter.notifyDataSetChanged();
+                                    }
+                                }
+
+                                @Override
+                                public void onCancel(PreferenceDialog dialog) {
+                                }
+                            }).show();
+                        }
+                    });
+                }
+            }.start();
+        }
     }
 
     @Override
