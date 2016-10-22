@@ -137,7 +137,7 @@ public class StatusService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Boolean enabled = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED);
-        if (enabled == null || !enabled) {
+        if (enabled == null || !enabled || !StaticUtils.isPermissionsGranted(this)) {
             stopSelf();
             return START_STICKY;
         }
