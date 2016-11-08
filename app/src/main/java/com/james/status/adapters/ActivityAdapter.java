@@ -87,6 +87,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
                         if (activity == null) return;
 
                         final int color = activity.getColor(context), defaultColor = activity.getDefaultColor(context);
+                        final List<Integer> colors = ColorUtils.getColors(context, activity.packageName);
 
                         new Handler(Looper.getMainLooper()).post(new Runnable() {
                             @Override
@@ -94,7 +95,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
                                 AppData.ActivityData activity = getActivity(holder.getAdapterPosition());
                                 if (activity == null) return;
 
-                                PreferenceDialog dialog = new ColorPickerDialog(context).setTag(activity).setPreference(color).setDefaultPreference(defaultColor).setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
+                                PreferenceDialog dialog = new ColorPickerDialog(context).setPresetColors(colors).setTag(activity).setPreference(color).setDefaultPreference(defaultColor).setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
                                     @Override
                                     public void onPreference(PreferenceDialog dialog, Integer preference) {
                                         Object tag = dialog.getTag();

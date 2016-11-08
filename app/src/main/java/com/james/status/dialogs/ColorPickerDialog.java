@@ -26,11 +26,15 @@ import com.james.status.activities.ImagePickerActivity;
 import com.james.status.utils.ColorUtils;
 import com.james.status.views.CustomImageView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ColorPickerDialog extends PreferenceDialog<Integer> {
 
     private Status status;
     private Status.OnColorPickedListener listener;
     private TextWatcher textWatcher;
+    private List<Integer> presetColors;
 
     private CustomImageView colorImage;
     private AppCompatEditText colorHex;
@@ -150,7 +154,16 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> {
         LinearLayout presetLayout = (LinearLayout) findViewById(R.id.colors);
         LayoutInflater inflater = LayoutInflater.from(getContext());
 
-        int[] colors = getContext().getResources().getIntArray(R.array.defaultColors);
+        if (presetColors == null) presetColors = new ArrayList<>();
+        for (int color : getContext().getResources().getIntArray(R.array.defaultColors)) {
+            presetColors.add(color);
+        }
+
+        List<Integer> colors = new ArrayList<>();
+        for (Integer color : presetColors) {
+            if (!colors.contains(color)) colors.add(color);
+        }
+
         for (int preset : colors) {
             View v = inflater.inflate(R.layout.item_color, null);
 
@@ -264,8 +277,13 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> {
         }
     }
 
+    public ColorPickerDialog setPresetColors(List<Integer> presetColors) {
+        this.presetColors = presetColors;
+        return this;
+    }
+
     @Override
-    public PreferenceDialog setPreference(@ColorInt Integer preference) {
+    public ColorPickerDialog setPreference(@ColorInt Integer preference) {
         Integer defaultPreference = getDefaultPreference();
         if (preference != null && defaultPreference != null && reset != null) {
             if (preference.equals(defaultPreference))
@@ -273,6 +291,6 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> {
             else reset.setVisibility(View.VISIBLE);
         }
 
-        return super.setPreference(preference);
+        return (ColorPickerDialog) super.setPreference(preference);
     }
 }

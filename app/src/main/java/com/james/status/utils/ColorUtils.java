@@ -14,6 +14,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.res.ResourcesCompat;
 
+import com.james.status.data.AppData;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class ColorUtils {
 
     public static boolean isColorDark(int color) {
@@ -69,23 +74,23 @@ public class ColorUtils {
         }
 
         if (packageInfo != null && resources != null) {
-            Integer statusBarColor = getStatusBarColor(packageInfo.packageName, resources, packageInfo.applicationInfo.theme);
-            if (statusBarColor != null) {
-                return statusBarColor;
+            if (activityInfo != null && activityResources != null) {
+                List<Integer> activityStatusBarColors = getStatusBarColors(activityInfo.packageName, resources, activityInfo.theme);
+                if (activityStatusBarColors.size() > 0) {
+                    return activityStatusBarColors.get(0);
+                }
             }
 
-            if (activityInfo != null && activityResources != null) {
-                Integer activityStatusBarColor = getStatusBarColor(activityInfo.packageName, resources, activityInfo.theme);
-                if (activityStatusBarColor != null) {
-                    return activityStatusBarColor;
-                }
+            List<Integer> statusBarColors = getStatusBarColors(packageInfo.packageName, resources, packageInfo.applicationInfo.theme);
+            if (statusBarColors.size() > 0) {
+                return statusBarColors.get(0);
             }
 
             if (packageInfo.activities != null) {
                 for (ActivityInfo otherActivityInfo : packageInfo.activities) {
-                    Integer otherStatusBarColor = getStatusBarColor(packageInfo.packageName, resources, otherActivityInfo.theme);
-                    if (otherStatusBarColor != null) {
-                        return otherStatusBarColor;
+                    List<Integer> otherStatusBarColors = getStatusBarColors(packageInfo.packageName, resources, otherActivityInfo.theme);
+                    if (otherStatusBarColors.size() > 0) {
+                        return otherStatusBarColors.get(0);
                     }
                 }
             }
@@ -94,7 +99,80 @@ public class ColorUtils {
         return null;
     }
 
-    public static Integer getStatusBarColor(String packageName, Resources resources, int style) {
+    private static List<Integer> getPrimaryColors(Context context, ComponentName componentName) {
+        List<Integer> colors = new ArrayList<>();
+
+        PackageManager packageManager = context.getPackageManager();
+
+        ActivityInfo activityInfo = null;
+        PackageInfo packageInfo = null;
+        Resources resources = null, activityResources = null;
+        try {
+            packageInfo = packageManager.getPackageInfo(componentName.getPackageName(), PackageManager.GET_META_DATA);
+            resources = packageManager.getResourcesForApplication(packageInfo.applicationInfo);
+            activityInfo = packageManager.getActivityInfo(componentName, 0);
+            activityResources = packageManager.getResourcesForActivity(componentName);
+        } catch (PackageManager.NameNotFoundException ignored) {
+        }
+
+        if (packageInfo != null && resources != null) {
+            if (activityInfo != null && activityResources != null) {
+                colors.addAll(getStatusBarColors(activityInfo.packageName, resources, activityInfo.theme));
+            }
+
+            colors.addAll(getStatusBarColors(packageInfo.packageName, resources, packageInfo.applicationInfo.theme));
+
+            if (packageInfo.activities != null) {
+                for (ActivityInfo otherActivityInfo : packageInfo.activities) {
+                    colors.addAll(getStatusBarColors(packageInfo.packageName, resources, otherActivityInfo.theme));
+                }
+            }
+        }
+
+        return colors;
+    }
+
+    public static List<Integer> getColors(Context context, String packageName) {
+        List<Integer> colors = new ArrayList<>();
+
+        PackageManager packageManager = context.getPackageManager();
+
+        PackageInfo packageInfo = null;
+        Resources resources = null;
+        try {
+            packageInfo = packageManager.getPackageInfo(packageName, PackageManager.GET_META_DATA);
+            resources = packageManager.getResourcesForApplication(packageInfo.applicationInfo);
+        } catch (PackageManager.NameNotFoundException ignored) {
+        }
+
+        if (packageInfo != null && resources != null) {
+            colors.addAll(getStatusBarColors(packageInfo.packageName, resources, packageInfo.applicationInfo.theme));
+
+            if (packageInfo.activities != null) {
+                for (ActivityInfo activityInfo : packageInfo.activities) {
+                    colors.addAll(getPrimaryColors(context, new ComponentName(activityInfo.packageName, activityInfo.name)));
+                }
+            }
+        }
+
+        return colors;
+    }
+
+
+    public static List<Integer> getColors(Context context, AppData app) {
+        List<Integer> colors = new ArrayList<>();
+        colors.addAll(getColors(context, app.packageName));
+        for (AppData.ActivityData activity : app.activities) {
+            Integer color = getPrimaryColor(context, activity.getComponentName());
+            if (color != null) colors.add(color);
+        }
+
+        return colors;
+    }
+
+    private static List<Integer> getStatusBarColors(String packageName, Resources resources, int style) {
+        List<Integer> colors = new ArrayList<>();
+
         Resources.Theme theme = resources.newTheme();
         theme.applyStyle(style, true);
 
@@ -108,7 +186,7 @@ public class ColorUtils {
             int statusBarRes = typedArray.getResourceId(i, 0);
             if (statusBarRes != 0) {
                 try {
-                    return ResourcesCompat.getColor(resources, statusBarRes, theme);
+                    colors.add(ResourcesCompat.getColor(resources, statusBarRes, theme));
                 } catch (Resources.NotFoundException ignored) {
                 }
             }
@@ -117,20 +195,21 @@ public class ColorUtils {
         typedArray = theme.obtainStyledAttributes(style, new int[]{
                 resources.getIdentifier("colorPrimary", "attr", packageName),
                 resources.getIdentifier("colorPrimary", "color", packageName),
-                resources.getIdentifier("navigationBarColor", "attr", packageName)
+                resources.getIdentifier("navigationBarColor", "attr", packageName),
+                resources.getIdentifier("colorAccent", "color", packageName)
         });
 
         for (int i = 0; i < typedArray.length(); i++) {
             int statusBarRes = typedArray.getResourceId(i, 0);
             if (statusBarRes != 0) {
                 try {
-                    return darkColor(ResourcesCompat.getColor(resources, statusBarRes, theme));
+                    colors.add(darkColor(ResourcesCompat.getColor(resources, statusBarRes, theme)));
                 } catch (Resources.NotFoundException ignored) {
                 }
             }
         }
 
-        return null;
+        return colors;
     }
 
     @ColorInt

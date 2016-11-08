@@ -184,12 +184,13 @@
                     android:textStyle="bold" />
 
                 <com.james.status.views.SquareImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
                     android:layout_gravity="center_vertical"
                     android:layout_margin="8dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     app:srcCompat="@drawable/ic_image"
+                    android:scaleType="center"
                     android:id="@+id/image" />
 
             </LinearLayout>
