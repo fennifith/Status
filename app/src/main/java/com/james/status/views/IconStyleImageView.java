@@ -1,8 +1,9 @@
 package com.james.status.views;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.TransitionDrawable;
 import android.os.Handler;
-import android.os.Looper;
 import android.support.graphics.drawable.VectorDrawableCompat;
 import android.util.AttributeSet;
 
@@ -10,52 +11,51 @@ import com.james.status.data.IconStyleData;
 
 public class IconStyleImageView extends SquareImageView {
 
-    Thread thread;
-    IconStyleData iconStyle;
+    private IconStyleData iconStyle;
+    private int resource;
+
+    private Handler handler;
+    private Runnable runnable;
 
     public IconStyleImageView(Context context) {
         super(context);
+        init();
     }
 
     public IconStyleImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        init();
     }
 
     public IconStyleImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        init();
     }
 
-    public void setIconStyle(final IconStyleData iconStyle) {
-        if (iconStyle == null) return;
+    private void init() {
+        handler = new Handler();
 
-        this.iconStyle = iconStyle;
-        if (thread != null && thread.isAlive()) thread.interrupt();
-
-        thread = new Thread() {
+        handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                while (true) {
-                    if (System.currentTimeMillis() % 600 == 0) break;
+                if (iconStyle != null) {
+                    Drawable previous = VectorDrawableCompat.create(getContext().getResources(), iconStyle.resource[resource % iconStyle.resource.length], getContext().getTheme());
+                    resource++;
+
+                    TransitionDrawable drawable = new TransitionDrawable(new Drawable[]{previous, VectorDrawableCompat.create(getContext().getResources(), iconStyle.resource[resource % iconStyle.resource.length], getContext().getTheme())});
+                    setImageDrawable(drawable);
+                    drawable.startTransition(150);
                 }
 
-                while (true) {
-                    for (final int resource : iconStyle.resource) {
-                        new Handler(Looper.getMainLooper()).post(new Runnable() {
-                            @Override
-                            public void run() {
-                                setImageDrawable(VectorDrawableCompat.create(getContext().getResources(), resource, getContext().getTheme()));
-                            }
-                        });
-
-                        try {
-                            sleep(600);
-                        } catch (InterruptedException e) {
-                            return;
-                        }
-                    }
-                }
+                if (handler != null) handler.postDelayed(this, 1500);
             }
-        };
-        thread.start();
+        }, 1500);
+    }
+
+    public void setIconStyle(IconStyleData iconStyle) {
+        if (iconStyle != null && iconStyle.resource.length < 1) return;
+        this.iconStyle = iconStyle;
+        if (iconStyle != null)
+            setImageDrawable(VectorDrawableCompat.create(getContext().getResources(), iconStyle.resource[resource % iconStyle.resource.length], getContext().getTheme()));
     }
 }

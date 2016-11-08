@@ -25,7 +25,7 @@ public class ListPickerDialog extends PreferenceDialog<ListPreferenceData.ListPr
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.dialog_icon_picker);
+        setContentView(R.layout.dialog_list_picker);
 
         RecyclerView recycler = (RecyclerView) findViewById(R.id.recycler);
         recycler.setLayoutManager(new GridLayoutManager(getContext(), 1));

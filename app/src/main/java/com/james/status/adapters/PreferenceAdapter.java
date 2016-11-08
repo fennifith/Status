@@ -11,8 +11,8 @@ import java.util.List;
 
 public class PreferenceAdapter extends RecyclerView.Adapter<PreferenceData.ViewHolder> {
 
-    Context context;
-    List<PreferenceData> datas;
+    private Context context;
+    private List<PreferenceData> datas;
 
     public PreferenceAdapter(Context context, List<PreferenceData> datas) {
         this.context = context;
