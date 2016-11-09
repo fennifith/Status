@@ -11,11 +11,13 @@ import android.view.ViewGroup;
 
 import com.getkeepsafe.taptargetview.TapTargetView;
 import com.james.status.R;
+import com.james.status.Status;
 import com.james.status.adapters.IconAdapter;
 import com.james.status.utils.StaticUtils;
 
-public class IconPreferenceFragment extends SimpleFragment {
+public class IconPreferenceFragment extends SimpleFragment implements Status.OnPreferenceChangedListener {
 
+    private Status status;
     private IconAdapter adapter;
     private boolean isSelected;
 
@@ -23,6 +25,8 @@ public class IconPreferenceFragment extends SimpleFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_icons, container, false);
+        status = (Status) getContext().getApplicationContext();
+        status.addListener(this);
 
         RecyclerView recycler = (RecyclerView) v.findViewById(R.id.recycler);
         recycler.setLayoutManager(new GridLayoutManager(getContext(), 1));
@@ -85,6 +89,12 @@ public class IconPreferenceFragment extends SimpleFragment {
     }
 
     @Override
+    public void onDestroy() {
+        if (status != null) status.removeListener(this);
+        super.onDestroy();
+    }
+
+    @Override
     public String getTitle(Context context) {
         return context.getString(R.string.tab_icons);
     }
@@ -109,5 +119,10 @@ public class IconPreferenceFragment extends SimpleFragment {
         if (adapter != null) {
             adapter.filter(filter);
         }
+    }
+
+    @Override
+    public void onPreferenceChanged() {
+        if (adapter != null) adapter.notifyDataSetChanged();
     }
 }
