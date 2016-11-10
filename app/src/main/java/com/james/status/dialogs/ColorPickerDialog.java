@@ -5,11 +5,12 @@ import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.ColorInt;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatSeekBar;
 import android.text.Editable;
@@ -26,10 +27,11 @@ import com.james.status.activities.ImagePickerActivity;
 import com.james.status.utils.ColorUtils;
 import com.james.status.views.CustomImageView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ColorPickerDialog extends PreferenceDialog<Integer> implements Status.OnColorPickedListener {
+public class ColorPickerDialog extends PreferenceDialog<Integer> implements Status.OnActivityResultListener {
 
     private Status status;
     private TextWatcher textWatcher;
@@ -280,10 +282,31 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> implements Stat
     }
 
     @Override
-    public void onColorPicked(@Nullable Integer color) {
-        if (color != null) {
-            setColor(color, false);
-            setPreference(color);
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Bitmap bitmap = null;
+
+        if (requestCode == ImagePickerActivity.ACTION_PICK_IMAGE) {
+            if (resultCode == ImagePickerActivity.RESULT_OK) {
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), data.getData());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        if (bitmap != null) {
+            new ImageColorPickerDialog(getContext(), bitmap).setDefaultPreference(Color.BLACK).setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
+                @Override
+                public void onPreference(PreferenceDialog dialog, Integer preference) {
+                    setColor(preference, false);
+                    setPreference(preference);
+                }
+
+                @Override
+                public void onCancel(PreferenceDialog dialog) {
+                }
+            }).show();
         }
 
         status.removeListener(this);

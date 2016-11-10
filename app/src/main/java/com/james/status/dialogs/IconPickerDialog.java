@@ -56,6 +56,13 @@ public class IconPickerDialog extends PreferenceDialog<IconStyleData> {
 
         recycler.setAdapter(adapter);
 
+        findViewById(R.id.add).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
         findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
