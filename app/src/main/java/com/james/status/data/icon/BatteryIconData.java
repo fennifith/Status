@@ -5,12 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.BatteryManager;
-import android.support.graphics.drawable.VectorDrawableCompat;
 
 import com.james.status.R;
 import com.james.status.data.IconStyleData;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -58,7 +56,7 @@ public class BatteryIconData extends IconData {
             if (status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL)
                 iconLevel += 7;
 
-            onDrawableUpdate(VectorDrawableCompat.create(getContext().getResources(), getIconResource(iconLevel), getContext().getTheme()));
+            onDrawableUpdate(iconLevel);
 
             if (hasText())
                 onTextUpdate(String.valueOf((int) (((double) level / scale) * 100)) + "%");
@@ -76,13 +74,19 @@ public class BatteryIconData extends IconData {
     }
 
     @Override
+    public int getIconStyleSize() {
+        return 15;
+    }
+
+    @Override
     public List<IconStyleData> getIconStyles() {
-        List<IconStyleData> styles = new ArrayList<>();
+        List<IconStyleData> styles = super.getIconStyles();
 
         styles.addAll(
                 Arrays.asList(
                         new IconStyleData(
                                 getContext().getString(R.string.icon_style_default),
+                                IconStyleData.TYPE_VECTOR,
                                 R.drawable.ic_battery_alert,
                                 R.drawable.ic_battery_20,
                                 R.drawable.ic_battery_30,
@@ -101,6 +105,7 @@ public class BatteryIconData extends IconData {
                         ),
                         new IconStyleData(
                                 getContext().getString(R.string.icon_style_stock),
+                                IconStyleData.TYPE_VECTOR,
                                 R.drawable.ic_battery_stock_alert,
                                 R.drawable.ic_battery_stock_20,
                                 R.drawable.ic_battery_stock_30,
@@ -119,6 +124,7 @@ public class BatteryIconData extends IconData {
                         ),
                         new IconStyleData(
                                 getContext().getString(R.string.icon_style_circle),
+                                IconStyleData.TYPE_VECTOR,
                                 R.drawable.ic_battery_circle_alert,
                                 R.drawable.ic_battery_circle_20,
                                 R.drawable.ic_battery_circle_30,
@@ -137,6 +143,7 @@ public class BatteryIconData extends IconData {
                         ),
                         new IconStyleData(
                                 getContext().getString(R.string.icon_style_retro),
+                                IconStyleData.TYPE_VECTOR,
                                 R.drawable.ic_battery_retro_alert,
                                 R.drawable.ic_battery_retro_20,
                                 R.drawable.ic_battery_retro_30,
@@ -155,6 +162,7 @@ public class BatteryIconData extends IconData {
                         ),
                         new IconStyleData(
                                 getContext().getString(R.string.icon_style_circle_outline),
+                                IconStyleData.TYPE_VECTOR,
                                 R.drawable.ic_battery_circle_outline_alert,
                                 R.drawable.ic_battery_circle_outline_20,
                                 R.drawable.ic_battery_circle_outline_30,
@@ -189,7 +197,7 @@ public class BatteryIconData extends IconData {
             if (status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL)
                 iconLevel += 7;
 
-            onDrawableUpdate(VectorDrawableCompat.create(getContext().getResources(), getIconResource(iconLevel), getContext().getTheme()));
+            onDrawableUpdate(iconLevel);
 
             if (hasText())
                 onTextUpdate(String.valueOf((int) (((double) level / scale) * 100)) + "%");

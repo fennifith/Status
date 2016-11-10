@@ -5,18 +5,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
-import android.support.graphics.drawable.VectorDrawableCompat;
 
 import com.james.status.R;
 import com.james.status.data.IconStyleData;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class RingerIconData extends IconData<RingerIconData.RingerReceiver> {
 
-    AudioManager audioManager;
+    private AudioManager audioManager;
 
     public RingerIconData(Context context) {
         super(context);
@@ -39,13 +37,13 @@ public class RingerIconData extends IconData<RingerIconData.RingerReceiver> {
 
         switch (audioManager.getRingerMode()) {
             case AudioManager.RINGER_MODE_SILENT:
-                onDrawableUpdate(VectorDrawableCompat.create(getContext().getResources(), getIconResource(0), getContext().getTheme()));
+                onDrawableUpdate(0);
                 break;
             case AudioManager.RINGER_MODE_VIBRATE:
-                onDrawableUpdate(VectorDrawableCompat.create(getContext().getResources(), getIconResource(1), getContext().getTheme()));
+                onDrawableUpdate(1);
                 break;
             case AudioManager.RINGER_MODE_NORMAL:
-                onDrawableUpdate(null);
+                onDrawableUpdate(-1);
                 break;
         }
     }
@@ -56,13 +54,19 @@ public class RingerIconData extends IconData<RingerIconData.RingerReceiver> {
     }
 
     @Override
+    public int getIconStyleSize() {
+        return 2;
+    }
+
+    @Override
     public List<IconStyleData> getIconStyles() {
-        List<IconStyleData> styles = new ArrayList<>();
+        List<IconStyleData> styles = super.getIconStyles();
 
         styles.addAll(
                 Arrays.asList(
                         new IconStyleData(
                                 getContext().getString(R.string.icon_style_default),
+                                IconStyleData.TYPE_VECTOR,
                                 R.drawable.ic_sound_mute,
                                 R.drawable.ic_sound_vibration
                         )
@@ -78,13 +82,13 @@ public class RingerIconData extends IconData<RingerIconData.RingerReceiver> {
         public void onReceive(Context context, Intent intent) {
             switch (audioManager.getRingerMode()) {
                 case AudioManager.RINGER_MODE_SILENT:
-                    onDrawableUpdate(VectorDrawableCompat.create(getContext().getResources(), getIconResource(0), getContext().getTheme()));
+                    onDrawableUpdate(0);
                     break;
                 case AudioManager.RINGER_MODE_VIBRATE:
-                    onDrawableUpdate(VectorDrawableCompat.create(getContext().getResources(), getIconResource(1), getContext().getTheme()));
+                    onDrawableUpdate(1);
                     break;
                 case AudioManager.RINGER_MODE_NORMAL:
-                    onDrawableUpdate(null);
+                    onDrawableUpdate(-1);
                     break;
             }
         }

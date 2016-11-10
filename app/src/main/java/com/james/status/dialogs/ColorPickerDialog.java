@@ -29,10 +29,9 @@ import com.james.status.views.CustomImageView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ColorPickerDialog extends PreferenceDialog<Integer> {
+public class ColorPickerDialog extends PreferenceDialog<Integer> implements Status.OnColorPickedListener {
 
     private Status status;
-    private Status.OnColorPickedListener listener;
     private TextWatcher textWatcher;
     private List<Integer> presetColors;
 
@@ -40,7 +39,7 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> {
     private AppCompatEditText colorHex;
     private TextView redInt, greenInt, blueInt;
     private AppCompatSeekBar red, green, blue;
-    private View reset, image;
+    private View reset;
 
     private boolean isTrackingTouch;
 
@@ -63,8 +62,6 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> {
         greenInt = (TextView) findViewById(R.id.greenInt);
         blue = (AppCompatSeekBar) findViewById(R.id.blue);
         blueInt = (TextView) findViewById(R.id.blueInt);
-
-        image = findViewById(R.id.image);
         reset = findViewById(R.id.reset);
 
         textWatcher = new TextWatcher() {
@@ -184,22 +181,10 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> {
             presetLayout.addView(v);
         }
 
-        listener = new Status.OnColorPickedListener() {
-            @Override
-            public void onColorPicked(@Nullable Integer color) {
-                if (color != null) {
-                    setColor(color, false);
-                    setPreference(color);
-                }
-
-                status.removeListener(this);
-            }
-        };
-
-        image.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.image).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                status.addListener(listener);
+                status.addListener(ColorPickerDialog.this);
                 getContext().startActivity(new Intent(getContext(), ImagePickerActivity.class));
             }
         });
@@ -292,5 +277,15 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> {
         }
 
         return (ColorPickerDialog) super.setPreference(preference);
+    }
+
+    @Override
+    public void onColorPicked(@Nullable Integer color) {
+        if (color != null) {
+            setColor(color, false);
+            setPreference(color);
+        }
+
+        status.removeListener(this);
     }
 }

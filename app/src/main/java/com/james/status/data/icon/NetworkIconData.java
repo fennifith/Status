@@ -1,7 +1,6 @@
 package com.james.status.data.icon;
 
 import android.content.Context;
-import android.support.graphics.drawable.VectorDrawableCompat;
 import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
@@ -9,7 +8,6 @@ import android.telephony.TelephonyManager;
 import com.james.status.R;
 import com.james.status.data.IconStyleData;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -44,13 +42,19 @@ public class NetworkIconData extends IconData {
     }
 
     @Override
+    public int getIconStyleSize() {
+        return 5;
+    }
+
+    @Override
     public List<IconStyleData> getIconStyles() {
-        List<IconStyleData> styles = new ArrayList<>();
+        List<IconStyleData> styles = super.getIconStyles();
 
         styles.addAll(
                 Arrays.asList(
                         new IconStyleData(
                                 getContext().getString(R.string.icon_style_default),
+                                IconStyleData.TYPE_VECTOR,
                                 R.drawable.ic_signal_0,
                                 R.drawable.ic_signal_1,
                                 R.drawable.ic_signal_2,
@@ -59,6 +63,7 @@ public class NetworkIconData extends IconData {
                         ),
                         new IconStyleData(
                                 getContext().getString(R.string.icon_style_square),
+                                IconStyleData.TYPE_VECTOR,
                                 R.drawable.ic_signal_square_0,
                                 R.drawable.ic_signal_square_1,
                                 R.drawable.ic_signal_square_2,
@@ -67,6 +72,7 @@ public class NetworkIconData extends IconData {
                         ),
                         new IconStyleData(
                                 getContext().getString(R.string.icon_style_retro),
+                                IconStyleData.TYPE_VECTOR,
                                 R.drawable.ic_signal_retro_0,
                                 R.drawable.ic_signal_retro_1,
                                 R.drawable.ic_signal_retro_2,
@@ -107,7 +113,7 @@ public class NetworkIconData extends IconData {
                     }
                 }
 
-                onDrawableUpdate(VectorDrawableCompat.create(getContext().getResources(), getIconResource(level), getContext().getTheme()));
+                onDrawableUpdate(level);
             }
         }
     }

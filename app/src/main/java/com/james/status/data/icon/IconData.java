@@ -11,7 +11,6 @@ import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
-import android.support.graphics.drawable.VectorDrawableCompat;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,7 +38,7 @@ public abstract class IconData<T extends BroadcastReceiver> {
     private Context context;
     private DrawableListener drawableListener;
     private TextListener textListener;
-    private int[] resource;
+    private IconStyleData style;
     private T receiver;
 
     private Drawable drawable;
@@ -50,10 +49,20 @@ public abstract class IconData<T extends BroadcastReceiver> {
     public IconData(Context context) {
         this.context = context;
 
-        resource = getResourceIntPreference(PreferenceIdentifier.ICON_STYLE, "drawable");
+        String name = getStringPreference(PreferenceIdentifier.ICON_STYLE);
+        List<IconStyleData> styles = getIconStyles();
+        if (styles.size() > 0) {
+            if (name != null) {
+                for (IconStyleData style : styles) {
+                    if (style.name.equals(name)) {
+                        this.style = style;
+                        break;
+                    }
+                }
+            }
 
-        if (resource == null)
-            resource = getDefaultIconResource();
+            if (style == null) style = styles.get(0);
+        }
     }
 
     public final Context getContext() {
@@ -84,8 +93,10 @@ public abstract class IconData<T extends BroadcastReceiver> {
         this.textListener = textListener;
     }
 
-    public final void onDrawableUpdate(@Nullable Drawable drawable) {
+    public final void onDrawableUpdate(int level) {
         if (hasDrawable()) {
+            drawable = style.getDrawable(context, level);
+
             if (v != null) {
                 CustomImageView iconView = (CustomImageView) v.findViewById(R.id.icon);
 
@@ -112,7 +123,6 @@ public abstract class IconData<T extends BroadcastReceiver> {
         }
 
         if (hasDrawableListener()) getDrawableListener().onUpdate(drawable);
-        this.drawable = drawable;
     }
 
     public final void onTextUpdate(@Nullable String text) {
@@ -148,7 +158,7 @@ public abstract class IconData<T extends BroadcastReceiver> {
 
     public boolean hasDrawable() {
         Boolean hasDrawable = getBooleanPreference(PreferenceIdentifier.ICON_VISIBILITY);
-        return canHazDrawable() && (hasDrawable == null || hasDrawable);
+        return canHazDrawable() && (hasDrawable == null || hasDrawable) && style != null;
     }
 
     public boolean canHazText() {
@@ -172,25 +182,11 @@ public abstract class IconData<T extends BroadcastReceiver> {
     public void register() {
         if (receiver == null) receiver = getReceiver();
         if (receiver != null) getContext().registerReceiver(receiver, getIntentFilter());
-        onDrawableUpdate(null);
+        onDrawableUpdate(-1);
     }
 
     public void unregister() {
         if (receiver != null) getContext().unregisterReceiver(receiver);
-    }
-
-    public int[] getDefaultIconResource() {
-        List<IconStyleData> iconStyles = getIconStyles();
-        if (iconStyles.size() > 0) return iconStyles.get(0).resource;
-        else return null;
-    }
-
-    public final int getIconResource() {
-        return resource[0];
-    }
-
-    public final int getIconResource(int level) {
-        return resource[Math.abs(level % resource.length)];
     }
 
     public final int getIconPadding() {
@@ -241,7 +237,7 @@ public abstract class IconData<T extends BroadcastReceiver> {
 
     public Drawable getFakeDrawable() {
         if (hasDrawable())
-            return VectorDrawableCompat.create(getContext().getResources(), resource[resource.length / 2], getContext().getTheme());
+            return style.getDrawable(context, style.getSize() / 2);
         else return new ColorDrawable(Color.TRANSPARENT);
     }
 
@@ -407,12 +403,13 @@ public abstract class IconData<T extends BroadcastReceiver> {
                     new PreferenceData.Identifier(
                             getContext().getString(R.string.preference_icon_style)
                     ),
-                    getResourceIntPreference(PreferenceIdentifier.ICON_STYLE, "drawable"),
+                    style,
                     getIconStyles(),
                     new PreferenceData.OnPreferenceChangeListener<IconStyleData>() {
                         @Override
                         public void onPreferenceChange(IconStyleData preference) {
-                            putPreference(PreferenceIdentifier.ICON_STYLE, preference.resource);
+                            style = preference;
+                            putPreference(PreferenceIdentifier.ICON_STYLE, preference.name);
                             StaticUtils.updateStatusService(getContext());
                         }
                     }
@@ -422,8 +419,47 @@ public abstract class IconData<T extends BroadcastReceiver> {
         return preferences;
     }
 
+    public int getIconStyleSize() {
+        return 0;
+    }
+
     public List<IconStyleData> getIconStyles() {
-        return new ArrayList<>();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+        List<IconStyleData> styles = new ArrayList<>();
+        String[] names = getStringArrayPreference(PreferenceIdentifier.ICON_STYLE_NAMES);
+        if (names != null) {
+            for (String name : names) {
+                IconStyleData style = IconStyleData.fromSharedPreferences(prefs, name, getClass().getName());
+                if (style != null) styles.add(style);
+            }
+        }
+
+        return styles;
+    }
+
+    public final void addIconStyle(IconStyleData style) {
+        if (style.getSize() == getIconStyleSize()) {
+            String[] names = getStringArrayPreference(PreferenceIdentifier.ICON_STYLE_NAMES);
+            List<String> list = new ArrayList<>();
+            if (names != null) list.addAll(Arrays.asList(names));
+
+            SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+            style.writeToSharedPreferences(editor, getClass().getName());
+            editor.apply();
+
+            list.add(style.name);
+            putPreference(PreferenceIdentifier.ICON_STYLE_NAMES, list.toArray(new String[list.size()]));
+        }
+    }
+
+    public final void removeIconStyle(IconStyleData style) {
+        String[] names = getStringArrayPreference(PreferenceIdentifier.ICON_STYLE_NAMES);
+        List<String> list = new ArrayList<>();
+        if (names != null) list.addAll(Arrays.asList(names));
+
+        list.remove(style.name);
+        putPreference(PreferenceIdentifier.ICON_STYLE_NAMES, list.toArray(new String[list.size()]));
     }
 
     @Nullable
@@ -489,6 +525,18 @@ public abstract class IconData<T extends BroadcastReceiver> {
         } else return null;
     }
 
+    public final String[] getStringArrayPreference(PreferenceIdentifier identifier) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        if (prefs.contains(getIdentifierString(identifier) + "-length")) {
+            String[] array = new String[prefs.getInt(getIdentifierString(identifier) + "-length", 0)];
+            for (int i = 0; i < array.length; i++) {
+                array[i] = prefs.getString(getIdentifierString(identifier) + "-" + i, null);
+            }
+
+            return array;
+        } else return null;
+    }
+
     public final void putPreference(PreferenceIdentifier identifier, boolean object) {
         PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(getIdentifierString(identifier), object).apply();
     }
@@ -512,6 +560,17 @@ public abstract class IconData<T extends BroadcastReceiver> {
         }
     }
 
+    public final void putPreference(PreferenceIdentifier identifier, String[] object) {
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+
+        editor.putInt(getIdentifierString(identifier) + "-length", object.length);
+        for (int i = 0; i < object.length; i++) {
+            editor.putString(getIdentifierString(identifier) + "-" + i, object[i]);
+        }
+
+        editor.apply();
+    }
+
     private String getIdentifierString(PreferenceIdentifier identifier) {
         return getClass().getName() + "/" + identifier.toString();
     }
@@ -525,6 +584,7 @@ public abstract class IconData<T extends BroadcastReceiver> {
         TEXT_SIZE,
         ICON_VISIBILITY,
         ICON_STYLE,
+        ICON_STYLE_NAMES,
         ICON_PADDING,
         ICON_SCALE
     }

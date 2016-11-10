@@ -7,12 +7,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.provider.Settings;
-import android.support.graphics.drawable.VectorDrawableCompat;
 
 import com.james.status.R;
 import com.james.status.data.IconStyleData;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -42,19 +40,14 @@ public class AlarmIconData extends IconData<AlarmIconData.AlarmReceiver> {
     public void register() {
         super.register();
 
-        Object alarm = null;
+        Object alarm;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             alarm = alarmManager.getNextAlarmClock();
         else
             alarm = Settings.System.getString(getContext().getContentResolver(), android.provider.Settings.System.NEXT_ALARM_FORMATTED);
 
         if (alarm != null)
-            onDrawableUpdate(VectorDrawableCompat.create(getContext().getResources(), getIconResource(), getContext().getTheme()));
-    }
-
-    @Override
-    public int[] getDefaultIconResource() {
-        return new int[]{R.drawable.ic_alarm};
+            onDrawableUpdate(0);
     }
 
     @Override
@@ -63,13 +56,19 @@ public class AlarmIconData extends IconData<AlarmIconData.AlarmReceiver> {
     }
 
     @Override
+    public int getIconStyleSize() {
+        return 1;
+    }
+
+    @Override
     public List<IconStyleData> getIconStyles() {
-        List<IconStyleData> styles = new ArrayList<>();
+        List<IconStyleData> styles = super.getIconStyles();
 
         styles.addAll(
                 Arrays.asList(
                         new IconStyleData(
                                 getContext().getString(R.string.icon_style_default),
+                                IconStyleData.TYPE_VECTOR,
                                 R.drawable.ic_alarm
                         )
                 )
@@ -88,8 +87,8 @@ public class AlarmIconData extends IconData<AlarmIconData.AlarmReceiver> {
                 alarm = Settings.System.getString(getContext().getContentResolver(), android.provider.Settings.System.NEXT_ALARM_FORMATTED);
 
             if (alarm != null)
-                onDrawableUpdate(VectorDrawableCompat.create(getContext().getResources(), getIconResource(), getContext().getTheme()));
-            else onDrawableUpdate(null);
+                onDrawableUpdate(0);
+            else onDrawableUpdate(-1);
         }
     }
 }

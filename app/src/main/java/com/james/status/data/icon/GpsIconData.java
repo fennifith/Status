@@ -11,13 +11,11 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
-import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.content.ContextCompat;
 
 import com.james.status.R;
 import com.james.status.data.IconStyleData;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -47,31 +45,30 @@ public class GpsIconData extends IconData<GpsIconData.GpsReceiver> {
     }
 
     @Override
-    public int[] getDefaultIconResource() {
-        return new int[]{
-                R.drawable.ic_gps_searching,
-                R.drawable.ic_gps_fixed
-        };
-    }
-
-    @Override
     public String getTitle() {
         return getContext().getString(R.string.icon_gps);
     }
 
     @Override
+    public int getIconStyleSize() {
+        return 2;
+    }
+
+    @Override
     public List<IconStyleData> getIconStyles() {
-        List<IconStyleData> styles = new ArrayList<>();
+        List<IconStyleData> styles = super.getIconStyles();
 
         styles.addAll(
                 Arrays.asList(
                         new IconStyleData(
                                 getContext().getString(R.string.icon_style_default),
+                                IconStyleData.TYPE_VECTOR,
                                 R.drawable.ic_gps_searching,
                                 R.drawable.ic_gps_fixed
                         ),
                         new IconStyleData(
                                 getContext().getString(R.string.icon_style_dish),
+                                IconStyleData.TYPE_VECTOR,
                                 R.drawable.ic_gps_dish_searching,
                                 R.drawable.ic_gps_dish_fixed
                         )
@@ -86,10 +83,10 @@ public class GpsIconData extends IconData<GpsIconData.GpsReceiver> {
         public void onReceive(Context context, Intent intent) {
             if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                 if (isLocationFixed()) {
-                    onDrawableUpdate(VectorDrawableCompat.create(getContext().getResources(), getIconResource(1), getContext().getTheme()));
+                    onDrawableUpdate(1);
                 } else
-                    onDrawableUpdate(VectorDrawableCompat.create(getContext().getResources(), getIconResource(0), getContext().getTheme()));
-            } else onDrawableUpdate(null);
+                    onDrawableUpdate(0);
+            } else onDrawableUpdate(-1);
         }
 
         private boolean isLocationFixed() {

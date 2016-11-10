@@ -7,12 +7,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.nfc.NfcAdapter;
 import android.nfc.NfcManager;
-import android.support.graphics.drawable.VectorDrawableCompat;
 
 import com.james.status.R;
 import com.james.status.data.IconStyleData;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -42,12 +40,7 @@ public class NfcIconData extends IconData<NfcIconData.NfcReceiver> {
 
         NfcAdapter adapter = manager.getDefaultAdapter();
         if (adapter != null && adapter.isEnabled())
-            onDrawableUpdate(VectorDrawableCompat.create(getContext().getResources(), getIconResource(), getContext().getTheme()));
-    }
-
-    @Override
-    public int[] getDefaultIconResource() {
-        return new int[]{R.drawable.ic_nfc};
+            onDrawableUpdate(0);
     }
 
     @Override
@@ -56,13 +49,19 @@ public class NfcIconData extends IconData<NfcIconData.NfcReceiver> {
     }
 
     @Override
+    public int getIconStyleSize() {
+        return 1;
+    }
+
+    @Override
     public List<IconStyleData> getIconStyles() {
-        List<IconStyleData> styles = new ArrayList<>();
+        List<IconStyleData> styles = super.getIconStyles();
 
         styles.addAll(
                 Arrays.asList(
                         new IconStyleData(
                                 getContext().getString(R.string.icon_style_default),
+                                IconStyleData.TYPE_VECTOR,
                                 R.drawable.ic_nfc
                         )
                 )
@@ -77,11 +76,11 @@ public class NfcIconData extends IconData<NfcIconData.NfcReceiver> {
             switch (intent.getIntExtra(NfcAdapter.EXTRA_ADAPTER_STATE, NfcAdapter.STATE_OFF)) {
                 case NfcAdapter.STATE_OFF:
                 case NfcAdapter.STATE_TURNING_OFF:
-                    onDrawableUpdate(null);
+                    onDrawableUpdate(-1);
                     break;
                 case NfcAdapter.STATE_ON:
                 case NfcAdapter.STATE_TURNING_ON:
-                    onDrawableUpdate(VectorDrawableCompat.create(getContext().getResources(), getIconResource(), getContext().getTheme()));
+                    onDrawableUpdate(0);
                     break;
             }
         }

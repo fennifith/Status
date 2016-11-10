@@ -4,13 +4,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.support.graphics.drawable.VectorDrawableCompat;
 import android.telephony.TelephonyManager;
 
 import com.james.status.R;
 import com.james.status.data.IconStyleData;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -31,23 +29,24 @@ public class AirplaneModeIconData extends IconData<AirplaneModeIconData.Airplane
     }
 
     @Override
-    public int[] getDefaultIconResource() {
-        return new int[]{R.drawable.ic_airplane};
-    }
-
-    @Override
     public String getTitle() {
         return getContext().getString(R.string.icon_airplane);
     }
 
     @Override
+    public int getIconStyleSize() {
+        return 1;
+    }
+
+    @Override
     public List<IconStyleData> getIconStyles() {
-        List<IconStyleData> styles = new ArrayList<>();
+        List<IconStyleData> styles = super.getIconStyles();
 
         styles.addAll(
                 Arrays.asList(
                         new IconStyleData(
                                 getContext().getString(R.string.icon_style_default),
+                                IconStyleData.TYPE_VECTOR,
                                 R.drawable.ic_airplane
                         )
                 )
@@ -60,8 +59,8 @@ public class AirplaneModeIconData extends IconData<AirplaneModeIconData.Airplane
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getBooleanExtra(TelephonyManager.EXTRA_STATE, false))
-                onDrawableUpdate(VectorDrawableCompat.create(getContext().getResources(), getIconResource(), getContext().getTheme()));
-            else onDrawableUpdate(null);
+                onDrawableUpdate(0);
+            else onDrawableUpdate(-1);
         }
     }
 }

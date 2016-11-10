@@ -166,7 +166,7 @@ public class NotificationsIconData extends IconData<NotificationsIconData.Notifi
                 notificationLayout.addView(v);
                 notifications.put(notification.getKey(), notification);
 
-                onDrawableUpdate(null);
+                onDrawableUpdate(-1);
                 notificationLayout.setVisibility(View.VISIBLE);
             }
         }

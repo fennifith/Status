@@ -2,7 +2,6 @@ package com.james.status.data.icon;
 
 import android.content.Context;
 import android.os.Build;
-import android.support.graphics.drawable.VectorDrawableCompat;
 import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
 import android.telephony.SubscriptionInfo;
@@ -10,11 +9,9 @@ import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.widget.Toast;
 
-import com.james.status.R;
-
 import java.lang.reflect.Field;
 
-public class DualNetworkIconData extends IconData {
+public class DualNetworkIconData extends NetworkIconData {
 
     private TelephonyManager telephonyManager;
     private SubscriptionManager subscriptionManager;
@@ -62,17 +59,6 @@ public class DualNetworkIconData extends IconData {
         isRegistered = false;
     }
 
-    @Override
-    public int[] getDefaultIconResource() {
-        return new int[]{
-                R.drawable.ic_signal_0,
-                R.drawable.ic_signal_1,
-                R.drawable.ic_signal_2,
-                R.drawable.ic_signal_3,
-                R.drawable.ic_signal_4
-        };
-    }
-
     private class NetworkListener extends PhoneStateListener {
 
         public NetworkListener(int id) {
@@ -113,7 +99,7 @@ public class DualNetworkIconData extends IconData {
                     }
                 }
 
-                onDrawableUpdate(VectorDrawableCompat.create(getContext().getResources(), getIconResource(level), getContext().getTheme()));
+                onDrawableUpdate(level);
             }
         }
     }

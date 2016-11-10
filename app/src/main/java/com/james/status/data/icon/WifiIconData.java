@@ -7,12 +7,10 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
-import android.support.graphics.drawable.VectorDrawableCompat;
 
 import com.james.status.R;
 import com.james.status.data.IconStyleData;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -43,7 +41,7 @@ public class WifiIconData extends IconData<WifiIconData.WifiReceiver> {
 
         int level = WifiManager.calculateSignalLevel(wifiManager.getConnectionInfo().getRssi(), 4);
         if (level > 0) { //temporary fix, cannot determine wifi connection without BroadcastReceiver for some reason
-            onDrawableUpdate(VectorDrawableCompat.create(getContext().getResources(), getIconResource(level), getContext().getTheme()));
+            onDrawableUpdate(level);
         }
     }
 
@@ -53,13 +51,19 @@ public class WifiIconData extends IconData<WifiIconData.WifiReceiver> {
     }
 
     @Override
+    public int getIconStyleSize() {
+        return 5;
+    }
+
+    @Override
     public List<IconStyleData> getIconStyles() {
-        List<IconStyleData> styles = new ArrayList<>();
+        List<IconStyleData> styles = super.getIconStyles();
 
         styles.addAll(
                 Arrays.asList(
                         new IconStyleData(
                                 getContext().getString(R.string.icon_style_default),
+                                IconStyleData.TYPE_VECTOR,
                                 R.drawable.ic_wifi_0,
                                 R.drawable.ic_wifi_1,
                                 R.drawable.ic_wifi_2,
@@ -68,6 +72,7 @@ public class WifiIconData extends IconData<WifiIconData.WifiReceiver> {
                         ),
                         new IconStyleData(
                                 getContext().getString(R.string.icon_style_triangle),
+                                IconStyleData.TYPE_VECTOR,
                                 R.drawable.ic_wifi_triangle_0,
                                 R.drawable.ic_wifi_triangle_1,
                                 R.drawable.ic_wifi_triangle_2,
@@ -76,6 +81,7 @@ public class WifiIconData extends IconData<WifiIconData.WifiReceiver> {
                         ),
                         new IconStyleData(
                                 getContext().getString(R.string.icon_style_retro),
+                                IconStyleData.TYPE_VECTOR,
                                 R.drawable.ic_wifi_retro_0,
                                 R.drawable.ic_wifi_retro_1,
                                 R.drawable.ic_wifi_retro_2,
@@ -94,10 +100,9 @@ public class WifiIconData extends IconData<WifiIconData.WifiReceiver> {
             NetworkInfo networkInfo = intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
             if (networkInfo == null) networkInfo = connectivityManager.getActiveNetworkInfo();
 
-            if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI && networkInfo.isConnected()) {
-                int level = WifiManager.calculateSignalLevel(wifiManager.getConnectionInfo().getRssi(), 4);
-                onDrawableUpdate(VectorDrawableCompat.create(getContext().getResources(), getIconResource(level), getContext().getTheme()));
-            } else onDrawableUpdate(null);
+            if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI && networkInfo.isConnected())
+                onDrawableUpdate(WifiManager.calculateSignalLevel(wifiManager.getConnectionInfo().getRssi(), 4));
+            else onDrawableUpdate(-1);
         }
     }
 }

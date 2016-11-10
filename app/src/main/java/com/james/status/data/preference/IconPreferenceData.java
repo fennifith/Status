@@ -13,7 +13,6 @@ import com.james.status.dialogs.IconPickerDialog;
 import com.james.status.dialogs.PreferenceDialog;
 import com.james.status.views.IconStyleImageView;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class IconPreferenceData extends PreferenceData<IconStyleData> {
@@ -21,15 +20,11 @@ public class IconPreferenceData extends PreferenceData<IconStyleData> {
     private IconStyleData iconStyle;
     private List<IconStyleData> iconStyles;
 
-    public IconPreferenceData(Context context, Identifier identifier, int[] resource, List<IconStyleData> iconStyles, OnPreferenceChangeListener<IconStyleData> listener) {
+    public IconPreferenceData(Context context, Identifier identifier, IconStyleData iconStyle, List<IconStyleData> iconStyles, OnPreferenceChangeListener<IconStyleData> listener) {
         super(context, identifier, listener);
 
-        if (resource != null) {
-            for (IconStyleData style : iconStyles) {
-                if (Arrays.equals(style.resource, resource)) iconStyle = style;
-            }
-        } else iconStyle = iconStyles.get(0);
-
+        if (iconStyle == null) iconStyle = iconStyles.get(0);
+        this.iconStyle = iconStyle;
         this.iconStyles = iconStyles;
     }
 
