@@ -203,6 +203,11 @@
     <string name="preference_fullscreen">Fullscreen</string>
     <string name="preference_notifications">Notifications</string>
     <string name="add_style">Add Style</string>
+    <string name="action_delete">Delete</string>
+    <string name="prompt_name">Type a name here…</string>
+    <string name="error_no_text_name">Please type a name…</string>
+    <string name="error_name_exists">A style with this name already exists.</string>
+    <string name="error_missing_icons">You are missing one or more required icons.</string>
 
     <string-array name="libraries">
         <item>

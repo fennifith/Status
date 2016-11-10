@@ -10,20 +10,24 @@ import android.view.View;
 import com.james.status.R;
 import com.james.status.adapters.IconStyleAdapter;
 import com.james.status.data.IconStyleData;
+import com.james.status.data.icon.IconData;
 import com.james.status.utils.ImageUtils;
 
 import java.util.List;
 
-public class IconPickerDialog extends PreferenceDialog<IconStyleData> {
+public class IconPickerDialog extends PreferenceDialog<IconStyleData> implements IconStyleAdapter.OnCheckedChangeListener {
 
+    private IconData icon;
     private List<IconStyleData> styles;
     private IconStyleAdapter adapter;
+    private RecyclerView recycler;
 
     private String title;
 
-    public IconPickerDialog(Context context, List<IconStyleData> styles) {
+    public IconPickerDialog(Context context, IconData icon) {
         super(context, R.style.AppTheme_Dialog_FullScreen);
-        this.styles = styles;
+        this.icon = icon;
+        styles = icon.getIconStyles();
     }
 
     @Override
@@ -42,16 +46,10 @@ public class IconPickerDialog extends PreferenceDialog<IconStyleData> {
             }
         });
 
-        RecyclerView recycler = (RecyclerView) findViewById(R.id.recycler);
+        recycler = (RecyclerView) findViewById(R.id.recycler);
         recycler.setLayoutManager(new GridLayoutManager(getContext(), 1));
 
-        adapter = new IconStyleAdapter(getContext(), styles, new IconStyleAdapter.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChange(IconStyleData selected) {
-                setPreference(selected);
-            }
-        });
-
+        adapter = new IconStyleAdapter(getContext(), styles, this);
         adapter.setIconStyle(getPreference());
 
         recycler.setAdapter(adapter);
@@ -59,7 +57,18 @@ public class IconPickerDialog extends PreferenceDialog<IconStyleData> {
         findViewById(R.id.add).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                new IconStyleDialog(getContext(), getPreference().getSize(), icon.getStringArrayPreference(IconData.PreferenceIdentifier.ICON_STYLE_NAMES)).setListener(new IconStyleDialog.OnIconStyleListener() {
+                    @Override
+                    public void onIconStyle(IconStyleData style) {
+                        icon.addIconStyle(style);
+                        styles = icon.getIconStyles();
 
+                        adapter = new IconStyleAdapter(getContext(), styles, IconPickerDialog.this);
+                        adapter.setIconStyle(style);
+                        setPreference(style);
+                        recycler.setAdapter(adapter);
+                    }
+                }).show();
             }
         });
 
@@ -86,5 +95,16 @@ public class IconPickerDialog extends PreferenceDialog<IconStyleData> {
     @Override
     public void setTitle(int titleId) {
         title = getContext().getString(titleId);
+    }
+
+    @Override
+    public IconStyleData getDefaultPreference() {
+        if (styles.size() > 0) return styles.get(0);
+        else return null;
+    }
+
+    @Override
+    public void onCheckedChange(IconStyleData selected) {
+        setPreference(selected);
     }
 }

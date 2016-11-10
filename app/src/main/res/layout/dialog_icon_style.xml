@@ -6,12 +6,30 @@
     android:minHeight="400dp"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/layout"
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginBottom="16dp"
+        android:hint="@string/prompt_name" />
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical" />
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:id="@+id/layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:orientation="vertical" />
+
+    </ScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,7 +44,7 @@
             android:layout_height="wrap_content"
             android:textAllCaps="true"
             android:textSize="16sp"
-            android:text="@string/action_cancel"
+            android:text="@string/action_delete"
             android:textColor="@color/colorAccent"
             android:background="?attr/selectableItemBackground"
             android:id="@+id/cancel"

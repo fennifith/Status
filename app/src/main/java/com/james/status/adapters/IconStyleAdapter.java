@@ -61,6 +61,17 @@ public class IconStyleAdapter extends RecyclerView.Adapter<IconStyleAdapter.View
 
         if (layout.getChildCount() < 1) layout.setVisibility(View.GONE);
 
+        if (style.type == IconStyleData.TYPE_FILE) {
+            View edit = holder.v.findViewById(R.id.edit);
+            edit.setVisibility(View.VISIBLE);
+            edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //TODO: edit icon
+                }
+            });
+        } else holder.v.findViewById(R.id.edit).setVisibility(View.GONE);
+
         holder.v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -26,6 +26,12 @@ public class ImagePickerActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        status.onActivityResult(0, RESULT_CANCELED, null);
+        super.onDestroy();
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         status.onActivityResult(requestCode, resultCode, data);
