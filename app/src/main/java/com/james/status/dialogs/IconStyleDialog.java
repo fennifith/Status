@@ -46,12 +46,26 @@ public class IconStyleDialog extends AppCompatDialog {
         paths = new String[size];
     }
 
+    public IconStyleDialog(Context context, IconStyleData style, String[] names) {
+        super(context, R.style.AppTheme_Dialog);
+        setTitle(R.string.action_edit_style);
+
+        status = (Status) context.getApplicationContext();
+
+        if (names != null) this.names = names;
+        size = style.getSize();
+
+        name = style.name;
+        paths = style.path;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_icon_style);
 
         editText = (EditText) findViewById(R.id.name);
+        if (name != null) editText.setText(name);
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -77,8 +91,16 @@ public class IconStyleDialog extends AppCompatDialog {
         for (int i = 0; i < size; i++) {
             final View v = LayoutInflater.from(getContext()).inflate(R.layout.item_icon_picker, null);
             ((TextView) v.findViewById(R.id.number)).setText(String.valueOf(i + 1));
-            if (paths[i] != null)
-                ((ImageView) v.findViewById(R.id.image)).setImageDrawable(Drawable.createFromPath(paths[i]));
+            if (paths[i] != null) {
+                Drawable drawable = null;
+                try {
+                    drawable = Drawable.createFromPath(paths[i]);
+                } catch (OutOfMemoryError e) {
+                    e.printStackTrace();
+                }
+
+                ((ImageView) v.findViewById(R.id.image)).setImageDrawable(drawable);
+            }
 
             final int something = i;
             v.setOnClickListener(new View.OnClickListener() {
@@ -110,7 +132,15 @@ public class IconStyleDialog extends AppCompatDialog {
                                 }
 
                                 paths[something] = path;
-                                ((ImageView) v.findViewById(R.id.image)).setImageDrawable(Drawable.createFromPath(path));
+
+                                Drawable drawable = null;
+                                try {
+                                    drawable = Drawable.createFromPath(path);
+                                } catch (OutOfMemoryError e) {
+                                    e.printStackTrace();
+                                }
+
+                                ((ImageView) v.findViewById(R.id.image)).setImageDrawable(drawable);
                             }
 
                             status.removeListener(this);

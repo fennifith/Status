@@ -11,6 +11,8 @@ import android.widget.LinearLayout;
 
 import com.james.status.R;
 import com.james.status.data.IconStyleData;
+import com.james.status.data.icon.IconData;
+import com.james.status.dialogs.IconStyleDialog;
 import com.james.status.utils.ImageUtils;
 import com.james.status.views.CustomImageView;
 
@@ -19,12 +21,14 @@ import java.util.List;
 public class IconStyleAdapter extends RecyclerView.Adapter<IconStyleAdapter.ViewHolder> {
 
     private Context context;
+    private IconData icon;
     private IconStyleData style;
     private List<IconStyleData> styles;
     private OnCheckedChangeListener onCheckedChangeListener;
 
-    public IconStyleAdapter(Context context, List<IconStyleData> styles, OnCheckedChangeListener onCheckedChangeListener) {
+    public IconStyleAdapter(Context context, IconData icon, List<IconStyleData> styles, OnCheckedChangeListener onCheckedChangeListener) {
         this.context = context;
+        this.icon = icon;
         this.styles = styles;
         this.onCheckedChangeListener = onCheckedChangeListener;
     }
@@ -64,10 +68,24 @@ public class IconStyleAdapter extends RecyclerView.Adapter<IconStyleAdapter.View
         if (style.type == IconStyleData.TYPE_FILE) {
             View edit = holder.v.findViewById(R.id.edit);
             edit.setVisibility(View.VISIBLE);
+
             edit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //TODO: edit icon
+                    IconStyleData style = styles.get(holder.getAdapterPosition());
+                    icon.removeIconStyle(style);
+                    styles.remove(holder.getAdapterPosition());
+                    if (styles.size() > 0) setIconStyle(styles.get(0));
+                    else notifyDataSetChanged();
+
+                    new IconStyleDialog(context, style, icon.getStringArrayPreference(IconData.PreferenceIdentifier.ICON_STYLE_NAMES)).setListener(new IconStyleDialog.OnIconStyleListener() {
+                        @Override
+                        public void onIconStyle(IconStyleData style) {
+                            icon.addIconStyle(style);
+                            styles = icon.getIconStyles();
+                            setIconStyle(style);
+                        }
+                    }).show();
                 }
             });
         } else holder.v.findViewById(R.id.edit).setVisibility(View.GONE);

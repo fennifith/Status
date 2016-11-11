@@ -49,7 +49,7 @@ public class IconPickerDialog extends PreferenceDialog<IconStyleData> implements
         recycler = (RecyclerView) findViewById(R.id.recycler);
         recycler.setLayoutManager(new GridLayoutManager(getContext(), 1));
 
-        adapter = new IconStyleAdapter(getContext(), styles, this);
+        adapter = new IconStyleAdapter(getContext(), icon, styles, this);
         adapter.setIconStyle(getPreference());
 
         recycler.setAdapter(adapter);
@@ -63,7 +63,7 @@ public class IconPickerDialog extends PreferenceDialog<IconStyleData> implements
                         icon.addIconStyle(style);
                         styles = icon.getIconStyles();
 
-                        adapter = new IconStyleAdapter(getContext(), styles, IconPickerDialog.this);
+                        adapter = new IconStyleAdapter(getContext(), icon, styles, IconPickerDialog.this);
                         adapter.setIconStyle(style);
                         setPreference(style);
                         recycler.setAdapter(adapter);
