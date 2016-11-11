@@ -155,6 +155,7 @@
     <string name="icon_style_stock">Stock</string>
     <string name="icon_style_circle">Circle</string>
     <string name="icon_style_circle_outline">Circle Outline</string>
+    <string name="icon_style_outline">Outline</string>
     <string name="icon_style_dish">Dish</string>
     <string name="icon_style_triangle">Triangle</string>
     <string name="icon_style_square">Square</string>
