@@ -71,6 +71,15 @@ public class WifiIconData extends IconData<WifiIconData.WifiReceiver> {
                                 R.drawable.ic_wifi_4
                         ),
                         new IconStyleData(
+                                getContext().getString(R.string.icon_style_radial),
+                                IconStyleData.TYPE_VECTOR,
+                                R.drawable.ic_wifi_radial_0,
+                                R.drawable.ic_wifi_radial_1,
+                                R.drawable.ic_wifi_radial_2,
+                                R.drawable.ic_wifi_radial_3,
+                                R.drawable.ic_wifi_radial_4
+                        ),
+                        new IconStyleData(
                                 getContext().getString(R.string.icon_style_triangle),
                                 IconStyleData.TYPE_VECTOR,
                                 R.drawable.ic_wifi_triangle_0,

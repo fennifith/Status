@@ -389,7 +389,7 @@ public abstract class IconData<T extends BroadcastReceiver> {
             ));
         }
 
-        if (hasDrawable() && getIconStyles().size() > 1) {
+        if (hasDrawable()) {
             preferences.add(new IconPreferenceData(
                     getContext(),
                     new PreferenceData.Identifier(
