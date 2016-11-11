@@ -106,6 +106,12 @@ public class ImageUtils {
     }
 
     public static Drawable tintDrawable(CustomImageView imageView, Drawable source, @ColorInt int color) {
+        if (imageView == null) return null;
+        if (source == null) {
+            imageView.setImageDrawable(null);
+            return null;
+        }
+
         imageView.setImageDrawable(DrawableCompat.wrap(source));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

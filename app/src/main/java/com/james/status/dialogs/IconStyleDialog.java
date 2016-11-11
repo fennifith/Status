@@ -3,6 +3,7 @@ package com.james.status.dialogs;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatDialog;
@@ -11,6 +12,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,12 +30,14 @@ public class IconStyleDialog extends AppCompatDialog {
     private String[] names = new String[0];
 
     private String name;
-    private String[] paths;
+    private String[] paths = new String[0];
 
     private EditText editText;
 
     public IconStyleDialog(Context context, int size, String[] names) {
         super(context, R.style.AppTheme_Dialog);
+        setTitle(R.string.action_edit_style);
+
         status = (Status) context.getApplicationContext();
 
         this.size = size;
@@ -57,14 +61,11 @@ public class IconStyleDialog extends AppCompatDialog {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 name = editText.getText().toString();
                 for (String string : names) {
-                    if (string.equals(name)) {
+                    if (string.equalsIgnoreCase(name)) {
                         name = null;
                         editText.setError(getContext().getString(R.string.error_name_exists));
-                        return;
                     }
                 }
-
-                editText.setError(null);
             }
 
             @Override
@@ -74,8 +75,10 @@ public class IconStyleDialog extends AppCompatDialog {
 
         LinearLayout layout = (LinearLayout) findViewById(R.id.layout);
         for (int i = 0; i < size; i++) {
-            View v = LayoutInflater.from(getContext()).inflate(R.layout.item_icon_picker, null);
+            final View v = LayoutInflater.from(getContext()).inflate(R.layout.item_icon_picker, null);
             ((TextView) v.findViewById(R.id.number)).setText(String.valueOf(i + 1));
+            if (paths[i] != null)
+                ((ImageView) v.findViewById(R.id.image)).setImageDrawable(Drawable.createFromPath(paths[i]));
 
             final int something = i;
             v.setOnClickListener(new View.OnClickListener() {
@@ -84,28 +87,32 @@ public class IconStyleDialog extends AppCompatDialog {
                     status.addListener(new Status.OnActivityResultListener() {
                         @Override
                         public void onActivityResult(int requestCode, int resultCode, Intent data) {
-                            String path = data.getDataString();
-                            try {
-                                Cursor cursor = getContext().getContentResolver().query(data.getData(), null, null, null, null);
-                                String documentId;
-                                if (cursor != null) {
-                                    cursor.moveToFirst();
-                                    documentId = cursor.getString(0);
-                                    documentId = documentId.substring(documentId.lastIndexOf(":") + 1);
-                                    cursor.close();
-                                } else return;
+                            if (requestCode == ImagePickerActivity.ACTION_PICK_IMAGE && resultCode == ImagePickerActivity.RESULT_OK) {
+                                String path = data.getDataString();
+                                try {
+                                    Cursor cursor = getContext().getContentResolver().query(data.getData(), null, null, null, null);
+                                    String documentId;
+                                    if (cursor != null) {
+                                        cursor.moveToFirst();
+                                        documentId = cursor.getString(0);
+                                        documentId = documentId.substring(documentId.lastIndexOf(":") + 1);
+                                        cursor.close();
+                                    } else return;
 
-                                cursor = getContext().getContentResolver().query(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, MediaStore.Images.Media._ID + " = ? ", new String[]{documentId}, null);
-                                if (cursor != null) {
-                                    cursor.moveToFirst();
-                                    path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
-                                    cursor.close();
+                                    cursor = getContext().getContentResolver().query(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, MediaStore.Images.Media._ID + " = ? ", new String[]{documentId}, null);
+                                    if (cursor != null) {
+                                        cursor.moveToFirst();
+                                        path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+                                        cursor.close();
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
                                 }
-                            } catch (Exception e) {
-                                e.printStackTrace();
+
+                                paths[something] = path;
+                                ((ImageView) v.findViewById(R.id.image)).setImageDrawable(Drawable.createFromPath(path));
                             }
 
-                            paths[something] = path;
                             status.removeListener(this);
                         }
                     });

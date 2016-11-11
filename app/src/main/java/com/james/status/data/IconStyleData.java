@@ -46,6 +46,7 @@ public class IconStyleData implements Parcelable {
         else return resource.length;
     }
 
+    @Nullable
     public Drawable getDrawable(Context context, int value) {
         if (value < 0 || value >= getSize()) return null;
         switch (type) {
@@ -54,7 +55,12 @@ public class IconStyleData implements Parcelable {
             case TYPE_IMAGE:
                 return ContextCompat.getDrawable(context, resource[value]);
             case TYPE_FILE:
-                return Drawable.createFromPath(path[value]);
+                try {
+                    return Drawable.createFromPath(path[value]);
+                } catch (OutOfMemoryError e) {
+                    e.printStackTrace();
+                    return null;
+                }
             default:
                 return null;
         }
@@ -106,6 +112,6 @@ public class IconStyleData implements Parcelable {
     }
 
     public boolean equals(IconStyleData data) {
-        return super.equals(data) || (data != null && (Arrays.equals(data.resource, resource) || data.name.matches(name)));
+        return super.equals(data) || (data != null && ((Arrays.equals(data.resource, resource) && resource.length > 0) || (Arrays.equals(data.path, path) && path.length > 0) || data.name.matches(name)));
     }
 }

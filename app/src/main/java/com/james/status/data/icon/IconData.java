@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
 import android.support.annotation.LayoutRes;
@@ -235,12 +233,6 @@ public abstract class IconData<T extends BroadcastReceiver> {
         else return null;
     }
 
-    public Drawable getFakeDrawable() {
-        if (hasDrawable())
-            return style.getDrawable(context, style.getSize() / 2);
-        else return new ColorDrawable(Color.TRANSPARENT);
-    }
-
     public String getFakeText() {
         return "";
     }
@@ -404,7 +396,7 @@ public abstract class IconData<T extends BroadcastReceiver> {
                             getContext().getString(R.string.preference_icon_style)
                     ),
                     style,
-                    getIconStyles(),
+                    this,
                     new PreferenceData.OnPreferenceChangeListener<IconStyleData>() {
                         @Override
                         public void onPreferenceChange(IconStyleData preference) {
@@ -430,7 +422,7 @@ public abstract class IconData<T extends BroadcastReceiver> {
         String[] names = getStringArrayPreference(PreferenceIdentifier.ICON_STYLE_NAMES);
         if (names != null) {
             for (String name : names) {
-                IconStyleData style = IconStyleData.fromSharedPreferences(prefs, name, getClass().getName());
+                IconStyleData style = IconStyleData.fromSharedPreferences(prefs, getClass().getName(), name);
                 if (style != null) styles.add(style);
             }
         }

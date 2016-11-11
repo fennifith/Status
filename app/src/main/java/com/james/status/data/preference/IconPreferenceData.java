@@ -9,23 +9,22 @@ import android.widget.TextView;
 
 import com.james.status.R;
 import com.james.status.data.IconStyleData;
+import com.james.status.data.icon.IconData;
 import com.james.status.dialogs.IconPickerDialog;
 import com.james.status.dialogs.PreferenceDialog;
 import com.james.status.views.IconStyleImageView;
 
-import java.util.List;
-
 public class IconPreferenceData extends PreferenceData<IconStyleData> {
 
     private IconStyleData iconStyle;
-    private List<IconStyleData> iconStyles;
+    private IconData iconData;
 
-    public IconPreferenceData(Context context, Identifier identifier, IconStyleData iconStyle, List<IconStyleData> iconStyles, OnPreferenceChangeListener<IconStyleData> listener) {
+    public IconPreferenceData(Context context, Identifier identifier, IconStyleData iconStyle, IconData iconData, OnPreferenceChangeListener<IconStyleData> listener) {
         super(context, identifier, listener);
 
-        if (iconStyle == null) iconStyle = iconStyles.get(0);
+        if (iconStyle == null) iconStyle = (IconStyleData) iconData.getIconStyles().get(0);
         this.iconStyle = iconStyle;
-        this.iconStyles = iconStyles;
+        this.iconData = iconData;
     }
 
     @Override
@@ -45,7 +44,7 @@ public class IconPreferenceData extends PreferenceData<IconStyleData> {
         holder.v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Dialog dialog = new IconPickerDialog(getContext(), iconStyles).setPreference(iconStyle).setListener(new PreferenceDialog.OnPreferenceListener<IconStyleData>() {
+                Dialog dialog = new IconPickerDialog(getContext(), iconData).setPreference(iconStyle).setListener(new PreferenceDialog.OnPreferenceListener<IconStyleData>() {
                     @Override
                     public void onPreference(PreferenceDialog dialog, IconStyleData preference) {
                         if (preference != null) {

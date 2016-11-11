@@ -285,13 +285,11 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> implements Stat
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Bitmap bitmap = null;
 
-        if (requestCode == ImagePickerActivity.ACTION_PICK_IMAGE) {
-            if (resultCode == ImagePickerActivity.RESULT_OK) {
-                try {
-                    bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), data.getData());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        if (requestCode == ImagePickerActivity.ACTION_PICK_IMAGE && resultCode == ImagePickerActivity.RESULT_OK) {
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), data.getData());
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
 

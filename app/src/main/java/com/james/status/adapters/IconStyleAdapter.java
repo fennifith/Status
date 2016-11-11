@@ -52,9 +52,9 @@ public class IconStyleAdapter extends RecyclerView.Adapter<IconStyleAdapter.View
         LinearLayout layout = (LinearLayout) holder.v.findViewById(R.id.icons);
         layout.removeAllViewsInLayout();
 
-        for (int resource : style.resource) {
+        for (int i = 0; i < style.getSize(); i++) {
             View view = LayoutInflater.from(context).inflate(R.layout.item_icon, layout, false);
-            ImageUtils.tintDrawable((CustomImageView) view.findViewById(R.id.icon), ImageUtils.getVectorDrawable(context, resource), Color.BLACK);
+            ImageUtils.tintDrawable((CustomImageView) view.findViewById(R.id.icon), style.getDrawable(context, i), Color.BLACK);
 
             layout.addView(view);
         }

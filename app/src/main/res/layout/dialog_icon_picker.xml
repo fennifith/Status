@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <android.support.design.widget.AppBarLayout
@@ -15,17 +15,19 @@
             android:orientation="horizontal">
 
             <android.support.v7.widget.Toolbar
-                android:layout_width="match_parent"
+                android:id="@+id/toolbar"
+                android:layout_width="0dp"
                 android:layout_height="?attr/actionBarSize"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                android:id="@+id/toolbar" />
+                android:layout_weight="1"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
             <com.james.status.views.SquareImageView
                 android:id="@+id/add"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:tint="@android:color/white"
+                android:layout_width="?attr/actionBarSize"
+                android:layout_height="?attr/actionBarSize"
                 android:background="?attr/selectableItemBackgroundBorderless"
+                android:scaleType="center"
+                android:tint="@android:color/white"
                 app:srcCompat="@drawable/ic_add_circle" />
 
         </LinearLayout>
@@ -33,51 +35,51 @@
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingBottom="12dp"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
-        android:paddingTop="12dp"
-        android:paddingBottom="12dp"
-        android:clipToPadding="false"
-        android:id="@+id/recycler" />
+        android:paddingTop="12dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_gravity="bottom|end"
         android:gravity="end"
+        android:orientation="horizontal"
         android:padding="16dp">
 
         <TextView
+            android:id="@+id/cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAllCaps="true"
-            android:textSize="16sp"
-            android:text="@string/action_cancel"
-            android:textColor="@color/colorAccent"
             android:background="?attr/selectableItemBackground"
-            android:id="@+id/cancel"
+            android:paddingBottom="8dp"
             android:paddingLeft="12dp"
             android:paddingRight="12dp"
             android:paddingTop="8dp"
-            android:paddingBottom="8dp" />
+            android:text="@string/action_cancel"
+            android:textAllCaps="true"
+            android:textColor="@color/colorAccent"
+            android:textSize="16sp" />
 
         <TextView
+            android:id="@+id/confirm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAllCaps="true"
-            android:textSize="16sp"
-            android:text="@string/action_ok"
-            android:textColor="@color/colorAccent"
             android:background="?attr/selectableItemBackground"
-            android:id="@+id/confirm"
+            android:paddingBottom="8dp"
             android:paddingLeft="12dp"
             android:paddingRight="12dp"
             android:paddingTop="8dp"
-            android:paddingBottom="8dp" />
+            android:text="@string/action_ok"
+            android:textAllCaps="true"
+            android:textColor="@color/colorAccent"
+            android:textSize="16sp" />
 
     </LinearLayout>
 
