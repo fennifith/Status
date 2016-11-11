@@ -16,8 +16,8 @@ import java.util.List;
 
 public class WifiIconData extends IconData<WifiIconData.WifiReceiver> {
 
-    WifiManager wifiManager;
-    ConnectivityManager connectivityManager;
+    private WifiManager wifiManager;
+    private ConnectivityManager connectivityManager;
 
     public WifiIconData(Context context) {
         super(context);
