@@ -48,6 +48,11 @@ public class AirplaneModeIconData extends IconData<AirplaneModeIconData.Airplane
                                 getContext().getString(R.string.icon_style_default),
                                 IconStyleData.TYPE_VECTOR,
                                 R.drawable.ic_airplane
+                        ),
+                        new IconStyleData(
+                                getContext().getString(R.string.icon_style_balloon),
+                                IconStyleData.TYPE_VECTOR,
+                                R.drawable.ic_airplane_air_balloon
                         )
                 )
         );
