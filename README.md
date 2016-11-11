@@ -20,6 +20,60 @@ Okay, there aren't really any guidelines over issue formatting provided that you
 ### Pull Requests
 I usually don't have any organization over how I handle issues and what I commit at any given time. If I'm interrupted in the middle of a session, I might commit a half-finished class that causes an error before the project even compiles. To prevent good work going to waste or having to be copied and pasted a lot to prevent merge conflicts, please contact me before you start working on any changes. This way we can decide who will work on the project when, and exactly what changes they will be making.
 
+### Icons
+Icon styles can be added to the app quickly and easily provided they meet the specifications below.
+
+#### Battery
+- 15 icons total, as follows
+- alert icon
+- 20%
+- 30%
+- 50%
+- 60%
+- 80%
+- 90%
+- full
+- charging 20%
+- charging 30%
+- charging 50%
+- charging 60%
+- charging 80%
+- charging 90%
+- charging full
+
+#### Network
+- 5 icons, signal strength 0-4
+
+#### Wifi
+- 5 icons, signal strength 0-4
+
+#### Bluetooth
+- 2 icons
+- on (not paired)
+- on (paired)
+
+#### GPS
+- 2 icons
+- on (not locked)
+- on (locked)
+
+#### Airplane Mode
+- one icon only
+
+#### NFC
+- one icon only
+
+#### Ringer Volume
+- 3 icons
+- mute
+- vibrate
+- on
+
+#### Headphones
+- 2 icons
+- normal headphones
+- headset (with mic)
+
 ## License
 
 ```
