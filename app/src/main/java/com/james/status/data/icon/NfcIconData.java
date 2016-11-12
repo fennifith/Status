@@ -17,7 +17,7 @@ import java.util.List;
 @TargetApi(18)
 public class NfcIconData extends IconData<NfcIconData.NfcReceiver> {
 
-    NfcManager manager;
+    private NfcManager manager;
 
     public NfcIconData(Context context) {
         super(context);

@@ -25,7 +25,7 @@ public class GpsIconData extends IconData<GpsIconData.GpsReceiver> {
             GPS_ENABLED_CHANGE_ACTION = "android.location.GPS_ENABLED_CHANGE",
             GPS_FIX_CHANGE_ACTION = "android.location.GPS_FIX_CHANGE";
 
-    LocationManager locationManager;
+    private LocationManager locationManager;
 
     public GpsIconData(Context context) {
         super(context);

@@ -14,7 +14,7 @@ import java.util.List;
 
 public class BatteryIconData extends IconData {
 
-    BatteryReceiver receiver;
+    private BatteryReceiver receiver;
 
     public BatteryIconData(Context context) {
         super(context);

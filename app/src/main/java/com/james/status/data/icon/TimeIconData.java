@@ -16,8 +16,8 @@ import java.util.List;
 
 public class TimeIconData extends IconData<TimeIconData.TimeReceiver> {
 
-    Calendar calendar;
-    String format;
+    private Calendar calendar;
+    private String format;
 
     public TimeIconData(Context context) {
         super(context);
