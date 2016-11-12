@@ -18,7 +18,7 @@ import com.james.status.views.CustomImageView;
 
 public class ColorPreferenceData extends PreferenceData<Integer> {
 
-    public int value;
+    private int value;
 
     public ColorPreferenceData(Context context, Identifier identifier, @ColorInt int defaultValue, OnPreferenceChangeListener<Integer> listener) {
         super(context, identifier, listener);

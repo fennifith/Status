@@ -51,9 +51,9 @@ public class BatteryIconData extends IconData {
             int scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, 1);
             int status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, 0);
 
-            int iconLevel = (int) (((float) level / scale) * 7) + 1;
+            int iconLevel = (int) (((float) level / scale) * 6) + 1;
 
-            if (status == BatteryManager.BATTERY_STATUS_CHARGING)
+            if (status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL)
                 iconLevel += 7;
 
             onDrawableUpdate(iconLevel);
@@ -211,9 +211,9 @@ public class BatteryIconData extends IconData {
             int scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, 1);
             int status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, 0);
 
-            int iconLevel = (int) (((float) level / scale) * 7) + 1;
+            int iconLevel = (int) (((float) level / scale) * 6) + 1;
 
-            if (status == BatteryManager.BATTERY_STATUS_CHARGING)
+            if (status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL)
                 iconLevel += 7;
 
             onDrawableUpdate(iconLevel);

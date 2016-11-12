@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class GeneralPreferenceFragment extends SimpleFragment {
+public class GeneralPreferenceFragment extends SimpleFragment implements PreferenceData.OnPreferenceChangeListener {
 
     private PreferenceSectionAdapter adapter;
 
@@ -50,12 +50,7 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                                 PreferenceData.Identifier.SectionIdentifier.COLORS
                         ),
                         true,
-                        new PreferenceData.OnPreferenceChangeListener<Boolean>() {
-                            @Override
-                            public void onPreferenceChange(Boolean preference) {
-                                StaticUtils.updateStatusService(getContext());
-                            }
-                        }
+                        this
                 ),
                 new ColorPreferenceData(
                         getContext(),
@@ -65,12 +60,7 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                                 PreferenceData.Identifier.SectionIdentifier.COLORS
                         ),
                         Color.BLACK,
-                        new PreferenceData.OnPreferenceChangeListener<Integer>() {
-                            @Override
-                            public void onPreferenceChange(Integer preference) {
-                                StaticUtils.updateStatusService(getContext());
-                            }
-                        }
+                        this
                 ),
                 new BooleanPreferenceData(
                         getContext(),
@@ -94,6 +84,16 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                         true,
                         null
                 ),
+                new ColorPreferenceData(
+                        getContext(),
+                        new PreferenceData.Identifier(
+                                PreferenceUtils.PreferenceIdentifier.STATUS_ICON_COLOR,
+                                getString(R.string.preference_default_color_icon),
+                                PreferenceData.Identifier.SectionIdentifier.ICONS
+                        ),
+                        Color.WHITE,
+                        null
+                ),
                 new BooleanPreferenceData(
                         getContext(),
                         new PreferenceData.Identifier(
@@ -103,12 +103,7 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                                 PreferenceData.Identifier.SectionIdentifier.ICONS
                         ),
                         true,
-                        new PreferenceData.OnPreferenceChangeListener<Boolean>() {
-                            @Override
-                            public void onPreferenceChange(Boolean preference) {
-                                StaticUtils.updateStatusService(getContext());
-                            }
-                        }
+                        this
                 ),
                 new BooleanPreferenceData(
                         getContext(),
@@ -119,12 +114,7 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                                 PreferenceData.Identifier.SectionIdentifier.ICONS
                         ),
                         false,
-                        new PreferenceData.OnPreferenceChangeListener<Boolean>() {
-                            @Override
-                            public void onPreferenceChange(Boolean preference) {
-                                StaticUtils.updateStatusService(getContext());
-                            }
-                        }
+                        this
                 ),
                 new BooleanPreferenceData(
                         getContext(),
@@ -135,12 +125,7 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                                 PreferenceData.Identifier.SectionIdentifier.ANIMATIONS
                         ),
                         true,
-                        new PreferenceData.OnPreferenceChangeListener<Boolean>() {
-                            @Override
-                            public void onPreferenceChange(Boolean preference) {
-                                StaticUtils.updateStatusService(getContext());
-                            }
-                        }
+                        this
                 ),
                 new BooleanPreferenceData(
                         getContext(),
@@ -151,12 +136,7 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                                 PreferenceData.Identifier.SectionIdentifier.ANIMATIONS
                         ),
                         true,
-                        new PreferenceData.OnPreferenceChangeListener<Boolean>() {
-                            @Override
-                            public void onPreferenceChange(Boolean preference) {
-                                StaticUtils.updateStatusService(getContext());
-                            }
-                        }
+                        this
                 ),
                 new BooleanPreferenceData(
                         getContext(),
@@ -225,5 +205,10 @@ public class GeneralPreferenceFragment extends SimpleFragment {
     @Override
     public String getTitle(Context context) {
         return context.getString(R.string.tab_settings);
+    }
+
+    @Override
+    public void onPreferenceChange(Object preference) {
+        StaticUtils.updateStatusService(getContext());
     }
 }

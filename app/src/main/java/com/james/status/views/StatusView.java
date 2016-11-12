@@ -102,6 +102,9 @@ public class StatusView extends FrameLayout {
         } else if (color != null) setColor(color);
         else setColor(Color.BLACK);
 
+        Integer defaultIconColor = PreferenceUtils.getIntegerPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_ICON_COLOR);
+        if (defaultIconColor != null) iconColor = defaultIconColor;
+
         if (wallpaperManager == null) wallpaperManager = WallpaperManager.getInstance(getContext());
     }
 
@@ -273,7 +276,7 @@ public class StatusView extends FrameLayout {
         } else if (status != null) {
             int backgroundColor = getDefaultColor();
             if (color == backgroundColor) {
-                if (color == Color.BLACK) color = Color.WHITE;
+                if (color == Color.BLACK) color = getDefaultIconColor();
                 else if (color == Color.WHITE) color = Color.BLACK;
             }
 
@@ -315,6 +318,13 @@ public class StatusView extends FrameLayout {
         return color;
     }
 
+    @ColorInt
+    private int getDefaultIconColor() {
+        Integer color = PreferenceUtils.getIntegerPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_ICON_COLOR);
+        if (color == null) color = Color.WHITE;
+        return color;
+    }
+
     public void setHomeScreen() {
         if (status != null && wallpaperManager != null) {
             Drawable backgroundDrawable;
@@ -347,7 +357,7 @@ public class StatusView extends FrameLayout {
 
     public void setDarkMode(boolean isDarkMode) {
         if (isContrastIcons) {
-            int color = isDarkMode ? Color.BLACK : Color.WHITE;
+            int color = isDarkMode ? Color.BLACK : getDefaultIconColor();
 
             if (isIconAnimations) {
                 ValueAnimator animator = ValueAnimator.ofObject(new ArgbEvaluator(), iconColor, color);
