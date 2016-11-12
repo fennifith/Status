@@ -101,6 +101,20 @@ public class AboutActivity extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.google).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://material.io/icons/")));
+            }
+        });
+
+        findViewById(R.id.md).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/Templarian/MaterialDesign")));
+            }
+        });
+
         findViewById(R.id.libraries).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

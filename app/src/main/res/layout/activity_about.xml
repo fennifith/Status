@@ -10,9 +10,9 @@
         android:background="@color/colorPrimary">
 
         <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:id="@+id/toolbar"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:layout_collapseMode="pin"
             app:title="@string/app_name" />
@@ -27,15 +27,15 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="4dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="4dp">
 
             <android.support.v7.widget.CardView
+                android:id="@+id/james"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
-                app:cardUseCompatPadding="true"
-                android:id="@+id/james">
+                app:cardUseCompatPadding="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -47,20 +47,20 @@
                         android:layout_height="wrap_content">
 
                         <com.james.status.views.RatioImageView
+                            android:id="@+id/jamesImage"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:scaleType="centerCrop"
-                            android:id="@+id/jamesImage" />
+                            android:scaleType="centerCrop" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="72dp"
-                            android:paddingLeft="16dp"
-                            android:paddingRight="16dp"
-                            android:gravity="center_vertical"
                             android:layout_gravity="bottom"
+                            android:background="@drawable/image_gradient"
+                            android:gravity="center_vertical"
                             android:orientation="vertical"
-                            android:background="@drawable/image_gradient">
+                            android:paddingLeft="16dp"
+                            android:paddingRight="16dp">
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -83,33 +83,33 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
                         android:gravity="center_vertical"
+                        android:orientation="horizontal"
                         android:padding="4dp">
 
                         <android.support.v7.widget.AppCompatButton
+                            android:id="@+id/jamesWebsite"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="@string/action_website"
                             android:background="?attr/selectableItemBackground"
-                            android:id="@+id/jamesWebsite" />
+                            android:text="@string/action_website" />
 
                         <android.support.v7.widget.AppCompatButton
+                            android:id="@+id/jamesGplus"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="@string/action_gplus"
                             android:background="?attr/selectableItemBackground"
-                            android:id="@+id/jamesGplus" />
+                            android:text="@string/action_gplus" />
 
                         <android.support.v7.widget.AppCompatButton
+                            android:id="@+id/jamesTwitter"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="@string/action_twitter"
                             android:background="?attr/selectableItemBackground"
-                            android:id="@+id/jamesTwitter" />
+                            android:text="@string/action_twitter" />
 
                     </LinearLayout>
 
@@ -133,20 +133,20 @@
                         android:layout_height="wrap_content">
 
                         <com.james.status.views.RatioImageView
+                            android:id="@+id/anasImage"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:scaleType="centerCrop"
-                            android:id="@+id/anasImage" />
+                            android:scaleType="centerCrop" />
 
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="72dp"
-                            android:paddingLeft="16dp"
-                            android:paddingRight="16dp"
-                            android:gravity="center_vertical"
                             android:layout_gravity="bottom"
+                            android:background="@drawable/image_gradient"
+                            android:gravity="center_vertical"
                             android:orientation="vertical"
-                            android:background="@drawable/image_gradient">
+                            android:paddingLeft="16dp"
+                            android:paddingRight="16dp">
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -169,25 +169,25 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
                         android:gravity="center_vertical"
+                        android:orientation="horizontal"
                         android:padding="4dp">
 
                         <android.support.v7.widget.AppCompatButton
+                            android:id="@+id/anasGplus"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="@string/action_gplus"
                             android:background="?attr/selectableItemBackground"
-                            android:id="@+id/anasGplus" />
+                            android:text="@string/action_gplus" />
 
                         <android.support.v7.widget.AppCompatButton
+                            android:id="@+id/anasTwitter"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="@string/action_twitter"
                             android:background="?attr/selectableItemBackground"
-                            android:id="@+id/anasTwitter" />
+                            android:text="@string/action_twitter" />
 
                     </LinearLayout>
 
@@ -210,21 +210,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <com.james.status.views.RatioImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:scaleType="centerCrop"
-                            android:id="@+id/vukImage" />
-
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="72dp"
-                            android:paddingLeft="16dp"
-                            android:paddingRight="16dp"
-                            android:gravity="center_vertical"
                             android:layout_gravity="bottom"
+                            android:background="@drawable/image_gradient"
+                            android:gravity="center_vertical"
                             android:orientation="vertical"
-                            android:background="@drawable/image_gradient">
+                            android:paddingLeft="16dp"
+                            android:paddingRight="16dp">
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -242,38 +236,139 @@
 
                         </LinearLayout>
 
+                        <com.james.status.views.RatioImageView
+                            android:id="@+id/vukImage"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:scaleType="centerCrop" />
+
                     </FrameLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
                         android:gravity="center_vertical"
+                        android:orientation="horizontal"
                         android:padding="4dp">
 
                         <android.support.v7.widget.AppCompatButton
+                            android:id="@+id/vukGplus"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="@string/action_gplus"
                             android:background="?attr/selectableItemBackground"
-                            android:id="@+id/vukGplus" />
+                            android:text="@string/action_gplus" />
 
                         <android.support.v7.widget.AppCompatButton
+                            android:id="@+id/vukPlay"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="@string/action_play"
                             android:background="?attr/selectableItemBackground"
-                            android:id="@+id/vukPlay" />
+                            android:text="@string/action_play" />
 
                         <android.support.v7.widget.AppCompatButton
+                            android:id="@+id/vukDribbble"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="@string/action_dribbble"
                             android:background="?attr/selectableItemBackground"
-                            android:id="@+id/vukDribbble" />
+                            android:text="@string/action_dribbble" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="4dp"
+                        android:text="@string/about_icons"
+                        android:textColor="@color/textColorPrimary"
+                        android:textSize="24sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:text="@string/about_icons_desc"
+                        android:textColor="@color/textColorSecondary"
+                        android:textSize="14sp" />
+
+                    <LinearLayout
+                        android:id="@+id/google"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:background="?attr/selectableItemBackground"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:paddingTop="4dp"
+                        android:paddingBottom="4dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/google_icons"
+                            android:textColor="@color/textColorPrimary"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/google_icons_desc"
+                            android:textColor="@color/textColorSecondary"
+                            android:textSize="14sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/md"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:background="?attr/selectableItemBackground"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:paddingTop="4dp"
+                        android:paddingBottom="4dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/md_icons"
+                            android:textColor="@color/textColorPrimary"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/md_icons_desc"
+                            android:textColor="@color/textColorSecondary"
+                            android:textSize="14sp" />
 
                     </LinearLayout>
 
@@ -282,24 +377,24 @@
             </android.support.v7.widget.CardView>
 
             <LinearLayout
+                android:id="@+id/libraries"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:background="?attr/selectableItemBackground"
+                android:gravity="center"
                 android:orientation="horizontal"
                 android:paddingBottom="16dp"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
-                android:paddingTop="16dp"
-                android:background="?attr/selectableItemBackground"
-                android:gravity="center"
-                android:id="@+id/libraries">
+                android:paddingTop="16dp">
 
                 <com.james.status.views.SquareImageView
                     android:layout_width="24dp"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_list"
                     android:tint="@color/colorAccent"
-                    android:tintMode="src_in" />
+                    android:tintMode="src_in"
+                    app:srcCompat="@drawable/ic_list" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -310,9 +405,9 @@
                     android:paddingTop="16dp"
                     android:text="@string/action_libraries"
                     android:textAllCaps="true"
-                    android:textStyle="bold"
                     android:textColor="@color/colorAccent"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
