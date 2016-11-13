@@ -498,9 +498,12 @@ public class StatusService extends Service {
         icons.add(new BatteryIconData(context));
         icons.add(new NetworkIconData(context));
         icons.add(new DataIconData(context));
-        icons.add(new WifiIconData(context));
-        icons.add(new BluetoothIconData(context));
-        icons.add(new GpsIconData(context));
+        if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_WIFI))
+            icons.add(new WifiIconData(context));
+        if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH))
+            icons.add(new BluetoothIconData(context));
+        if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_LOCATION))
+            icons.add(new GpsIconData(context));
         icons.add(new AirplaneModeIconData(context));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 && context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_NFC))
             icons.add(new NfcIconData(context));
