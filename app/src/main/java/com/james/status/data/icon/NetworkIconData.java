@@ -4,7 +4,6 @@ import android.content.Context;
 import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
-import android.widget.Toast;
 
 import com.james.status.R;
 import com.james.status.data.IconStyleData;
@@ -110,7 +109,6 @@ public class NetworkIconData extends IconData {
                 else if (level != 0) level = 4;
                 else level = -1;
 
-                Toast.makeText(getContext(), String.valueOf(level), Toast.LENGTH_SHORT).show();
                 onDrawableUpdate(level);
             }
         }
