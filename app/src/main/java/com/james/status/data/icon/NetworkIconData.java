@@ -4,6 +4,7 @@ import android.content.Context;
 import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
+import android.widget.Toast;
 
 import com.james.status.R;
 import com.james.status.data.IconStyleData;
@@ -86,33 +87,30 @@ public class NetworkIconData extends IconData {
     }
 
     private class NetworkListener extends PhoneStateListener {
+
         @Override
         public void onSignalStrengthsChanged(SignalStrength signalStrength) {
             super.onSignalStrengthsChanged(signalStrength);
 
             if (isRegistered) {
-                int level = signalStrength.getGsmSignalStrength();
+                int level;
 
-                if (level > 4) level /= 7.75;
-                else if (level < 1) {
-                    int strength = signalStrength.getCdmaDbm();
+                if (signalStrength.isGsm()) {
+                    if (signalStrength.getGsmSignalStrength() != 99)
+                        level = signalStrength.getGsmSignalStrength() * 2 - 113;
+                    else
+                        level = signalStrength.getGsmSignalStrength();
+                } else
+                    level = signalStrength.getCdmaDbm();
 
-                    if (strength < -100) level = 0;
-                    else if (strength < -95) level = 1;
-                    else if (strength < -85) level = 2;
-                    else if (strength < -75) level = 3;
-                    else if (strength != 0) level = 4;
-                    else {
-                        strength = signalStrength.getEvdoDbm();
+                if (level < -100) level = 0;
+                else if (level < -95) level = 1;
+                else if (level < -85) level = 2;
+                else if (level < -75) level = 3;
+                else if (level != 0) level = 4;
+                else level = -1;
 
-                        if (strength == 0 || strength < -100) level = 0;
-                        else if (strength < -95) level = 1;
-                        else if (strength < -85) level = 2;
-                        else if (strength < -75) level = 3;
-                        else level = 4;
-                    }
-                }
-
+                Toast.makeText(getContext(), String.valueOf(level), Toast.LENGTH_SHORT).show();
                 onDrawableUpdate(level);
             }
         }

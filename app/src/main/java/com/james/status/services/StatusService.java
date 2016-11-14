@@ -502,7 +502,7 @@ public class StatusService extends Service {
             icons.add(new WifiIconData(context));
         if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH))
             icons.add(new BluetoothIconData(context));
-        if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_LOCATION))
+        if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_LOCATION_GPS))
             icons.add(new GpsIconData(context));
         icons.add(new AirplaneModeIconData(context));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 && context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_NFC))
