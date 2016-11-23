@@ -8,6 +8,7 @@ import android.telephony.TelephonyManager;
 import com.james.status.R;
 import com.james.status.data.IconStyleData;
 
+import java.lang.ref.SoftReference;
 import java.util.Arrays;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class NetworkIconData extends IconData {
     @Override
     public void register() {
         if (networkListener == null) {
-            networkListener = new NetworkListener();
+            networkListener = new NetworkListener(this);
             telephonyManager.listen(networkListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
         }
         isRegistered = true;
@@ -87,11 +88,20 @@ public class NetworkIconData extends IconData {
 
     private class NetworkListener extends PhoneStateListener {
 
+        private SoftReference<NetworkIconData> reference;
+
+        private NetworkListener(NetworkIconData iconData) {
+            reference = new SoftReference<>(iconData);
+        }
+
         @Override
         public void onSignalStrengthsChanged(SignalStrength signalStrength) {
             super.onSignalStrengthsChanged(signalStrength);
 
-            if (isRegistered) {
+            NetworkIconData icon = null;
+            if (reference != null) icon = reference.get();
+
+            if (icon != null && icon.isRegistered) {
                 int level;
 
                 if (signalStrength.isGsm()) {
@@ -109,7 +119,7 @@ public class NetworkIconData extends IconData {
                 else if (level != 0) level = 4;
                 else level = -1;
 
-                onDrawableUpdate(level);
+                icon.onDrawableUpdate(level);
             }
         }
     }

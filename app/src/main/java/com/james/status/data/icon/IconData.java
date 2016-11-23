@@ -1,6 +1,5 @@
 package com.james.status.data.icon;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -22,6 +21,7 @@ import com.james.status.data.preference.IconPreferenceData;
 import com.james.status.data.preference.IntegerPreferenceData;
 import com.james.status.data.preference.ListPreferenceData;
 import com.james.status.data.preference.PreferenceData;
+import com.james.status.receivers.IconUpdateReceiver;
 import com.james.status.utils.StaticUtils;
 import com.james.status.views.CustomImageView;
 
@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class IconData<T extends BroadcastReceiver> {
+public abstract class IconData<T extends IconUpdateReceiver> {
 
     public static final int LEFT_GRAVITY = -1, CENTER_GRAVITY = 0, RIGHT_GRAVITY = 1;
 

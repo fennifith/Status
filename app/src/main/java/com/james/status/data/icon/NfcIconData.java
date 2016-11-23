@@ -1,7 +1,6 @@
 package com.james.status.data.icon;
 
 import android.annotation.TargetApi;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -10,6 +9,7 @@ import android.nfc.NfcManager;
 
 import com.james.status.R;
 import com.james.status.data.IconStyleData;
+import com.james.status.receivers.IconUpdateReceiver;
 
 import java.util.Arrays;
 import java.util.List;
@@ -26,7 +26,7 @@ public class NfcIconData extends IconData<NfcIconData.NfcReceiver> {
 
     @Override
     public NfcReceiver getReceiver() {
-        return new NfcReceiver();
+        return new NfcReceiver(this);
     }
 
     @Override
@@ -80,17 +80,22 @@ public class NfcIconData extends IconData<NfcIconData.NfcReceiver> {
         return styles;
     }
 
-    public class NfcReceiver extends BroadcastReceiver {
+    public class NfcReceiver extends IconUpdateReceiver<NfcIconData> {
+
+        public NfcReceiver(NfcIconData iconData) {
+            super(iconData);
+        }
+
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void onReceive(NfcIconData icon, Intent intent) {
             switch (intent.getIntExtra(NfcAdapter.EXTRA_ADAPTER_STATE, NfcAdapter.STATE_OFF)) {
                 case NfcAdapter.STATE_OFF:
                 case NfcAdapter.STATE_TURNING_OFF:
-                    onDrawableUpdate(-1);
+                    icon.onDrawableUpdate(-1);
                     break;
                 case NfcAdapter.STATE_ON:
                 case NfcAdapter.STATE_TURNING_ON:
-                    onDrawableUpdate(0);
+                    icon.onDrawableUpdate(0);
                     break;
             }
         }

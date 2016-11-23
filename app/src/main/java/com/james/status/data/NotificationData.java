@@ -18,7 +18,6 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.service.notification.StatusBarNotification;
-import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.NotificationCompat;
@@ -284,9 +283,5 @@ public class NotificationData implements Parcelable {
             dest.writeParcelable(unloadedIcon, flags);
             dest.writeParcelable(unloadedLargeIcon, flags);
         }
-    }
-
-    public interface OnColorListener {
-        void onColor(String key, @ColorInt int color);
     }
 }

@@ -1,6 +1,5 @@
 package com.james.status.data.icon;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -8,6 +7,7 @@ import android.telephony.TelephonyManager;
 
 import com.james.status.R;
 import com.james.status.data.IconStyleData;
+import com.james.status.receivers.IconUpdateReceiver;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,7 +20,7 @@ public class AirplaneModeIconData extends IconData<AirplaneModeIconData.Airplane
 
     @Override
     public AirplaneModeReceiver getReceiver() {
-        return new AirplaneModeReceiver();
+        return new AirplaneModeReceiver(this);
     }
 
     @Override
@@ -60,12 +60,17 @@ public class AirplaneModeIconData extends IconData<AirplaneModeIconData.Airplane
         return styles;
     }
 
-    public class AirplaneModeReceiver extends BroadcastReceiver {
+    public class AirplaneModeReceiver extends IconUpdateReceiver<AirplaneModeIconData> {
+
+        public AirplaneModeReceiver(AirplaneModeIconData iconData) {
+            super(iconData);
+        }
+
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void onReceive(AirplaneModeIconData icon, Intent intent) {
             if (intent.getBooleanExtra(TelephonyManager.EXTRA_STATE, false))
-                onDrawableUpdate(0);
-            else onDrawableUpdate(-1);
+                icon.onDrawableUpdate(0);
+            else icon.onDrawableUpdate(-1);
         }
     }
 }

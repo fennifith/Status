@@ -1,7 +1,6 @@
 package com.james.status.data.icon;
 
 import android.animation.LayoutTransition;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -17,6 +16,7 @@ import com.james.status.R;
 import com.james.status.data.NotificationData;
 import com.james.status.data.preference.IntegerPreferenceData;
 import com.james.status.data.preference.PreferenceData;
+import com.james.status.receivers.IconUpdateReceiver;
 import com.james.status.services.NotificationService;
 import com.james.status.utils.PreferenceUtils;
 import com.james.status.utils.StaticUtils;
@@ -43,7 +43,7 @@ public class NotificationsIconData extends IconData<NotificationsIconData.Notifi
 
     @Override
     public NotificationReceiver getReceiver() {
-        return new NotificationReceiver();
+        return new NotificationReceiver(this);
     }
 
     @Override
@@ -186,9 +186,14 @@ public class NotificationsIconData extends IconData<NotificationsIconData.Notifi
         if (notifications.size() < 1) notificationLayout.setVisibility(View.GONE);
     }
 
-    public class NotificationReceiver extends BroadcastReceiver {
+    public class NotificationReceiver extends IconUpdateReceiver<NotificationsIconData> {
+
+        public NotificationReceiver(NotificationsIconData iconData) {
+            super(iconData);
+        }
+
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void onReceive(NotificationsIconData icon, Intent intent) {
             if (intent == null) return;
             String action = intent.getAction();
             if (action == null) return;
@@ -200,10 +205,10 @@ public class NotificationsIconData extends IconData<NotificationsIconData.Notifi
 
             switch (action) {
                 case ACTION_NOTIFICATION_ADDED:
-                    addNotification(notification);
+                    icon.addNotification(notification);
                     break;
                 case ACTION_NOTIFICATION_REMOVED:
-                    removeNotification(notification);
+                    icon.removeNotification(notification);
                     break;
             }
         }

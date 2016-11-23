@@ -1,13 +1,13 @@
 package com.james.status.data.icon;
 
 import android.bluetooth.BluetoothAdapter;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
 import com.james.status.R;
 import com.james.status.data.IconStyleData;
+import com.james.status.receivers.IconUpdateReceiver;
 import com.james.status.utils.StaticUtils;
 
 import java.util.Arrays;
@@ -21,7 +21,7 @@ public class BluetoothIconData extends IconData<BluetoothIconData.BluetoothRecei
 
     @Override
     public BluetoothIconData.BluetoothReceiver getReceiver() {
-        return new BluetoothReceiver();
+        return new BluetoothReceiver(this);
     }
 
     @Override
@@ -71,16 +71,21 @@ public class BluetoothIconData extends IconData<BluetoothIconData.BluetoothRecei
         return styles;
     }
 
-    public class BluetoothReceiver extends BroadcastReceiver {
+    public class BluetoothReceiver extends IconUpdateReceiver<BluetoothIconData> {
+
+        public BluetoothReceiver(BluetoothIconData iconData) {
+            super(iconData);
+        }
+
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void onReceive(BluetoothIconData icon, Intent intent) {
             int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.STATE_OFF);
             if (state != BluetoothAdapter.STATE_OFF) {
                 if (state == BluetoothAdapter.STATE_CONNECTED)
-                    onDrawableUpdate(1);
+                    icon.onDrawableUpdate(1);
                 else
-                    onDrawableUpdate(0);
-            } else onDrawableUpdate(-1);
+                    icon.onDrawableUpdate(0);
+            } else icon.onDrawableUpdate(-1);
         }
     }
 }

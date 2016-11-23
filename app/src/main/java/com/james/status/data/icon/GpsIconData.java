@@ -1,7 +1,6 @@
 package com.james.status.data.icon;
 
 import android.Manifest;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -15,6 +14,7 @@ import android.support.v4.content.ContextCompat;
 
 import com.james.status.R;
 import com.james.status.data.IconStyleData;
+import com.james.status.receivers.IconUpdateReceiver;
 
 import java.util.Arrays;
 import java.util.List;
@@ -34,7 +34,7 @@ public class GpsIconData extends IconData<GpsIconData.GpsReceiver> {
 
     @Override
     public GpsReceiver getReceiver() {
-        return new GpsReceiver();
+        return new GpsReceiver(this);
     }
 
     @Override
@@ -78,15 +78,20 @@ public class GpsIconData extends IconData<GpsIconData.GpsReceiver> {
         return styles;
     }
 
-    public class GpsReceiver extends BroadcastReceiver {
+    public class GpsReceiver extends IconUpdateReceiver<GpsIconData> {
+
+        public GpsReceiver(GpsIconData iconData) {
+            super(iconData);
+        }
+
         @Override
-        public void onReceive(Context context, Intent intent) {
-            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+        public void onReceive(GpsIconData icon, Intent intent) {
+            if (icon.locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                 if (isLocationFixed()) {
-                    onDrawableUpdate(1);
+                    icon.onDrawableUpdate(1);
                 } else
-                    onDrawableUpdate(0);
-            } else onDrawableUpdate(-1);
+                    icon.onDrawableUpdate(0);
+            } else icon.onDrawableUpdate(-1);
         }
 
         private boolean isLocationFixed() {

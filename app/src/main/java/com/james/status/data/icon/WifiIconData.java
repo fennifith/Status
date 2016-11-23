@@ -1,6 +1,5 @@
 package com.james.status.data.icon;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -10,6 +9,7 @@ import android.net.wifi.WifiManager;
 
 import com.james.status.R;
 import com.james.status.data.IconStyleData;
+import com.james.status.receivers.IconUpdateReceiver;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,7 +27,7 @@ public class WifiIconData extends IconData<WifiIconData.WifiReceiver> {
 
     @Override
     public WifiReceiver getReceiver() {
-        return new WifiReceiver();
+        return new WifiReceiver(this);
     }
 
     @Override
@@ -103,15 +103,20 @@ public class WifiIconData extends IconData<WifiIconData.WifiReceiver> {
         return styles;
     }
 
-    public class WifiReceiver extends BroadcastReceiver {
+    public class WifiReceiver extends IconUpdateReceiver<WifiIconData> {
+
+        public WifiReceiver(WifiIconData iconData) {
+            super(iconData);
+        }
+
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void onReceive(WifiIconData icon, Intent intent) {
             NetworkInfo networkInfo = intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
-            if (networkInfo == null) networkInfo = connectivityManager.getActiveNetworkInfo();
+            if (networkInfo == null) networkInfo = icon.connectivityManager.getActiveNetworkInfo();
 
             if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI && networkInfo.isConnected())
-                onDrawableUpdate(WifiManager.calculateSignalLevel(wifiManager.getConnectionInfo().getRssi(), 4));
-            else onDrawableUpdate(-1);
+                icon.onDrawableUpdate(WifiManager.calculateSignalLevel(icon.wifiManager.getConnectionInfo().getRssi(), 4));
+            else icon.onDrawableUpdate(-1);
         }
     }
 }

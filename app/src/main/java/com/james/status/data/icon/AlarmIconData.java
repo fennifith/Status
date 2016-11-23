@@ -1,7 +1,6 @@
 package com.james.status.data.icon;
 
 import android.app.AlarmManager;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -10,6 +9,7 @@ import android.provider.Settings;
 
 import com.james.status.R;
 import com.james.status.data.IconStyleData;
+import com.james.status.receivers.IconUpdateReceiver;
 
 import java.util.Arrays;
 import java.util.List;
@@ -25,7 +25,7 @@ public class AlarmIconData extends IconData<AlarmIconData.AlarmReceiver> {
 
     @Override
     public AlarmReceiver getReceiver() {
-        return new AlarmReceiver();
+        return new AlarmReceiver(this);
     }
 
     @Override
@@ -77,18 +77,23 @@ public class AlarmIconData extends IconData<AlarmIconData.AlarmReceiver> {
         return styles;
     }
 
-    public class AlarmReceiver extends BroadcastReceiver {
+    public class AlarmReceiver extends IconUpdateReceiver<AlarmIconData> {
+
+        public AlarmReceiver(AlarmIconData iconData) {
+            super(iconData);
+        }
+
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void onReceive(AlarmIconData icon, Intent intent) {
             Object alarm = null;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                alarm = alarmManager.getNextAlarmClock();
+                alarm = icon.alarmManager.getNextAlarmClock();
             else
-                alarm = Settings.System.getString(getContext().getContentResolver(), android.provider.Settings.System.NEXT_ALARM_FORMATTED);
+                alarm = Settings.System.getString(icon.getContext().getContentResolver(), android.provider.Settings.System.NEXT_ALARM_FORMATTED);
 
             if (alarm != null)
-                onDrawableUpdate(0);
-            else onDrawableUpdate(-1);
+                icon.onDrawableUpdate(0);
+            else icon.onDrawableUpdate(-1);
         }
     }
 }

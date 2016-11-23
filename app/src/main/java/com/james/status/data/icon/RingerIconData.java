@@ -1,6 +1,5 @@
 package com.james.status.data.icon;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -8,6 +7,7 @@ import android.media.AudioManager;
 
 import com.james.status.R;
 import com.james.status.data.IconStyleData;
+import com.james.status.receivers.IconUpdateReceiver;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,7 +23,7 @@ public class RingerIconData extends IconData<RingerIconData.RingerReceiver> {
 
     @Override
     public RingerReceiver getReceiver() {
-        return new RingerReceiver();
+        return new RingerReceiver(this);
     }
 
     @Override
@@ -76,19 +76,23 @@ public class RingerIconData extends IconData<RingerIconData.RingerReceiver> {
         return styles;
     }
 
-    public class RingerReceiver extends BroadcastReceiver {
+    public class RingerReceiver extends IconUpdateReceiver<RingerIconData> {
+
+        public RingerReceiver(RingerIconData iconData) {
+            super(iconData);
+        }
 
         @Override
-        public void onReceive(Context context, Intent intent) {
-            switch (audioManager.getRingerMode()) {
+        public void onReceive(RingerIconData icon, Intent intent) {
+            switch (icon.audioManager.getRingerMode()) {
                 case AudioManager.RINGER_MODE_SILENT:
-                    onDrawableUpdate(0);
+                    icon.onDrawableUpdate(0);
                     break;
                 case AudioManager.RINGER_MODE_VIBRATE:
-                    onDrawableUpdate(1);
+                    icon.onDrawableUpdate(1);
                     break;
                 case AudioManager.RINGER_MODE_NORMAL:
-                    onDrawableUpdate(-1);
+                    icon.onDrawableUpdate(-1);
                     break;
             }
         }

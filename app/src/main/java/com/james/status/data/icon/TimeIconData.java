@@ -1,6 +1,5 @@
 package com.james.status.data.icon;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -9,6 +8,7 @@ import android.text.format.DateFormat;
 import com.james.status.R;
 import com.james.status.data.preference.FormatPreferenceData;
 import com.james.status.data.preference.PreferenceData;
+import com.james.status.receivers.IconUpdateReceiver;
 import com.james.status.utils.StaticUtils;
 
 import java.util.Calendar;
@@ -60,7 +60,7 @@ public class TimeIconData extends IconData<TimeIconData.TimeReceiver> {
 
     @Override
     public TimeReceiver getReceiver() {
-        return new TimeReceiver();
+        return new TimeReceiver(this);
     }
 
     @Override
@@ -107,11 +107,16 @@ public class TimeIconData extends IconData<TimeIconData.TimeReceiver> {
         return preferences;
     }
 
-    public class TimeReceiver extends BroadcastReceiver {
+    public class TimeReceiver extends IconUpdateReceiver<TimeIconData> {
+
+        public TimeReceiver(TimeIconData iconData) {
+            super(iconData);
+        }
+
         @Override
-        public void onReceive(Context context, Intent intent) {
-            calendar.setTimeInMillis(System.currentTimeMillis());
-            onTextUpdate(DateFormat.format(format, calendar).toString());
+        public void onReceive(TimeIconData icon, Intent intent) {
+            icon.calendar.setTimeInMillis(System.currentTimeMillis());
+            icon.onTextUpdate(DateFormat.format(icon.format, icon.calendar).toString());
         }
     }
 }

@@ -6,6 +6,8 @@ import android.telephony.TelephonyManager;
 
 import com.james.status.R;
 
+import java.lang.ref.SoftReference;
+
 //HAH IT'S A ICON DATA FOR THE DATA ICON GET IT BECAUSE THEIR NAMES ARE THE SAME BUT REVERSED YEAH IT'S SO FUNNY HAHHAHAHAHAHAHAH I KNOW RIGHT IT'S REALLY HILARIOUS I'M LITERALLY DYING OF LAUGHTER
 public class DataIconData extends IconData {
 
@@ -18,7 +20,7 @@ public class DataIconData extends IconData {
         super(context);
 
         telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        dataListener = new DataListener();
+        dataListener = new DataListener(this);
     }
 
     @Override
@@ -96,21 +98,31 @@ public class DataIconData extends IconData {
     }
 
     private class DataListener extends PhoneStateListener {
+
+        private SoftReference<DataIconData> reference;
+
+        private DataListener(DataIconData iconData) {
+            reference = new SoftReference<>(iconData);
+        }
+
         @Override
         public void onDataConnectionStateChanged(int state, int networkType) {
             super.onDataConnectionStateChanged(state, networkType);
 
-            if (isRegistered) {
-                if (state == TelephonyManager.DATA_DISCONNECTED) onTextUpdate(null);
+            DataIconData icon = null;
+            if (reference != null) icon = reference.get();
+
+            if (icon != null && icon.isRegistered) {
+                if (state == TelephonyManager.DATA_DISCONNECTED) icon.onTextUpdate(null);
                 else {
-                    switch (telephonyManager.getNetworkType()) {
+                    switch (icon.telephonyManager.getNetworkType()) {
                         case TelephonyManager.NETWORK_TYPE_GPRS:
                         case 16:
                         case TelephonyManager.NETWORK_TYPE_EDGE:
                         case TelephonyManager.NETWORK_TYPE_CDMA:
                         case TelephonyManager.NETWORK_TYPE_1xRTT:
                         case TelephonyManager.NETWORK_TYPE_IDEN:
-                            onTextUpdate("2G");
+                            icon.onTextUpdate("2G");
                             break;
                         case TelephonyManager.NETWORK_TYPE_UMTS:
                         case TelephonyManager.NETWORK_TYPE_EVDO_0:
@@ -122,14 +134,14 @@ public class DataIconData extends IconData {
                         case TelephonyManager.NETWORK_TYPE_EHRPD:
                         case TelephonyManager.NETWORK_TYPE_HSPAP:
                         case 17:
-                            onTextUpdate("3G");
+                            icon.onTextUpdate("3G");
                             break;
                         case TelephonyManager.NETWORK_TYPE_LTE:
                         case 18:
-                            onTextUpdate("4G");
+                            icon.onTextUpdate("4G");
                             break;
                         default:
-                            onTextUpdate(null);
+                            icon.onTextUpdate(null);
                             break;
                     }
                 }

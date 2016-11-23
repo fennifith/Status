@@ -1,6 +1,5 @@
 package com.james.status.data.icon;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -9,6 +8,7 @@ import android.os.Build;
 
 import com.james.status.R;
 import com.james.status.data.IconStyleData;
+import com.james.status.receivers.IconUpdateReceiver;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,7 +21,7 @@ public class HeadphoneIconData extends IconData<HeadphoneIconData.HeadphoneRecei
 
     @Override
     public HeadphoneReceiver getReceiver() {
-        return new HeadphoneReceiver();
+        return new HeadphoneReceiver(this);
     }
 
     @Override
@@ -59,12 +59,17 @@ public class HeadphoneIconData extends IconData<HeadphoneIconData.HeadphoneRecei
         return styles;
     }
 
-    public class HeadphoneReceiver extends BroadcastReceiver {
+    public class HeadphoneReceiver extends IconUpdateReceiver<HeadphoneIconData> {
+
+        public HeadphoneReceiver(HeadphoneIconData iconData) {
+            super(iconData);
+        }
+
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void onReceive(HeadphoneIconData icon, Intent intent) {
             if (intent.getIntExtra("state", 0) == 1)
-                onDrawableUpdate(intent.getIntExtra("microphone", 0));
-            else onDrawableUpdate(-1);
+                icon.onDrawableUpdate(intent.getIntExtra("microphone", 0));
+            else icon.onDrawableUpdate(-1);
         }
     }
 }

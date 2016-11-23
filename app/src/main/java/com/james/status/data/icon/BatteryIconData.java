@@ -1,6 +1,5 @@
 package com.james.status.data.icon;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -8,6 +7,7 @@ import android.os.BatteryManager;
 
 import com.james.status.R;
 import com.james.status.data.IconStyleData;
+import com.james.status.receivers.IconUpdateReceiver;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,7 +18,7 @@ public class BatteryIconData extends IconData {
 
     public BatteryIconData(Context context) {
         super(context);
-        receiver = new BatteryReceiver();
+        receiver = new BatteryReceiver(this);
     }
 
     @Override
@@ -204,9 +204,14 @@ public class BatteryIconData extends IconData {
         return styles;
     }
 
-    public class BatteryReceiver extends BroadcastReceiver {
+    public class BatteryReceiver extends IconUpdateReceiver<BatteryIconData> {
+
+        public BatteryReceiver(BatteryIconData iconData) {
+            super(iconData);
+        }
+
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void onReceive(BatteryIconData icon, Intent intent) {
             int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
             int scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, 1);
             int status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, 0);
@@ -216,10 +221,10 @@ public class BatteryIconData extends IconData {
             if (status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL)
                 iconLevel += 7;
 
-            onDrawableUpdate(iconLevel);
+            icon.onDrawableUpdate(iconLevel);
 
-            if (hasText())
-                onTextUpdate(String.valueOf((int) (((double) level / scale) * 100)) + "%");
+            if (icon.hasText())
+                icon.onTextUpdate(String.valueOf((int) (((double) level / scale) * 100)) + "%");
         }
     }
 }
