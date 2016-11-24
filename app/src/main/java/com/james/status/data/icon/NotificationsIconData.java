@@ -133,18 +133,23 @@ public class NotificationsIconData extends IconData<NotificationsIconData.Notifi
 
     private void addNotification(NotificationData notification) {
         if (notificationLayout != null) {
+            View v = null;
+
             for (int i = 0; i < notificationLayout.getChildCount(); i++) {
                 View child = notificationLayout.getChildAt(i);
                 Object tag = child.getTag();
 
                 if (tag != null && tag instanceof String && ((String) tag).matches(notification.getKey())) {
-                    notificationLayout.removeView(child);
+                    v = child;
                     notifications.remove(notification.getKey());
+                    break;
                 }
             }
 
-            View v = inflater.inflate(R.layout.item_icon, notificationLayout, false);
-            v.setTag(notification.getKey());
+            if (v == null) {
+                v = inflater.inflate(R.layout.item_icon, notificationLayout, false);
+                v.setTag(notification.getKey());
+            }
 
             v.setPadding(getIconPadding(), 0, getIconPadding(), 0);
             v.findViewById(R.id.text).setVisibility(View.GONE);
@@ -163,7 +168,7 @@ public class NotificationsIconData extends IconData<NotificationsIconData.Notifi
 
                 iconView.setLayoutParams(layoutParams);
 
-                notificationLayout.addView(v);
+                if (v.getParent() == null) notificationLayout.addView(v);
                 notifications.put(notification.getKey(), notification);
 
                 onDrawableUpdate(-1);
