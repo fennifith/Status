@@ -2,7 +2,6 @@ package com.james.status.data.preference;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.ColorInt;
 import android.view.LayoutInflater;
@@ -18,10 +17,12 @@ import com.james.status.views.CustomImageView;
 
 public class ColorPreferenceData extends PreferenceData<Integer> {
 
-    private int value;
+    private int defaultValue, value;
 
     public ColorPreferenceData(Context context, Identifier identifier, @ColorInt int defaultValue, OnPreferenceChangeListener<Integer> listener) {
         super(context, identifier, listener);
+
+        this.defaultValue = defaultValue;
 
         Integer value = PreferenceUtils.getIntegerPreference(getContext(), identifier.getPreference());
         if (value == null) value = defaultValue;
@@ -44,7 +45,7 @@ public class ColorPreferenceData extends PreferenceData<Integer> {
         holder.v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Dialog dialog = new ColorPickerDialog(getContext()).setPreference(value).setDefaultPreference(Color.BLACK).setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
+                Dialog dialog = new ColorPickerDialog(getContext()).setPreference(value).setDefaultPreference(defaultValue).setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
                     @Override
                     public void onPreference(PreferenceDialog dialog, Integer color) {
                         value = color;
