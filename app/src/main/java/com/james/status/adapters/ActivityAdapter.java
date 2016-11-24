@@ -145,6 +145,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
 
         Boolean isFullscreen = activity.getBooleanPreference(context, AppData.PreferenceIdentifier.FULLSCREEN);
         fullscreenSwitch.setChecked(isFullscreen != null && isFullscreen);
+        holder.v.findViewById(R.id.color).setVisibility(fullscreenSwitch.isChecked() ? View.GONE : View.VISIBLE);
 
         fullscreenSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -153,6 +154,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
                 if (activity == null) return;
 
                 activity.putPreference(context, AppData.PreferenceIdentifier.FULLSCREEN, isChecked);
+                holder.v.findViewById(R.id.color).setVisibility(isChecked ? View.GONE : View.VISIBLE);
             }
         });
 

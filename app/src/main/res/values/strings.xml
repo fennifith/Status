@@ -79,8 +79,6 @@
     <string name="preference_app_colors_desc">Set the color for the status bar to use on a specific screen. This will override any other color options provided the \'automatic status bar coloring\' option is enabled.</string>
     <string name="preference_transparent_home">Transparency on Home Screen</string>
     <string name="preference_transparent_home_desc">This option sets the status bar\'s background as the current wallpaper when the home screen is displayed. This setting will not work correctly on live wallpapers or if your home screen\'s scrolling wallpaper option is enabled.</string>
-    <string name="preference_fullscreen_apps">Fullscreen Apps</string>
-    <string name="preference_fullscreen_apps_desc">The status bar will be disabled in the apps set here.</string>
     <string name="preference_dark_icons">Contrasting Icon Colors</string>
     <string name="preference_dark_icons_desc">Adjusts the color of the icons to avoid invisible or hard to see icons on light backgrounds.</string>
     <string name="preference_tinted_icons">Tinted Icons</string>
@@ -214,7 +212,7 @@
     <string name="vuk_name">Vukašin Anđelković</string>
     <string name="vuk_desc">The great lord of Material Design, yeah he makes icons and stuff.</string>
     <string name="preference_status_color">Primary Color</string>
-    <string name="preference_fullscreen">Fullscreen</string>
+    <string name="preference_fullscreen">Hide Status</string>
     <string name="preference_notifications">Notifications</string>
 
     <string name="about_icons">Icon Sources</string>

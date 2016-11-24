@@ -69,7 +69,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
         AppData app = getApp(position);
         if (app == null) return;
 
-        iconView = holder.v.findViewById(R.id.launchIcon);
+        if (iconView == null) iconView = holder.v.findViewById(R.id.launchIcon);
 
         ((TextView) holder.v.findViewById(R.id.appName)).setText(app.label);
         ((TextView) holder.v.findViewById(R.id.appPackage)).setText(app.packageName);
@@ -168,6 +168,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
 
         Boolean isFullscreen = app.getBooleanPreference(context, AppData.PreferenceIdentifier.FULLSCREEN);
         fullscreenSwitch.setChecked(isFullscreen != null && isFullscreen);
+        holder.v.findViewById(R.id.color).setVisibility(fullscreenSwitch.isChecked() ? View.GONE : View.VISIBLE);
 
         fullscreenSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -176,6 +177,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
                 if (app == null) return;
 
                 app.putPreference(context, AppData.PreferenceIdentifier.FULLSCREEN, isChecked);
+                holder.v.findViewById(R.id.color).setVisibility(isChecked ? View.GONE : View.VISIBLE);
             }
         });
 

@@ -28,6 +28,7 @@ public class AppPreferenceFragment extends SimpleFragment {
     private RecyclerView recycler;
     private ProgressBar progressBar;
 
+    private GridLayoutManager layoutManager;
     private AppAdapter adapter;
     private List<AppData> apps;
     private PackageManager packageManager;
@@ -42,7 +43,8 @@ public class AppPreferenceFragment extends SimpleFragment {
         recycler = (RecyclerView) v.findViewById(R.id.recycler);
         progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
 
-        recycler.setLayoutManager(new GridLayoutManager(getContext(), 1));
+        layoutManager = new GridLayoutManager(getContext(), 1);
+        recycler.setLayoutManager(layoutManager);
         progressBar.setVisibility(View.VISIBLE);
 
         apps = new ArrayList<>();
@@ -82,7 +84,7 @@ public class AppPreferenceFragment extends SimpleFragment {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (adapter != null && adapter.iconView != null && newState == RecyclerView.SCROLL_STATE_IDLE && isSelected) {
+                if (adapter != null && adapter.iconView != null && newState == RecyclerView.SCROLL_STATE_IDLE && layoutManager.findFirstCompletelyVisibleItemPosition() == 0 && isSelected) {
                     if (StaticUtils.shouldShowTutorial(getContext(), "activities")) {
                         new TapTargetView.Builder(getActivity())
                                 .title(R.string.tutorial_activities)

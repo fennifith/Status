@@ -109,6 +109,7 @@ public class AppSettingActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 app.putPreference(AppSettingActivity.this, AppData.PreferenceIdentifier.FULLSCREEN, isChecked);
+                adapter.notifyDataSetChanged();
             }
         });
 
