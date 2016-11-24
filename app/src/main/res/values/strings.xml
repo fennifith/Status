@@ -200,6 +200,7 @@
     </string>
 
     <string name="empty">Nothing here…</string>
+    <string name="reset_apps_confirm">Are you sure you want to reset all the app-specific preferences? This cannot be undone.</string>
 
     <string name="james_name">James Fenn</string>
     <string name="james_desc">Android developer and professional cabbage eater.</string>
@@ -221,6 +222,9 @@
 
     <string name="md_icons">Material Design Icons</string>
     <string name="md_icons_desc">Made by many various contributors, this collection of icons contains useful resources unavailable from Google\'s site.</string>
+    <string name="reset_all">Reset All</string>
+    <string name="notifications_disable">Disable All Notifications</string>
+    <string name="notifications_enable">Enable All Notifications</string>
 
     <string-array name="libraries">
         <item>

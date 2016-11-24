@@ -167,6 +167,15 @@ public class AppData implements Parcelable {
         }
     }
 
+    public void clearPreferences(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        for (String key : prefs.getAll().keySet()) {
+            if (key.contains("/" + packageName + "/")) editor.remove(key);
+        }
+        editor.apply();
+    }
+
     private String getIdentifierString(PreferenceIdentifier identifier) {
         return identifier.toString() + "/" + packageName + "/" + name;
     }
