@@ -28,6 +28,9 @@ public class PreferenceAdapter extends RecyclerView.Adapter<PreferenceData.ViewH
     @Override
     public void onBindViewHolder(PreferenceData.ViewHolder holder, int position) {
         datas.get(position).onBindViewHolder(holder, position);
+
+        holder.itemView.setAlpha(0);
+        holder.itemView.animate().alpha(1).setDuration(500).start();
     }
 
     @Override

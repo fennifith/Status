@@ -109,6 +109,9 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
         recycler.setLayoutManager(new GridLayoutManager(activity, 1));
         recycler.setNestedScrollingEnabled(false);
         recycler.setAdapter(new PreferenceAdapter(activity, icon.getPreferences()));
+
+        holder.v.setAlpha(0);
+        holder.v.animate().alpha(1).setDuration(500).start();
     }
 
     @Override

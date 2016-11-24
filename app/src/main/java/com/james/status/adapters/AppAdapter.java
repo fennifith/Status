@@ -1,6 +1,6 @@
 package com.james.status.adapters;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -9,6 +9,8 @@ import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
@@ -36,14 +38,14 @@ import java.util.List;
 
 public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
 
-    private Context context;
+    private Activity activity;
     private PackageManager packageManager;
     private List<AppData> originalApps, apps;
     public View iconView;
 
-    public AppAdapter(Context context, List<AppData> apps) {
-        this.context = context;
-        packageManager = context.getPackageManager();
+    public AppAdapter(Activity activity, List<AppData> apps) {
+        this.activity = activity;
+        packageManager = activity.getPackageManager();
 
         originalApps = new ArrayList<>();
         originalApps.addAll(apps);
@@ -61,7 +63,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_app_card, parent, false));
+        return new ViewHolder(LayoutInflater.from(activity).inflate(R.layout.item_app_card, parent, false));
     }
 
     @Override
@@ -89,7 +91,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
                     return;
                 }
 
-                new Handler(context.getMainLooper()).post(new Runnable() {
+                new Handler(activity.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
                         if (icon != null)
@@ -108,8 +110,8 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
                         AppData app = getApp(holder.getAdapterPosition());
                         if (app == null) return;
 
-                        final int color = app.getColor(context), defaultColor = app.getDefaultColor(context);
-                        final List<Integer> colors = ColorUtils.getColors(context, app);
+                        final int color = app.getColor(activity), defaultColor = app.getDefaultColor(activity);
+                        final List<Integer> colors = ColorUtils.getColors(activity, app);
 
                         new Handler(Looper.getMainLooper()).post(new Runnable() {
                             @Override
@@ -117,12 +119,12 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
                                 AppData app = getApp(holder.getAdapterPosition());
                                 if (app == null) return;
 
-                                PreferenceDialog dialog = new ColorPickerDialog(context).setPresetColors(colors).setTag(app).setPreference(color).setDefaultPreference(defaultColor).setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
+                                PreferenceDialog dialog = new ColorPickerDialog(activity).setPresetColors(colors).setTag(app).setPreference(color).setDefaultPreference(defaultColor).setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
                                     @Override
                                     public void onPreference(PreferenceDialog dialog, Integer preference) {
                                         Object tag = dialog.getTag();
                                         if (tag != null && tag instanceof AppData)
-                                            ((AppData) tag).putPreference(context, AppData.PreferenceIdentifier.COLOR, preference);
+                                            ((AppData) tag).putPreference(activity, AppData.PreferenceIdentifier.COLOR, preference);
 
                                         notifyItemChanged(holder.getAdapterPosition());
                                     }
@@ -147,7 +149,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
                 AppData app = getApp(holder.getAdapterPosition());
                 if (app == null) return;
 
-                final int color = app.getColor(context);
+                final int color = app.getColor(activity);
 
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
@@ -155,9 +157,9 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
                         ((ImageView) holder.v.findViewById(R.id.colorView)).setImageDrawable(new ColorDrawable(color));
 
                         holder.v.findViewById(R.id.titleBar).setBackgroundColor(color);
-                        ((TextView) holder.v.findViewById(R.id.appName)).setTextColor(ContextCompat.getColor(context, ColorUtils.isColorDark(color) ? R.color.textColorPrimaryInverse : R.color.textColorPrimary));
-                        ((TextView) holder.v.findViewById(R.id.appPackage)).setTextColor(ContextCompat.getColor(context, ColorUtils.isColorDark(color) ? R.color.textColorSecondaryInverse : R.color.textColorSecondary));
-                        ImageUtils.tintDrawable(((CustomImageView) holder.v.findViewById(R.id.launchIcon)), ImageUtils.getVectorDrawable(context, R.drawable.ic_launch), ColorUtils.isColorDark(color) ? Color.WHITE : Color.BLACK);
+                        ((TextView) holder.v.findViewById(R.id.appName)).setTextColor(ContextCompat.getColor(activity, ColorUtils.isColorDark(color) ? R.color.textColorPrimaryInverse : R.color.textColorPrimary));
+                        ((TextView) holder.v.findViewById(R.id.appPackage)).setTextColor(ContextCompat.getColor(activity, ColorUtils.isColorDark(color) ? R.color.textColorSecondaryInverse : R.color.textColorSecondary));
+                        ImageUtils.tintDrawable(((CustomImageView) holder.v.findViewById(R.id.launchIcon)), ImageUtils.getVectorDrawable(activity, R.drawable.ic_launch), ColorUtils.isColorDark(color) ? Color.WHITE : Color.BLACK);
                     }
                 });
             }
@@ -166,7 +168,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
         SwitchCompat fullscreenSwitch = (SwitchCompat) holder.v.findViewById(R.id.fullscreenSwitch);
         fullscreenSwitch.setOnCheckedChangeListener(null);
 
-        Boolean isFullscreen = app.getBooleanPreference(context, AppData.PreferenceIdentifier.FULLSCREEN);
+        Boolean isFullscreen = app.getBooleanPreference(activity, AppData.PreferenceIdentifier.FULLSCREEN);
         fullscreenSwitch.setChecked(isFullscreen != null && isFullscreen);
         holder.v.findViewById(R.id.color).setVisibility(fullscreenSwitch.isChecked() ? View.GONE : View.VISIBLE);
 
@@ -176,7 +178,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
                 AppData app = getApp(holder.getAdapterPosition());
                 if (app == null) return;
 
-                app.putPreference(context, AppData.PreferenceIdentifier.FULLSCREEN, isChecked);
+                app.putPreference(activity, AppData.PreferenceIdentifier.FULLSCREEN, isChecked);
                 holder.v.findViewById(R.id.color).setVisibility(isChecked ? View.GONE : View.VISIBLE);
             }
         });
@@ -184,7 +186,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
         SwitchCompat notificationSwitch = (SwitchCompat) holder.v.findViewById(R.id.notificationSwitch);
         notificationSwitch.setOnCheckedChangeListener(null);
 
-        Boolean isNotifications = app.getSpecificBooleanPreference(context, AppData.PreferenceIdentifier.NOTIFICATIONS);
+        Boolean isNotifications = app.getSpecificBooleanPreference(activity, AppData.PreferenceIdentifier.NOTIFICATIONS);
         notificationSwitch.setChecked(isNotifications == null || isNotifications);
 
         notificationSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -193,20 +195,24 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
                 AppData app = getApp(holder.getAdapterPosition());
                 if (app == null) return;
 
-                app.putSpecificPreference(context, AppData.PreferenceIdentifier.NOTIFICATIONS, isChecked);
+                app.putSpecificPreference(activity, AppData.PreferenceIdentifier.NOTIFICATIONS, isChecked);
 
-                StaticUtils.updateStatusService(context);
+                StaticUtils.updateStatusService(activity);
             }
         });
 
         holder.v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, AppSettingActivity.class);
+                Intent intent = new Intent(activity, AppSettingActivity.class);
                 intent.putExtra(AppSettingActivity.EXTRA_APP, getApp(holder.getAdapterPosition()));
-                context.startActivity(intent);
+
+                ActivityCompat.startActivity(activity, intent, ActivityOptionsCompat.makeScaleUpAnimation(view, (int) view.getX(), (int) view.getY(), view.getWidth(), view.getHeight()).toBundle());
             }
         });
+
+        holder.v.setAlpha(0);
+        holder.v.animate().alpha(1).setDuration(500).start();
     }
 
     @Nullable

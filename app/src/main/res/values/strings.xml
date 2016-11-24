@@ -189,8 +189,6 @@
         HH - Hours (24h)\n
         kk - Hours (24h)\n
         mm - Minutes\n
-        ss - Seconds\n
-        SSS - Milliseconds\n
         a - AM/PM
         Z - Time Zone
         \n

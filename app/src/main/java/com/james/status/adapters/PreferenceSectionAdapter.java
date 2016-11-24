@@ -57,6 +57,9 @@ public class PreferenceSectionAdapter extends RecyclerView.Adapter<PreferenceSec
 
         if (items.size() > 0) holder.v.setVisibility(View.VISIBLE);
         else holder.v.setVisibility(View.GONE);
+
+        holder.v.setAlpha(0);
+        holder.v.animate().alpha(1).setDuration(500).start();
     }
 
     @Override

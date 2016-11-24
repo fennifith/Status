@@ -71,7 +71,7 @@ public class AppPreferenceFragment extends SimpleFragment {
                     new Handler(context.getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
-                            adapter = new AppAdapter(getContext(), apps);
+                            adapter = new AppAdapter(getActivity(), apps);
                             recycler.setAdapter(adapter);
                             progressBar.setVisibility(View.GONE);
                         }

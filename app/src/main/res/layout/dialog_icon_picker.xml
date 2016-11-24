@@ -18,8 +18,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="0dp"
                 android:layout_height="?attr/actionBarSize"
-                android:layout_weight="1"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+                android:layout_weight="1" />
 
             <com.james.status.views.SquareImageView
                 android:id="@+id/add"
@@ -27,7 +26,6 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:scaleType="center"
-                android:tint="@android:color/white"
                 app:srcCompat="@drawable/ic_add_circle" />
 
         </LinearLayout>

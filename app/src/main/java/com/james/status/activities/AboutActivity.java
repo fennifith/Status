@@ -28,7 +28,6 @@ public class AboutActivity extends AppCompatActivity {
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
 
         jamesImage = (ImageView) findViewById(R.id.jamesImage);
         Glide.with(this).load("https://theandroidmaster.github.io/images/headers/rocks.jpg").into(jamesImage);

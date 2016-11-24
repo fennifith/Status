@@ -51,6 +51,9 @@ public class ListPreferenceAdapter extends RecyclerView.Adapter<ListPreferenceAd
                 setListPreference(styles.get(holder.getAdapterPosition()));
             }
         });
+
+        holder.v.setAlpha(0);
+        holder.v.animate().alpha(1).setDuration(500).start();
     }
 
     @Override

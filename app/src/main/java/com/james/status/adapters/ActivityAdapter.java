@@ -159,6 +159,9 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
         });
 
         holder.v.findViewById(R.id.notificationSwitch).setVisibility(View.GONE);
+
+        holder.v.setAlpha(0);
+        holder.v.animate().alpha(1).setDuration(500).start();
     }
 
     @Nullable

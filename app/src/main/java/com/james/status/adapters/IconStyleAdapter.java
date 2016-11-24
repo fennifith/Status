@@ -96,6 +96,9 @@ public class IconStyleAdapter extends RecyclerView.Adapter<IconStyleAdapter.View
                 setIconStyle(styles.get(holder.getAdapterPosition()));
             }
         });
+
+        holder.v.setAlpha(0);
+        holder.v.animate().alpha(1).setDuration(500).start();
     }
 
     @Override

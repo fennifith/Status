@@ -38,6 +38,9 @@ public class LicenseAdapter extends RecyclerView.Adapter<LicenseAdapter.ViewHold
         TextView textView = (TextView) holder.v.findViewById(R.id.subtitle);
         textView.setText(licenses.get(position));
         textView.setMovementMethod(new LinkMovementMethod());
+
+        holder.v.setAlpha(0);
+        holder.v.animate().alpha(1).setDuration(500).start();
     }
 
     @Override

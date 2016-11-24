@@ -27,7 +27,6 @@
                     android:layout_width="0dp"
                     android:layout_height="?attr/actionBarSize"
                     android:layout_weight="1"
-                    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                     app:title="@string/app_name" />
 
                 <android.support.v7.widget.SwitchCompat
@@ -45,8 +44,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            app:tabTextColor="@color/textColorSecondaryInverse"
-            app:tabSelectedTextColor="@color/textColorPrimaryInverse"
+            app:tabTextColor="@color/textColorSecondary"
+            app:tabSelectedTextColor="@color/textColorPrimary"
             android:background="@null"
             android:id="@+id/tabLayout" />
 

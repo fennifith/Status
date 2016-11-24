@@ -1,6 +1,7 @@
 package com.james.status.dialogs;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -38,7 +39,7 @@ public class IconPickerDialog extends PreferenceDialog<IconStyleData> implements
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (title != null) toolbar.setTitle(title);
 
-        toolbar.setNavigationIcon(ImageUtils.getVectorDrawable(getContext(), R.drawable.ic_back));
+        toolbar.setNavigationIcon(ImageUtils.tintDrawable(ImageUtils.getVectorDrawable(getContext(), R.drawable.ic_back), Color.BLACK));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
