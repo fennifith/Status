@@ -138,8 +138,12 @@ public class StatusService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Boolean enabled = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED);
         if (enabled == null || !enabled || !StaticUtils.isPermissionsGranted(this)) {
+            if (statusView != null) {
+                if (statusView.getParent() != null) windowManager.removeView(statusView);
+                statusView = null;
+            }
             stopSelf();
-            return START_STICKY;
+            return START_NOT_STICKY;
         }
 
         if (intent == null) return START_STICKY;
