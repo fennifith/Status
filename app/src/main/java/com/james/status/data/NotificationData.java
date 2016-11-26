@@ -240,7 +240,7 @@ public class NotificationData implements Parcelable {
 
         try {
             return ResourcesCompat.getDrawable(resources, resource, theme);
-        } catch (Resources.NotFoundException e) {
+        } catch (Resources.NotFoundException | OutOfMemoryError e) {
             return null;
         }
     }

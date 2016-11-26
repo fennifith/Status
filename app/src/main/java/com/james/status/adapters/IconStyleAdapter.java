@@ -72,9 +72,12 @@ public class IconStyleAdapter extends RecyclerView.Adapter<IconStyleAdapter.View
             edit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    IconStyleData style = styles.get(holder.getAdapterPosition());
+                    int position = holder.getAdapterPosition();
+                    if (position < 0 || position >= styles.size()) return;
+
+                    IconStyleData style = styles.get(position);
                     icon.removeIconStyle(style);
-                    styles.remove(holder.getAdapterPosition());
+                    styles.remove(position);
                     if (styles.size() > 0) setIconStyle(styles.get(0));
                     else notifyDataSetChanged();
 
@@ -93,7 +96,8 @@ public class IconStyleAdapter extends RecyclerView.Adapter<IconStyleAdapter.View
         holder.v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setIconStyle(styles.get(holder.getAdapterPosition()));
+                int position = holder.getAdapterPosition();
+                if (position >= 0 && position < styles.size()) setIconStyle(styles.get(position));
             }
         });
 

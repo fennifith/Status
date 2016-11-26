@@ -55,6 +55,7 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> implements Stat
         setContentView(R.layout.dialog_color_picker);
 
         status = (Status) getContext().getApplicationContext();
+        status.addListener(this);
 
         colorImage = (CustomImageView) findViewById(R.id.color);
         colorHex = (AppCompatEditText) findViewById(R.id.colorHex);
@@ -186,7 +187,6 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> implements Stat
         findViewById(R.id.image).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                status.addListener(ColorPickerDialog.this);
                 getContext().startActivity(new Intent(getContext(), ImagePickerActivity.class));
             }
         });
@@ -306,7 +306,11 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> implements Stat
                 }
             }).show();
         }
+    }
 
+    @Override
+    public void dismiss() {
         status.removeListener(this);
+        super.dismiss();
     }
 }

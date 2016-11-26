@@ -45,7 +45,7 @@ public class ActionData extends NotificationCompat.Action implements Parcelable 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(getIcon());
-        dest.writeString(getTitle().toString());
+        dest.writeString(getTitle() != null ? getTitle().toString() : "");
         PendingIntent.writePendingIntentOrNullToParcel(getActionIntent(), dest);
         dest.writeString(packageName);
     }
