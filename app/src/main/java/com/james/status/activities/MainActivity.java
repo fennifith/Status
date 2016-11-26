@@ -96,8 +96,8 @@ public class MainActivity extends AppCompatActivity {
             new TapTargetView.Builder(this)
                     .title(R.string.tutorial_enable)
                     .description(R.string.tutorial_enable_desc)
-                    .outerCircleColor(R.color.colorAccent)
-                    .dimColor(android.R.color.black)
+                    .targetCircleColor(R.color.colorAccent)
+                    .textColor(android.R.color.black)
                     .drawShadow(false)
                     .listener(new TapTargetView.Listener() {
                         @Override
@@ -118,8 +118,8 @@ public class MainActivity extends AppCompatActivity {
             new TapTargetView.Builder(MainActivity.this)
                     .title(R.string.tutorial_search)
                     .description(R.string.tutorial_search_desc)
-                    .outerCircleColor(R.color.colorPrimary)
-                    .dimColor(android.R.color.black)
+                    .targetCircleColor(R.color.colorAccent)
+                    .textColor(android.R.color.black)
                     .drawShadow(false)
                     .listener(new TapTargetView.Listener() {
                         @Override
@@ -137,8 +137,8 @@ public class MainActivity extends AppCompatActivity {
             new TapTargetView.Builder(MainActivity.this)
                     .title(R.string.tutorial_faq)
                     .description(R.string.tutorial_faq_desc)
-                    .outerCircleColor(R.color.colorPrimary)
-                    .dimColor(android.R.color.black)
+                    .targetCircleColor(R.color.colorAccent)
+                    .textColor(android.R.color.black)
                     .drawShadow(false)
                     .listener(new TapTargetView.Listener() {
                         @Override

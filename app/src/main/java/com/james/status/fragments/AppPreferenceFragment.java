@@ -28,7 +28,6 @@ public class AppPreferenceFragment extends SimpleFragment {
     private RecyclerView recycler;
     private ProgressBar progressBar;
 
-    private GridLayoutManager layoutManager;
     private AppAdapter adapter;
     private List<AppData> apps;
     private PackageManager packageManager;
@@ -43,8 +42,7 @@ public class AppPreferenceFragment extends SimpleFragment {
         recycler = (RecyclerView) v.findViewById(R.id.recycler);
         progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
 
-        layoutManager = new GridLayoutManager(getContext(), 1);
-        recycler.setLayoutManager(layoutManager);
+        recycler.setLayoutManager(new GridLayoutManager(getContext(), 1));
         progressBar.setVisibility(View.VISIBLE);
 
         apps = new ArrayList<>();
@@ -84,28 +82,26 @@ public class AppPreferenceFragment extends SimpleFragment {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (adapter != null && adapter.iconView != null && newState == RecyclerView.SCROLL_STATE_IDLE && layoutManager.findFirstCompletelyVisibleItemPosition() == 0 && isSelected) {
-                    if (StaticUtils.shouldShowTutorial(getContext(), "activities")) {
-                        new TapTargetView.Builder(getActivity())
-                                .title(R.string.tutorial_activities)
-                                .description(R.string.tutorial_activities_desc)
-                                .outerCircleColor(R.color.colorPrimary)
-                                .dimColor(android.R.color.black)
-                                .drawShadow(false)
-                                .listener(new TapTargetView.Listener() {
-                                    @Override
-                                    public void onTargetClick(TapTargetView view) {
-                                        view.dismiss(true);
-                                        adapter.iconView.performClick();
-                                    }
+                if (adapter != null && adapter.iconView != null && adapter.iconView.getParent() != null && newState == RecyclerView.SCROLL_STATE_IDLE && isSelected && StaticUtils.shouldShowTutorial(getContext(), "activities")) {
+                    new TapTargetView.Builder(getActivity())
+                            .title(R.string.tutorial_activities)
+                            .description(R.string.tutorial_activities_desc)
+                            .targetCircleColor(R.color.colorAccent)
+                            .textColor(android.R.color.black)
+                            .drawShadow(false)
+                            .listener(new TapTargetView.Listener() {
+                                @Override
+                                public void onTargetClick(TapTargetView view) {
+                                    view.dismiss(true);
+                                    adapter.iconView.performClick();
+                                }
 
-                                    @Override
-                                    public void onTargetLongClick(TapTargetView view) {
-                                    }
-                                })
-                                .cancelable(true)
-                                .showFor(adapter.iconView);
-                    }
+                                @Override
+                                public void onTargetLongClick(TapTargetView view) {
+                                }
+                            })
+                            .cancelable(true)
+                            .showFor(adapter.iconView);
                 }
             }
         });

@@ -159,7 +159,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
         AppData app = getApp(position);
         if (app == null) return;
 
-        if (iconView == null) iconView = holder.v.findViewById(R.id.launchIcon);
+        iconView = holder.v.findViewById(R.id.launchIcon);
 
         ((TextView) holder.v.findViewById(R.id.appName)).setText(app.label);
         ((TextView) holder.v.findViewById(R.id.appPackage)).setText(app.packageName);

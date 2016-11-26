@@ -165,7 +165,7 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> implements Stat
         }
 
         for (int preset : colors) {
-            View v = inflater.inflate(R.layout.item_color, null);
+            View v = inflater.inflate(R.layout.item_color, presetLayout, false);
 
             CustomImageView colorView = (CustomImageView) v.findViewById(R.id.color);
             colorView.setImageDrawable(new ColorDrawable(preset));

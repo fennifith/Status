@@ -38,13 +38,13 @@ public class IconPreferenceFragment extends SimpleFragment implements Status.OnP
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (adapter != null && adapter.itemView != null && newState == RecyclerView.SCROLL_STATE_IDLE && isSelected) {
+                if (adapter != null && adapter.itemView != null && adapter.itemView.getParent() != null && newState == RecyclerView.SCROLL_STATE_IDLE && isSelected) {
                     if (StaticUtils.shouldShowTutorial(getContext(), "disableicon")) {
                         new TapTargetView.Builder(getActivity())
                                 .title(R.string.tutorial_icon_switch)
                                 .description(R.string.tutorial_icon_switch_desc)
-                                .outerCircleColor(R.color.colorAccent)
-                                .dimColor(android.R.color.black)
+                                .targetCircleColor(R.color.colorAccent)
+                                .textColor(android.R.color.black)
                                 .drawShadow(false)
                                 .listener(new TapTargetView.Listener() {
                                     @Override
@@ -63,10 +63,8 @@ public class IconPreferenceFragment extends SimpleFragment implements Status.OnP
                         new TapTargetView.Builder(getActivity())
                                 .title(R.string.tutorial_icon_order)
                                 .description(R.string.tutorial_icon_order_desc)
-                                .textColor(R.color.textColorPrimary)
-                                .outerCircleColor(R.color.colorPrimaryLight)
-                                .targetCircleColor(android.R.color.black)
-                                .dimColor(android.R.color.black)
+                                .targetCircleColor(R.color.colorAccent)
+                                .textColor(android.R.color.black)
                                 .drawShadow(false)
                                 .listener(new TapTargetView.Listener() {
                                     @Override
