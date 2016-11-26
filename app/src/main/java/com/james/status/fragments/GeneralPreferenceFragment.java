@@ -12,12 +12,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.james.status.R;
+import com.james.status.Status;
 import com.james.status.adapters.PreferenceSectionAdapter;
 import com.james.status.data.preference.BooleanPreferenceData;
 import com.james.status.data.preference.ColorPreferenceData;
 import com.james.status.data.preference.IntegerPreferenceData;
 import com.james.status.data.preference.ListPreferenceData;
 import com.james.status.data.preference.PreferenceData;
+import com.james.status.services.AccessibilityService;
 import com.james.status.services.StatusService;
 import com.james.status.utils.PreferenceUtils;
 import com.james.status.utils.StaticUtils;
@@ -188,6 +190,28 @@ public class GeneralPreferenceFragment extends SimpleFragment implements Prefere
                                 getString(R.string.heads_up_transparent),
                                 StatusService.HEADSUP_LAYOUT_TRANSPARENT
                         )
+                ),
+                new BooleanPreferenceData(
+                        getContext(),
+                        new PreferenceData.Identifier(
+                                PreferenceUtils.PreferenceIdentifier.STATUS_HIDE_ON_VOLUME,
+                                getString(R.string.preference_hide_on_volume),
+                                getString(R.string.preference_hide_on_volume_desc),
+                                PreferenceData.Identifier.SectionIdentifier.OTHER
+                        ),
+                        AccessibilityService.shouldHideOnVolume(getContext()),
+                        null
+                ),
+                new BooleanPreferenceData(
+                        getContext(),
+                        new PreferenceData.Identifier(
+                                PreferenceUtils.PreferenceIdentifier.STATUS_DEBUG,
+                                getString(R.string.preference_debug),
+                                getString(R.string.preference_debug_desc),
+                                PreferenceData.Identifier.SectionIdentifier.OTHER
+                        ),
+                        Status.isDebug(getContext()),
+                        null
                 )
         ));
 

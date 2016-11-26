@@ -1,8 +1,13 @@
 package com.james.status;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
+import android.util.Log;
+import android.widget.Toast;
+
+import com.james.status.utils.PreferenceUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,5 +79,16 @@ public class Status extends Application {
 
     public interface OnPreferenceChangedListener {
         void onPreferenceChanged();
+    }
+
+    public static void showDebug(Context context, String message, int length) {
+        if (isDebug(context))
+            Toast.makeText(context, message, length).show();
+        else Log.d("Status", message);
+    }
+
+    public static boolean isDebug(Context context) {
+        Boolean isDebug = PreferenceUtils.getBooleanPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_DEBUG);
+        return (isDebug != null && isDebug) || (isDebug == null && BuildConfig.DEBUG);
     }
 }

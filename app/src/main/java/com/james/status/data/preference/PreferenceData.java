@@ -110,7 +110,8 @@ public class PreferenceData<T> {
             COLORS,
             ICONS,
             ANIMATIONS,
-            NOTIFICATIONS
+            NOTIFICATIONS,
+            OTHER
         }
     }
 }

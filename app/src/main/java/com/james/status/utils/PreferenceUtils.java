@@ -22,7 +22,9 @@ public class PreferenceUtils {
         STATUS_HEADS_UP_DURATION,
         STATUS_BACKGROUND_ANIMATIONS,
         STATUS_ICON_ANIMATIONS,
-        STATUS_HEADS_UP_LAYOUT
+        STATUS_HEADS_UP_LAYOUT,
+        STATUS_HIDE_ON_VOLUME,
+        STATUS_DEBUG
     }
 
     @Nullable

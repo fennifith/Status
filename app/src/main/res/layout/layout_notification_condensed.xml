@@ -59,32 +59,44 @@
 
                     </LinearLayout>
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp"
-                        android:textColor="@color/textColorPrimary"
-                        android:textSize="16sp"
-                        android:id="@+id/title"
-                        android:singleLine="true"
-                        android:lines="1"
-                        android:maxLines="1"
-                        android:ellipsize="end" />
+                        android:gravity="bottom"
+                        android:orientation="horizontal">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp"
-                        android:textColor="@color/textColorSecondary"
-                        android:textSize="14sp"
-                        android:id="@+id/subtitle"
-                        android:layout_marginBottom="8dp"
-                        android:singleLine="true"
-                        android:lines="1"
-                        android:maxLines="1"
-                        android:ellipsize="end" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginEnd="4dp"
+                            android:textColor="@color/textColorPrimary"
+                            android:textSize="16sp"
+                            android:id="@+id/title"
+                            android:singleLine="true"
+                            android:lines="1"
+                            android:maxLines="1"
+                            android:ellipsize="end" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="16dp"
+                            android:layout_marginEnd="16dp"
+                            android:textColor="@color/textColorSecondary"
+                            android:textSize="14sp"
+                            android:id="@+id/subtitle"
+                            android:layout_marginBottom="8dp"
+                            android:singleLine="true"
+                            android:lines="1"
+                            android:maxLines="1"
+                            android:ellipsize="end" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 

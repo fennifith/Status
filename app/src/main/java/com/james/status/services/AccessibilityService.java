@@ -3,12 +3,16 @@ package com.james.status.services;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.app.Notification;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
@@ -16,8 +20,10 @@ import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.NotificationCompat;
 import android.view.accessibility.AccessibilityEvent;
+import android.widget.Toast;
 
 import com.james.status.R;
+import com.james.status.Status;
 import com.james.status.activities.AppSettingActivity;
 import com.james.status.data.AppData;
 import com.james.status.data.NotificationData;
@@ -26,6 +32,7 @@ import com.james.status.utils.ColorUtils;
 import com.james.status.utils.PreferenceUtils;
 import com.james.status.utils.StaticUtils;
 
+import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +50,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
     private List<NotificationData> notifications;
 
     private AppData.ActivityData activityData;
+    private VolumeReceiver volumeReceiver;
 
     private int color = Color.BLACK;
 
@@ -96,6 +104,9 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
         packageManager = getPackageManager();
         notificationManager = NotificationManagerCompat.from(this);
 
+        volumeReceiver = new VolumeReceiver(this);
+        registerReceiver(volumeReceiver, new IntentFilter("android.media.VOLUME_CHANGED_ACTION"));
+
         notifications = new ArrayList<>();
         AccessibilityServiceInfo config = new AccessibilityServiceInfo();
         config.eventTypes = AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED | AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED;
@@ -129,29 +140,33 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                 case AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED:
                     final CharSequence packageName = event.getPackageName();
                     final CharSequence className = event.getClassName();
+                    Status.showDebug(this, event.toString(), Toast.LENGTH_LONG);
+
                     if (packageName != null && packageName.length() > 0 && className != null && className.length() > 0) {
-                        if (packageName.toString().equals("com.android.systemui") && className.toString().equals("android.widget.FrameLayout")) {
-                            setStatusBar(null, null, null, true);
-
-                            if (StaticUtils.shouldUseCompatNotifications(this)) {
-                                for (NotificationData notification : notifications) {
-
-                                    Intent intent = new Intent(NotificationsIconData.ACTION_NOTIFICATION_REMOVED);
-                                    intent.putExtra(NotificationsIconData.EXTRA_NOTIFICATION, notification);
-                                    sendBroadcast(intent);
-                                }
-
-                                notifications.clear();
-                            }
-
-                            return;
-                        }
-
                         try {
                             activityData = new AppData.ActivityData(packageManager, packageManager.getActivityInfo(new ComponentName(packageName.toString(), className.toString()), PackageManager.GET_META_DATA));
                         } catch (PackageManager.NameNotFoundException | NullPointerException e) {
-                            if (activityData != null && !activityData.packageName.matches(packageName.toString()) && !activityData.packageName.contains(packageName) && !packageName.toString().contains(activityData.packageName))
-                                setStatusBar(null, false, null, false);
+                            if (activityData != null && !activityData.packageName.matches(packageName.toString()) && !activityData.packageName.contains(packageName) && !packageName.toString().contains(activityData.packageName)) {
+                                if (packageName.toString().equals("com.android.systemui")) {
+                                    if (event.getText().toString().toLowerCase().contains("volume")) {
+                                        if (event.getText().toString().toLowerCase().contains("hidden")) {
+                                            volumeReceiver.cancel();
+                                            setStatusBar(null, false, null, false);
+                                        } else if (!VolumeReceiver.canReceive())
+                                            volumeReceiver.onVolumeChanged();
+                                    } else setStatusBar(null, false, null, true);
+
+                                    if (StaticUtils.shouldUseCompatNotifications(this)) {
+                                        for (NotificationData notification : notifications) {
+                                            Intent intent = new Intent(NotificationsIconData.ACTION_NOTIFICATION_REMOVED);
+                                            intent.putExtra(NotificationsIconData.EXTRA_NOTIFICATION, notification);
+                                            sendBroadcast(intent);
+                                        }
+
+                                        notifications.clear();
+                                    }
+                                } else setStatusBar(null, false, null, false);
+                            }
                             return;
                         }
 
@@ -263,7 +278,64 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
 
     @Override
     public void onDestroy() {
+        if (volumeReceiver != null) unregisterReceiver(volumeReceiver);
         if (notificationManager != null) notificationManager.cancel(NOTIFICATION_ID);
         super.onDestroy();
+    }
+
+    private static class VolumeReceiver extends BroadcastReceiver {
+
+        private SoftReference<AccessibilityService> reference;
+        private Handler handler;
+        private Runnable runnable;
+
+        private VolumeReceiver(AccessibilityService service) {
+            reference = new SoftReference<>(service);
+            handler = new Handler();
+            runnable = new Runnable() {
+                @Override
+                public void run() {
+                    AccessibilityService service = reference.get();
+                    if (service != null) {
+                        Status.showDebug(service, "Volume callback called", Toast.LENGTH_SHORT);
+                        service.setStatusBar(null, false, null, false);
+                    }
+                }
+            };
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Status.showDebug(context, intent.getExtras().toString(), Toast.LENGTH_SHORT);
+            onVolumeChanged();
+        }
+
+        private void onVolumeChanged() {
+            AccessibilityService service = reference.get();
+            if (service != null) {
+                Status.showDebug(service, "Volume callback added", Toast.LENGTH_SHORT);
+                service.setStatusBar(null, false, null, true);
+                handler.removeCallbacks(runnable);
+
+                if (shouldHideOnVolume(service))
+                    handler.postDelayed(runnable, 3000);
+            }
+        }
+
+        private void cancel() {
+            AccessibilityService service = reference.get();
+            if (service != null)
+                Status.showDebug(service, "Volume callback removed", Toast.LENGTH_SHORT);
+            handler.removeCallbacks(runnable);
+        }
+
+        private static boolean canReceive() {
+            return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && Build.VERSION.SDK_INT < Build.VERSION_CODES.M;
+        }
+    }
+
+    public static boolean shouldHideOnVolume(Context context) {
+        Boolean isVolumeHidden = PreferenceUtils.getBooleanPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_HIDE_ON_VOLUME);
+        return (isVolumeHidden == null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) || (isVolumeHidden != null && isVolumeHidden);
     }
 }
