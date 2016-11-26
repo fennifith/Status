@@ -59,7 +59,7 @@ public class HeadphoneIconData extends IconData<HeadphoneIconData.HeadphoneRecei
         return styles;
     }
 
-    public class HeadphoneReceiver extends IconUpdateReceiver<HeadphoneIconData> {
+    static class HeadphoneReceiver extends IconUpdateReceiver<HeadphoneIconData> {
 
         public HeadphoneReceiver(HeadphoneIconData iconData) {
             super(iconData);

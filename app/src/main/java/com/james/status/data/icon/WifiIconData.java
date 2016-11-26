@@ -103,7 +103,7 @@ public class WifiIconData extends IconData<WifiIconData.WifiReceiver> {
         return styles;
     }
 
-    public class WifiReceiver extends IconUpdateReceiver<WifiIconData> {
+    static class WifiReceiver extends IconUpdateReceiver<WifiIconData> {
 
         public WifiReceiver(WifiIconData iconData) {
             super(iconData);

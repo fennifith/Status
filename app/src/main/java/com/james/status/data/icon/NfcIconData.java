@@ -80,7 +80,7 @@ public class NfcIconData extends IconData<NfcIconData.NfcReceiver> {
         return styles;
     }
 
-    public class NfcReceiver extends IconUpdateReceiver<NfcIconData> {
+    static class NfcReceiver extends IconUpdateReceiver<NfcIconData> {
 
         public NfcReceiver(NfcIconData iconData) {
             super(iconData);

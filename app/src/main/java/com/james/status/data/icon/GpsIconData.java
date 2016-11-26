@@ -78,7 +78,7 @@ public class GpsIconData extends IconData<GpsIconData.GpsReceiver> {
         return styles;
     }
 
-    public class GpsReceiver extends IconUpdateReceiver<GpsIconData> {
+    static class GpsReceiver extends IconUpdateReceiver<GpsIconData> {
 
         public GpsReceiver(GpsIconData iconData) {
             super(iconData);
@@ -87,16 +87,16 @@ public class GpsIconData extends IconData<GpsIconData.GpsReceiver> {
         @Override
         public void onReceive(GpsIconData icon, Intent intent) {
             if (icon.locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                if (isLocationFixed()) {
+                if (isLocationFixed(icon)) {
                     icon.onDrawableUpdate(1);
                 } else
                     icon.onDrawableUpdate(0);
             } else icon.onDrawableUpdate(-1);
         }
 
-        private boolean isLocationFixed() {
-            if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        private boolean isLocationFixed(GpsIconData icon) {
+            if (ContextCompat.checkSelfPermission(icon.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                Location location = icon.locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                 return location != null && (getElapsedTime(location) < 3000 || location.hasAccuracy());
             } else return false;
         }

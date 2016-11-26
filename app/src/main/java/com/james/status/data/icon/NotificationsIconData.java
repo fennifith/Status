@@ -191,7 +191,7 @@ public class NotificationsIconData extends IconData<NotificationsIconData.Notifi
         if (notifications.size() < 1) notificationLayout.setVisibility(View.GONE);
     }
 
-    public class NotificationReceiver extends IconUpdateReceiver<NotificationsIconData> {
+    static class NotificationReceiver extends IconUpdateReceiver<NotificationsIconData> {
 
         public NotificationReceiver(NotificationsIconData iconData) {
             super(iconData);

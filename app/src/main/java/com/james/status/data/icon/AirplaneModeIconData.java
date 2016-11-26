@@ -60,7 +60,7 @@ public class AirplaneModeIconData extends IconData<AirplaneModeIconData.Airplane
         return styles;
     }
 
-    public class AirplaneModeReceiver extends IconUpdateReceiver<AirplaneModeIconData> {
+    static class AirplaneModeReceiver extends IconUpdateReceiver<AirplaneModeIconData> {
 
         public AirplaneModeReceiver(AirplaneModeIconData iconData) {
             super(iconData);

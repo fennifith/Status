@@ -71,7 +71,7 @@ public class BluetoothIconData extends IconData<BluetoothIconData.BluetoothRecei
         return styles;
     }
 
-    public class BluetoothReceiver extends IconUpdateReceiver<BluetoothIconData> {
+    static class BluetoothReceiver extends IconUpdateReceiver<BluetoothIconData> {
 
         public BluetoothReceiver(BluetoothIconData iconData) {
             super(iconData);

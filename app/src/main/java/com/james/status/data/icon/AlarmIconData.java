@@ -77,7 +77,7 @@ public class AlarmIconData extends IconData<AlarmIconData.AlarmReceiver> {
         return styles;
     }
 
-    public class AlarmReceiver extends IconUpdateReceiver<AlarmIconData> {
+    static class AlarmReceiver extends IconUpdateReceiver<AlarmIconData> {
 
         public AlarmReceiver(AlarmIconData iconData) {
             super(iconData);

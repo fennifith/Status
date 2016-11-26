@@ -97,7 +97,7 @@ public class DataIconData extends IconData {
         return getContext().getString(R.string.icon_data);
     }
 
-    private class DataListener extends PhoneStateListener {
+    private static class DataListener extends PhoneStateListener {
 
         private SoftReference<DataIconData> reference;
 

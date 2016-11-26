@@ -76,7 +76,7 @@ public class RingerIconData extends IconData<RingerIconData.RingerReceiver> {
         return styles;
     }
 
-    public class RingerReceiver extends IconUpdateReceiver<RingerIconData> {
+    static class RingerReceiver extends IconUpdateReceiver<RingerIconData> {
 
         public RingerReceiver(RingerIconData iconData) {
             super(iconData);

@@ -47,6 +47,7 @@ import com.james.status.data.icon.IconData;
 import com.james.status.data.icon.NetworkIconData;
 import com.james.status.data.icon.NfcIconData;
 import com.james.status.data.icon.NotificationsIconData;
+import com.james.status.data.icon.OrientationIconData;
 import com.james.status.data.icon.RingerIconData;
 import com.james.status.data.icon.TimeIconData;
 import com.james.status.data.icon.WifiIconData;
@@ -524,6 +525,7 @@ public class StatusService extends Service {
         icons.add(new AlarmIconData(context));
         icons.add(new RingerIconData(context));
         icons.add(new HeadphoneIconData(context));
+        icons.add(new OrientationIconData(context));
 
         for (IconData icon : icons) {
             if (icon.getIntegerPreference(IconData.PreferenceIdentifier.POSITION) == null)

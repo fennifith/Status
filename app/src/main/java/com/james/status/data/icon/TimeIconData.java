@@ -107,7 +107,7 @@ public class TimeIconData extends IconData<TimeIconData.TimeReceiver> {
         return preferences;
     }
 
-    public class TimeReceiver extends IconUpdateReceiver<TimeIconData> {
+    static class TimeReceiver extends IconUpdateReceiver<TimeIconData> {
 
         public TimeReceiver(TimeIconData iconData) {
             super(iconData);

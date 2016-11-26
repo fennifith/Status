@@ -86,7 +86,7 @@ public class NetworkIconData extends IconData {
         return styles;
     }
 
-    private class NetworkListener extends PhoneStateListener {
+    private static class NetworkListener extends PhoneStateListener {
 
         private SoftReference<NetworkIconData> reference;
 
