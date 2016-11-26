@@ -144,7 +144,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
         }
     }
 
-    public final boolean isVisible() {
+    public boolean isVisible() {
         Boolean isVisible = getBooleanPreference(PreferenceIdentifier.VISIBILITY);
         return isVisible == null || isVisible;
     }

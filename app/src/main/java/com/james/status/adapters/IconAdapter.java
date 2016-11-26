@@ -49,8 +49,8 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
 
         checkBox.setOnCheckedChangeListener(null);
 
-        Boolean isVisible = icon.getBooleanPreference(IconData.PreferenceIdentifier.VISIBILITY);
-        checkBox.setChecked(isVisible == null || isVisible);
+        boolean isVisible = icon.isVisible();
+        checkBox.setChecked(isVisible);
 
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -66,7 +66,7 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
         });
 
         View moveUp = holder.v.findViewById(R.id.moveUp);
-        moveUp.setVisibility((isVisible == null || isVisible) && position > 0 && filter == null ? View.VISIBLE : View.GONE);
+        moveUp.setVisibility(isVisible && position > 0 && filter == null ? View.VISIBLE : View.GONE);
         moveUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,7 +85,7 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
         });
 
         View moveDown = holder.v.findViewById(R.id.moveDown);
-        moveDown.setVisibility((isVisible == null || isVisible) && position < icons.size() - 1 && filter == null ? View.VISIBLE : View.GONE);
+        moveDown.setVisibility(isVisible && position < icons.size() - 1 && filter == null ? View.VISIBLE : View.GONE);
         moveDown.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,7 +104,7 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
         });
 
         RecyclerView recycler = (RecyclerView) holder.v.findViewById(R.id.recycler);
-        recycler.setVisibility(isVisible == null || isVisible ? View.VISIBLE : View.GONE);
+        recycler.setVisibility(isVisible ? View.VISIBLE : View.GONE);
 
         recycler.setLayoutManager(new GridLayoutManager(activity, 1));
         recycler.setNestedScrollingEnabled(false);

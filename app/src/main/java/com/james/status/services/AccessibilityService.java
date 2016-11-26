@@ -312,13 +312,12 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
 
         private void onVolumeChanged() {
             AccessibilityService service = reference.get();
-            if (service != null) {
+            if (service != null && shouldHideOnVolume(service)) {
                 Status.showDebug(service, "Volume callback added", Toast.LENGTH_SHORT);
                 service.setStatusBar(null, false, null, true);
                 handler.removeCallbacks(runnable);
 
-                if (shouldHideOnVolume(service))
-                    handler.postDelayed(runnable, 3000);
+                handler.postDelayed(runnable, 3000);
             }
         }
 
