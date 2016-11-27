@@ -70,6 +70,11 @@ public class AlarmIconData extends IconData<AlarmIconData.AlarmReceiver> {
                                 getContext().getString(R.string.icon_style_default),
                                 IconStyleData.TYPE_VECTOR,
                                 R.drawable.ic_alarm
+                        ),
+                        new IconStyleData(
+                                getContext().getString(R.string.icon_style_system),
+                                IconStyleData.TYPE_IMAGE,
+                                android.R.drawable.ic_popup_reminder
                         )
                 )
         );
@@ -79,7 +84,7 @@ public class AlarmIconData extends IconData<AlarmIconData.AlarmReceiver> {
 
     static class AlarmReceiver extends IconUpdateReceiver<AlarmIconData> {
 
-        public AlarmReceiver(AlarmIconData iconData) {
+        private AlarmReceiver(AlarmIconData iconData) {
             super(iconData);
         }
 

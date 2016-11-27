@@ -61,7 +61,7 @@ public class DualNetworkIconData extends NetworkIconData {
 
     private class NetworkListener extends PhoneStateListener {
 
-        public NetworkListener(int id) {
+        private NetworkListener(int id) {
             super();
             try {
                 Field field = this.getClass().getSuperclass().getDeclaredField("mSubId");

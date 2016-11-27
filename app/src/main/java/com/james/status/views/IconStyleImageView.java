@@ -2,11 +2,13 @@ package com.james.status.views;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.util.AttributeSet;
 
 import com.james.status.data.IconStyleData;
+import com.james.status.utils.ImageUtils;
 
 public class IconStyleImageView extends SquareImageView {
 
@@ -46,7 +48,8 @@ public class IconStyleImageView extends SquareImageView {
                             public void onAnimationUpdate(ValueAnimator animator) {
                                 float alpha = (float) animator.getAnimatedValue();
                                 setAlpha(alpha);
-                                if (alpha == 0) setImageDrawable(drawable);
+                                if (alpha == 0)
+                                    ImageUtils.tintDrawable(IconStyleImageView.this, drawable, Color.BLACK);
                             }
                         });
                         animator.start();
@@ -62,7 +65,8 @@ public class IconStyleImageView extends SquareImageView {
         if (iconStyle != null && iconStyle.getSize() < 1) return;
         this.iconStyle = iconStyle;
         if (iconStyle != null) {
-            setImageDrawable(iconStyle.getDrawable(getContext(), resource % iconStyle.getSize()));
+            Drawable drawable = iconStyle.getDrawable(getContext(), resource % iconStyle.getSize());
+            ImageUtils.tintDrawable(this, drawable, Color.BLACK);
             init();
         }
     }

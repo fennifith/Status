@@ -32,6 +32,7 @@ import android.view.animation.OvershootInterpolator;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.james.status.BuildConfig;
 import com.james.status.R;
 import com.james.status.data.ActionData;
 import com.james.status.data.NotificationData;
@@ -503,23 +504,23 @@ public class StatusService extends Service {
         icons.add(new TimeIconData(context));
         icons.add(new BatteryIconData(context));
 
-        if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_TELEPHONY)) {
+        if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_TELEPHONY) || BuildConfig.DEBUG) {
             icons.add(new NetworkIconData(context));
             icons.add(new CarrierIconData(context));
             icons.add(new DataIconData(context));
         }
 
-        if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_WIFI))
+        if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_WIFI) || BuildConfig.DEBUG)
             icons.add(new WifiIconData(context));
 
-        if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH))
+        if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH) || BuildConfig.DEBUG)
             icons.add(new BluetoothIconData(context));
 
-        if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_LOCATION_GPS))
+        if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_LOCATION_GPS) || BuildConfig.DEBUG)
             icons.add(new GpsIconData(context));
 
         icons.add(new AirplaneModeIconData(context));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 && context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_NFC))
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 && (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_NFC) || BuildConfig.DEBUG))
             icons.add(new NfcIconData(context));
 
         icons.add(new AlarmIconData(context));

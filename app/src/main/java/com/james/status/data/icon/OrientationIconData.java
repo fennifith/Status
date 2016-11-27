@@ -91,6 +91,13 @@ public class OrientationIconData extends IconData<OrientationIconData.Orientatio
                         R.drawable.ic_orientation_auto,
                         R.drawable.ic_orientation_portrait,
                         R.drawable.ic_orientation_landscape
+                ),
+                new IconStyleData(
+                        getContext().getString(R.string.icon_style_system),
+                        IconStyleData.TYPE_IMAGE,
+                        android.R.drawable.ic_menu_always_landscape_portrait,
+                        android.R.drawable.ic_lock_idle_lock,
+                        android.R.drawable.ic_lock_idle_lock
                 )
         ));
 
@@ -118,7 +125,7 @@ public class OrientationIconData extends IconData<OrientationIconData.Orientatio
 
         private SoftReference<OrientationIconData> reference;
 
-        public OrientationObserver(OrientationIconData iconData) {
+        private OrientationObserver(OrientationIconData iconData) {
             super(new Handler());
             reference = new SoftReference<>(iconData);
         }

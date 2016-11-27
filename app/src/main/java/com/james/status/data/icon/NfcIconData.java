@@ -82,7 +82,7 @@ public class NfcIconData extends IconData<NfcIconData.NfcReceiver> {
 
     static class NfcReceiver extends IconUpdateReceiver<NfcIconData> {
 
-        public NfcReceiver(NfcIconData iconData) {
+        private NfcReceiver(NfcIconData iconData) {
             super(iconData);
         }
 

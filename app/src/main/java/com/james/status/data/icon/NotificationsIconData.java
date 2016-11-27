@@ -203,7 +203,7 @@ public class NotificationsIconData extends IconData<NotificationsIconData.Notifi
 
     static class NotificationReceiver extends IconUpdateReceiver<NotificationsIconData> {
 
-        public NotificationReceiver(NotificationsIconData iconData) {
+        private NotificationReceiver(NotificationsIconData iconData) {
             super(iconData);
         }
 

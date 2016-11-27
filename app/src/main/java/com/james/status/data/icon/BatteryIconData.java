@@ -206,7 +206,7 @@ public class BatteryIconData extends IconData {
 
     static class BatteryReceiver extends IconUpdateReceiver<BatteryIconData> {
 
-        public BatteryReceiver(BatteryIconData iconData) {
+        private BatteryReceiver(BatteryIconData iconData) {
             super(iconData);
         }
 

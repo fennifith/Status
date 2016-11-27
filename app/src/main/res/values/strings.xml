@@ -169,6 +169,7 @@
     <string name="icon_style_balloon">Hot Air Balloon</string>
     <string name="icon_style_radial">Radial</string>
     <string name="icon_style_tap">Tap</string>
+    <string name="icon_style_system">System</string>
 
     <string name="tutorial_enable">Enable the Status Bar</string>
     <string name="tutorial_enable_desc">This switch allows you to enable and disable the customized status bar. Turn it on to try it!</string>

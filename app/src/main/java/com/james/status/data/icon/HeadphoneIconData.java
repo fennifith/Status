@@ -52,6 +52,12 @@ public class HeadphoneIconData extends IconData<HeadphoneIconData.HeadphoneRecei
                                 IconStyleData.TYPE_VECTOR,
                                 R.drawable.ic_headset,
                                 R.drawable.ic_headset_mic
+                        ),
+                        new IconStyleData(
+                                getContext().getString(R.string.icon_style_system),
+                                IconStyleData.TYPE_IMAGE,
+                                android.R.drawable.stat_sys_headset,
+                                android.R.drawable.stat_sys_headset
                         )
                 )
         );
@@ -61,7 +67,7 @@ public class HeadphoneIconData extends IconData<HeadphoneIconData.HeadphoneRecei
 
     static class HeadphoneReceiver extends IconUpdateReceiver<HeadphoneIconData> {
 
-        public HeadphoneReceiver(HeadphoneIconData iconData) {
+        private HeadphoneReceiver(HeadphoneIconData iconData) {
             super(iconData);
         }
 

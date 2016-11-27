@@ -67,6 +67,12 @@ public class GpsIconData extends IconData<GpsIconData.GpsReceiver> {
                                 R.drawable.ic_gps_fixed
                         ),
                         new IconStyleData(
+                                getContext().getString(R.string.icon_style_system),
+                                IconStyleData.TYPE_IMAGE,
+                                android.R.drawable.ic_menu_mapmode,
+                                android.R.drawable.ic_menu_mylocation
+                        ),
+                        new IconStyleData(
                                 getContext().getString(R.string.icon_style_dish),
                                 IconStyleData.TYPE_VECTOR,
                                 R.drawable.ic_gps_dish_searching,
@@ -80,7 +86,7 @@ public class GpsIconData extends IconData<GpsIconData.GpsReceiver> {
 
     static class GpsReceiver extends IconUpdateReceiver<GpsIconData> {
 
-        public GpsReceiver(GpsIconData iconData) {
+        private GpsReceiver(GpsIconData iconData) {
             super(iconData);
         }
 
