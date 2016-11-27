@@ -54,38 +54,45 @@ public class DataIconData extends IconData {
             telephonyManager.listen(dataListener, PhoneStateListener.LISTEN_DATA_CONNECTION_STATE);
         isRegistered = true;
 
-        if (telephonyManager.getDataState() != TelephonyManager.DATA_DISCONNECTED) {
-            switch (telephonyManager.getNetworkType()) {
-                case TelephonyManager.NETWORK_TYPE_GPRS:
-                case TelephonyManager.NETWORK_TYPE_EDGE:
-                case TelephonyManager.NETWORK_TYPE_IDEN:
-                    onTextUpdate("2G");
-                    break;
-                case TelephonyManager.NETWORK_TYPE_UMTS:
-                case TelephonyManager.NETWORK_TYPE_HSDPA:
-                case TelephonyManager.NETWORK_TYPE_HSUPA:
-                case TelephonyManager.NETWORK_TYPE_EVDO_0:
-                case TelephonyManager.NETWORK_TYPE_EVDO_A:
-                case TelephonyManager.NETWORK_TYPE_EVDO_B:
-                case TelephonyManager.NETWORK_TYPE_EHRPD:
-                case TelephonyManager.NETWORK_TYPE_CDMA:
-                case TelephonyManager.NETWORK_TYPE_1xRTT:
-                    onTextUpdate("3G");
-                    break;
-                case TelephonyManager.NETWORK_TYPE_HSPA:
-                    onTextUpdate("H");
-                    break;
-                case TelephonyManager.NETWORK_TYPE_HSPAP:
-                    onTextUpdate("H+");
-                    break;
-                case TelephonyManager.NETWORK_TYPE_LTE:
-                    onTextUpdate("4G");
-                    break;
-                default:
-                    onTextUpdate(null);
-                    break;
-            }
-        } else onTextUpdate(null);
+        onDataChanged();
+    }
+
+    private void onDataChanged() {
+        switch (telephonyManager.getDataState()) {
+            case TelephonyManager.DATA_CONNECTED:
+            case TelephonyManager.DATA_CONNECTING:
+                if (telephonyManager.getDataState() != TelephonyManager.DATA_DISCONNECTED) {
+                    switch (telephonyManager.getNetworkType()) {
+                        case TelephonyManager.NETWORK_TYPE_GPRS:
+                        case TelephonyManager.NETWORK_TYPE_EDGE:
+                        case TelephonyManager.NETWORK_TYPE_IDEN:
+                            onTextUpdate("2G");
+                            return;
+                        case TelephonyManager.NETWORK_TYPE_UMTS:
+                        case TelephonyManager.NETWORK_TYPE_HSDPA:
+                        case TelephonyManager.NETWORK_TYPE_HSUPA:
+                        case TelephonyManager.NETWORK_TYPE_EVDO_0:
+                        case TelephonyManager.NETWORK_TYPE_EVDO_A:
+                        case TelephonyManager.NETWORK_TYPE_EVDO_B:
+                        case TelephonyManager.NETWORK_TYPE_EHRPD:
+                        case TelephonyManager.NETWORK_TYPE_CDMA:
+                        case TelephonyManager.NETWORK_TYPE_1xRTT:
+                            onTextUpdate("3G");
+                            return;
+                        case TelephonyManager.NETWORK_TYPE_HSPA:
+                            onTextUpdate("H");
+                            return;
+                        case TelephonyManager.NETWORK_TYPE_HSPAP:
+                            onTextUpdate("H+");
+                            return;
+                        case TelephonyManager.NETWORK_TYPE_LTE:
+                            onTextUpdate("4G");
+                            return;
+                    }
+                }
+        }
+
+        onTextUpdate(null);
     }
 
     @Override
@@ -110,43 +117,9 @@ public class DataIconData extends IconData {
         public void onDataConnectionStateChanged(int state, int networkType) {
             super.onDataConnectionStateChanged(state, networkType);
 
-            DataIconData icon = null;
-            if (reference != null) icon = reference.get();
-
-            if (icon != null && icon.isRegistered) {
-                if (state == TelephonyManager.DATA_DISCONNECTED) icon.onTextUpdate(null);
-                else {
-                    switch (icon.telephonyManager.getNetworkType()) {
-                        case TelephonyManager.NETWORK_TYPE_GPRS:
-                        case 16:
-                        case TelephonyManager.NETWORK_TYPE_EDGE:
-                        case TelephonyManager.NETWORK_TYPE_CDMA:
-                        case TelephonyManager.NETWORK_TYPE_1xRTT:
-                        case TelephonyManager.NETWORK_TYPE_IDEN:
-                            icon.onTextUpdate("2G");
-                            break;
-                        case TelephonyManager.NETWORK_TYPE_UMTS:
-                        case TelephonyManager.NETWORK_TYPE_EVDO_0:
-                        case TelephonyManager.NETWORK_TYPE_EVDO_A:
-                        case TelephonyManager.NETWORK_TYPE_HSDPA:
-                        case TelephonyManager.NETWORK_TYPE_HSUPA:
-                        case TelephonyManager.NETWORK_TYPE_HSPA:
-                        case TelephonyManager.NETWORK_TYPE_EVDO_B:
-                        case TelephonyManager.NETWORK_TYPE_EHRPD:
-                        case TelephonyManager.NETWORK_TYPE_HSPAP:
-                        case 17:
-                            icon.onTextUpdate("3G");
-                            break;
-                        case TelephonyManager.NETWORK_TYPE_LTE:
-                        case 18:
-                            icon.onTextUpdate("4G");
-                            break;
-                        default:
-                            icon.onTextUpdate(null);
-                            break;
-                    }
-                }
-            }
+            DataIconData icon = reference.get();
+            if (icon != null && icon.isRegistered)
+                icon.onDataChanged();
         }
     }
 }
