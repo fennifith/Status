@@ -4,8 +4,10 @@ import android.content.Context;
 import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
+import android.widget.Toast;
 
 import com.james.status.R;
+import com.james.status.Status;
 import com.james.status.data.IconStyleData;
 
 import java.lang.ref.SoftReference;
@@ -102,25 +104,22 @@ public class NetworkIconData extends IconData {
             if (reference != null) icon = reference.get();
 
             if (icon != null && icon.isRegistered) {
-                int level;
+                int gsmLevel = signalStrength.getGsmSignalStrength() != 99 ? (int) (((float) signalStrength.getGsmSignalStrength() / 31) * 4) : 0;
+                int cdmaLevel = getSignalStrength(signalStrength.getCdmaDbm());
+                boolean isGsm = signalStrength.isGsm() && Math.random() % 2 == 0;
 
-                if (signalStrength.isGsm()) {
-                    if (signalStrength.getGsmSignalStrength() != 99)
-                        level = signalStrength.getGsmSignalStrength() * 2 - 113;
-                    else
-                        level = signalStrength.getGsmSignalStrength();
-                } else
-                    level = signalStrength.getCdmaDbm();
-
-                if (level < -100) level = 0;
-                else if (level < -95) level = 1;
-                else if (level < -85) level = 2;
-                else if (level < -75) level = 3;
-                else if (level != 0) level = 4;
-                else level = -1;
-
-                icon.onDrawableUpdate(level);
+                Status.showDebug(icon.getContext(), "gsm: " + gsmLevel + " cdma: " + cdmaLevel + " isGsm: " + String.valueOf(signalStrength.isGsm()) + " using: " + (isGsm ? "gsm" : "cdma"), Toast.LENGTH_SHORT);
+                icon.onDrawableUpdate(isGsm ? gsmLevel : cdmaLevel);
             }
+        }
+
+        private int getSignalStrength(int dbm) {
+            if (dbm < -100) return 0;
+            else if (dbm < -95) return 1;
+            else if (dbm < -85) return 2;
+            else if (dbm < -75) return 3;
+            else if (dbm != 0) return 4;
+            else return -1;
         }
     }
 }
