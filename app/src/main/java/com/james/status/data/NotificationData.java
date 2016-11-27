@@ -26,7 +26,7 @@ import com.james.status.utils.PreferenceUtils;
 
 public class NotificationData implements Parcelable {
 
-    public String category, title, subtitle, packageName, key, tag = "";
+    public String category, title, subtitle, packageName, group, key, tag = "";
     public int priority, id, iconRes, color = Color.BLACK;
     private boolean isAlert;
     private Bitmap largeIcon;
@@ -54,6 +54,7 @@ public class NotificationData implements Parcelable {
         title = getTitle(notification);
         subtitle = getSubtitle(notification);
         this.packageName = packageName;
+        group = NotificationCompat.getGroup(notification);
         priority = notification.priority;
         this.id = id;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) this.color = notification.color;
@@ -117,6 +118,7 @@ public class NotificationData implements Parcelable {
         title = in.readString();
         subtitle = in.readString();
         packageName = in.readString();
+        group = in.readString();
         key = in.readString();
         tag = in.readString();
         priority = in.readInt();
@@ -260,6 +262,7 @@ public class NotificationData implements Parcelable {
         dest.writeString(title);
         dest.writeString(subtitle);
         dest.writeString(packageName);
+        dest.writeString(group);
         dest.writeString(key);
         dest.writeString(tag);
         dest.writeInt(priority);

@@ -20,6 +20,8 @@ import com.james.status.utils.StaticUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 @TargetApi(18)
 public class NotificationService extends NotificationListenerService {
@@ -84,8 +86,7 @@ public class NotificationService extends NotificationListenerService {
         AppData app = null;
         try {
             app = new AppData(packageManager, packageManager.getApplicationInfo(sbn.getPackageName(), PackageManager.GET_META_DATA), packageManager.getPackageInfo(sbn.getPackageName(), PackageManager.GET_ACTIVITIES));
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+        } catch (PackageManager.NameNotFoundException ignored) {
         }
 
         Boolean isEnabled = null;
@@ -137,7 +138,10 @@ public class NotificationService extends NotificationListenerService {
     private void sendNotifications() {
         Boolean enabled = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED);
         if (enabled != null && enabled && !StaticUtils.shouldUseCompatNotifications(this)) {
-            for (StatusBarNotification sbn : getNotifications()) {
+            List<StatusBarNotification> notifications = getNotifications();
+            Collections.reverse(notifications);
+
+            for (StatusBarNotification sbn : notifications) {
                 AppData app = null;
                 try {
                     app = new AppData(packageManager, packageManager.getApplicationInfo(sbn.getPackageName(), PackageManager.GET_META_DATA), packageManager.getPackageInfo(sbn.getPackageName(), PackageManager.GET_ACTIVITIES));

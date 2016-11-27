@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v4.util.ArrayMap;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -139,10 +140,19 @@ public class NotificationsIconData extends IconData<NotificationsIconData.Notifi
                 View child = notificationLayout.getChildAt(i);
                 Object tag = child.getTag();
 
-                if (tag != null && tag instanceof String && ((String) tag).matches(notification.getKey())) {
-                    v = child;
-                    notifications.remove(notification.getKey());
-                    break;
+                if (tag != null && tag instanceof String) {
+                    NotificationData notification2 = notifications.get(tag);
+                    if (notification2 != null && (notification.getKey().equals(notification2.getKey()) || notification.equals(notification2) || (notification.group != null && notification2.group != null && notification.group.equals(notification2.group)))) {
+                        if (v != null && v.getParent() != null) {
+                            notificationLayout.removeView(child);
+                            i--;
+
+                            Log.e("Notification", "removing view for " + notification2.getKey() + " in group " + notification2.group);
+                        } else
+                            Log.e("Notification", "removing notification " + notification2.getKey() + " in group " + notification2.group);
+                        v = child;
+                        notifications.remove(notification2);
+                    }
                 }
             }
 
@@ -168,7 +178,7 @@ public class NotificationsIconData extends IconData<NotificationsIconData.Notifi
 
                 iconView.setLayoutParams(layoutParams);
 
-                if (v.getParent() == null) notificationLayout.addView(v);
+                if (v.getParent() == null) notificationLayout.addView(v, 0);
                 notifications.put(notification.getKey(), notification);
 
                 onDrawableUpdate(-1);
