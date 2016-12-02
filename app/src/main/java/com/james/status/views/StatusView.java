@@ -63,7 +63,7 @@ public class StatusView extends FrameLayout {
     public void setUp() {
         if (status != null && status.getParent() != null) removeView(status);
 
-        View v = LayoutInflater.from(getContext()).inflate(R.layout.layout_status, null);
+        View v = LayoutInflater.from(getContext()).inflate(R.layout.layout_status, this, false);
         status = (LinearLayout) v.findViewById(R.id.status);
         status.getLayoutParams().height = StaticUtils.getStatusBarHeight(getContext());
 
@@ -378,7 +378,11 @@ public class StatusView extends FrameLayout {
         }
     }
 
-    private void setIconTint(View view, int color) {
+    private void setIconTint(View view, @ColorInt int color) {
+        for (IconData icon : getIcons()) {
+            icon.setColor(color);
+        }
+
         if (view instanceof LinearLayout) {
             for (int i = 0; i < ((LinearLayout) view).getChildCount(); i++) {
                 setIconTint(((LinearLayout) view).getChildAt(i), color);

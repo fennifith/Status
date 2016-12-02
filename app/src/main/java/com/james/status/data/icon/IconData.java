@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
+import android.support.annotation.ColorInt;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.util.TypedValue;
@@ -22,6 +23,7 @@ import com.james.status.data.preference.IntegerPreferenceData;
 import com.james.status.data.preference.ListPreferenceData;
 import com.james.status.data.preference.PreferenceData;
 import com.james.status.receivers.IconUpdateReceiver;
+import com.james.status.utils.ColorUtils;
 import com.james.status.utils.StaticUtils;
 import com.james.status.views.CustomImageView;
 
@@ -41,11 +43,14 @@ public abstract class IconData<T extends IconUpdateReceiver> {
 
     private Drawable drawable;
     private String text;
+    private int color;
 
     private View v;
 
     public IconData(Context context) {
         this.context = context;
+
+        color = ColorUtils.getDefaultColor(context);
 
         String name = getStringPreference(PreferenceIdentifier.ICON_STYLE);
         List<IconStyleData> styles = getIconStyles();
@@ -65,6 +70,15 @@ public abstract class IconData<T extends IconUpdateReceiver> {
 
     public final Context getContext() {
         return context;
+    }
+
+    public final void setColor(@ColorInt int color) {
+        this.color = color;
+    }
+
+    @ColorInt
+    public final int getColor() {
+        return color;
     }
 
     public final boolean hasDrawableListener() {

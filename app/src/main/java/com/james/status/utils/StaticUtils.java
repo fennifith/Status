@@ -73,7 +73,7 @@ public class StaticUtils {
 
     public static boolean isNotificationGranted(Context context) {
         for (String packageName : NotificationManagerCompat.getEnabledListenerPackages(context)) {
-            if (packageName.contains(context.getPackageName()) || packageName.matches(context.getPackageName()))
+            if (packageName.contains(context.getPackageName()) || packageName.equals(context.getPackageName()))
                 return true;
         }
         return shouldUseCompatNotifications(context);

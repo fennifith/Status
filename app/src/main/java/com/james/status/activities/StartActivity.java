@@ -142,9 +142,8 @@ public class StartActivity extends AppCompatActivity {
                     accessibilityStep.setPositiveButtonEnable(StaticUtils.isAccessibilityGranted(this));
                 break;
             case REQUEST_NOTIFICATION:
-                if (notificationStep != null) {
+                if (notificationStep != null)
                     notificationStep.setPositiveButtonEnable(StaticUtils.isNotificationGranted(this));
-                }
                 break;
             case REQUEST_OVERLAY:
                 if (overlayStep != null)

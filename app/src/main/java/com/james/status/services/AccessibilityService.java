@@ -146,7 +146,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                         try {
                             activityData = new AppData.ActivityData(packageManager, packageManager.getActivityInfo(new ComponentName(packageName.toString(), className.toString()), PackageManager.GET_META_DATA));
                         } catch (PackageManager.NameNotFoundException | NullPointerException e) {
-                            if (activityData != null && !activityData.packageName.matches(packageName.toString()) && !activityData.packageName.contains(packageName) && !packageName.toString().contains(activityData.packageName)) {
+                            if (activityData != null) {
                                 if (packageName.toString().equals("com.android.systemui")) {
                                     if (event.getText().toString().toLowerCase().contains("volume")) {
                                         if (event.getText().toString().toLowerCase().contains("hidden")) {

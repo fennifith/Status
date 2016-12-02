@@ -143,6 +143,7 @@ public class StatusService extends Service {
         if (enabled == null || !enabled || !StaticUtils.isPermissionsGranted(this)) {
             if (statusView != null) {
                 if (statusView.getParent() != null) windowManager.removeView(statusView);
+                statusView.unregister();
                 statusView = null;
             }
             stopSelf();
@@ -523,7 +524,9 @@ public class StatusService extends Service {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 && (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_NFC) || BuildConfig.DEBUG))
             icons.add(new NfcIconData(context));
 
-        icons.add(new AlarmIconData(context));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP || BuildConfig.DEBUG)
+            icons.add(new AlarmIconData(context));
+
         icons.add(new RingerIconData(context));
         icons.add(new HeadphoneIconData(context));
         icons.add(new OrientationIconData(context));
