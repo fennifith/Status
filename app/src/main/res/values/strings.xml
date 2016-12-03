@@ -232,6 +232,7 @@
     <string name="reset_all">Reset All</string>
     <string name="notifications_disable">Disable All Notifications</string>
     <string name="notifications_enable">Enable All Notifications</string>
+    <string name="action_policy">Privacy Policy</string>
 
     <string-array name="libraries">
         <item>

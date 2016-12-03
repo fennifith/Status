@@ -120,6 +120,13 @@ public class AboutActivity extends AppCompatActivity {
                 new LicenseDialog(AboutActivity.this).show();
             }
         });
+
+        findViewById(R.id.policy).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://theandroidmaster.github.io/apps/status/policy.txt")));
+            }
+        });
     }
 
     @Override
