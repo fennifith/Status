@@ -94,6 +94,7 @@ public class StatusService extends Service {
 
     private boolean shouldFireClickEvent = true;
     private int headsUpDuration = 10000;
+    private boolean isRegistered;
 
     @Override
     public void onCreate() {
@@ -232,6 +233,7 @@ public class StatusService extends Service {
         notificationFilter.addAction(NotificationsIconData.ACTION_NOTIFICATION_REMOVED);
 
         registerReceiver(notificationReceiver, notificationFilter);
+        isRegistered = true;
 
         if (StaticUtils.isAccessibilityServiceRunning(this)) {
             Intent intent = new Intent(AccessibilityService.ACTION_GET_COLOR);
@@ -250,16 +252,19 @@ public class StatusService extends Service {
 
     @Override
     public void onDestroy() {
-        unregisterReceiver(notificationReceiver);
+        if (isRegistered) {
+            unregisterReceiver(notificationReceiver);
+            isRegistered = false;
+        }
 
         if (fullscreenView != null) {
-            windowManager.removeView(fullscreenView);
+            if (fullscreenView.getParent() != null) windowManager.removeView(fullscreenView);
             fullscreenView = null;
         }
 
         if (statusView != null) {
-            statusView.unregister();
-            windowManager.removeView(statusView);
+            if (statusView.isRegistered()) statusView.unregister();
+            if (statusView.getParent() != null) windowManager.removeView(statusView);
             statusView = null;
         }
 

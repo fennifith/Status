@@ -38,7 +38,7 @@ public class StatusView extends FrameLayout {
 
     @ColorInt
     private Integer color, iconColor = Color.WHITE;
-    private boolean isSystemShowing, isFullscreen, isAnimations, isIconAnimations, isTintedIcons, isContrastIcons;
+    private boolean isSystemShowing, isFullscreen, isAnimations, isIconAnimations, isTintedIcons, isContrastIcons, isRegistered;
 
     private List<IconData> icons;
     private WallpaperManager wallpaperManager;
@@ -178,19 +178,25 @@ public class StatusView extends FrameLayout {
     }
 
     public void register() {
-        if (icons != null) {
+        if (icons != null && !isRegistered()) {
             for (IconData icon : icons) {
                 icon.register();
             }
+            isRegistered = true;
         }
     }
 
     public void unregister() {
-        if (icons != null) {
+        if (icons != null && isRegistered()) {
             for (IconData icon : icons) {
                 icon.unregister();
             }
+            isRegistered = false;
         }
+    }
+
+    public boolean isRegistered() {
+        return isRegistered;
     }
 
     public void setSystemShowing(boolean isSystemShowing) {
