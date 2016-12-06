@@ -125,8 +125,7 @@ public class StatusService extends Service {
         };
 
         Boolean enabled = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED);
-        if (enabled == null || !enabled) stopSelf();
-        else setUp();
+        if (enabled != null && enabled && StaticUtils.isPermissionsGranted(this)) setUp();
 
         Integer duration = PreferenceUtils.getIntegerPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_HEADS_UP_DURATION);
         if (duration != null) headsUpDuration = duration * 1000;
