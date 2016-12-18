@@ -4,14 +4,11 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
-public class SimpleFragment extends Fragment {
+public abstract class SimpleFragment extends Fragment {
 
-    public String getTitle(Context context) {
-        return "";
-    }
+    public abstract String getTitle(Context context);
 
-    public void filter(@Nullable String filter) {
-    }
+    public abstract void filter(@Nullable String filter);
 
     public void onSelect() {
     }
