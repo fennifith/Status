@@ -13,7 +13,6 @@ import com.james.status.R;
 import com.james.status.data.IconStyleData;
 import com.james.status.data.icon.IconData;
 import com.james.status.dialogs.IconStyleDialog;
-import com.james.status.utils.ImageUtils;
 import com.james.status.views.CustomImageView;
 
 import java.util.List;
@@ -58,7 +57,7 @@ public class IconStyleAdapter extends RecyclerView.Adapter<IconStyleAdapter.View
 
         for (int i = 0; i < style.getSize(); i++) {
             View view = LayoutInflater.from(context).inflate(R.layout.item_icon, layout, false);
-            ImageUtils.tintDrawable((CustomImageView) view.findViewById(R.id.icon), style.getDrawable(context, i), Color.BLACK);
+            ((CustomImageView) view.findViewById(R.id.icon)).setImageDrawable(style.getDrawable(context, i), Color.BLACK);
 
             layout.addView(view);
         }

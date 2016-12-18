@@ -3,6 +3,7 @@ package com.james.status.views;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
@@ -23,6 +24,11 @@ public class CustomImageView extends AppCompatImageView {
 
     public CustomImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+    }
+
+    public void setImageDrawable(Drawable drawable, @ColorInt int color) {
+        super.setImageDrawable(drawable);
+        setColorFilter(color);
     }
 
     public void transition(final Bitmap second) {

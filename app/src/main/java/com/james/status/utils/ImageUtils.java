@@ -12,15 +12,12 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.util.Log;
 import android.view.WindowManager;
-
-import com.james.status.views.CustomImageView;
 
 public class ImageUtils {
 
@@ -95,32 +92,6 @@ public class ImageUtils {
             e.printStackTrace();
             return null;
         }
-    }
-
-    public static Drawable tintDrawable(Drawable source, @ColorInt int color) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            DrawableCompat.setTint(source, color);
-        } else source.mutate().setColorFilter(color, PorterDuff.Mode.SRC_IN);
-
-        return source;
-    }
-
-    public static Drawable tintDrawable(CustomImageView imageView, Drawable source, @ColorInt int color) {
-        if (imageView == null) return null;
-        if (source == null) {
-            imageView.setImageDrawable(null);
-            return null;
-        }
-
-        imageView.setImageDrawable(DrawableCompat.wrap(source));
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            DrawableCompat.setTint(source, color);
-        } else source.mutate().setColorFilter(color, PorterDuff.Mode.SRC_IN);
-
-        imageView.invalidate();
-
-        return source;
     }
 
     public static Bitmap tintBitmap(Bitmap source, @ColorInt int color) {

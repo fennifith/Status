@@ -247,7 +247,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
                         holder.v.findViewById(R.id.titleBar).setBackgroundColor(color);
                         ((TextView) holder.v.findViewById(R.id.appName)).setTextColor(ContextCompat.getColor(context, ColorUtils.isColorDark(color) ? R.color.textColorPrimaryInverse : R.color.textColorPrimary));
                         ((TextView) holder.v.findViewById(R.id.appPackage)).setTextColor(ContextCompat.getColor(context, ColorUtils.isColorDark(color) ? R.color.textColorSecondaryInverse : R.color.textColorSecondary));
-                        ImageUtils.tintDrawable(((CustomImageView) holder.v.findViewById(R.id.launchIcon)), ImageUtils.getVectorDrawable(context, R.drawable.ic_launch), ColorUtils.isColorDark(color) ? Color.WHITE : Color.BLACK);
+                        ((CustomImageView) holder.v.findViewById(R.id.launchIcon)).setImageDrawable(ImageUtils.getVectorDrawable(context, R.drawable.ic_launch), ColorUtils.isColorDark(color) ? Color.WHITE : Color.BLACK);
                     }
                 });
             }

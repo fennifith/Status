@@ -52,7 +52,6 @@ import com.james.status.data.icon.OrientationIconData;
 import com.james.status.data.icon.RingerIconData;
 import com.james.status.data.icon.TimeIconData;
 import com.james.status.data.icon.WifiIconData;
-import com.james.status.utils.ImageUtils;
 import com.james.status.utils.PreferenceUtils;
 import com.james.status.utils.StaticUtils;
 import com.james.status.views.CustomImageView;
@@ -362,7 +361,7 @@ public class StatusService extends Service {
 
         CustomImageView icon = (CustomImageView) headsUpView.findViewById(R.id.icon);
         Drawable drawable = notification.getIcon(this);
-        if (drawable != null) ImageUtils.tintDrawable(icon, drawable, notification.color);
+        if (drawable != null) icon.setImageDrawable(drawable, notification.color);
 
         CustomImageView largeIcon = (CustomImageView) headsUpView.findViewById(R.id.largeIcon);
         Drawable largeDrawable = notification.getLargeIcon(this);
@@ -405,7 +404,7 @@ public class StatusService extends Service {
 
                 Drawable actionIcon = action.getIcon(this);
                 if (actionIcon != null)
-                    ImageUtils.tintDrawable((CustomImageView) button.findViewById(R.id.icon), actionIcon, notification.color);
+                    ((CustomImageView) button.findViewById(R.id.icon)).setImageDrawable(actionIcon, notification.color);
                 else button.findViewById(R.id.icon).setVisibility(View.GONE);
 
                 TextView title = (TextView) button.findViewById(R.id.title);

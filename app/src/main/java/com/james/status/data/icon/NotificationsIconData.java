@@ -19,7 +19,6 @@ import com.james.status.data.preference.IntegerPreferenceData;
 import com.james.status.data.preference.PreferenceData;
 import com.james.status.receivers.IconUpdateReceiver;
 import com.james.status.services.NotificationService;
-import com.james.status.utils.ImageUtils;
 import com.james.status.utils.PreferenceUtils;
 import com.james.status.utils.StaticUtils;
 import com.james.status.views.CustomImageView;
@@ -169,7 +168,7 @@ public class NotificationsIconData extends IconData<NotificationsIconData.Notifi
 
             if (drawable != null) {
                 CustomImageView iconView = (CustomImageView) v.findViewById(R.id.icon);
-                ImageUtils.tintDrawable(iconView, drawable, getColor());
+                iconView.setImageDrawable(drawable, getColor());
 
                 ViewGroup.LayoutParams layoutParams = iconView.getLayoutParams();
                 if (layoutParams != null)

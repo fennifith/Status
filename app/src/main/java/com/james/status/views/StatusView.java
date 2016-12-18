@@ -152,7 +152,7 @@ public class StatusView extends FrameLayout {
                     CustomImageView iconView = (CustomImageView) item.findViewById(R.id.icon);
 
                     if (drawable != null && iconView != null)
-                        ImageUtils.tintDrawable(iconView, drawable, iconColor);
+                        iconView.setImageDrawable(drawable, iconColor);
                     else if (iconView == null || !iconView.getParent().equals(item))
                         setIconTint(item, iconColor);
                 }
@@ -398,7 +398,7 @@ public class StatusView extends FrameLayout {
         } else if (view instanceof CustomImageView) {
             CustomImageView imageView = (CustomImageView) view;
             if (imageView.getDrawable() != null)
-                ImageUtils.tintDrawable(imageView, imageView.getDrawable(), color);
+                imageView.setColorFilter(color);
         }
     }
 

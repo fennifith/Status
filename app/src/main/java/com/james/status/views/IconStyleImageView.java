@@ -8,7 +8,6 @@ import android.os.Handler;
 import android.util.AttributeSet;
 
 import com.james.status.data.IconStyleData;
-import com.james.status.utils.ImageUtils;
 
 public class IconStyleImageView extends SquareImageView {
 
@@ -49,7 +48,7 @@ public class IconStyleImageView extends SquareImageView {
                                 float alpha = (float) animator.getAnimatedValue();
                                 setAlpha(alpha);
                                 if (alpha == 0)
-                                    ImageUtils.tintDrawable(IconStyleImageView.this, drawable, Color.BLACK);
+                                    setImageDrawable(drawable, Color.BLACK);
                             }
                         });
                         animator.start();
@@ -66,7 +65,7 @@ public class IconStyleImageView extends SquareImageView {
         this.iconStyle = iconStyle;
         if (iconStyle != null) {
             Drawable drawable = iconStyle.getDrawable(getContext(), resource % iconStyle.getSize());
-            ImageUtils.tintDrawable(this, drawable, Color.BLACK);
+            setImageDrawable(drawable, Color.BLACK);
             init();
         }
     }
