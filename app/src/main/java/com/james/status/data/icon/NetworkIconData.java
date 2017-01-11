@@ -12,6 +12,8 @@ import java.lang.ref.SoftReference;
 import java.util.Arrays;
 import java.util.List;
 
+import james.signalstrengthslib.SignalStrengths;
+
 public class NetworkIconData extends IconData {
 
     private TelephonyManager telephonyManager;
@@ -101,26 +103,8 @@ public class NetworkIconData extends IconData {
             NetworkIconData icon = null;
             if (reference != null) icon = reference.get();
 
-            if (icon != null && icon.isRegistered) {
-                int level;
-
-                if (signalStrength.isGsm()) {
-                    if (signalStrength.getGsmSignalStrength() != 99)
-                        level = signalStrength.getGsmSignalStrength() * 2 - 113;
-                    else
-                        level = signalStrength.getGsmSignalStrength();
-                } else
-                    level = signalStrength.getCdmaDbm();
-
-                if (level < -100) level = 0;
-                else if (level < -95) level = 1;
-                else if (level < -85) level = 2;
-                else if (level < -75) level = 3;
-                else if (level != 0) level = 4;
-                else level = -1;
-
-                icon.onDrawableUpdate(level);
-            }
+            if (icon != null && icon.isRegistered)
+                icon.onDrawableUpdate((int) Math.round(SignalStrengths.getFirstValid(signalStrength)));
         }
     }
 }

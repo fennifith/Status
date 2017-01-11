@@ -35,12 +35,9 @@ public class BluetoothIconData extends IconData<BluetoothIconData.BluetoothRecei
 
         int state = StaticUtils.getBluetoothState(getContext());
 
-        if (state != BluetoothAdapter.STATE_OFF) {
-            if (state == BluetoothAdapter.STATE_CONNECTED)
-                onDrawableUpdate(1);
-            else
-                onDrawableUpdate(0);
-        } else onDrawableUpdate(-1);
+        if (state != BluetoothAdapter.STATE_OFF)
+            onDrawableUpdate(state == BluetoothAdapter.STATE_CONNECTED ? 1 : 0);
+        else onDrawableUpdate(-1);
     }
 
     @Override
@@ -80,12 +77,9 @@ public class BluetoothIconData extends IconData<BluetoothIconData.BluetoothRecei
         @Override
         public void onReceive(BluetoothIconData icon, Intent intent) {
             int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.STATE_OFF);
-            if (state != BluetoothAdapter.STATE_OFF) {
-                if (state == BluetoothAdapter.STATE_CONNECTED)
-                    icon.onDrawableUpdate(1);
-                else
-                    icon.onDrawableUpdate(0);
-            } else icon.onDrawableUpdate(-1);
+            if (state != BluetoothAdapter.STATE_OFF)
+                icon.onDrawableUpdate(state == BluetoothAdapter.STATE_CONNECTED ? 1 : 0);
+            else icon.onDrawableUpdate(-1);
         }
     }
 }
