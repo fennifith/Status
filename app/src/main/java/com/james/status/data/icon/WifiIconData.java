@@ -115,7 +115,7 @@ public class WifiIconData extends IconData<WifiIconData.WifiReceiver> {
             if (networkInfo == null) networkInfo = icon.connectivityManager.getActiveNetworkInfo();
 
             if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI && networkInfo.isConnected())
-                icon.onDrawableUpdate(WifiManager.calculateSignalLevel(icon.wifiManager.getConnectionInfo().getRssi(), 4));
+                icon.onDrawableUpdate(WifiManager.calculateSignalLevel(icon.wifiManager.getConnectionInfo().getRssi(), 5));
             else icon.onDrawableUpdate(-1);
         }
     }
