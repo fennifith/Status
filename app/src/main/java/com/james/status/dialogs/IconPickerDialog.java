@@ -1,7 +1,10 @@
 package com.james.status.dialogs;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -38,7 +41,9 @@ public class IconPickerDialog extends PreferenceDialog<IconStyleData> implements
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (title != null) toolbar.setTitle(title);
 
-        toolbar.setNavigationIcon(ImageUtils.getVectorDrawable(getContext(), R.drawable.ic_back));
+        Drawable back = ImageUtils.getVectorDrawable(getContext(), R.drawable.ic_back);
+        DrawableCompat.setTint(back, Color.BLACK);
+        toolbar.setNavigationIcon(back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
