@@ -39,10 +39,9 @@ public class WifiIconData extends IconData<WifiIconData.WifiReceiver> {
     public void register() {
         super.register();
 
-        int level = WifiManager.calculateSignalLevel(wifiManager.getConnectionInfo().getRssi(), 4);
-        if (level > 0) { //temporary fix, cannot determine wifi connection without BroadcastReceiver for some reason
-            onDrawableUpdate(level);
-        }
+        int level = WifiManager.calculateSignalLevel(wifiManager.getConnectionInfo().getRssi(), 5);
+        if (level > 0)
+            onDrawableUpdate(level); //temporary fix, cannot determine if wifi is enabled without BroadcastReceiver for some reason
     }
 
     @Override
