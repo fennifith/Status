@@ -75,6 +75,16 @@ public class AlarmIconData extends IconData<AlarmIconData.AlarmReceiver> {
                                 getContext().getString(R.string.icon_style_system),
                                 IconStyleData.TYPE_IMAGE,
                                 android.R.drawable.ic_popup_reminder
+                        ),
+                        new IconStyleData(
+                                getContext().getString(R.string.icon_style_clear),
+                                IconStyleData.TYPE_VECTOR,
+                                R.drawable.ic_alarm_clear
+                        ),
+                        new IconStyleData(
+                                getContext().getString(R.string.icon_style_school),
+                                IconStyleData.TYPE_VECTOR,
+                                R.drawable.ic_alarm_school
                         )
                 )
         );
