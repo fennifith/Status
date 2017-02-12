@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Created by Ghost Ninja(Technologx) https://technologx.com -->
+<!-- All rights have been given to James for use in this project! -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="129dp"
+    android:height="129dp"
+    android:viewportWidth="129"
+    android:viewportHeight="129">
+
+    <path
+        android:fillColor="#000000"
+        android:pathData="M82.2,37.9c0-17.2-14-31.3-31.3-31.3s-31.3,14-31.3,31.3 14,31.3 31.3,31.3
+31.3-14.1 31.3-31.3zm-54.3,0c0-12.7 10.3-23 23-23s23,10.3
+23,23-10.3,23-23,23-23-10.3-23-23z" />
+    <path
+        android:fillColor="#000000"
+        android:pathData="M93.7,49.4c-8.6,0-15.6,7-15.6,15.6 0,6.2 3.6,11.5
+8.8,14.1-3.4,8.8-9.9,16-18.3,20.3v-0.5c0-2.3-1.8-4.1-4.1-4.1h-27.2c-2.3,0-4.1,1.8-4.1,4.1v19.4c0,2.3
+1.8,4.1 4.1,4.1h27.2c2.3,0 4.1-1.8 4.1-4.1v-9.8c12.5-5.1 22.1-15.2 26.6-27.9
+7.9-0.7 14.2-7.4
+14.2-15.6-0.1-8.6-7.1-15.6-15.7-15.6zm-33.3,55.7c-0.1,0.4-0.1,0.8
+0,1.2v7.9h-18.9v-11.2h18.9v2.1zm33.3-32.7c-4.1,0-7.4-3.3-7.4-7.4s3.3-7.4 7.4-7.4
+7.4,3.3 7.4,7.4-3.3,7.4-7.4,7.4z" />
+</vector>
