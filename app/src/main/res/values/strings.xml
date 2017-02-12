@@ -156,10 +156,15 @@
     <string name="unit_sp">sp</string>
     <string name="unit_seconds">" seconds"</string>
 
+    <string name="icon_style_android">Android</string>
     <string name="icon_style_default">Default</string>
     <string name="icon_style_stock">Stock</string>
     <string name="icon_style_circle">Circle</string>
     <string name="icon_style_circle_outline">Circle Outline</string>
+    <string name="icon_style_classic">Classic</string>
+    <string name="icon_style_clear">Clear</string>
+    <string name="icon_style_clip">Clip</string>
+    <string name="icon_style_curved">Curved</string>
     <string name="icon_style_outline">Outline</string>
     <string name="icon_style_dish">Dish</string>
     <string name="icon_style_triangle">Triangle</string>
@@ -169,6 +174,7 @@
     <string name="icon_style_balloon">Hot Air Balloon</string>
     <string name="icon_style_radial">Radial</string>
     <string name="icon_style_tap">Tap</string>
+    <string name="icon_style_school">School</string>
     <string name="icon_style_system">System</string>
 
     <string name="tutorial_enable">Enable the Status Bar</string>
@@ -214,6 +220,9 @@
 
     <string name="anas_name">Anas Khan</string>
     <string name="anas_desc">Better known as the Oreo lord, this guy can add more butter to buttery interfaces.</string>
+    
+    <string name="ghost_name">Ghost Ninja</string>
+    <string name="ghost_desc">I\'m a graphic designer, website designer, husbad &amp; father. I have 2 kids a son &amp; step-daughter which both I love to death along with my wife. I also enjoy helping people like James on this project!</string>
 
     <string name="vuk_name">Vukašin Anđelković</string>
     <string name="vuk_desc">The great lord of Material Design, yeah he makes icons and stuff.</string>
