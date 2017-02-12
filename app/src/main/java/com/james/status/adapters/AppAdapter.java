@@ -34,7 +34,6 @@ import com.james.status.utils.StaticUtils;
 import com.james.status.utils.StringUtils;
 import com.james.status.views.CustomImageView;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -43,7 +42,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
 
     private Context context;
     private PackageManager packageManager;
-    private List<AppData> originalApps, apps;
+    private List<AppData> apps;
     public View iconView;
 
     private boolean expanded;
@@ -52,18 +51,13 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
         this.context = context;
         packageManager = context.getPackageManager();
 
-        originalApps = new ArrayList<>();
-        originalApps.addAll(apps);
-
-        Collections.sort(originalApps, new Comparator<AppData>() {
+        this.apps = apps;
+        Collections.sort(apps, new Comparator<AppData>() {
             @Override
             public int compare(AppData lhs, AppData rhs) {
                 return lhs.label.compareToIgnoreCase(rhs.label);
             }
         });
-
-        this.apps = new ArrayList<>();
-        this.apps.addAll(originalApps);
     }
 
     @Override
