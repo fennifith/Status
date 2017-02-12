@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Created by Ghost Ninja(Technologx) https://technologx.com -->
+<!-- All rights have been given to James for use in this project! -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="576.000000dp"
+    android:height="576.000000dp"
+    android:viewportWidth="576.000000"
+    android:viewportHeight="576.000000">
+
+    <group
+            android:translateY="576.000000"
+            android:scaleX="0.100000"
+            android:scaleY="-0.100000">
+        <path
+            android:fillColor="#000000"
+            android:strokeWidth="1"
+            android:pathData="M650 1446 c0 -7 7 -19 15 -26 8 -7 15 -17 15 -22 0 -8 113 -163 129 -178 3 -3 30
+-34 60 -70 111 -133 279 -289 436 -406 91 -66 89 -65 205 -134 47 -28 92 -55 100
+-60 18 -10 149 -75 200 -98 82 -37 159 -66 230 -88 30 -9 71 -23 90 -29 72 -26 288
+-68 455 -90 225 -29 521 -17 770 31 128 25 217 45 255 59 19 6 60 20 90 29 71 22
+148 51 230 88 51 23 182 88 200 98 8 5 53 32 100 60 116 69 114 68 205 134 157 117
+325 273 436 406 30 36 57 67 60 70 16 15 129 170 129 178 0 5 7 15 15 22 50 41 129
+40 -2205 40 -1879 0 -2220 -2 -2220 -14z" />
+    </group>
+</vector>
