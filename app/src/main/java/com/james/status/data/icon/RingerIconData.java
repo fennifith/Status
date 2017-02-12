@@ -68,7 +68,7 @@ public class RingerIconData extends IconData<RingerIconData.RingerReceiver> {
                                 getContext().getString(R.string.icon_style_default),
                                 IconStyleData.TYPE_VECTOR,
                                 R.drawable.ic_sound_mute,
-                                R.drawable.ic_sound_vibration
+                                R.drawable.ic_sound_vibrate
                         ),
                         new IconStyleData(
                                 getContext().getString(R.string.icon_style_system),
@@ -78,9 +78,8 @@ public class RingerIconData extends IconData<RingerIconData.RingerReceiver> {
                         new IconStyleData(
                                 getContext().getString(R.string.icon_style_android),
                                 IconStyleData.TYPE_VECTOR,
-                                R.drawable.ic_ringer_android_silent,
-                                R.drawable.ic_ringer_android_vibrate,
-                                R.drawable.ic_ringer_android
+                                R.drawable.ic_sound_android_mute,
+                                R.drawable.ic_sound_android_vibrate
                         )
                 )
         );

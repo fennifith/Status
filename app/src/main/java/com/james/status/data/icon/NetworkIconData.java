@@ -103,11 +103,11 @@ public class NetworkIconData extends IconData {
                         new IconStyleData(
                                 getContext().getString(R.string.icon_style_clip),
                                 IconStyleData.TYPE_VECTOR,
-                                R.drawable.ic_clip_0,
-                                R.drawable.ic_clip_1,
-                                R.drawable.ic_clip_2,
-                                R.drawable.ic_clip_3,
-                                R.drawable.ic_clip_4
+                                R.drawable.ic_number_clip_0,
+                                R.drawable.ic_number_clip_1,
+                                R.drawable.ic_number_clip_2,
+                                R.drawable.ic_number_clip_3,
+                                R.drawable.ic_number_clip_4
                         )
                 )
         );
