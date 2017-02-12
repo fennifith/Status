@@ -69,15 +69,15 @@ public class WifiIconData extends IconData<WifiIconData.WifiReceiver> {
                                 R.drawable.ic_wifi_3,
                                 R.drawable.ic_wifi_4
                         ),
-                        new IconStyleData(
+                /*        new IconStyleData(
                                 getContext().getString(R.string.icon_style_radial),
                                 IconStyleData.TYPE_VECTOR,
-                                R.drawable.ic_wifi_radial_0,
+                                R.drawable.,
                                 R.drawable.ic_wifi_radial_1,
                                 R.drawable.ic_wifi_radial_2,
                                 R.drawable.ic_wifi_radial_3,
                                 R.drawable.ic_wifi_radial_4
-                        ),
+                        ), */
                         new IconStyleData(
                                 getContext().getString(R.string.icon_style_triangle),
                                 IconStyleData.TYPE_VECTOR,
@@ -95,6 +95,24 @@ public class WifiIconData extends IconData<WifiIconData.WifiReceiver> {
                                 R.drawable.ic_wifi_retro_2,
                                 R.drawable.ic_wifi_retro_3,
                                 R.drawable.ic_wifi_retro_4
+                        ),
+                        new IconStyleData(
+                                getContext().getString(R.string.icon_style_classic),
+                                IconStyleData.TYPE_VECTOR,
+                                R.drawable.ic_wifi_classic_0,
+                                R.drawable.ic_wifi_classic_1,
+                                R.drawable.ic_wifi_classic_2,
+                                R.drawable.ic_wifi_classic_3,
+                                R.drawable.ic_wifi_classic_4
+                        ),
+                        new IconStyleData(
+                                getContext().getString(R.string.icon_style_clip),
+                                IconStyleData.TYPE_VECTOR,
+                                R.drawable.ic_clip_0,
+                                R.drawable.ic_clip_1,
+                                R.drawable.ic_clip_2,
+                                R.drawable.ic_clip_3,
+                                R.drawable.ic_clip_4
                         )
                 )
         );
