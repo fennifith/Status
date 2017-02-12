@@ -81,6 +81,33 @@ public class NetworkIconData extends IconData {
                                 R.drawable.ic_signal_retro_2,
                                 R.drawable.ic_signal_retro_3,
                                 R.drawable.ic_signal_retro_4
+                        ),
+                     new IconStyleData(
+                             getContext().getString(R.string.icon_style_circle),
+                             IconStyleData.TYPE_VECTOR,
+                             R.drawable.ic_network_circle_0,
+                             R.drawable.ic_network_circle_1,
+                             R.drawable.ic_network_circle_2,
+                             R.drawable.ic_network_circle_3,
+                             R.drawable.ic_network_circle_4
+                        ),
+                        new IconStyleData(
+                                getContext().getString(R.string.icon_style_curved),
+                                IconStyleData.TYPE_VECTOR,
+                                R.drawable.ic_network_curved_0,
+                                R.drawable.ic_network_curved_1,
+                                R.drawable.ic_network_curved_2,
+                                R.drawable.ic_network_curved_3,
+                                R.drawable.ic_network_curved_4
+                        ),
+                        new IconStyleData(
+                                getContext().getString(R.string.icon_style_clip),
+                                IconStyleData.TYPE_VECTOR,
+                                R.drawable.ic_clip_0,
+                                R.drawable.ic_clip_1,
+                                R.drawable.ic_clip_2,
+                                R.drawable.ic_clip_3,
+                                R.drawable.ic_clip_4
                         )
                 )
         );
