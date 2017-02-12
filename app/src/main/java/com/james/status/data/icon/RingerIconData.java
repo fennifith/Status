@@ -74,6 +74,13 @@ public class RingerIconData extends IconData<RingerIconData.RingerReceiver> {
                                 getContext().getString(R.string.icon_style_system),
                                 IconStyleData.TYPE_IMAGE,
                                 android.R.drawable.ic_lock_silent_mode
+                        ),
+                        new IconStyleData(
+                                getContext().getString(R.string.icon_style_android),
+                                IconStyleData.TYPE_VECTOR,
+                                R.drawable.ic_ringer_android_silent,
+                                R.drawable.ic_ringer_android_vibrate,
+                                R.drawable.ic_ringer_android
                         )
                 )
         );
