@@ -31,6 +31,7 @@ import com.james.status.dialogs.PreferenceDialog;
 import com.james.status.utils.ColorUtils;
 import com.james.status.utils.ImageUtils;
 import com.james.status.utils.StaticUtils;
+import com.james.status.utils.StringUtils;
 import com.james.status.views.CustomImageView;
 
 import java.util.ArrayList;
@@ -316,18 +317,29 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
         return apps.size();
     }
 
-    public void filter(@Nullable String string) {
-        apps.clear();
-
+    public void filter(@Nullable final String string) {
         if (string == null || string.length() < 1) {
-            apps.addAll(originalApps);
+            Collections.sort(apps, new Comparator<AppData>() {
+                @Override
+                public int compare(AppData lhs, AppData rhs) {
+                    return lhs.label.compareToIgnoreCase(rhs.label);
+                }
+            });
         } else {
-            string = string.toLowerCase();
+            Collections.sort(apps, new Comparator<AppData>() {
+                @Override
+                public int compare(AppData lhs, AppData rhs) {
+                    int value = 0;
 
-            for (AppData app : originalApps) {
-                if ((app.label != null && (app.label.toLowerCase().contains(string) || string.contains(app.label.toLowerCase()))) || (app.name != null && (app.name.toLowerCase().contains(string) || string.contains(app.name.toLowerCase()))))
-                    apps.add(app);
-            }
+                    value += StringUtils.difference(lhs.label.toLowerCase(), string).length();
+                    value += StringUtils.difference(lhs.packageName, string).length();
+                    value -= StringUtils.difference(rhs.label.toLowerCase(), string).length();
+                    value -= StringUtils.difference(rhs.packageName, string).length();
+
+                    return value;
+
+                }
+            });
         }
 
         notifyDataSetChanged();

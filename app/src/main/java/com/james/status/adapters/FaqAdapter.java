@@ -63,7 +63,6 @@ public class FaqAdapter extends RecyclerView.Adapter<FaqAdapter.ViewHolder> {
         if (filter == null || filter.length() < 1) {
             faqs.addAll(originalFaqs);
         } else {
-            filter = filter.toLowerCase();
             for (FaqData faq : originalFaqs) {
                 if (faq.name.toLowerCase().contains(filter) || filter.contains(faq.name.toLowerCase()) || faq.content.toLowerCase().contains(filter) || filter.contains(faq.content.toLowerCase()))
                     faqs.add(faq);

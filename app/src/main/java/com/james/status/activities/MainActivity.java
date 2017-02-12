@@ -165,14 +165,14 @@ public class MainActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                adapter.filter(viewPager.getCurrentItem(), query);
+                adapter.filter(viewPager.getCurrentItem(), query.toLowerCase());
                 appbar.setExpanded(true);
                 return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                adapter.filter(viewPager.getCurrentItem(), newText);
+                adapter.filter(viewPager.getCurrentItem(), newText.toLowerCase());
                 appbar.setExpanded(true);
                 return true;
             }

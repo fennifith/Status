@@ -133,7 +133,7 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
             icons.addAll(originalIcons);
         } else {
             for (IconData icon : originalIcons) {
-                if (icon.getTitle().toLowerCase().contains(filter))
+                if (icon.getTitle().toLowerCase().contains(filter) || filter.contains(icon.getTitle().toLowerCase()))
                     icons.add(icon);
             }
         }

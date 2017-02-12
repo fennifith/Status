@@ -86,8 +86,6 @@ public class PreferenceSectionAdapter extends RecyclerView.Adapter<PreferenceSec
 
     public void filter(@Nullable String string) {
         if (string != null && string.length() > 0) {
-            string = string.toLowerCase();
-
             ArrayList<PreferenceData> newDatas = new ArrayList<>();
             for (PreferenceData data : originalDatas) {
                 PreferenceData.Identifier identifier = data.getIdentifier();
