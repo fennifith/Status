@@ -61,7 +61,7 @@ public class AboutActivity extends AppCompatActivity {
 
         findViewById(R.id.vukDribbble).setOnClickListener(new UrlClickListener("https://dribbble.com/zavukodlak"));
 
-        Glide.with(this).load("https://theandroidmaster.github.io/images/headers/onamountain.jpeg").into((ImageView) findViewById(R.id.ghostImage));
+        Glide.with(this).load("https://technologx.com/android/ghostninja/header.png").into((ImageView) findViewById(R.id.ghostImage));
 
         findViewById(R.id.ghostWebsite).setOnClickListener(new UrlClickListener("https://technologx.com/"));
 
