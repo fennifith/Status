@@ -28,6 +28,11 @@
     <string name="action_add_style">Add Style</string>
     <string name="action_delete">Delete</string>
     <string name="action_edit_style">Edit Icon Style</string>
+    <string name="action_policy">Privacy Policy</string>
+
+    <string name="reset_all">Reset All</string>
+    <string name="notifications_disable">Disable All Notifications</string>
+    <string name="notifications_enable">Enable All Notifications</string>
 
     <string name="prompt_name">Type a name here…</string>
 
@@ -123,6 +128,9 @@
     <string name="preference_hide_on_volume_desc">This option handles how the status bar responds to the volume popup. If it does not overlap the status bar, this does not need to be checked. This might not work on some devices.</string>
     <string name="preference_debug">Debug Messages</string>
     <string name="preference_debug_desc">Shows confusing debug info about window changes.</string>
+    <string name="preference_status_color">Primary Color</string>
+    <string name="preference_fullscreen">Hide Status</string>
+    <string name="preference_notifications">Notifications</string>
 
     <string name="icon_notifications">Notifications</string>
     <string name="icon_clock">Clock</string>
@@ -220,15 +228,12 @@
 
     <string name="anas_name">Anas Khan</string>
     <string name="anas_desc">Better known as the Oreo lord, this guy can add more butter to buttery interfaces.</string>
-    
-    <string name="ghost_name">Ghost Ninja</string>
-    <string name="ghost_desc">I\'m a graphic designer, website designer, husbad &amp; father. I have 2 kids a son &amp; step-daughter which both I love to death along with my wife. I also enjoy helping people like James on this project!</string>
 
     <string name="vuk_name">Vukašin Anđelković</string>
     <string name="vuk_desc">The great lord of Material Design, yeah he makes icons and stuff.</string>
-    <string name="preference_status_color">Primary Color</string>
-    <string name="preference_fullscreen">Hide Status</string>
-    <string name="preference_notifications">Notifications</string>
+
+    <string name="ghost_name">Ghost Ninja</string>
+    <string name="ghost_desc">A graphic designer, web designer, and the owner of technologx.com.</string>
 
     <string name="about_icons">Icon Sources</string>
     <string name="about_icons_desc">Obviously, it would be hard to make over 100 icons used in this app by myself, so (as well as the ones by the people above) the app uses icons from a few different sources.</string>
@@ -238,10 +243,6 @@
 
     <string name="md_icons">Material Design Icons</string>
     <string name="md_icons_desc">Made by many various contributors, this collection of icons contains useful resources unavailable from Google\'s site.</string>
-    <string name="reset_all">Reset All</string>
-    <string name="notifications_disable">Disable All Notifications</string>
-    <string name="notifications_enable">Enable All Notifications</string>
-    <string name="action_policy">Privacy Policy</string>
 
     <string-array name="libraries">
         <item>
