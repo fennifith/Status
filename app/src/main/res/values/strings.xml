@@ -61,7 +61,7 @@
     <string name="tab_settings">Settings</string>
     <string name="tab_icons">Icons</string>
     <string name="tab_apps">Apps</string>
-    <string name="tab_faqs">FAQs</string>
+    <string name="tab_help">Help</string>
 
     <string name="preference_show_clock">Show Clock</string>
     <string name="preference_24h">Use 24 Hour Time Format</string>
@@ -186,19 +186,19 @@
     <string name="icon_style_system">System</string>
 
     <string name="tutorial_enable">Enable the Status Bar</string>
-    <string name="tutorial_enable_desc">This switch allows you to enable and disable the customized status bar. Turn it on to try it!</string>
+    <string name="tutorial_enable_desc">The switch at the top of the screen allows you to enable and disable the customized status bar. Turn it on to try it!</string>
     <string name="tutorial_search">Search</string>
-    <string name="tutorial_search_desc">Find the exact setting you want to change by using the app\'s search bar.</string>
-    <string name="tutorial_faq">Need help?</string>
-    <string name="tutorial_faq_desc">The FAQ section is always being updated and contains almost all the issues users have encountered using the app.</string>
+    <string name="tutorial_search_desc">Find the exact setting you want to change by using Status\'s search bar.</string>
+    <string name="tutorial_help">Need help?</string>
+    <string name="tutorial_help_desc">The help section is always being updated and contains almost all the issues that have been encountered by other users using this app.</string>
     <string name="tutorial_image_picker">Image Color Picker</string>
-    <string name="tutorial_image_picker_desc">Can\'t get the right color? Try picking a color from an image instead!</string>
+    <string name="tutorial_image_picker_desc">Can\'t get the right color? Try picking the color from an image instead!</string>
     <string name="tutorial_icon_switch">Don\'t like an icon?</string>
     <string name="tutorial_icon_switch_desc">Enable or disable an icon by clicking the check box next to its name.</string>
     <string name="tutorial_icon_order">Re-order Icons</string>
     <string name="tutorial_icon_order_desc">Change the order of the icons by pressing the up and down buttons next to an icon\'s name.</string>
     <string name="tutorial_activities">Don\'t want to modify the whole app?</string>
-    <string name="tutorial_activities_desc">Change individual screens by clicking the \'expand\' button next to an app\'s title.</string>
+    <string name="tutorial_activities_desc">Change individual screens by clicking the \'expand\' button next to the app\'s title and package name.</string>
 
     <string name="red">Red</string>
     <string name="green">Green</string>

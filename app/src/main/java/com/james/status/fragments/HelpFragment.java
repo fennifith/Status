@@ -26,7 +26,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FaqFragment extends SimpleFragment {
+public class HelpFragment extends SimpleFragment {
 
     private static final String
             FAQ_URL = "https://theandroidmaster.github.io/apps/status/faq.json",
@@ -113,6 +113,6 @@ public class FaqFragment extends SimpleFragment {
 
     @Override
     public String getTitle(Context context) {
-        return context.getString(R.string.tab_faqs);
+        return context.getString(R.string.tab_help);
     }
 }
