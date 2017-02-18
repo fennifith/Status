@@ -30,7 +30,7 @@ import com.james.status.services.StatusService;
 import com.james.status.utils.PreferenceUtils;
 import com.james.status.utils.StaticUtils;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
 
     private Status status;
 
@@ -41,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private SimplePagerAdapter adapter;
+
+    private MenuItem resetItem, notificationItem;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -82,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
         adapter = new SimplePagerAdapter(this, getSupportFragmentManager(), viewPager, new GeneralPreferenceFragment(), new IconPreferenceFragment(), new AppPreferenceFragment(), new FaqFragment());
         viewPager.setAdapter(adapter);
+        viewPager.addOnPageChangeListener(this);
 
         tabLayout.setupWithViewPager(viewPager);
     }
@@ -160,6 +163,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
+        resetItem = menu.findItem(R.id.action_reset);
+        notificationItem = menu.findItem(R.id.action_toggle_notifications);
         searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -207,6 +212,17 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_about:
                 startActivity(new Intent(this, AboutActivity.class));
                 break;
+            case R.id.action_reset:
+                if (adapter.getItem(viewPager.getCurrentItem()) instanceof AppPreferenceFragment)
+                    ((AppPreferenceFragment) adapter.getItem(viewPager.getCurrentItem())).reset();
+                break;
+            case R.id.action_toggle_notifications:
+                if (adapter.getItem(viewPager.getCurrentItem()) instanceof AppPreferenceFragment) {
+                    boolean isNotifications = ((AppPreferenceFragment) adapter.getItem(viewPager.getCurrentItem())).isNotifications();
+                    ((AppPreferenceFragment) adapter.getItem(viewPager.getCurrentItem())).setNotifications(!isNotifications);
+                    item.setTitle(!isNotifications ? R.string.notifications_disable : R.string.notifications_enable);
+                }
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -215,5 +231,27 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         status.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        if (adapter.getItem(position) instanceof AppPreferenceFragment) {
+            resetItem.setVisible(true);
+            notificationItem.setVisible(true);
+            notificationItem.setTitle(((AppPreferenceFragment) adapter.getItem(position)).isNotifications() ? R.string.notifications_disable : R.string.notifications_enable);
+        } else {
+            resetItem.setVisible(false);
+            notificationItem.setVisible(false);
+        }
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
     }
 }

@@ -25,4 +25,16 @@
         android:title="@string/action_about"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/action_reset"
+        android:title="@string/reset_all"
+        android:visible="false"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_toggle_notifications"
+        android:title="@string/notifications_disable"
+        android:visible="false"
+        app:showAsAction="never" />
+
 </menu>

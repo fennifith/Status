@@ -1,7 +1,6 @@
 package com.james.status.adapters;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -14,7 +13,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
@@ -60,48 +58,6 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
                 return lhs.label.compareToIgnoreCase(rhs.label);
             }
         });
-    }
-
-    public void reset() {
-        new AlertDialog.Builder(context).setTitle(R.string.reset_all).setMessage(R.string.reset_apps_confirm).setPositiveButton(R.string.action_ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                for (AppData app : apps) {
-                    app.clearPreferences(context);
-                }
-
-                StaticUtils.updateStatusService(context);
-                notifyDataSetChanged();
-                dialogInterface.dismiss();
-            }
-        }).setNegativeButton(R.string.action_cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-            }
-        }).show();
-    }
-
-    public boolean isNotifications() {
-        boolean notifications = true;
-        for (AppData app : apps) {
-            Boolean isNotifications = app.getSpecificBooleanPreference(context, AppData.PreferenceIdentifier.NOTIFICATIONS);
-            if (isNotifications != null && !isNotifications) {
-                notifications = false;
-                break;
-            }
-        }
-
-        return notifications;
-    }
-
-    public void setNotifications(boolean isNotifications) {
-        for (AppData app : apps) {
-            app.putSpecificPreference(context, AppData.PreferenceIdentifier.NOTIFICATIONS, isNotifications);
-        }
-
-        StaticUtils.updateStatusService(context);
-        notifyDataSetChanged();
     }
 
     @Override
