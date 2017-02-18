@@ -114,6 +114,14 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             }
         });
 
+        appbar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (verticalOffset != 0 && behavior != null && behavior.getState() == BottomSheetBehavior.STATE_EXPANDED)
+                    behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            }
+        });
+
         Boolean enabled = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED);
         service.setChecked((enabled != null && enabled) || StaticUtils.isStatusServiceRunning(this));
         service.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -146,6 +154,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         title.setText(titleRes);
         content.setText(contentRes);
         behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        appbar.setExpanded(true, true);
         bottomSheet.setTag(listener);
     }
 
@@ -155,21 +164,24 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
         if (behavior.getState() == BottomSheetBehavior.STATE_HIDDEN) {
             if (StaticUtils.isAccessibilityGranted(this) && StaticUtils.isNotificationGranted(this) && StaticUtils.isPermissionsGranted(this) && !StaticUtils.isStatusServiceRunning(this) && StaticUtils.shouldShowTutorial(this, "enable")) {
-                appbar.setExpanded(true, false);
                 setTutorial(R.string.tutorial_enable, R.string.tutorial_enable_desc, new OnTutorialClickListener() {
                     @Override
                     public void onClick() {
-                        service.setChecked(true);
+                        if (service != null) service.setChecked(true);
                     }
                 });
             } else if (searchView != null && StaticUtils.shouldShowTutorial(MainActivity.this, "search", 1)) {
-                appbar.setExpanded(true, false);
-                setTutorial(R.string.tutorial_search, R.string.tutorial_search_desc, null);
+                setTutorial(R.string.tutorial_search, R.string.tutorial_search_desc, new OnTutorialClickListener() {
+                    @Override
+                    public void onClick() {
+                        if (searchView != null) searchView.setIconified(false);
+                    }
+                });
             } else if (tabLayout != null && viewPager != null && viewPager.getCurrentItem() != 3 && StaticUtils.shouldShowTutorial(MainActivity.this, "faqs", 2)) {
                 setTutorial(R.string.tutorial_help, R.string.tutorial_help_desc, new OnTutorialClickListener() {
                     @Override
                     public void onClick() {
-                        viewPager.setCurrentItem(3);
+                        if (viewPager != null) viewPager.setCurrentItem(3);
                     }
                 });
             }

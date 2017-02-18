@@ -187,7 +187,7 @@
 
     <string name="tutorial_enable">Enable the Status Bar</string>
     <string name="tutorial_enable_desc">The switch at the top of the screen allows you to enable and disable the customized status bar. Turn it on to try it!</string>
-    <string name="tutorial_search">Search</string>
+    <string name="tutorial_search">Looking for something?</string>
     <string name="tutorial_search_desc">Find the exact setting you want to change by using Status\'s search bar.</string>
     <string name="tutorial_help">Need help?</string>
     <string name="tutorial_help_desc">The help section is always being updated and contains almost all the issues that have been encountered by other users using this app.</string>
