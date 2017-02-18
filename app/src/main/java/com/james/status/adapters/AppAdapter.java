@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
@@ -19,6 +20,7 @@ import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -38,14 +40,14 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import james.tooltips.Tooltip;
+
 public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
 
     private Context context;
     private PackageManager packageManager;
     private List<AppData> apps;
-    public View iconView;
-
-    private boolean expanded;
+    public Tooltip tooltip;
 
     public AppAdapter(Context context, List<AppData> apps) {
         this.context = context;
@@ -60,9 +62,51 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
         });
     }
 
+    public void reset() {
+        new AlertDialog.Builder(context).setTitle(R.string.reset_all).setMessage(R.string.reset_apps_confirm).setPositiveButton(R.string.action_ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                for (AppData app : apps) {
+                    app.clearPreferences(context);
+                }
+
+                StaticUtils.updateStatusService(context);
+                notifyDataSetChanged();
+                dialogInterface.dismiss();
+            }
+        }).setNegativeButton(R.string.action_cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        }).show();
+    }
+
+    public boolean isNotifications() {
+        boolean notifications = true;
+        for (AppData app : apps) {
+            Boolean isNotifications = app.getSpecificBooleanPreference(context, AppData.PreferenceIdentifier.NOTIFICATIONS);
+            if (isNotifications != null && !isNotifications) {
+                notifications = false;
+                break;
+            }
+        }
+
+        return notifications;
+    }
+
+    public void setNotifications(boolean isNotifications) {
+        for (AppData app : apps) {
+            app.putSpecificPreference(context, AppData.PreferenceIdentifier.NOTIFICATIONS, isNotifications);
+        }
+
+        StaticUtils.updateStatusService(context);
+        notifyDataSetChanged();
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(context).inflate(viewType == 0 ? R.layout.item_apps_selector : R.layout.item_app_card, parent, false));
+        return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_app_card, parent, false));
     }
 
     @Override
@@ -74,87 +118,31 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         if (position == 0) {
-            holder.v.findViewById(R.id.layout).setVisibility(expanded ? View.VISIBLE : View.GONE);
-            holder.v.findViewById(R.id.more).setRotation(expanded ? 180 : 0);
-
-            holder.v.findViewById(R.id.more).setOnClickListener(new View.OnClickListener() {
+            View help = holder.v.findViewById(R.id.help);
+            help.setVisibility(View.VISIBLE);
+            help.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
-                    View layout = holder.v.findViewById(R.id.layout);
-                    if (layout.getVisibility() == View.GONE) {
-                        holder.v.findViewById(R.id.more).animate().rotation(180).start();
-                        layout.setVisibility(View.VISIBLE);
-                        expanded = true;
+                public void onClick(View v) {
+                    if (tooltip != null && tooltip.isShowing()) {
+                        tooltip.dismiss();
                     } else {
-                        holder.v.findViewById(R.id.more).animate().rotation(0).start();
-                        layout.setVisibility(View.GONE);
-                        expanded = false;
+                        if (tooltip == null) {
+                            Point size = new Point();
+                            ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getSize(size);
+
+                            tooltip = new Tooltip((ViewGroup) holder.v)
+                                    .setText(context.getString(R.string.tutorial_activities_desc))
+                                    .setPosition(Tooltip.Position.LEFT)
+                                    .setMaximumWidth(size.x / 2);
+                        }
+                        tooltip.showFor(v);
                     }
                 }
             });
-
-            boolean notifications = true;
-            for (AppData app : apps) {
-                Boolean isNotifications = app.getSpecificBooleanPreference(context, AppData.PreferenceIdentifier.NOTIFICATIONS);
-                if (isNotifications != null && !isNotifications) {
-                    notifications = false;
-                    break;
-                }
-            }
-
-            holder.v.findViewById(R.id.reset).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    new AlertDialog.Builder(context).setTitle(R.string.reset_all).setMessage(R.string.reset_apps_confirm).setPositiveButton(R.string.action_ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            for (AppData app : apps) {
-                                app.clearPreferences(context);
-                            }
-
-                            StaticUtils.updateStatusService(context);
-                            notifyDataSetChanged();
-                            dialogInterface.dismiss();
-                        }
-                    }).setNegativeButton(R.string.action_cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.dismiss();
-                        }
-                    }).show();
-                }
-            });
-
-            TextView notificationsView = (TextView) holder.v.findViewById(R.id.notifications);
-            notificationsView.setText(notifications ? R.string.notifications_disable : R.string.notifications_enable);
-            notificationsView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    boolean notifications = true;
-                    for (AppData app : apps) {
-                        Boolean isNotifications = app.getSpecificBooleanPreference(context, AppData.PreferenceIdentifier.NOTIFICATIONS);
-                        if (isNotifications != null && !isNotifications) {
-                            notifications = false;
-                            break;
-                        }
-                    }
-
-                    for (AppData app : apps) {
-                        app.putSpecificPreference(context, AppData.PreferenceIdentifier.NOTIFICATIONS, !notifications);
-                    }
-
-                    StaticUtils.updateStatusService(context);
-                    notifyDataSetChanged();
-                }
-            });
-
-            return;
-        } else position--;
+        } else holder.v.findViewById(R.id.help).setVisibility(View.GONE);
 
         AppData app = getApp(position);
         if (app == null) return;
-
-        iconView = holder.v.findViewById(R.id.launchIcon);
 
         ((TextView) holder.v.findViewById(R.id.appName)).setText(app.label);
         ((TextView) holder.v.findViewById(R.id.appPackage)).setText(app.packageName);
@@ -164,7 +152,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
         new Thread() {
             @Override
             public void run() {
-                AppData app = getApp(holder.getAdapterPosition() - 1);
+                AppData app = getApp(holder.getAdapterPosition());
                 if (app == null) return;
 
                 final Drawable icon;
@@ -190,7 +178,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
                 new Thread() {
                     @Override
                     public void run() {
-                        AppData app = getApp(holder.getAdapterPosition() - 1);
+                        AppData app = getApp(holder.getAdapterPosition());
                         if (app == null) return;
 
                         final int color = app.getColor(context), defaultColor = app.getDefaultColor(context);
@@ -199,7 +187,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
                         new Handler(Looper.getMainLooper()).post(new Runnable() {
                             @Override
                             public void run() {
-                                AppData app = getApp(holder.getAdapterPosition() - 1);
+                                AppData app = getApp(holder.getAdapterPosition());
                                 if (app == null) return;
 
                                 PreferenceDialog dialog = new ColorPickerDialog(context).setPresetColors(colors).setTag(app).setPreference(color).setDefaultPreference(defaultColor).setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
@@ -209,7 +197,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
                                         if (tag != null && tag instanceof AppData)
                                             ((AppData) tag).putPreference(context, AppData.PreferenceIdentifier.COLOR, preference);
 
-                                        notifyItemChanged(holder.getAdapterPosition() - 1);
+                                        notifyItemChanged(holder.getAdapterPosition());
                                     }
 
                                     @Override
@@ -229,7 +217,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
         new Thread() {
             @Override
             public void run() {
-                AppData app = getApp(holder.getAdapterPosition() - 1);
+                AppData app = getApp(holder.getAdapterPosition());
                 if (app == null) return;
 
                 final int color = app.getColor(context);
@@ -258,7 +246,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
         fullscreenSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                AppData app = getApp(holder.getAdapterPosition() - 1);
+                AppData app = getApp(holder.getAdapterPosition());
                 if (app == null) return;
 
                 app.putPreference(context, AppData.PreferenceIdentifier.FULLSCREEN, isChecked);
@@ -276,7 +264,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
         notificationSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                AppData app = getApp(holder.getAdapterPosition() - 1);
+                AppData app = getApp(holder.getAdapterPosition());
                 if (app == null) return;
 
                 app.putSpecificPreference(context, AppData.PreferenceIdentifier.NOTIFICATIONS, isChecked);
@@ -290,7 +278,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, AppSettingActivity.class);
-                intent.putExtra(AppSettingActivity.EXTRA_APP, getApp(holder.getAdapterPosition() - 1));
+                intent.putExtra(AppSettingActivity.EXTRA_APP, getApp(holder.getAdapterPosition()));
 
                 ActivityCompat.startActivity(context, intent, ActivityOptionsCompat.makeScaleUpAnimation(view, (int) view.getX(), (int) view.getY(), view.getWidth(), view.getHeight()).toBundle());
             }
