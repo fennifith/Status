@@ -4,8 +4,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
@@ -15,10 +18,10 @@ import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
+import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 
-import com.getkeepsafe.taptargetview.TapTargetView;
 import com.james.status.R;
 import com.james.status.Status;
 import com.james.status.adapters.SimplePagerAdapter;
@@ -41,7 +44,10 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private SimplePagerAdapter adapter;
+    private View bottomSheet, expand;
+    private TextView title, content;
 
+    private BottomSheetBehavior behavior;
     private MenuItem resetItem, notificationItem;
 
     @Override
@@ -60,6 +66,50 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         service = (SwitchCompat) findViewById(R.id.serviceEnabled);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
+        bottomSheet = findViewById(R.id.bottomSheet);
+        expand = findViewById(R.id.expand);
+        title = (TextView) findViewById(R.id.title);
+        content = (TextView) findViewById(R.id.content);
+
+        behavior = BottomSheetBehavior.from(bottomSheet);
+        behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                if (newState == BottomSheetBehavior.STATE_EXPANDED) {
+                    content.animate().alpha(1).start();
+                    expand.animate().alpha(0).start();
+                } else {
+                    content.animate().alpha(0).start();
+                    expand.animate().alpha(1).start();
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+            }
+        });
+
+        bottomSheet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (behavior.getState() == BottomSheetBehavior.STATE_COLLAPSED)
+                    behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                else if (behavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+                    OnTutorialClickListener listener = (OnTutorialClickListener) v.getTag();
+                    if (listener != null) listener.onClick();
+                    behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                }
+            }
+        });
+
+        expand.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            }
+        });
 
         Boolean enabled = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED);
         service.setChecked((enabled != null && enabled) || StaticUtils.isStatusServiceRunning(this));
@@ -89,73 +139,35 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         tabLayout.setupWithViewPager(viewPager);
     }
 
+    public void setTutorial(@StringRes int titleRes, @StringRes int contentRes, OnTutorialClickListener listener) {
+        title.setText(titleRes);
+        content.setText(contentRes);
+        behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        bottomSheet.setTag(listener);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
 
         if (StaticUtils.isAccessibilityGranted(this) && StaticUtils.isNotificationGranted(this) && StaticUtils.isPermissionsGranted(this) && !StaticUtils.isStatusServiceRunning(this) && StaticUtils.shouldShowTutorial(this, "enable")) {
             appbar.setExpanded(true, false);
-
-            new TapTargetView.Builder(this)
-                    .title(R.string.tutorial_enable)
-                    .description(R.string.tutorial_enable_desc)
-                    .targetCircleColor(R.color.colorAccent)
-                    .textColor(android.R.color.black)
-                    .drawShadow(false)
-                    .listener(new TapTargetView.Listener() {
-                        @Override
-                        public void onTargetClick(TapTargetView view) {
-                            service.performClick();
-                            view.dismiss(true);
-                        }
-
-                        @Override
-                        public void onTargetLongClick(TapTargetView view) {
-                        }
-                    })
-                    .cancelable(true)
-                    .showFor(service);
+            setTutorial(R.string.tutorial_enable, R.string.tutorial_enable_desc, new OnTutorialClickListener() {
+                @Override
+                public void onClick() {
+                    service.setChecked(true);
+                }
+            });
         } else if (searchView != null && StaticUtils.shouldShowTutorial(MainActivity.this, "search", 1)) {
             appbar.setExpanded(true, false);
-
-            new TapTargetView.Builder(MainActivity.this)
-                    .title(R.string.tutorial_search)
-                    .description(R.string.tutorial_search_desc)
-                    .targetCircleColor(R.color.colorAccent)
-                    .textColor(android.R.color.black)
-                    .drawShadow(false)
-                    .listener(new TapTargetView.Listener() {
-                        @Override
-                        public void onTargetClick(TapTargetView view) {
-                            view.dismiss(true);
-                        }
-
-                        @Override
-                        public void onTargetLongClick(TapTargetView view) {
-                        }
-                    })
-                    .cancelable(true)
-                    .showFor(searchView);
+            setTutorial(R.string.tutorial_search, R.string.tutorial_search_desc, null);
         } else if (tabLayout != null && viewPager != null && viewPager.getCurrentItem() != 3 && StaticUtils.shouldShowTutorial(MainActivity.this, "faqs", 2)) {
-            new TapTargetView.Builder(MainActivity.this)
-                    .title(R.string.tutorial_faq)
-                    .description(R.string.tutorial_faq_desc)
-                    .targetCircleColor(R.color.colorAccent)
-                    .textColor(android.R.color.black)
-                    .drawShadow(false)
-                    .listener(new TapTargetView.Listener() {
-                        @Override
-                        public void onTargetClick(TapTargetView view) {
-                            view.dismiss(true);
-                            viewPager.setCurrentItem(3, true);
-                        }
-
-                        @Override
-                        public void onTargetLongClick(TapTargetView view) {
-                        }
-                    })
-                    .cancelable(true)
-                    .showFor(((ViewGroup) tabLayout.getChildAt(0)).getChildAt(3));
+            setTutorial(R.string.tutorial_faq, R.string.tutorial_faq_desc, new OnTutorialClickListener() {
+                @Override
+                public void onClick() {
+                    viewPager.setCurrentItem(3);
+                }
+            });
         }
     }
 
@@ -253,5 +265,9 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    public interface OnTutorialClickListener {
+        void onClick();
     }
 }
