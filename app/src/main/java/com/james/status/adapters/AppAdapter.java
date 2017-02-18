@@ -36,14 +36,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import james.tooltips.Tooltip;
-
 public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
 
     private Context context;
     private PackageManager packageManager;
     private List<AppData> apps;
-    public Tooltip tooltip;
 
     public AppAdapter(Context context, List<AppData> apps) {
         this.context = context;

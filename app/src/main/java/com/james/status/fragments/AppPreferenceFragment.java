@@ -80,15 +80,6 @@ public class AppPreferenceFragment extends SimpleFragment {
             }
         }.start();
 
-        recycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                if (adapter != null && adapter.tooltip != null && adapter.tooltip.isShowing())
-                    adapter.tooltip.dismiss();
-            }
-        });
-
         return v;
     }
 

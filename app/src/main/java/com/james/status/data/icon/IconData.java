@@ -119,9 +119,9 @@ public abstract class IconData<T extends IconUpdateReceiver> {
 
                         ViewGroup.LayoutParams layoutParams = iconView.getLayoutParams();
                         if (layoutParams != null)
-                            layoutParams.height = (int) StaticUtils.getPixelsFromDp(getContext(), getIconScale());
+                            layoutParams.height = (int) StaticUtils.getPixelsFromDp(getIconScale());
                         else
-                            layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, (int) StaticUtils.getPixelsFromDp(getContext(), getIconScale()));
+                            layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, (int) StaticUtils.getPixelsFromDp(getIconScale()));
 
                         iconView.setLayoutParams(layoutParams);
                         iconView.setImageDrawable(drawable);
@@ -265,7 +265,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
             v = LayoutInflater.from(getContext()).inflate(getIconLayout(), null);
             v.setTag(this);
 
-            float iconPaddingDp = StaticUtils.getPixelsFromDp(getContext(), getIconPadding());
+            float iconPaddingDp = StaticUtils.getPixelsFromDp(getIconPadding());
             v.setPadding((int) iconPaddingDp, 0, (int) iconPaddingDp, 0);
 
             TextView textView = (TextView) v.findViewById(R.id.text);

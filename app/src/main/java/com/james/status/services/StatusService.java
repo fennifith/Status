@@ -303,7 +303,7 @@ public class StatusService extends Service {
 
         headsUpView = LayoutInflater.from(this).inflate(headsUpLayout, null);
 
-        ViewCompat.setElevation(headsUpView, StaticUtils.getPixelsFromDp(this, 2));
+        ViewCompat.setElevation(headsUpView, StaticUtils.getPixelsFromDp(2));
 
         headsUpView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -339,7 +339,7 @@ public class StatusService extends Service {
                         break;
                     case MotionEvent.ACTION_UP:
                     case MotionEvent.ACTION_CANCEL:
-                        if (Math.abs(event.getX() - offsetX) > StaticUtils.getPixelsFromDp(StatusService.this, 72) && headsUpView != null && headsUpView.getParent() != null)
+                        if (Math.abs(event.getX() - offsetX) > StaticUtils.getPixelsFromDp(72) && headsUpView != null && headsUpView.getParent() != null)
                             dismissHeadsUpView();
                         else if (headsUpView != null)
                             headsUpView.animate().x(0).setDuration(150).start();
@@ -347,7 +347,7 @@ public class StatusService extends Service {
                         break;
                     default:
                         if (headsUpView != null) headsUpView.setX(event.getX() - offsetX);
-                        shouldFireClickEvent = Math.abs(event.getX() - offsetX) < StaticUtils.getPixelsFromDp(StatusService.this, 8);
+                        shouldFireClickEvent = Math.abs(event.getX() - offsetX) < StaticUtils.getPixelsFromDp(8);
                 }
 
                 return false;

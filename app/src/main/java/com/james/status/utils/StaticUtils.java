@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
@@ -17,7 +18,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.util.TypedValue;
 
 import com.james.status.Status;
 import com.james.status.activities.StartActivity;
@@ -52,8 +52,12 @@ public class StaticUtils {
         else return 0;
     }
 
-    public static float getPixelsFromDp(Context context, int dp) {
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
+    public static float getPixelsFromDp(int dp) {
+        return dp * Resources.getSystem().getDisplayMetrics().density;
+    }
+
+    public static float getDpFromPixels(int px) {
+        return px / Resources.getSystem().getDisplayMetrics().density;
     }
 
     public static int getBluetoothState(Context context) {

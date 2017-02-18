@@ -255,10 +255,5 @@
             <i> - Apache 2.0</i>
             <p>\nSteppers is a view library for Android based on Material Design guidelines.</p>
         </item>
-        <item>
-            <a href="https://github.com/KeepSafe/TapTargetView">TapTargetView</a>
-            <i> - Apache 2.0</i>
-            <p>\nAn implementation of tap targets from the Material Design guidelines for feature discovery</p>
-        </item>
     </string-array>
 </resources>

@@ -34,8 +34,6 @@ import com.james.status.services.StatusService;
 import com.james.status.utils.PreferenceUtils;
 import com.james.status.utils.StaticUtils;
 
-import james.tooltips.utils.ViewUtils;
-
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
 
     private Status status;
@@ -74,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         title = (TextView) findViewById(R.id.title);
         content = (TextView) findViewById(R.id.content);
 
-        ViewCompat.setElevation(bottomSheet, ViewUtils.dpToPx(10));
+        ViewCompat.setElevation(bottomSheet, StaticUtils.getPixelsFromDp(10));
 
         behavior = BottomSheetBehavior.from(bottomSheet);
         behavior.setState(BottomSheetBehavior.STATE_HIDDEN);

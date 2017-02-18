@@ -120,11 +120,11 @@ public class PageIndicator extends View implements ViewPager.OnPageChangeListene
         private Paint unselectedPaint;
 
         public int getMeasuredHeight(int widthMeasuredSpec, int heightMeasuredSpec) {
-            return (int) StaticUtils.getPixelsFromDp(context, 8);
+            return (int) StaticUtils.getPixelsFromDp(8);
         }
 
         public int getMeasuredWidth(int widthMeasuredSpec, int heightMeasuredSpec) {
-            return (int) StaticUtils.getPixelsFromDp(context, 8 * (indicator.getTotalPages() * 2 - 1));
+            return (int) StaticUtils.getPixelsFromDp(8 * (indicator.getTotalPages() * 2 - 1));
         }
 
         public void onInitEngine(PageIndicator indicator, Context context) {
@@ -146,36 +146,36 @@ public class PageIndicator extends View implements ViewPager.OnPageChangeListene
             for (int i = 0; i < indicator.getTotalPages(); i++) {
                 float radius;
                 if (i == indicator.getActualPosition() + 1) {
-                    radius = StaticUtils.getPixelsFromDp(context, (int) (4 * (1 - indicator.getPositionOffset())));
+                    radius = StaticUtils.getPixelsFromDp((int) (4 * (1 - indicator.getPositionOffset())));
                 } else if (i == indicator.getActualPosition()) {
-                    radius = StaticUtils.getPixelsFromDp(context, (int) (4 * (indicator.getPositionOffset())));
+                    radius = StaticUtils.getPixelsFromDp((int) (4 * (indicator.getPositionOffset())));
                 } else {
-                    radius = StaticUtils.getPixelsFromDp(context, 4);
+                    radius = StaticUtils.getPixelsFromDp(4);
                 }
-                float x = StaticUtils.getPixelsFromDp(context, 4) + StaticUtils.getPixelsFromDp(context, 16 * i);
+                float x = StaticUtils.getPixelsFromDp(4) + StaticUtils.getPixelsFromDp(16 * i);
                 canvas.drawCircle(x, height / 2, radius, unselectedPaint);
             }
 
             float firstX;
             float secondX;
 
-            firstX = StaticUtils.getPixelsFromDp(context, 4 + indicator.getActualPosition() * 16);
+            firstX = StaticUtils.getPixelsFromDp(4 + indicator.getActualPosition() * 16);
 
             if (indicator.getPositionOffset() > .5f) {
-                firstX += StaticUtils.getPixelsFromDp(context, (int) (16 * (indicator.getPositionOffset() - .5f) * 2));
+                firstX += StaticUtils.getPixelsFromDp((int) (16 * (indicator.getPositionOffset() - .5f) * 2));
             }
 
-            secondX = StaticUtils.getPixelsFromDp(context, 4 + indicator.getActualPosition() * 16);
+            secondX = StaticUtils.getPixelsFromDp(4 + indicator.getActualPosition() * 16);
 
             if (indicator.getPositionOffset() < .5f) {
-                secondX += StaticUtils.getPixelsFromDp(context, (int) (16 * indicator.getPositionOffset() * 2));
+                secondX += StaticUtils.getPixelsFromDp((int) (16 * indicator.getPositionOffset() * 2));
             } else {
-                secondX += StaticUtils.getPixelsFromDp(context, 16);
+                secondX += StaticUtils.getPixelsFromDp(16);
             }
 
-            canvas.drawCircle(firstX, StaticUtils.getPixelsFromDp(context, 4), StaticUtils.getPixelsFromDp(context, 4), selectedPaint);
-            canvas.drawCircle(secondX, StaticUtils.getPixelsFromDp(context, 4), StaticUtils.getPixelsFromDp(context, 4), selectedPaint);
-            canvas.drawRect(firstX, 0, secondX, StaticUtils.getPixelsFromDp(context, 8), selectedPaint);
+            canvas.drawCircle(firstX, StaticUtils.getPixelsFromDp(4), StaticUtils.getPixelsFromDp(4), selectedPaint);
+            canvas.drawCircle(secondX, StaticUtils.getPixelsFromDp(4), StaticUtils.getPixelsFromDp(4), selectedPaint);
+            canvas.drawRect(firstX, 0, secondX, StaticUtils.getPixelsFromDp(8), selectedPaint);
         }
     }
 }
