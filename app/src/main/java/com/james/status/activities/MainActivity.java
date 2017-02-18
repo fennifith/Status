@@ -252,13 +252,15 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     @Override
     public void onPageSelected(int position) {
-        if (adapter.getItem(position) instanceof AppPreferenceFragment) {
-            resetItem.setVisible(true);
-            notificationItem.setVisible(true);
-            notificationItem.setTitle(((AppPreferenceFragment) adapter.getItem(position)).isNotifications() ? R.string.notifications_disable : R.string.notifications_enable);
-        } else {
-            resetItem.setVisible(false);
-            notificationItem.setVisible(false);
+        if (resetItem != null && notificationItem != null) {
+            if (adapter.getItem(position) instanceof AppPreferenceFragment) {
+                resetItem.setVisible(true);
+                notificationItem.setVisible(true);
+                notificationItem.setTitle(((AppPreferenceFragment) adapter.getItem(position)).isNotifications() ? R.string.notifications_disable : R.string.notifications_enable);
+            } else {
+                resetItem.setVisible(false);
+                notificationItem.setVisible(false);
+            }
         }
     }
 
