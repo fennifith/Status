@@ -11,6 +11,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -32,6 +33,8 @@ import com.james.status.fragments.IconPreferenceFragment;
 import com.james.status.services.StatusService;
 import com.james.status.utils.PreferenceUtils;
 import com.james.status.utils.StaticUtils;
+
+import james.tooltips.utils.ViewUtils;
 
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
 
@@ -70,6 +73,8 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         expand = findViewById(R.id.expand);
         title = (TextView) findViewById(R.id.title);
         content = (TextView) findViewById(R.id.content);
+
+        ViewCompat.setElevation(bottomSheet, ViewUtils.dpToPx(10));
 
         behavior = BottomSheetBehavior.from(bottomSheet);
         behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
@@ -150,24 +155,26 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     protected void onResume() {
         super.onResume();
 
-        if (StaticUtils.isAccessibilityGranted(this) && StaticUtils.isNotificationGranted(this) && StaticUtils.isPermissionsGranted(this) && !StaticUtils.isStatusServiceRunning(this) && StaticUtils.shouldShowTutorial(this, "enable")) {
-            appbar.setExpanded(true, false);
-            setTutorial(R.string.tutorial_enable, R.string.tutorial_enable_desc, new OnTutorialClickListener() {
-                @Override
-                public void onClick() {
-                    service.setChecked(true);
-                }
-            });
-        } else if (searchView != null && StaticUtils.shouldShowTutorial(MainActivity.this, "search", 1)) {
-            appbar.setExpanded(true, false);
-            setTutorial(R.string.tutorial_search, R.string.tutorial_search_desc, null);
-        } else if (tabLayout != null && viewPager != null && viewPager.getCurrentItem() != 3 && StaticUtils.shouldShowTutorial(MainActivity.this, "faqs", 2)) {
-            setTutorial(R.string.tutorial_faq, R.string.tutorial_faq_desc, new OnTutorialClickListener() {
-                @Override
-                public void onClick() {
-                    viewPager.setCurrentItem(3);
-                }
-            });
+        if (behavior.getState() == BottomSheetBehavior.STATE_HIDDEN) {
+            if (StaticUtils.isAccessibilityGranted(this) && StaticUtils.isNotificationGranted(this) && StaticUtils.isPermissionsGranted(this) && !StaticUtils.isStatusServiceRunning(this) && StaticUtils.shouldShowTutorial(this, "enable")) {
+                appbar.setExpanded(true, false);
+                setTutorial(R.string.tutorial_enable, R.string.tutorial_enable_desc, new OnTutorialClickListener() {
+                    @Override
+                    public void onClick() {
+                        service.setChecked(true);
+                    }
+                });
+            } else if (searchView != null && StaticUtils.shouldShowTutorial(MainActivity.this, "search", 1)) {
+                appbar.setExpanded(true, false);
+                setTutorial(R.string.tutorial_search, R.string.tutorial_search_desc, null);
+            } else if (tabLayout != null && viewPager != null && viewPager.getCurrentItem() != 3 && StaticUtils.shouldShowTutorial(MainActivity.this, "faqs", 2)) {
+                setTutorial(R.string.tutorial_faq, R.string.tutorial_faq_desc, new OnTutorialClickListener() {
+                    @Override
+                    public void onClick() {
+                        viewPager.setCurrentItem(3);
+                    }
+                });
+            }
         }
     }
 
@@ -260,6 +267,23 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             } else {
                 resetItem.setVisible(false);
                 notificationItem.setVisible(false);
+            }
+        }
+
+        if (behavior != null && behavior.getState() == BottomSheetBehavior.STATE_HIDDEN) {
+            switch (position) {
+                case 1:
+                    if (StaticUtils.shouldShowTutorial(this, "disableicon")) {
+                        setTutorial(R.string.tutorial_icon_switch, R.string.tutorial_icon_switch_desc, null);
+                    } else if (StaticUtils.shouldShowTutorial(this, "moveicon", 1)) {
+                        setTutorial(R.string.tutorial_icon_order, R.string.tutorial_icon_order_desc, null);
+                    }
+                    break;
+                case 2:
+                    if (StaticUtils.shouldShowTutorial(this, "activities")) {
+                        setTutorial(R.string.tutorial_activities, R.string.tutorial_activities_desc, null);
+                    }
+                    break;
             }
         }
     }

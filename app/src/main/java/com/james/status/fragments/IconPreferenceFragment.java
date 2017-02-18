@@ -9,11 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.getkeepsafe.taptargetview.TapTargetView;
 import com.james.status.R;
 import com.james.status.Status;
 import com.james.status.adapters.IconAdapter;
-import com.james.status.utils.StaticUtils;
 
 public class IconPreferenceFragment extends SimpleFragment implements Status.OnPreferenceChangedListener {
 
@@ -33,55 +31,6 @@ public class IconPreferenceFragment extends SimpleFragment implements Status.OnP
 
         adapter = new IconAdapter(getActivity());
         recycler.setAdapter(adapter);
-
-        recycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                if (adapter != null && adapter.itemView != null && adapter.itemView.getParent() != null && newState == RecyclerView.SCROLL_STATE_IDLE && isSelected) {
-                    if (StaticUtils.shouldShowTutorial(getContext(), "disableicon")) {
-                        new TapTargetView.Builder(getActivity())
-                                .title(R.string.tutorial_icon_switch)
-                                .description(R.string.tutorial_icon_switch_desc)
-                                .targetCircleColor(R.color.colorAccent)
-                                .textColor(android.R.color.black)
-                                .drawShadow(false)
-                                .listener(new TapTargetView.Listener() {
-                                    @Override
-                                    public void onTargetClick(TapTargetView view) {
-                                        view.dismiss(true);
-                                    }
-
-                                    @Override
-                                    public void onTargetLongClick(TapTargetView view) {
-                                    }
-                                })
-                                .cancelable(true)
-                                .showFor(adapter.itemView.findViewById(R.id.iconCheckBox));
-                    } else if (StaticUtils.shouldShowTutorial(getContext(), "moveicon", 1)) {
-                        View moveDown = adapter.itemView.findViewById(R.id.moveDown), moveUp = adapter.itemView.findViewById(R.id.moveUp);
-                        new TapTargetView.Builder(getActivity())
-                                .title(R.string.tutorial_icon_order)
-                                .description(R.string.tutorial_icon_order_desc)
-                                .targetCircleColor(R.color.colorAccent)
-                                .textColor(android.R.color.black)
-                                .drawShadow(false)
-                                .listener(new TapTargetView.Listener() {
-                                    @Override
-                                    public void onTargetClick(TapTargetView view) {
-                                        view.dismiss(true);
-                                    }
-
-                                    @Override
-                                    public void onTargetLongClick(TapTargetView view) {
-                                    }
-                                })
-                                .cancelable(true)
-                                .showFor(moveDown.getVisibility() == View.VISIBLE ? moveDown : moveUp);
-                    }
-                }
-            }
-        });
 
         return v;
     }

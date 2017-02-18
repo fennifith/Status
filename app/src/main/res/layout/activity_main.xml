@@ -62,7 +62,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
-        android:elevation="10dp"
         android:orientation="vertical"
         app:behavior_hideable="true"
         app:behavior_peekHeight="64dp"
@@ -77,8 +76,9 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
+                android:minHeight="40dp"
                 android:orientation="horizontal">
 
                 <com.james.status.views.SquareImageView
@@ -96,7 +96,6 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="4dp"
                     android:layout_weight="1"
-                    android:text="Hi"
                     android:textColor="?android:textColorPrimary"
                     android:textSize="18sp" />
 
@@ -116,6 +115,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
+                android:alpha="0"
                 android:textColor="?android:textColorSecondary"
                 android:textSize="14sp" />
 
