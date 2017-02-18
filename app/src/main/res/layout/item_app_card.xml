@@ -1,167 +1,158 @@
-<?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-    <LinearLayout
+    <com.james.status.views.SquareImageView
+        android:id="@+id/help"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_gravity="end"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:scaleType="centerInside"
+        android:visibility="gone"
+        app:srcCompat="@drawable/ic_help" />
+
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        tools:ignore="UselessParent">
+        android:layout_margin="4dp"
+        app:cardUseCompatPadding="true">
 
-        <com.james.status.views.SquareImageView
-            android:id="@+id/help"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:layout_gravity="end"
-            android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:scaleType="centerInside"
-            android:visibility="gone"
-            app:srcCompat="@drawable/ic_help" />
-
-        <android.support.v7.widget.CardView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            app:cardUseCompatPadding="true">
+            android:background="?attr/selectableItemBackground"
+            android:orientation="vertical"
+            android:paddingBottom="12dp">
 
             <LinearLayout
+                android:id="@+id/titleBar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:orientation="vertical"
-                android:paddingBottom="12dp">
+                android:layout_marginBottom="8dp"
+                android:gravity="center_vertical"
+                android:minHeight="72dp"
+                android:orientation="horizontal">
+
+                <com.james.status.views.SquareImageView
+                    android:id="@+id/icon"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:scaleType="fitCenter" />
 
                 <LinearLayout
-                    android:id="@+id/titleBar"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:gravity="center_vertical"
-                    android:minHeight="72dp"
-                    android:orientation="horizontal">
-
-                    <com.james.status.views.SquareImageView
-                        android:id="@+id/icon"
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp"
-                        android:scaleType="fitCenter" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:padding="4dp">
-
-                        <TextView
-                            android:id="@+id/appName"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:ellipsize="end"
-                            android:lines="1"
-                            android:maxLines="1"
-                            android:singleLine="true"
-                            android:textColor="@color/textColorPrimary"
-                            android:textSize="16sp" />
-
-                        <TextView
-                            android:id="@+id/appPackage"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:ellipsize="end"
-                            android:lines="1"
-                            android:maxLines="1"
-                            android:singleLine="true"
-                            android:textColor="@color/textColorSecondary"
-                            android:textSize="14sp" />
-
-                    </LinearLayout>
-
-                    <com.james.status.views.CustomImageView
-                        android:id="@+id/launchIcon"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp"
-                        app:srcCompat="@drawable/ic_launch" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/color"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:background="?attr/selectableItemBackground"
-                    android:orientation="horizontal">
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:padding="4dp">
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:id="@+id/appName"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
                         android:ellipsize="end"
                         android:lines="1"
                         android:maxLines="1"
-                        android:paddingLeft="12dp"
-                        android:paddingRight="12dp"
                         android:singleLine="true"
-                        android:text="@string/preference_status_color"
-                        android:textColor="?android:textColorPrimary"
+                        android:textColor="@color/textColorPrimary"
                         android:textSize="16sp" />
 
-                    <com.james.status.views.CircleImageView
-                        android:id="@+id/colorView"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="12dp"
-                        android:layout_marginRight="12dp"
-                        android:src="@android:color/black" />
+                    <TextView
+                        android:id="@+id/appPackage"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textColor="@color/textColorSecondary"
+                        android:textSize="14sp" />
 
                 </LinearLayout>
 
-                <android.support.v7.widget.SwitchCompat
-                    android:id="@+id/fullscreenSwitch"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:ellipsize="end"
-                    android:gravity="center_vertical|start"
-                    android:lines="1"
-                    android:maxLines="1"
-                    android:paddingLeft="12dp"
-                    android:paddingRight="12dp"
-                    android:singleLine="true"
-                    android:text="@string/preference_fullscreen"
-                    android:textColor="?android:textColorPrimary"
-                    android:textSize="16sp" />
-
-                <android.support.v7.widget.SwitchCompat
-                    android:id="@+id/notificationSwitch"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:ellipsize="end"
-                    android:gravity="center_vertical|start"
-                    android:lines="1"
-                    android:maxLines="1"
-                    android:paddingLeft="12dp"
-                    android:paddingRight="12dp"
-                    android:singleLine="true"
-                    android:text="@string/preference_notifications"
-                    android:textColor="?android:textColorPrimary"
-                    android:textSize="16sp" />
+                <com.james.status.views.CustomImageView
+                    android:id="@+id/launchIcon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    app:srcCompat="@drawable/ic_launch" />
 
             </LinearLayout>
 
-        </android.support.v7.widget.CardView>
+            <LinearLayout
+                android:id="@+id/color"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="?attr/selectableItemBackground"
+                android:orientation="horizontal">
 
-    </LinearLayout>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp"
+                    android:singleLine="true"
+                    android:text="@string/preference_status_color"
+                    android:textColor="?android:textColorPrimary"
+                    android:textSize="16sp" />
 
-</FrameLayout>
+                <com.james.status.views.CircleImageView
+                    android:id="@+id/colorView"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    android:src="@android:color/black" />
+
+            </LinearLayout>
+
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/fullscreenSwitch"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:ellipsize="end"
+                android:gravity="center_vertical|start"
+                android:lines="1"
+                android:maxLines="1"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:singleLine="true"
+                android:text="@string/preference_fullscreen"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="16sp" />
+
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/notificationSwitch"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:ellipsize="end"
+                android:gravity="center_vertical|start"
+                android:lines="1"
+                android:maxLines="1"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:singleLine="true"
+                android:text="@string/preference_notifications"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

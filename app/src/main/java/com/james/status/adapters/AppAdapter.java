@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
@@ -18,7 +17,6 @@ import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -73,30 +71,6 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        if (position == 0) {
-            View help = holder.v.findViewById(R.id.help);
-            help.setVisibility(View.VISIBLE);
-            help.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (tooltip != null && tooltip.isShowing()) {
-                        tooltip.dismiss();
-                    } else {
-                        if (tooltip == null) {
-                            Point size = new Point();
-                            ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getSize(size);
-
-                            tooltip = new Tooltip((ViewGroup) holder.v)
-                                    .setText(context.getString(R.string.tutorial_activities_desc))
-                                    .setPosition(Tooltip.Position.LEFT)
-                                    .setMaximumWidth(size.x / 2);
-                        }
-                        tooltip.showFor(v);
-                    }
-                }
-            });
-        } else holder.v.findViewById(R.id.help).setVisibility(View.GONE);
-
         AppData app = getApp(position);
         if (app == null) return;
 
