@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 import com.james.status.R;
 import com.james.status.data.IconStyleData;
 import com.james.status.data.icon.IconData;
-import com.james.status.dialogs.IconStyleDialog;
+import com.james.status.dialogs.IconCreatorDialog;
 import com.james.status.views.CustomImageView;
 
 import java.util.List;
@@ -80,7 +80,7 @@ public class IconStyleAdapter extends RecyclerView.Adapter<IconStyleAdapter.View
                     if (styles.size() > 0) setIconStyle(styles.get(0));
                     else notifyDataSetChanged();
 
-                    new IconStyleDialog(context, style, icon.getStringArrayPreference(IconData.PreferenceIdentifier.ICON_STYLE_NAMES)).setListener(new IconStyleDialog.OnIconStyleListener() {
+                    new IconCreatorDialog(context, style, icon.getStringArrayPreference(IconData.PreferenceIdentifier.ICON_STYLE_NAMES)).setListener(new IconCreatorDialog.OnIconStyleListener() {
                         @Override
                         public void onIconStyle(IconStyleData style) {
                             icon.addIconStyle(style);

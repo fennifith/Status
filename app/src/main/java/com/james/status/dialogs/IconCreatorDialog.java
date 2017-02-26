@@ -22,7 +22,7 @@ import com.james.status.Status;
 import com.james.status.activities.ImagePickerActivity;
 import com.james.status.data.IconStyleData;
 
-public class IconStyleDialog extends AppCompatDialog {
+public class IconCreatorDialog extends AppCompatDialog {
 
     private Status status;
     private OnIconStyleListener listener;
@@ -34,7 +34,7 @@ public class IconStyleDialog extends AppCompatDialog {
 
     private EditText editText;
 
-    public IconStyleDialog(Context context, int size, String[] names) {
+    public IconCreatorDialog(Context context, int size, String[] names) {
         super(context, R.style.AppTheme_Dialog);
         setTitle(R.string.action_edit_style);
 
@@ -46,7 +46,7 @@ public class IconStyleDialog extends AppCompatDialog {
         paths = new String[size];
     }
 
-    public IconStyleDialog(Context context, IconStyleData style, String[] names) {
+    public IconCreatorDialog(Context context, IconStyleData style, String[] names) {
         super(context, R.style.AppTheme_Dialog);
         setTitle(R.string.action_edit_style);
 
@@ -62,7 +62,7 @@ public class IconStyleDialog extends AppCompatDialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.dialog_icon_style);
+        setContentView(R.layout.dialog_icon_creator);
 
         editText = (EditText) findViewById(R.id.name);
         if (name != null) editText.setText(name);
@@ -89,7 +89,7 @@ public class IconStyleDialog extends AppCompatDialog {
 
         LinearLayout layout = (LinearLayout) findViewById(R.id.layout);
         for (int i = 0; i < size; i++) {
-            final View v = LayoutInflater.from(getContext()).inflate(R.layout.item_icon_picker, null);
+            final View v = LayoutInflater.from(getContext()).inflate(R.layout.item_icon_create, null);
             ((TextView) v.findViewById(R.id.number)).setText(String.valueOf(i + 1));
             if (paths[i] != null) {
                 Drawable drawable = null;
@@ -184,7 +184,7 @@ public class IconStyleDialog extends AppCompatDialog {
         });
     }
 
-    public IconStyleDialog setListener(OnIconStyleListener listener) {
+    public IconCreatorDialog setListener(OnIconStyleListener listener) {
         this.listener = listener;
         return this;
     }

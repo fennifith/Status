@@ -18,8 +18,8 @@
         android:id="@+id/image"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:scaleType="center"
-        android:src="@color/textColorSecondary"
+        android:tint="@android:color/black"
+        android:scaleType="centerInside"
         android:layout_gravity="center_vertical" />
 
 </LinearLayout>
