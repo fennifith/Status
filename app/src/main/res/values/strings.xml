@@ -255,5 +255,10 @@
             <i> - Apache 2.0</i>
             <p>\nSteppers is a view library for Android based on Material Design guidelines.</p>
         </item>
+        <item>
+            <a href="https://github.com/codekidX/storage-chooser">Storage Chooser</a>
+            <i> - MPL 2.0</i>
+            <p>\nLets users choose between internal or external storage with just few lines of code.</p>
+        </item>
     </string-array>
 </resources>

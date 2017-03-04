@@ -30,5 +30,6 @@ dependencies {
 
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'me.drozdzynski.library.steppers:steppers:0.3.3-SNAPSHOT'
+    compile 'com.github.codekidX:storage-chooser:1.0.31'
     compile 'james.signalstrengths:signalstrengths:0.0.4'
 }
