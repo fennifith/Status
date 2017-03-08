@@ -49,8 +49,13 @@ public class PreferenceData<T> implements View.OnClickListener {
 
             if (title != null)
                 title.setText(identifier.getTitle());
-            if (subtitle != null)
-                subtitle.setText(identifier.getSubtitle());
+            if (subtitle != null) {
+                String text = identifier.getSubtitle();
+                if (text.length() > 0) {
+                    subtitle.setVisibility(View.VISIBLE);
+                    subtitle.setText(text);
+                } else subtitle.setVisibility(View.GONE);
+            }
         }
 
         holder.v.setOnClickListener(this);

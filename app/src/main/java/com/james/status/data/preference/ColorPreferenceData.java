@@ -7,7 +7,6 @@ import android.support.annotation.ColorInt;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.james.status.R;
 import com.james.status.dialogs.ColorPickerDialog;
@@ -36,37 +35,31 @@ public class ColorPreferenceData extends PreferenceData<Integer> {
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        TextView title = (TextView) holder.v.findViewById(R.id.title);
-        CustomImageView color = (CustomImageView) holder.v.findViewById(R.id.color);
-
-        title.setText(getIdentifier().getTitle());
-        color.setImageDrawable(new ColorDrawable(value));
-
-        holder.v.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Dialog dialog = new ColorPickerDialog(getContext()).setPreference(value).setDefaultPreference(defaultValue).setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
-                    @Override
-                    public void onPreference(PreferenceDialog dialog, Integer color) {
-                        value = color;
-                        ((CustomImageView) holder.v.findViewById(R.id.color)).transition(new ColorDrawable(color));
-
-                        PreferenceUtils.PreferenceIdentifier identifier = getIdentifier().getPreference();
-                        if (identifier != null)
-                            PreferenceUtils.putPreference(getContext(), getIdentifier().getPreference(), color);
-                        onPreferenceChange(color);
-                    }
-
-                    @Override
-                    public void onCancel(PreferenceDialog dialog) {
-                    }
-                });
-
-                dialog.setTitle(getIdentifier().getTitle());
-
-                dialog.show();
-            }
-        });
+        super.onBindViewHolder(holder, position);
+        ((CustomImageView) holder.v.findViewById(R.id.color)).setImageDrawable(new ColorDrawable(value));
     }
 
+    @Override
+    public void onClick(final View v) {
+        Dialog dialog = new ColorPickerDialog(getContext()).setPreference(value).setDefaultPreference(defaultValue).setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
+            @Override
+            public void onPreference(PreferenceDialog dialog, Integer color) {
+                value = color;
+                ((CustomImageView) v.findViewById(R.id.color)).transition(new ColorDrawable(color));
+
+                PreferenceUtils.PreferenceIdentifier identifier = getIdentifier().getPreference();
+                if (identifier != null)
+                    PreferenceUtils.putPreference(getContext(), getIdentifier().getPreference(), color);
+                onPreferenceChange(color);
+            }
+
+            @Override
+            public void onCancel(PreferenceDialog dialog) {
+            }
+        });
+
+        dialog.setTitle(getIdentifier().getTitle());
+
+        dialog.show();
+    }
 }

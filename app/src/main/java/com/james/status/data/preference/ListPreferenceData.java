@@ -6,12 +6,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.james.status.R;
 import com.james.status.utils.PreferenceUtils;
 
 import java.util.ArrayList;
@@ -42,58 +38,51 @@ public class ListPreferenceData extends PreferenceData<Integer> {
     }
 
     @Override
-    public ViewHolder getViewHolder(LayoutInflater inflater, ViewGroup parent) {
-        return new ViewHolder(inflater.inflate(R.layout.item_preference_text, parent, false));
+    public void onBindViewHolder(final ViewHolder holder, int position) {
+        super.onBindViewHolder(holder, position);
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
-        ((TextView) holder.v.findViewById(R.id.title)).setText(getIdentifier().getTitle());
+    public void onClick(View v) {
+        selectedPreference = getListPreference(preference);
+        if (selectedPreference == null) return;
 
-        holder.v.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                selectedPreference = getListPreference(preference);
-                if (selectedPreference == null) return;
+        CharSequence[] array = new CharSequence[items.size()];
+        for (int i = 0; i < items.size(); i++) {
+            array[i] = items.get(i).name;
+        }
 
-                CharSequence[] array = new CharSequence[items.size()];
-                for (int i = 0; i < items.size(); i++) {
-                    array[i] = items.get(i).name;
-                }
+        new AlertDialog.Builder(getContext())
+                .setTitle(getIdentifier().getTitle())
+                .setSingleChoiceItems(array, items.indexOf(selectedPreference), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        selectedPreference = items.get(which);
+                    }
+                })
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (selectedPreference != null) {
+                            ListPreferenceData.this.preference = selectedPreference.id;
 
-                new AlertDialog.Builder(getContext())
-                        .setTitle(getIdentifier().getTitle())
-                        .setSingleChoiceItems(array, items.indexOf(selectedPreference), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                selectedPreference = items.get(which);
-                            }
-                        })
-                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                if (selectedPreference != null) {
-                                    ListPreferenceData.this.preference = selectedPreference.id;
+                            PreferenceUtils.PreferenceIdentifier identifier = getIdentifier().getPreference();
+                            if (identifier != null)
+                                PreferenceUtils.putPreference(getContext(), identifier, selectedPreference.id);
 
-                                    PreferenceUtils.PreferenceIdentifier identifier = getIdentifier().getPreference();
-                                    if (identifier != null)
-                                        PreferenceUtils.putPreference(getContext(), identifier, selectedPreference.id);
-
-                                    onPreferenceChange(selectedPreference.id);
-                                    selectedPreference = null;
-                                }
-                            }
-                        })
-                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                selectedPreference = null;
-                            }
-                        })
-                        .create()
-                        .show();
-            }
-        });
+                            onPreferenceChange(selectedPreference.id);
+                            selectedPreference = null;
+                        }
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        selectedPreference = null;
+                    }
+                })
+                .create()
+                .show();
     }
 
     @Nullable

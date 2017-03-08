@@ -5,7 +5,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.james.status.R;
 import com.james.status.data.IconStyleData;
@@ -34,34 +33,28 @@ public class IconPreferenceData extends PreferenceData<IconStyleData> {
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        TextView title = (TextView) holder.v.findViewById(R.id.title);
-        IconStyleImageView icon = (IconStyleImageView) holder.v.findViewById(R.id.icon);
+        super.onBindViewHolder(holder, position);
+        ((IconStyleImageView) holder.v.findViewById(R.id.icon)).setIconStyle(iconStyle);
+    }
 
-        title.setText(getIdentifier().getTitle());
-
-        icon.setIconStyle(iconStyle);
-
-        holder.v.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(final View v) {
+        Dialog dialog = new IconPickerDialog(getContext(), iconData).setPreference(iconStyle).setListener(new PreferenceDialog.OnPreferenceListener<IconStyleData>() {
             @Override
-            public void onClick(View view) {
-                Dialog dialog = new IconPickerDialog(getContext(), iconData).setPreference(iconStyle).setListener(new PreferenceDialog.OnPreferenceListener<IconStyleData>() {
-                    @Override
-                    public void onPreference(PreferenceDialog dialog, IconStyleData preference) {
-                        if (preference != null) {
-                            ((IconStyleImageView) holder.v.findViewById(R.id.icon)).setIconStyle(preference);
+            public void onPreference(PreferenceDialog dialog, IconStyleData preference) {
+                if (preference != null) {
+                    ((IconStyleImageView) v.findViewById(R.id.icon)).setIconStyle(preference);
 
-                            IconPreferenceData.this.iconStyle = preference;
-                            onPreferenceChange(preference);
-                        }
-                    }
+                    IconPreferenceData.this.iconStyle = preference;
+                    onPreferenceChange(preference);
+                }
+            }
 
-                    @Override
-                    public void onCancel(PreferenceDialog dialog) {
-                    }
-                });
-                dialog.setTitle(getIdentifier().getTitle());
-                dialog.show();
+            @Override
+            public void onCancel(PreferenceDialog dialog) {
             }
         });
+        dialog.setTitle(getIdentifier().getTitle());
+        dialog.show();
     }
 }

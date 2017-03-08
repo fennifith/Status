@@ -3,10 +3,8 @@ package com.james.status.data.preference;
 import android.content.Context;
 import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
-import android.widget.TextView;
 
 import com.james.status.R;
 import com.james.status.utils.PreferenceUtils;
@@ -30,12 +28,10 @@ public class BooleanPreferenceData extends PreferenceData<Boolean> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Identifier identifier = getIdentifier();
+        super.onBindViewHolder(holder, position);
 
         SwitchCompat titleView = (SwitchCompat) holder.v.findViewById(R.id.title);
-        TextView subtitleView = (TextView) holder.v.findViewById(R.id.subtitle);
 
-        titleView.setText(identifier.getTitle());
         titleView.setOnCheckedChangeListener(null);
         titleView.setChecked(value);
         titleView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -49,9 +45,5 @@ public class BooleanPreferenceData extends PreferenceData<Boolean> {
                 onPreferenceChange(b);
             }
         });
-
-        String subtitle = identifier.getSubtitle();
-        if (subtitle.length() > 0) subtitleView.setText(subtitle);
-        else subtitleView.setVisibility(View.GONE);
     }
 }
