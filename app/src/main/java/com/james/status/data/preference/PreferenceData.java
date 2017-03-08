@@ -1,15 +1,18 @@
 package com.james.status.data.preference;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.james.status.R;
 import com.james.status.utils.PreferenceUtils;
 
-public class PreferenceData<T> {
+public class PreferenceData<T> implements View.OnClickListener {
 
     private final Context context;
     private final Identifier identifier;
@@ -36,14 +39,29 @@ public class PreferenceData<T> {
     }
 
     public ViewHolder getViewHolder(LayoutInflater inflater, ViewGroup parent) {
-        return null;
+        return new ViewHolder(inflater.inflate(R.layout.item_preference_text, parent, false));
     }
 
     public void onBindViewHolder(ViewHolder holder, int position) {
+        if (identifier != null) {
+            TextView title = (TextView) holder.v.findViewById(R.id.title);
+            TextView subtitle = (TextView) holder.v.findViewById(R.id.subtitle);
+
+            if (title != null)
+                title.setText(identifier.getTitle());
+            if (subtitle != null)
+                subtitle.setText(identifier.getSubtitle());
+        }
+
+        holder.v.setOnClickListener(this);
     }
 
     public void onPreferenceChange(T preference) {
         if (listener != null) listener.onPreferenceChange(preference);
+    }
+
+    @Override
+    public void onClick(View v) {
     }
 
     public interface OnPreferenceChangeListener<T> {
@@ -75,6 +93,22 @@ public class PreferenceData<T> {
             this.subtitle = subtitle;
         }
 
+        public Identifier(@Nullable String title, SectionIdentifier sectionIdentifier) {
+            this.title = title;
+            this.sectionIdentifier = sectionIdentifier;
+        }
+
+        public Identifier(@Nullable String title, @Nullable String subtitle, SectionIdentifier sectionIdentifier) {
+            this.title = title;
+            this.subtitle = subtitle;
+            this.sectionIdentifier = sectionIdentifier;
+        }
+
+        public Identifier(PreferenceUtils.PreferenceIdentifier identifier, @Nullable String title, @Nullable String subtitle) {
+            this.title = title;
+            this.subtitle = subtitle;
+        }
+
         public Identifier(PreferenceUtils.PreferenceIdentifier identifier, @Nullable String title, SectionIdentifier sectionIdentifier) {
             this.identifier = identifier;
             this.title = title;
@@ -88,20 +122,24 @@ public class PreferenceData<T> {
             this.sectionIdentifier = sectionIdentifier;
         }
 
+        @NonNull
         public String getTitle() {
             if (title != null) return title;
             else return "";
         }
 
+        @NonNull
         public String getSubtitle() {
             if (subtitle != null) return subtitle;
             else return "";
         }
 
+        @Nullable
         public PreferenceUtils.PreferenceIdentifier getPreference() {
             return identifier;
         }
 
+        @Nullable
         public SectionIdentifier getSection() {
             return sectionIdentifier;
         }

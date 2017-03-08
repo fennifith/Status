@@ -24,6 +24,7 @@ import com.james.status.services.StatusService;
 import com.james.status.utils.PreferenceUtils;
 import com.james.status.utils.StaticUtils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -191,6 +192,19 @@ public class GeneralPreferenceFragment extends SimpleFragment implements Prefere
                                 StatusService.HEADSUP_LAYOUT_TRANSPARENT
                         )
                 ),
+                new PreferenceData<Serializable>(
+                        getContext(),
+                        new PreferenceData.Identifier(
+                                "Backup/Restore Settings",
+                                "Allows you to backup or restore all the settings in Status as a text file.",
+                                PreferenceData.Identifier.SectionIdentifier.OTHER
+                        )
+                ) {
+                    @Override
+                    public void onClick(View v) {
+                        //TODO: show dialog
+                    }
+                },
                 new BooleanPreferenceData(
                         getContext(),
                         new PreferenceData.Identifier(
