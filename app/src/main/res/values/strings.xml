@@ -210,8 +210,8 @@
         HH - Hours (24h)\n
         kk - Hours (24h)\n
         mm - Minutes\n
-        a - AM/PM
-        Z - Time Zone
+        a - AM/PM\n
+        Z - Time Zone\n
         \n
         dd - Day of Month\n
         EEE - Day of Week\n
