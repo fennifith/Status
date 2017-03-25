@@ -5,8 +5,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Handler;
-import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -18,6 +17,10 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.afollestad.async.Action;
+import com.afollestad.async.Async;
+import com.afollestad.async.Done;
+import com.afollestad.async.Result;
 import com.james.status.R;
 import com.james.status.data.AppData;
 import com.james.status.dialogs.ColorPickerDialog;
@@ -54,91 +57,154 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
 
         ((CustomImageView) holder.v.findViewById(R.id.icon)).setImageDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        new Thread() {
+        new Action<Drawable>() {
+            @NonNull
             @Override
-            public void run() {
-                AppData.ActivityData activity = getActivity(holder.getAdapterPosition());
-                if (activity == null) return;
+            public String id() {
+                return "appIcon";
+            }
 
-                final Drawable icon;
-                try {
-                    icon = context.getPackageManager().getApplicationIcon(activity.packageName);
-                } catch (PackageManager.NameNotFoundException e) {
-                    return;
+            @Nullable
+            @Override
+            protected Drawable run() throws InterruptedException {
+                AppData.ActivityData activity = getActivity(holder.getAdapterPosition());
+                if (activity != null) {
+                    try {
+                        return context.getPackageManager().getApplicationIcon(activity.packageName);
+                    } catch (PackageManager.NameNotFoundException ignored) {
+                    }
                 }
 
-                new Handler(context.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (icon != null)
-                            ((CustomImageView) holder.v.findViewById(R.id.icon)).setImageDrawable(icon);
-                    }
-                });
+                return null;
             }
-        }.start();
+
+            @Override
+            protected void done(@Nullable Drawable result) {
+                if (result != null)
+                    ((CustomImageView) holder.v.findViewById(R.id.icon)).setImageDrawable(result);
+            }
+        }.execute();
 
         holder.v.findViewById(R.id.color).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new Thread() {
+                Async.parallel(
+                        new Action<Integer>() {
+                            @NonNull
+                            @Override
+                            public String id() {
+                                return "color";
+                            }
+
+                            @Nullable
+                            @Override
+                            protected Integer run() throws InterruptedException {
+                                AppData.ActivityData activity = getActivity(holder.getAdapterPosition());
+                                if (activity != null)
+                                    return activity.getColor(context);
+                                else return null;
+                            }
+                        },
+                        new Action<Integer>() {
+                            @NonNull
+                            @Override
+                            public String id() {
+                                return "defaultColor";
+                            }
+
+                            @Nullable
+                            @Override
+                            protected Integer run() throws InterruptedException {
+                                AppData.ActivityData activity = getActivity(holder.getAdapterPosition());
+                                if (activity != null)
+                                    return activity.getDefaultColor(context);
+                                else return null;
+                            }
+                        },
+                        new Action<List<Integer>>() {
+                            @NonNull
+                            @Override
+                            public String id() {
+                                return "colors";
+                            }
+
+                            @Nullable
+                            @Override
+                            protected List<Integer> run() throws InterruptedException {
+                                AppData.ActivityData activity = getActivity(holder.getAdapterPosition());
+                                if (activity != null)
+                                    return ColorUtils.getColors(context, activity.packageName);
+                                else return null;
+                            }
+                        }
+                ).done(new Done() {
                     @Override
-                    public void run() {
+                    public void result(@NonNull Result result) {
+                        Action colorAction = result.get("color");
+                        Action defaultColorAction = result.get("defaultColor");
+                        Action colorsAction = result.get("colors");
+
                         AppData.ActivityData activity = getActivity(holder.getAdapterPosition());
                         if (activity == null) return;
 
-                        final int color = activity.getColor(context), defaultColor = activity.getDefaultColor(context);
-                        final List<Integer> colors = ColorUtils.getColors(context, activity.packageName);
+                        ColorPickerDialog dialog = new ColorPickerDialog(context);
+                        if (colorsAction != null && colorsAction.getResult() != null)
+                            dialog.setPresetColors((List<Integer>) colorsAction.getResult());
+                        if (colorAction != null && colorAction.getResult() != null)
+                            dialog.setPreference((Integer) colorAction.getResult());
+                        if (defaultColorAction != null && defaultColorAction.getResult() != null)
+                            dialog.setDefaultPreference((Integer) defaultColorAction.getResult());
 
-                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        dialog.setTag(activity);
+                        dialog.setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
                             @Override
-                            public void run() {
-                                AppData.ActivityData activity = getActivity(holder.getAdapterPosition());
-                                if (activity == null) return;
+                            public void onPreference(PreferenceDialog dialog, Integer preference) {
+                                Object tag = dialog.getTag();
+                                if (tag != null && tag instanceof AppData.ActivityData)
+                                    ((AppData.ActivityData) tag).putPreference(context, AppData.PreferenceIdentifier.COLOR, preference);
 
-                                PreferenceDialog dialog = new ColorPickerDialog(context).setPresetColors(colors).setTag(activity).setPreference(color).setDefaultPreference(defaultColor).setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
-                                    @Override
-                                    public void onPreference(PreferenceDialog dialog, Integer preference) {
-                                        Object tag = dialog.getTag();
-                                        if (tag != null && tag instanceof AppData.ActivityData)
-                                            ((AppData.ActivityData) tag).putPreference(context, AppData.PreferenceIdentifier.COLOR, preference);
+                                notifyItemChanged(holder.getAdapterPosition());
+                            }
 
-                                        notifyItemChanged(holder.getAdapterPosition());
-                                    }
-
-                                    @Override
-                                    public void onCancel(PreferenceDialog dialog) {
-                                    }
-                                });
-
-                                dialog.setTitle(activity.label);
-                                dialog.show();
+                            @Override
+                            public void onCancel(PreferenceDialog dialog) {
                             }
                         });
-                    }
-                }.start();
-            }
-        });
 
-        new Thread() {
-            @Override
-            public void run() {
-                AppData.ActivityData activity = getActivity(holder.getAdapterPosition());
-                if (activity == null) return;
-
-                final int color = activity.getColor(context);
-
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        ((ImageView) holder.v.findViewById(R.id.colorView)).setImageDrawable(new ColorDrawable(color));
-
-                        holder.v.findViewById(R.id.titleBar).setBackgroundColor(color);
-                        ((TextView) holder.v.findViewById(R.id.appName)).setTextColor(ContextCompat.getColor(context, ColorUtils.isColorDark(color) ? R.color.textColorPrimaryInverse : R.color.textColorPrimary));
-                        ((TextView) holder.v.findViewById(R.id.appPackage)).setTextColor(ContextCompat.getColor(context, ColorUtils.isColorDark(color) ? R.color.textColorSecondaryInverse : R.color.textColorSecondary));
+                        dialog.setTitle(activity.label);
+                        dialog.show();
                     }
                 });
             }
-        }.start();
+        });
+
+        new Action<Integer>() {
+            @NonNull
+            @Override
+            public String id() {
+                return "color";
+            }
+
+            @Nullable
+            @Override
+            protected Integer run() throws InterruptedException {
+                AppData.ActivityData activity = getActivity(holder.getAdapterPosition());
+                if (activity != null)
+                    return activity.getColor(context);
+                else return null;
+            }
+
+            @Override
+            protected void done(@Nullable Integer result) {
+                if (result != null) {
+                    ((ImageView) holder.v.findViewById(R.id.colorView)).setImageDrawable(new ColorDrawable(result));
+
+                    holder.v.findViewById(R.id.titleBar).setBackgroundColor(result);
+                    ((TextView) holder.v.findViewById(R.id.appName)).setTextColor(ContextCompat.getColor(context, ColorUtils.isColorDark(result) ? R.color.textColorPrimaryInverse : R.color.textColorPrimary));
+                    ((TextView) holder.v.findViewById(R.id.appPackage)).setTextColor(ContextCompat.getColor(context, ColorUtils.isColorDark(result) ? R.color.textColorSecondaryInverse : R.color.textColorSecondary));
+                }
+            }
+        }.execute();
 
         SwitchCompat fullscreenSwitch = (SwitchCompat) holder.v.findViewById(R.id.fullscreenSwitch);
         fullscreenSwitch.setOnCheckedChangeListener(null);
