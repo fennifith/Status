@@ -33,11 +33,10 @@ public class LicenseAdapter extends RecyclerView.Adapter<LicenseAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.v.findViewById(R.id.title).setVisibility(View.GONE);
+        holder.title.setVisibility(View.GONE);
 
-        TextView textView = (TextView) holder.v.findViewById(R.id.subtitle);
-        textView.setText(licenses.get(position));
-        textView.setMovementMethod(new LinkMovementMethod());
+        holder.subtitle.setText(licenses.get(position));
+        holder.subtitle.setMovementMethod(new LinkMovementMethod());
 
         holder.v.setAlpha(0);
         holder.v.animate().alpha(1).setDuration(500).start();
@@ -49,11 +48,15 @@ public class LicenseAdapter extends RecyclerView.Adapter<LicenseAdapter.ViewHold
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+
         View v;
+        TextView title, subtitle;
 
         public ViewHolder(View v) {
             super(v);
             this.v = v;
+            title = (TextView) v.findViewById(R.id.title);
+            subtitle = (TextView) v.findViewById(R.id.subtitle);
         }
     }
 }

@@ -44,16 +44,13 @@ public class PreferenceSectionAdapter extends RecyclerView.Adapter<PreferenceSec
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        TextView title = (TextView) holder.v.findViewById(R.id.title);
-        RecyclerView recycler = (RecyclerView) holder.v.findViewById(R.id.recycler);
-
-        title.setText(sections.get(position).name().replace('_', ' '));
+        holder.title.setText(sections.get(position).name().replace('_', ' '));
 
         ArrayList<PreferenceData> items = getItems(sections.get(position));
 
-        recycler.setNestedScrollingEnabled(false);
-        recycler.setLayoutManager(new GridLayoutManager(context, 1));
-        recycler.setAdapter(new PreferenceAdapter(context, items));
+        holder.recycler.setNestedScrollingEnabled(false);
+        holder.recycler.setLayoutManager(new GridLayoutManager(context, 1));
+        holder.recycler.setAdapter(new PreferenceAdapter(context, items));
 
         if (items.size() > 0) holder.v.setVisibility(View.VISIBLE);
         else holder.v.setVisibility(View.GONE);
@@ -76,11 +73,16 @@ public class PreferenceSectionAdapter extends RecyclerView.Adapter<PreferenceSec
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+
         View v;
+        TextView title;
+        RecyclerView recycler;
 
         public ViewHolder(View v) {
             super(v);
             this.v = v;
+            title = (TextView) v.findViewById(R.id.title);
+            recycler = (RecyclerView) v.findViewById(R.id.recycler);
         }
     }
 

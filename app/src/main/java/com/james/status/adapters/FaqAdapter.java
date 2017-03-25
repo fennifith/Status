@@ -45,8 +45,8 @@ public class FaqAdapter extends RecyclerView.Adapter<FaqAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        ((TextView) holder.v.findViewById(R.id.title)).setText(faqs.get(position).name);
-        ((TextView) holder.v.findViewById(R.id.subtitle)).setText(faqs.get(position).content);
+        holder.title.setText(faqs.get(position).name);
+        holder.subtitle.setText(faqs.get(position).content);
 
         holder.v.setAlpha(0);
         holder.v.animate().alpha(1).setDuration(500).start();
@@ -73,11 +73,15 @@ public class FaqAdapter extends RecyclerView.Adapter<FaqAdapter.ViewHolder> {
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+
         View v;
+        TextView title, subtitle;
 
         public ViewHolder(View v) {
             super(v);
             this.v = v;
+            title = (TextView) v.findViewById(R.id.title);
+            subtitle = (TextView) v.findViewById(R.id.subtitle);
         }
     }
 }

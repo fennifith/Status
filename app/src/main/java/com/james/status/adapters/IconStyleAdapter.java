@@ -46,29 +46,26 @@ public class IconStyleAdapter extends RecyclerView.Adapter<IconStyleAdapter.View
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        AppCompatRadioButton button = (AppCompatRadioButton) holder.v.findViewById(R.id.radio);
         IconStyleData style = styles.get(position);
 
-        button.setText(style.name);
-        button.setChecked(style.equals(this.style));
+        holder.button.setText(style.name);
+        holder.button.setChecked(style.equals(this.style));
 
-        LinearLayout layout = (LinearLayout) holder.v.findViewById(R.id.icons);
-        layout.removeAllViewsInLayout();
+        holder.layout.removeAllViewsInLayout();
 
         for (int i = 0; i < style.getSize(); i++) {
-            View view = LayoutInflater.from(context).inflate(R.layout.item_icon, layout, false);
+            View view = LayoutInflater.from(context).inflate(R.layout.item_icon, holder.layout, false);
             ((CustomImageView) view.findViewById(R.id.icon)).setImageDrawable(style.getDrawable(context, i), Color.BLACK);
 
-            layout.addView(view);
+            holder.layout.addView(view);
         }
 
-        if (layout.getChildCount() < 1) layout.setVisibility(View.GONE);
+        if (holder.layout.getChildCount() < 1)
+            holder.layout.setVisibility(View.GONE);
 
         if (style.type == IconStyleData.TYPE_FILE) {
-            View edit = holder.v.findViewById(R.id.edit);
-            edit.setVisibility(View.VISIBLE);
-
-            edit.setOnClickListener(new View.OnClickListener() {
+            holder.edit.setVisibility(View.VISIBLE);
+            holder.edit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     int position = holder.getAdapterPosition();
@@ -90,7 +87,7 @@ public class IconStyleAdapter extends RecyclerView.Adapter<IconStyleAdapter.View
                     }).show();
                 }
             });
-        } else holder.v.findViewById(R.id.edit).setVisibility(View.GONE);
+        } else holder.edit.setVisibility(View.GONE);
 
         holder.v.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,11 +112,16 @@ public class IconStyleAdapter extends RecyclerView.Adapter<IconStyleAdapter.View
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        View v;
+        View v, edit;
+        AppCompatRadioButton button;
+        LinearLayout layout;
 
         public ViewHolder(View v) {
             super(v);
             this.v = v;
+            edit = v.findViewById(R.id.edit);
+            button = (AppCompatRadioButton) v.findViewById(R.id.radio);
+            layout = (LinearLayout) v.findViewById(R.id.icons);
         }
     }
 

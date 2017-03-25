@@ -44,15 +44,13 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
 
         icon.putPreference(IconData.PreferenceIdentifier.POSITION, position);
 
-        final AppCompatCheckBox checkBox = (AppCompatCheckBox) holder.v.findViewById(R.id.iconCheckBox);
-        checkBox.setText(icon.getTitle());
-
-        checkBox.setOnCheckedChangeListener(null);
+        holder.checkBox.setText(icon.getTitle());
+        holder.checkBox.setOnCheckedChangeListener(null);
 
         boolean isVisible = icon.isVisible();
-        checkBox.setChecked(isVisible);
+        holder.checkBox.setChecked(isVisible);
 
-        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 IconData icon = getIcon(holder.getAdapterPosition());
@@ -65,9 +63,8 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
             }
         });
 
-        View moveUp = holder.v.findViewById(R.id.moveUp);
-        moveUp.setVisibility(isVisible && position > 0 && filter == null ? View.VISIBLE : View.GONE);
-        moveUp.setOnClickListener(new View.OnClickListener() {
+        holder.moveUp.setVisibility(isVisible && position > 0 && filter == null ? View.VISIBLE : View.GONE);
+        holder.moveUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 IconData icon = getIcon(holder.getAdapterPosition());
@@ -84,9 +81,8 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
             }
         });
 
-        View moveDown = holder.v.findViewById(R.id.moveDown);
-        moveDown.setVisibility(isVisible && position < icons.size() - 1 && filter == null ? View.VISIBLE : View.GONE);
-        moveDown.setOnClickListener(new View.OnClickListener() {
+        holder.moveDown.setVisibility(isVisible && position < icons.size() - 1 && filter == null ? View.VISIBLE : View.GONE);
+        holder.moveDown.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 IconData icon = getIcon(holder.getAdapterPosition());
@@ -157,10 +153,15 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         View v;
+        AppCompatCheckBox checkBox;
+        View moveUp, moveDown;
 
         public ViewHolder(View v) {
             super(v);
             this.v = v;
+            checkBox = (AppCompatCheckBox) v.findViewById(R.id.iconCheckBox);
+            moveUp = v.findViewById(R.id.moveUp);
+            moveDown = v.findViewById(R.id.moveDown);
         }
     }
 }
