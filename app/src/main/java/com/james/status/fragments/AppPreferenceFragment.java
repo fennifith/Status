@@ -6,7 +6,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import com.afollestad.async.Action;
 import com.james.status.R;
 import com.james.status.adapters.AppAdapter;
 import com.james.status.data.AppData;
@@ -50,9 +51,16 @@ public class AppPreferenceFragment extends SimpleFragment {
         apps = new ArrayList<>();
         packageManager = getContext().getPackageManager();
 
-        new Thread() {
+        new Action<List<AppData>>() {
+            @NonNull
             @Override
-            public void run() {
+            public String id() {
+                return "apps";
+            }
+
+            @Nullable
+            @Override
+            protected List<AppData> run() throws InterruptedException {
                 for (ApplicationInfo applicationInfo : packageManager.getInstalledApplications(PackageManager.GET_META_DATA)) {
                     PackageInfo packageInfo;
 
@@ -66,19 +74,18 @@ public class AppPreferenceFragment extends SimpleFragment {
                         apps.add(new AppData(packageManager, applicationInfo, packageInfo));
                 }
 
-                Context context = getContext();
-                if (context != null) {
-                    new Handler(context.getMainLooper()).post(new Runnable() {
-                        @Override
-                        public void run() {
-                            adapter = new AppAdapter(getActivity(), apps);
-                            recycler.setAdapter(adapter);
-                            progressBar.setVisibility(View.GONE);
-                        }
-                    });
+                return apps;
+            }
+
+            @Override
+            protected void done(@Nullable List<AppData> result) {
+                if (result != null) {
+                    adapter = new AppAdapter(getActivity(), result);
+                    recycler.setAdapter(adapter);
+                    progressBar.setVisibility(View.GONE);
                 }
             }
-        }.start();
+        }.execute();
 
         return v;
     }
