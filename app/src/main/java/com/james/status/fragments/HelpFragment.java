@@ -4,8 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,7 +13,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import com.afollestad.async.Action;
 import com.james.status.R;
 import com.james.status.adapters.FaqAdapter;
 import com.james.status.data.FaqData;
@@ -51,9 +52,16 @@ public class HelpFragment extends SimpleFragment {
         recycler.setNestedScrollingEnabled(false);
         faqs = new ArrayList<>();
 
-        new Thread() {
+        new Action<String>() {
+            @NonNull
             @Override
-            public void run() {
+            public String id() {
+                return "faqs";
+            }
+
+            @Nullable
+            @Override
+            protected String run() throws InterruptedException {
                 try {
                     URL url = new URL(FAQ_URL);
                     HttpURLConnection request = (HttpURLConnection) url.openConnection();
@@ -81,20 +89,24 @@ public class HelpFragment extends SimpleFragment {
                     reader.close();
                 } catch (Exception e) {
                     e.printStackTrace();
+                    return e.getMessage();
                 }
 
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        progressBar.setVisibility(View.GONE);
-                        if (faqs.size() > 0) {
-                            adapter = new FaqAdapter(getContext(), faqs);
-                            recycler.setAdapter(adapter);
-                        } else emptyView.setVisibility(View.VISIBLE);
-                    }
-                });
+                return null;
             }
-        }.start();
+
+            @Override
+            protected void done(@Nullable String result) {
+                if (result != null)
+                    Toast.makeText(getContext(), result, Toast.LENGTH_SHORT).show();
+
+                progressBar.setVisibility(View.GONE);
+                if (faqs.size() > 0) {
+                    adapter = new FaqAdapter(getContext(), faqs);
+                    recycler.setAdapter(adapter);
+                } else emptyView.setVisibility(View.VISIBLE);
+            }
+        }.execute();
 
         v.findViewById(R.id.community).setOnClickListener(new View.OnClickListener() {
             @Override
