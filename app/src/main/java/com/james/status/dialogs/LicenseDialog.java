@@ -20,7 +20,7 @@ public class LicenseDialog extends AppCompatDialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.dialog_licenses);
+        setContentView(R.layout.dialog_recycler);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
