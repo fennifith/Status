@@ -267,9 +267,14 @@
             <p>\nSteppers is a view library for Android based on Material Design guidelines.</p>
         </item>
         <item>
-            <a href="https://github.com/codekidX/storage-chooser">Storage Chooser</a>
-            <i> - MPL 2.0</i>
-            <p>\nLets users choose between internal or external storage with just few lines of code.</p>
+            <a href="https://github.com/afollestad/async">Async</a>
+            <i> - Apache 2.0</i>
+            <p>\nA library designed to make the organized execution of async processes in Android easy.</p>
+        </item>
+        <item>
+            <a href="https://github.com/google/gson">Gson</a>
+            <i> - Apache 2.0</i>
+            <p>\nGson is a Java library that can be used to convert Java Objects into their JSON representation.</p>
         </item>
     </string-array>
 </resources>
