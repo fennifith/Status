@@ -33,4 +33,6 @@ dependencies {
     compile 'com.github.codekidX:storage-chooser:1.0.31'
     compile 'james.signalstrengths:signalstrengths:0.0.4'
     compile 'com.afollestad:async:0.2.3'
+    compile 'com.google.code.gson:gson:2.7'
+
 }

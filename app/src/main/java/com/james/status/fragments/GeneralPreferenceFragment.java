@@ -19,6 +19,7 @@ import com.james.status.data.preference.ColorPreferenceData;
 import com.james.status.data.preference.IntegerPreferenceData;
 import com.james.status.data.preference.ListPreferenceData;
 import com.james.status.data.preference.PreferenceData;
+import com.james.status.dialogs.BackupDialog;
 import com.james.status.services.AccessibilityService;
 import com.james.status.services.StatusService;
 import com.james.status.utils.PreferenceUtils;
@@ -195,14 +196,14 @@ public class GeneralPreferenceFragment extends SimpleFragment implements Prefere
                 new PreferenceData<Serializable>(
                         getContext(),
                         new PreferenceData.Identifier(
-                                "Backup/Restore Settings",
-                                "Allows you to backup or restore all the settings in Status as a text file.",
+                                getString(R.string.preference_backups),
+                                getString(R.string.preference_backups_desc),
                                 PreferenceData.Identifier.SectionIdentifier.OTHER
                         )
                 ) {
                     @Override
                     public void onClick(View v) {
-                        //TODO: show dialog
+                        new BackupDialog(getContext()).show();
                     }
                 },
                 new BooleanPreferenceData(

@@ -40,7 +40,7 @@ public class FaqAdapter extends RecyclerView.Adapter<FaqAdapter.ViewHolder> {
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_faq, parent, false));
+        return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_text, parent, false));
     }
 
     @Override

@@ -29,15 +29,22 @@
     <string name="action_delete">Delete</string>
     <string name="action_edit_style">Edit Icon Style</string>
     <string name="action_policy">Privacy Policy</string>
+    <string name="action_new_backup">New Backup</string>
+    <string name="action_save">Save</string>
+    <string name="action_delete_backup">Delete this Backup</string>
+    <string name="action_restore_backup">Restore from this Backup</string>
+    <string name="action_save_backup">Overwrite backup</string>
+    <string name="action_create_backup">Create Backup</string>
 
     <string name="reset_all">Reset All</string>
     <string name="notifications_disable">Disable All Notifications</string>
     <string name="notifications_enable">Enable All Notifications</string>
 
     <string name="prompt_name">Type a name here…</string>
+    <string name="prompt_backup_name">Backup Name</string>
 
     <string name="error_no_text_name">Please type a name…</string>
-    <string name="error_name_exists">A style with this name already exists.</string>
+    <string name="error_name_exists">An item with this name already exists.</string>
     <string name="error_missing_icons">You are missing one or more required icons.</string>
 
     <string name="service_name">Status Service</string>
@@ -131,6 +138,8 @@
     <string name="preference_status_color">Primary Color</string>
     <string name="preference_fullscreen">Hide Status</string>
     <string name="preference_notifications">Notifications</string>
+    <string name="preference_backups">Backup/Restore Settings</string>
+    <string name="preference_backups_desc">Allows you to backup or restore all the settings in Status as a text file.</string>
 
     <string name="icon_notifications">Notifications</string>
     <string name="icon_clock">Clock</string>
@@ -163,6 +172,8 @@
     <string name="unit_dp">dp</string>
     <string name="unit_sp">sp</string>
     <string name="unit_seconds">" seconds"</string>
+    <string name="unit_mb">%1$f Mb</string>
+    <string name="unit_kb">%1$f Kb</string>
 
     <string name="icon_style_android">Android</string>
     <string name="icon_style_default">Default</string>

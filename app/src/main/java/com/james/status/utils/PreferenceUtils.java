@@ -5,9 +5,19 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 
+import com.google.gson.Gson;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Map;
+import java.util.Set;
+
 public class PreferenceUtils {
 
     public enum PreferenceIdentifier {
+        PREF_NAME,
         STATUS_ENABLED,
         STATUS_NOTIFICATIONS_COMPAT,
         STATUS_NOTIFICATIONS_HEADS_UP,
@@ -132,5 +142,76 @@ public class PreferenceUtils {
 
     public static void putPreference(Context context, PreferenceIdentifier identifier, long object) {
         PreferenceManager.getDefaultSharedPreferences(context).edit().putLong(identifier.toString(), object).apply();
+    }
+
+    public static boolean toFile(Context context, File file) {
+        Map<String, ?> prefs = PreferenceManager.getDefaultSharedPreferences(context).getAll();
+
+        FileOutputStream stream = null;
+        try {
+            stream = new FileOutputStream(file);
+            stream.write(new Gson().toJson(prefs).getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (stream != null) {
+            try {
+                stream.close();
+            } catch (IOException ignored) {
+            }
+        }
+
+        return file.exists();
+    }
+
+    public static boolean fromFile(Context context, File file) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        byte[] bytes = new byte[(int) file.length()];
+
+        FileInputStream stream = null;
+        try {
+            stream = new FileInputStream(file);
+            stream.read(bytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (stream != null) {
+            try {
+                stream.close();
+            } catch (IOException ignored) {
+            }
+        }
+
+        String contents = new String(bytes);
+        SharedPreferences.Editor editor = prefs.edit();
+        try {
+            Map<String, ?> map = new Gson().fromJson(contents, Map.class);
+            for (String key : map.keySet()) {
+                Object value = map.get(key);
+                if (value instanceof Boolean)
+                    editor.putBoolean(key, (Boolean) value);
+                else if (value instanceof Float)
+                    editor.putFloat(key, (Float) value);
+                else if (value instanceof Integer)
+                    editor.putInt(key, (Integer) value);
+                else if (value instanceof Long)
+                    editor.putLong(key, (Long) value);
+                else if (value instanceof String)
+                    editor.putString(key, (String) value);
+                else if (value instanceof Set)
+                    editor.putStringSet(key, (Set) value);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return editor.commit();
+    }
+
+    public static String getBackupsDir(Context context) {
+        return context.getApplicationInfo().dataDir + "/backups";
     }
 }
