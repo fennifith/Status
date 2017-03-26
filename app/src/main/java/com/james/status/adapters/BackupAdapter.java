@@ -32,36 +32,23 @@ public class BackupAdapter extends RecyclerView.Adapter<BackupAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        if (position < files.size()) {
-            File file = files.get(position);
-            holder.title.setText(file.getName().substring(0, file.getName().length() - 4));
-            holder.subtitle.setVisibility(View.GONE);
+        File file = files.get(position);
+        holder.title.setText(file.getName().substring(0, file.getName().length() - 4));
+        holder.subtitle.setVisibility(View.GONE);
 
-            holder.v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    BackupCreatorDialog dialog = new BackupCreatorDialog(context, files, files.get(holder.getAdapterPosition()));
-                    dialog.setListener(listener);
-                    dialog.show();
-                }
-            });
-        } else {
-            holder.title.setText(R.string.action_new_backup);
-            holder.subtitle.setVisibility(View.GONE);
-            holder.v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    BackupCreatorDialog dialog = new BackupCreatorDialog(context, files, null);
-                    dialog.setListener(listener);
-                    dialog.show();
-                }
-            });
-        }
+        holder.v.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BackupCreatorDialog dialog = new BackupCreatorDialog(context, files, files.get(holder.getAdapterPosition()));
+                dialog.setListener(listener);
+                dialog.show();
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        return files.size() + 1;
+        return files.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

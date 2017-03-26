@@ -34,11 +34,20 @@ public class BackupDialog extends AppCompatDialog implements BackupCreatorDialog
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.dialog_recycler);
+        setContentView(R.layout.dialog_backup);
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
         recyclerView.setAdapter(new BackupAdapter(getContext(), files, this));
+
+        findViewById(R.id.newBackup).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BackupCreatorDialog dialog = new BackupCreatorDialog(getContext(), files, null);
+                dialog.setListener(BackupDialog.this);
+                dialog.show();
+            }
+        });
 
         findViewById(R.id.dismiss).setOnClickListener(new View.OnClickListener() {
             @Override
