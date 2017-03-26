@@ -10,28 +10,28 @@
         android:orientation="horizontal">
 
         <TextView
+            android:id="@+id/title"
             android:layout_width="0dp"
             android:layout_height="52dp"
             android:layout_weight="1"
+            android:ellipsize="end"
             android:gravity="center_vertical|start"
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp"
-            android:textColor="?android:textColorPrimary"
-            android:textSize="16sp"
-            android:id="@+id/title"
-            android:singleLine="true"
             android:lines="1"
             android:maxLines="1"
-            android:ellipsize="end" />
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:singleLine="true"
+            android:textColor="?android:textColorPrimary"
+            android:textSize="16sp" />
 
         <com.james.status.views.CircleImageView
+            android:id="@+id/color"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_gravity="center_vertical|end"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
-            android:src="@android:color/black"
-            android:id="@+id/color" />
+            android:src="@android:color/black" />
 
     </LinearLayout>
 

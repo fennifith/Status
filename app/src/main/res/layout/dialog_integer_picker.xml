@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minWidth="300dp"
-    android:minHeight="300dp">
+    android:minHeight="300dp"
+    android:minWidth="300dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,11 +13,11 @@
         android:orientation="vertical">
 
         <FrameLayout
+            android:id="@+id/scaleUp"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:id="@+id/scaleUp">
+            android:background="?attr/selectableItemBackgroundBorderless">
 
             <com.james.status.views.CustomImageView
                 android:layout_width="24dp"
@@ -30,35 +30,35 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:layout_weight="1.2"
             android:layout_gravity="center_horizontal"
+            android:layout_weight="1.2"
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/scale"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:textSize="20sp"
                 android:textColor="@color/textColorPrimary"
-                android:id="@+id/scale" />
+                android:textSize="20sp" />
 
             <TextView
+                android:id="@+id/unit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:textSize="14sp"
-                android:textStyle="bold"
                 android:textColor="@color/textColorSecondary"
-                android:id="@+id/unit" />
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
         <FrameLayout
+            android:id="@+id/scaleDown"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:id="@+id/scaleDown">
+            android:background="?attr/selectableItemBackgroundBorderless">
 
             <com.james.status.views.CustomImageView
                 android:layout_width="24dp"
@@ -73,38 +73,38 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_gravity="bottom|end"
         android:gravity="end"
+        android:orientation="horizontal"
         android:padding="16dp">
 
         <TextView
+            android:id="@+id/cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAllCaps="true"
-            android:textSize="16sp"
-            android:text="@string/action_cancel"
-            android:textColor="@color/colorAccent"
             android:background="?attr/selectableItemBackground"
-            android:id="@+id/cancel"
+            android:paddingBottom="8dp"
             android:paddingLeft="12dp"
             android:paddingRight="12dp"
             android:paddingTop="8dp"
-            android:paddingBottom="8dp" />
+            android:text="@string/action_cancel"
+            android:textAllCaps="true"
+            android:textColor="@color/colorAccent"
+            android:textSize="16sp" />
 
         <TextView
+            android:id="@+id/confirm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAllCaps="true"
-            android:textSize="16sp"
-            android:text="@string/action_ok"
-            android:textColor="@color/colorAccent"
             android:background="?attr/selectableItemBackground"
-            android:id="@+id/confirm"
+            android:paddingBottom="8dp"
             android:paddingLeft="12dp"
             android:paddingRight="12dp"
             android:paddingTop="8dp"
-            android:paddingBottom="8dp" />
+            android:text="@string/action_ok"
+            android:textAllCaps="true"
+            android:textColor="@color/colorAccent"
+            android:textSize="16sp" />
 
     </LinearLayout>
 

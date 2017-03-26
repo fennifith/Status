@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:id="@+id/toolbar" />
+            android:layout_height="?attr/actionBarSize" />
 
     </android.support.design.widget.AppBarLayout>
 
@@ -23,79 +23,79 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="12dp"
+            android:orientation="vertical"
             android:paddingBottom="12dp"
-            android:orientation="vertical">
+            android:paddingTop="12dp">
 
             <LinearLayout
+                android:id="@+id/color"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:background="?attr/selectableItemBackground"
-                android:orientation="horizontal"
-                android:id="@+id/color">
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="center_vertical"
-                    android:paddingLeft="12dp"
-                    android:paddingRight="12dp"
-                    android:text="@string/preference_status_color"
-                    android:textColor="?android:textColorPrimary"
-                    android:textSize="16sp"
-                    android:singleLine="true"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
                     android:lines="1"
                     android:maxLines="1"
-                    android:ellipsize="end" />
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp"
+                    android:singleLine="true"
+                    android:text="@string/preference_status_color"
+                    android:textColor="?android:textColorPrimary"
+                    android:textSize="16sp" />
 
                 <com.james.status.views.CircleImageView
+                    android:id="@+id/colorView"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_gravity="center_vertical|end"
                     android:layout_marginLeft="12dp"
                     android:layout_marginRight="12dp"
-                    android:src="@android:color/black"
-                    android:id="@+id/colorView" />
+                    android:src="@android:color/black" />
 
             </LinearLayout>
 
             <android.support.v7.widget.SwitchCompat
+                android:id="@+id/fullscreenSwitch"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
+                android:ellipsize="end"
                 android:gravity="center_vertical|start"
+                android:lines="1"
+                android:maxLines="1"
                 android:paddingLeft="12dp"
                 android:paddingRight="12dp"
+                android:singleLine="true"
                 android:text="@string/preference_fullscreen"
                 android:textColor="?android:textColorPrimary"
-                android:textSize="16sp"
-                android:singleLine="true"
-                android:lines="1"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:id="@+id/fullscreenSwitch" />
+                android:textSize="16sp" />
 
             <android.support.v7.widget.SwitchCompat
+                android:id="@+id/notificationSwitch"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
+                android:ellipsize="end"
                 android:gravity="center_vertical|start"
-                android:paddingLeft="12dp"
-                android:paddingRight="12dp"
-                android:text="@string/preference_notifications"
-                android:textColor="?android:textColorPrimary"
-                android:textSize="16sp"
-                android:singleLine="true"
                 android:lines="1"
                 android:maxLines="1"
-                android:ellipsize="end"
-                android:id="@+id/notificationSwitch" />
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:singleLine="true"
+                android:text="@string/preference_notifications"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="16sp" />
 
             <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clipToPadding="false"
-                android:padding="4dp"
-                android:id="@+id/recycler" />
+                android:padding="4dp" />
 
         </LinearLayout>
 

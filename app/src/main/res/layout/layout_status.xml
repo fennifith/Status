@@ -5,41 +5,41 @@
     android:gravity="top">
 
     <LinearLayout
+        android:id="@+id/status"
         android:layout_width="match_parent"
         android:layout_height="25dp"
-        android:orientation="horizontal"
-        android:background="@android:color/black"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:gravity="center_vertical"
         android:layout_gravity="top"
-        android:id="@+id/status">
+        android:background="@android:color/black"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp">
 
         <LinearLayout
+            android:id="@+id/notificationIcons"
             android:layout_width="0dp"
             android:layout_height="24dp"
-            android:layout_weight="1"
-            android:orientation="horizontal"
             android:layout_gravity="center_vertical"
+            android:layout_weight="1"
             android:gravity="center_vertical|start"
-            android:id="@+id/notificationIcons" />
+            android:orientation="horizontal" />
 
         <LinearLayout
+            android:id="@+id/statusCenterIcons"
             android:layout_width="wrap_content"
             android:layout_height="24dp"
-            android:orientation="horizontal"
             android:layout_gravity="center_vertical"
             android:gravity="center"
-            android:id="@+id/statusCenterIcons" />
+            android:orientation="horizontal" />
 
         <LinearLayout
+            android:id="@+id/statusIcons"
             android:layout_width="0dp"
             android:layout_height="24dp"
-            android:layout_weight="1"
-            android:orientation="horizontal"
             android:layout_gravity="center_vertical"
+            android:layout_weight="1"
             android:gravity="center_vertical|end"
-            android:id="@+id/statusIcons" />
+            android:orientation="horizontal" />
 
     </LinearLayout>
 

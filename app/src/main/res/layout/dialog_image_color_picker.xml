@@ -4,51 +4,51 @@
     android:layout_height="match_parent">
 
     <com.james.status.views.ColorPickerImageView
+        android:id="@+id/image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scaleType="fitXY"
-        android:adjustViewBounds="true"
-        android:layout_marginTop="16dp"
         android:layout_marginBottom="64dp"
-        android:src="@android:color/black"
-        android:id="@+id/image"
-        android:minWidth="300dp" />
+        android:layout_marginTop="16dp"
+        android:adjustViewBounds="true"
+        android:minWidth="300dp"
+        android:scaleType="fitXY"
+        android:src="@android:color/black" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_gravity="bottom|end"
         android:gravity="end"
+        android:orientation="horizontal"
         android:padding="16dp">
 
         <TextView
+            android:id="@+id/cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAllCaps="true"
-            android:textSize="16sp"
-            android:text="@string/action_cancel"
-            android:textColor="@color/colorAccent"
             android:background="?attr/selectableItemBackground"
-            android:id="@+id/cancel"
+            android:paddingBottom="8dp"
             android:paddingLeft="12dp"
             android:paddingRight="12dp"
             android:paddingTop="8dp"
-            android:paddingBottom="8dp" />
+            android:text="@string/action_cancel"
+            android:textAllCaps="true"
+            android:textColor="@color/colorAccent"
+            android:textSize="16sp" />
 
         <TextView
+            android:id="@+id/confirm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAllCaps="true"
-            android:textSize="16sp"
-            android:text="@string/action_ok"
-            android:textColor="@color/colorAccent"
             android:background="?attr/selectableItemBackground"
-            android:id="@+id/confirm"
+            android:paddingBottom="8dp"
             android:paddingLeft="12dp"
             android:paddingRight="12dp"
             android:paddingTop="8dp"
-            android:paddingBottom="8dp" />
+            android:text="@string/action_ok"
+            android:textAllCaps="true"
+            android:textColor="@color/colorAccent"
+            android:textSize="16sp" />
 
     </LinearLayout>
 

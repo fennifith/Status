@@ -5,26 +5,26 @@
     android:layout_height="match_parent">
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
         android:padding="4dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:id="@+id/recycler" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <ProgressBar
+        android:id="@+id/progressBar"
         style="@style/Base.Widget.AppCompat.ProgressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:indeterminate="true"
         android:layout_gravity="center"
-        android:id="@+id/progressBar" />
+        android:indeterminate="true" />
 
     <LinearLayout
+        android:id="@+id/empty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:id="@+id/empty"
         android:orientation="vertical"
         android:visibility="gone">
 
@@ -32,11 +32,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:layout_margin="8dp"
             android:rotation="90"
             android:text=":P"
             android:textColor="@color/textColorPrimary"
-            android:textSize="40sp"
-            android:layout_margin="8dp" />
+            android:textSize="40sp" />
 
         <TextView
             android:layout_width="wrap_content"

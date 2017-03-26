@@ -2,24 +2,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="42dp"
-    android:padding="8dp"
+    android:background="?attr/selectableItemBackground"
     android:orientation="horizontal"
-    android:background="?attr/selectableItemBackground">
+    android:padding="8dp">
 
     <TextView
         android:id="@+id/number"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:textColor="@color/textColorPrimary"
-        android:gravity="center_vertical" />
+        android:gravity="center_vertical"
+        android:textColor="@color/textColorPrimary" />
 
     <com.james.status.views.SquareImageView
         android:id="@+id/image"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:tint="@android:color/black"
+        android:layout_gravity="center_vertical"
         android:scaleType="centerInside"
-        android:layout_gravity="center_vertical" />
+        android:tint="@android:color/black" />
 
 </LinearLayout>

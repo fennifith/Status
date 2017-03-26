@@ -8,21 +8,21 @@
     android:paddingRight="2dp">
 
     <TextView
+        android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center_vertical"
-        android:textSize="14sp"
         android:textColor="@android:color/white"
-        android:id="@+id/text" />
+        android:textSize="14sp" />
 
     <com.james.status.views.CustomImageView
+        android:id="@+id/icon"
         android:layout_width="18dp"
         android:layout_height="24dp"
         android:layout_gravity="center_vertical"
-        android:tint="@android:color/white"
-        android:tintMode="src_in"
+        android:layout_margin="1dp"
         android:scaleType="centerInside"
-        android:id="@+id/icon"
-        android:layout_margin="1dp" />
+        android:tint="@android:color/white"
+        android:tintMode="src_in" />
 
 </LinearLayout>

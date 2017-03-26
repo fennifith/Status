@@ -13,18 +13,18 @@
         android:paddingTop="16dp">
 
         <android.support.v7.widget.SwitchCompat
+            android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/title"
-            android:textSize="16sp"
-            android:textColor="?android:textColorPrimary" />
+            android:textColor="?android:textColorPrimary"
+            android:textSize="16sp" />
 
         <TextView
+            android:id="@+id/subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/subtitle"
-            android:textSize="14sp"
-            android:textColor="?android:textColorSecondary" />
+            android:textColor="?android:textColorSecondary"
+            android:textSize="14sp" />
 
     </LinearLayout>
 

@@ -3,29 +3,29 @@
     android:layout_width="wrap_content"
     android:layout_height="32dp"
     android:gravity="center_vertical"
+    android:orientation="horizontal"
     android:paddingLeft="4dp"
-    android:paddingRight="4dp"
-    android:orientation="horizontal">
+    android:paddingRight="4dp">
 
     <com.james.status.views.SquareImageView
+        android:id="@+id/icon"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
-        android:tint="@color/textColorPrimary"
-        android:id="@+id/icon" />
+        android:tint="@color/textColorPrimary" />
 
     <TextView
+        android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
-        android:textSize="14sp"
-        android:textColor="@color/textColorPrimary"
-        android:textAllCaps="true"
-        android:singleLine="true"
         android:lines="1"
         android:maxLines="1"
-        android:id="@+id/title" />
+        android:singleLine="true"
+        android:textAllCaps="true"
+        android:textColor="@color/textColorPrimary"
+        android:textSize="14sp" />
 
 </LinearLayout>

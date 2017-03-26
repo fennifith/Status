@@ -15,31 +15,31 @@
             android:orientation="vertical">
 
             <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clipToPadding="false"
-                android:padding="4dp"
-                android:id="@+id/recycler" />
+                android:padding="4dp" />
 
             <LinearLayout
+                android:id="@+id/community"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:background="?attr/selectableItemBackground"
+                android:gravity="center"
                 android:orientation="horizontal"
                 android:paddingBottom="16dp"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
-                android:paddingTop="16dp"
-                android:background="?attr/selectableItemBackground"
-                android:gravity="center"
-                android:id="@+id/community">
+                android:paddingTop="16dp">
 
                 <com.james.status.views.SquareImageView
                     android:layout_width="24dp"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_people"
                     android:tint="@color/colorAccent"
-                    android:tintMode="src_in" />
+                    android:tintMode="src_in"
+                    app:srcCompat="@drawable/ic_people" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -50,9 +50,9 @@
                     android:paddingTop="16dp"
                     android:text="@string/action_community"
                     android:textAllCaps="true"
-                    android:textStyle="bold"
                     android:textColor="@color/colorAccent"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
@@ -61,18 +61,18 @@
     </android.support.v4.widget.NestedScrollView>
 
     <ProgressBar
+        android:id="@+id/progressBar"
         style="@style/Base.Widget.AppCompat.ProgressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:indeterminate="true"
         android:layout_gravity="center"
-        android:id="@+id/progressBar" />
+        android:indeterminate="true" />
 
     <LinearLayout
+        android:id="@+id/empty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:id="@+id/empty"
         android:orientation="vertical"
         android:visibility="gone">
 
@@ -80,11 +80,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:layout_margin="8dp"
             android:rotation="90"
             android:text=":P"
             android:textColor="@color/textColorPrimary"
-            android:textSize="40sp"
-            android:layout_margin="8dp" />
+            android:textSize="40sp" />
 
         <TextView
             android:layout_width="wrap_content"

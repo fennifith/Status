@@ -18,11 +18,11 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="58dp"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
                 android:background="@color/colorAccent"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp">
 
                 <android.support.v7.widget.AppCompatCheckBox
                     android:id="@+id/iconCheckBox"

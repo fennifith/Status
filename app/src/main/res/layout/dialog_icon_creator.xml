@@ -2,18 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:minWidth="300dp"
     android:minHeight="400dp"
+    android:minWidth="300dp"
     android:orientation="vertical">
 
     <android.support.v7.widget.AppCompatEditText
         android:id="@+id/name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginBottom="16dp"
         android:layout_marginLeft="24dp"
         android:layout_marginRight="24dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginTop="24dp"
         android:hint="@string/prompt_name" />
 
     <ScrollView
@@ -25,47 +25,47 @@
             android:id="@+id/layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:orientation="vertical" />
+            android:paddingRight="16dp" />
 
     </ScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_gravity="bottom|end"
         android:gravity="end"
+        android:orientation="horizontal"
         android:padding="16dp">
 
         <TextView
+            android:id="@+id/cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAllCaps="true"
-            android:textSize="16sp"
-            android:text="@string/action_delete"
-            android:textColor="@color/colorAccent"
             android:background="?attr/selectableItemBackground"
-            android:id="@+id/cancel"
+            android:paddingBottom="8dp"
             android:paddingLeft="12dp"
             android:paddingRight="12dp"
             android:paddingTop="8dp"
-            android:paddingBottom="8dp" />
+            android:text="@string/action_delete"
+            android:textAllCaps="true"
+            android:textColor="@color/colorAccent"
+            android:textSize="16sp" />
 
         <TextView
+            android:id="@+id/confirm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAllCaps="true"
-            android:textSize="16sp"
-            android:text="@string/action_ok"
-            android:textColor="@color/colorAccent"
             android:background="?attr/selectableItemBackground"
-            android:id="@+id/confirm"
+            android:paddingBottom="8dp"
             android:paddingLeft="12dp"
             android:paddingRight="12dp"
             android:paddingTop="8dp"
-            android:paddingBottom="8dp" />
+            android:text="@string/action_ok"
+            android:textAllCaps="true"
+            android:textColor="@color/colorAccent"
+            android:textSize="16sp" />
 
     </LinearLayout>
 
