@@ -19,6 +19,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.util.ArrayMap;
 import android.support.v4.view.ViewCompat;
 import android.view.Gravity;
@@ -34,6 +35,7 @@ import android.widget.TextView;
 
 import com.james.status.BuildConfig;
 import com.james.status.R;
+import com.james.status.activities.MainActivity;
 import com.james.status.data.ActionData;
 import com.james.status.data.NotificationData;
 import com.james.status.data.icon.AirplaneModeIconData;
@@ -76,6 +78,8 @@ public class StatusService extends Service {
     public static final int HEADSUP_LAYOUT_CARD = 1;
     public static final int HEADSUP_LAYOUT_CONDENSED = 2;
     public static final int HEADSUP_LAYOUT_TRANSPARENT = 3;
+
+    private static final int ID_FOREGROUND = 682;
 
     private StatusView statusView;
     private View fullscreenView;
@@ -155,6 +159,16 @@ public class StatusService extends Service {
         switch (action) {
             case ACTION_START:
                 setUp();
+
+                Boolean isForeground = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_PERSISTENT_NOTIFICATION);
+                if (isForeground == null || isForeground) {
+                    startForeground(ID_FOREGROUND, new NotificationCompat.Builder(this)
+                            .setSmallIcon(R.drawable.transparent)
+                            .setContentTitle(getString(R.string.app_name))
+                            .setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class), 0))
+                            .build()
+                    );
+                } else stopForeground(true);
                 break;
             case ACTION_STOP:
                 windowManager.removeView(statusView);

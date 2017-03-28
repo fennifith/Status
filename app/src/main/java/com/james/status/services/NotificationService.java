@@ -94,11 +94,11 @@ public class NotificationService extends NotificationListenerService {
             isEnabled = app.getSpecificBooleanPreference(this, AppData.PreferenceIdentifier.NOTIFICATIONS);
         if (isEnabled == null) isEnabled = true;
 
-        if (enabled != null && enabled && isEnabled && !StaticUtils.shouldUseCompatNotifications(this)) {
+        if (enabled != null && enabled && isEnabled && !StaticUtils.shouldUseCompatNotifications(this) && !sbn.getPackageName().matches("com.james.status")) {
             NotificationData notification = new NotificationData(sbn, getKey(sbn));
 
             if (notification.shouldShowHeadsUp(this)) {
-                if (!sbn.getPackageName().matches("com.james.status") && sbn.getId() != BLANK_NOTIFICATION) {
+                if (sbn.getId() != BLANK_NOTIFICATION) {
                     notificationManager.notify(BLANK_NOTIFICATION, new Notification.Builder(this)
                             .setContentTitle("").setContentText("")
                             .setSmallIcon(R.drawable.transparent)
@@ -142,6 +142,9 @@ public class NotificationService extends NotificationListenerService {
             Collections.reverse(notifications);
 
             for (StatusBarNotification sbn : notifications) {
+                if (sbn.getPackageName().matches("com.james.status"))
+                    continue;
+
                 AppData app = null;
                 try {
                     app = new AppData(packageManager, packageManager.getApplicationInfo(sbn.getPackageName(), PackageManager.GET_META_DATA), packageManager.getPackageInfo(sbn.getPackageName(), PackageManager.GET_ACTIVITIES));

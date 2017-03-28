@@ -17,7 +17,6 @@ import java.util.Set;
 public class PreferenceUtils {
 
     public enum PreferenceIdentifier {
-        PREF_NAME,
         STATUS_ENABLED,
         STATUS_NOTIFICATIONS_COMPAT,
         STATUS_NOTIFICATIONS_HEADS_UP,
@@ -34,6 +33,7 @@ public class PreferenceUtils {
         STATUS_ICON_ANIMATIONS,
         STATUS_HEADS_UP_LAYOUT,
         STATUS_HIDE_ON_VOLUME,
+        STATUS_PERSISTENT_NOTIFICATION,
         STATUS_DEBUG
     }
 

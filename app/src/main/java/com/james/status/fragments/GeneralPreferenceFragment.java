@@ -193,6 +193,17 @@ public class GeneralPreferenceFragment extends SimpleFragment implements Prefere
                                 StatusService.HEADSUP_LAYOUT_TRANSPARENT
                         )
                 ),
+                new BooleanPreferenceData(
+                        getContext(),
+                        new PreferenceData.Identifier(
+                                PreferenceUtils.PreferenceIdentifier.STATUS_PERSISTENT_NOTIFICATION,
+                                getString(R.string.preference_persistent_notification),
+                                getString(R.string.preference_persistent_notification_desc),
+                                PreferenceData.Identifier.SectionIdentifier.OTHER
+                        ),
+                        true,
+                        this
+                ),
                 new PreferenceData<Serializable>(
                         getContext(),
                         new PreferenceData.Identifier(

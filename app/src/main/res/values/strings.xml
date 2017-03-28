@@ -138,6 +138,8 @@
     <string name="preference_status_color">Primary Color</string>
     <string name="preference_fullscreen">Hide Status</string>
     <string name="preference_notifications">Notifications</string>
+    <string name="preference_persistent_notification">Show Persistent Notification</string>
+    <string name="preference_persistent_notification_desc">This keeps the Status service in the foreground and prevents it from being automatically shut down due to conserve memory or battery life. Disabling this setting could improve performance, but it could also cause various stability issues on some devices.</string>
     <string name="preference_backups">Backup/Restore Settings</string>
     <string name="preference_backups_desc">Allows you to backup or restore all the settings in Status as a text file.</string>
 
