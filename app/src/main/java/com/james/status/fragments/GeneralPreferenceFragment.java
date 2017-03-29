@@ -1,5 +1,6 @@
 package com.james.status.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
@@ -214,7 +215,7 @@ public class GeneralPreferenceFragment extends SimpleFragment implements Prefere
                 ) {
                     @Override
                     public void onClick(View v) {
-                        new BackupDialog(getContext()).show();
+                        new BackupDialog((Activity) getContext()).show();
                     }
                 },
                 new BooleanPreferenceData(

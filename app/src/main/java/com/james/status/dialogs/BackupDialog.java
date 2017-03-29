@@ -1,7 +1,6 @@
 package com.james.status.dialogs;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatDialog;
@@ -20,12 +19,15 @@ import java.util.List;
 
 public class BackupDialog extends AppCompatDialog implements BackupCreatorDialog.OnBackupChangedListener, DialogInterface.OnDismissListener {
 
+    private Activity activity;
     private List<File> files;
     private RecyclerView recyclerView;
     private boolean isSettingsChanged;
 
-    public BackupDialog(Context context) {
-        super(context, R.style.AppTheme_Dialog);
+    public BackupDialog(Activity activity) {
+        super(activity, R.style.AppTheme_Dialog);
+        this.activity = activity;
+
         setTitle(R.string.preference_backups);
         setOnDismissListener(this);
         onFileChanged(false);
@@ -85,11 +87,7 @@ public class BackupDialog extends AppCompatDialog implements BackupCreatorDialog
 
     @Override
     public void onDismiss(DialogInterface dialog) {
-        if (isSettingsChanged) {
-            if (getContext() instanceof Activity)
-                ((Activity) getContext()).recreate();
-            else if (getOwnerActivity() != null)
-                getOwnerActivity().recreate();
-        }
+        if (isSettingsChanged)
+            activity.recreate();
     }
 }
