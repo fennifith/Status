@@ -79,8 +79,8 @@ public class AppPreferenceFragment extends SimpleFragment {
 
             @Override
             protected void done(@Nullable List<AppData> result) {
-                if (result != null) {
-                    adapter = new AppAdapter(getActivity(), result);
+                if (result != null && getContext() != null) {
+                    adapter = new AppAdapter(getContext(), result);
                     recycler.setAdapter(adapter);
                     progressBar.setVisibility(View.GONE);
                 }
