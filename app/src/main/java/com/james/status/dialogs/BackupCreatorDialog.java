@@ -95,27 +95,23 @@ public class BackupCreatorDialog extends AppCompatDialog implements View.OnClick
         switch (v.getId()) {
             case R.id.save:
                 if (file != null) {
-                    PreferenceUtils.toFile(getContext(), file);
-                    if (listener != null)
+                    if (listener != null && PreferenceUtils.toFile(getContext(), file)) {
                         listener.onFileChanged(false);
-                    dismiss();
+                        dismiss();
+                    }
                 } else editText.setError(getContext().getString(R.string.error_name_exists));
                 break;
             case R.id.restore:
-                if (file != null && file.exists()) {
-                    PreferenceUtils.fromFile(getContext(), file);
-                    if (listener != null)
-                        listener.onFileChanged(true);
+                if (file != null && listener != null && file.exists() && PreferenceUtils.fromFile(getContext(), file)) {
+                    listener.onFileChanged(true);
                     dismiss();
                 }
                 break;
             case R.id.delete:
-                if (file != null && file.exists()) {
-                    file.delete();
-                    if (listener != null)
-                        listener.onFileChanged(false);
+                if (file != null && file.exists() && file.delete()) {
+                    listener.onFileChanged(false);
+                    dismiss();
                 }
-                dismiss();
                 break;
         }
     }

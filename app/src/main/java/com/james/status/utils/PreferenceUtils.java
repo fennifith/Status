@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -153,6 +154,7 @@ public class PreferenceUtils {
             stream.write(new Gson().toJson(prefs).getBytes());
         } catch (IOException e) {
             e.printStackTrace();
+            Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
         if (stream != null) {
@@ -160,7 +162,7 @@ public class PreferenceUtils {
                 stream.close();
             } catch (IOException ignored) {
             }
-        }
+        } else return false;
 
         return file.exists();
     }
@@ -205,6 +207,7 @@ public class PreferenceUtils {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
             return false;
         }
 
