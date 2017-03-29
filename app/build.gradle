@@ -8,8 +8,8 @@ android {
         applicationId "com.james.status"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 28
-        versionName "3.0"
+        versionCode 29
+        versionName "3.1"
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
