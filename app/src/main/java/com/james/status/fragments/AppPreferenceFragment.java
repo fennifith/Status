@@ -37,6 +37,13 @@ public class AppPreferenceFragment extends SimpleFragment {
 
     private boolean isSelected;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        apps = new ArrayList<>();
+        packageManager = getContext().getPackageManager();
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -47,9 +54,6 @@ public class AppPreferenceFragment extends SimpleFragment {
 
         recycler.setLayoutManager(new GridLayoutManager(getContext(), 1));
         progressBar.setVisibility(View.VISIBLE);
-
-        apps = new ArrayList<>();
-        packageManager = getContext().getPackageManager();
 
         new Action<List<AppData>>() {
             @NonNull
