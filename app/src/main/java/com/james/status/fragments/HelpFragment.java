@@ -97,14 +97,16 @@ public class HelpFragment extends SimpleFragment {
 
             @Override
             protected void done(@Nullable String result) {
-                if (result != null)
-                    Toast.makeText(getContext(), result, Toast.LENGTH_SHORT).show();
+                if (getContext() != null) {
+                    if (result != null)
+                        Toast.makeText(getContext(), result, Toast.LENGTH_SHORT).show();
 
-                progressBar.setVisibility(View.GONE);
-                if (faqs.size() > 0) {
-                    adapter = new FaqAdapter(getContext(), faqs);
-                    recycler.setAdapter(adapter);
-                } else emptyView.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.GONE);
+                    if (faqs.size() > 0) {
+                        adapter = new FaqAdapter(getContext(), faqs);
+                        recycler.setAdapter(adapter);
+                    } else emptyView.setVisibility(View.VISIBLE);
+                }
             }
         }.execute();
 
