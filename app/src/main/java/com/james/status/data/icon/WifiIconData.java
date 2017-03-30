@@ -21,7 +21,7 @@ public class WifiIconData extends IconData<WifiIconData.WifiReceiver> {
 
     public WifiIconData(Context context) {
         super(context);
-        wifiManager = (WifiManager) getContext().getSystemService(Context.WIFI_SERVICE);
+        wifiManager = (WifiManager) getContext().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
     }
 
