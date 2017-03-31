@@ -49,7 +49,7 @@
 
     <string name="service_name">Status Service</string>
     <string name="service_name_general">Accessibility Service</string>
-    <string name="service_desc">This service needs to be enabled in order to detect window changes to update the status bar.</string>
+    <string name="service_desc">\'Status Service\' needs to be enabled in order to detect window changes to update the status bar. On some phones you may need to scroll to the bottom of the screen before it becomes visible.</string>
 
     <string name="notifications_compat">Compatibility Mode</string>
     <string name="notifications_compat_desc">On some versions of android the app cannot use the standard notification listener API to display the notification icons. I have found a way to detect them through the accessibility service, however it cannot detect when a notification has been dismissed. Thus, it removes all notifications whenever the notification panel is opened. If you do not like this, you can either check for a firmware update or disable the notifications in the settings menu. Please note: this setting will break the notification icons on some devices. It is recommended not to enable this feature on versions of android that are newer than Lollipop.</string>
@@ -57,10 +57,10 @@
     <string name="service_start_stop">Status Bar Service</string>
 
     <string name="notification_name">Notification Access</string>
-    <string name="notification_desc">The app needs to read incoming notifications in order to display icons on the status bar.</string>
+    <string name="notification_desc">The app needs to read incoming notifications in order to display notification icons on the status bar.</string>
 
     <string name="permissions_name">Additional Permissions</string>
-    <string name="permissions_desc">This app needs a few additional permissions in order to access parts of the phone relevant to the status bar.</string>
+    <string name="permissions_desc">This app needs a few additional permissions in order to access parts of the phone relevant to the status bar. An explanation of why these are needed is provided in the Status\'s Play Store page.</string>
 
     <string name="overlay_name">Draw Overlays</string>
     <string name="overlay_desc">The app needs to be able to draw an overlay on top of the screen so that it can show the status bar.</string>
