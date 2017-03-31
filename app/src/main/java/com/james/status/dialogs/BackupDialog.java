@@ -64,7 +64,7 @@ public class BackupDialog extends AppCompatDialog implements BackupCreatorDialog
         if (files != null) files.clear();
         else files = new ArrayList<>();
 
-        File dir = new File(PreferenceUtils.getBackupsDir(getContext()));
+        File dir = new File(PreferenceUtils.getBackupsDir());
         if (!dir.exists())
             dir.mkdirs();
 
