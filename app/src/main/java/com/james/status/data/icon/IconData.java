@@ -149,12 +149,13 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                     v.setVisibility(View.VISIBLE);
                     textView.setVisibility(View.VISIBLE);
 
-                    int curColor = textView.getCurrentTextColor();
                     Integer color = getTextColor();
                     Boolean isContrast = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_DARK_ICONS);
 
-                    if (color != null && !((isContrast == null || isContrast) && curColor != Color.WHITE && curColor != Color.BLACK))
+                    if (color != null && !((isContrast == null || isContrast) && (color == Color.WHITE || color == Color.BLACK))) {
                         textView.setTextColor(color);
+                        textView.setTag(color);
+                    } else textView.setTag(null);
 
                     textView.setText(text);
                 } else {
