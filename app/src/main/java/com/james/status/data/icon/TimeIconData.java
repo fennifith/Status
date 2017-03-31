@@ -49,11 +49,6 @@ public class TimeIconData extends IconData<TimeIconData.TimeReceiver> {
     }
 
     @Override
-    public String getFakeText() {
-        return format;
-    }
-
-    @Override
     public int getDefaultGravity() {
         return CENTER_GRAVITY;
     }

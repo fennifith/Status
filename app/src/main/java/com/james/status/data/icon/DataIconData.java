@@ -44,11 +44,6 @@ public class DataIconData extends IconData {
     }
 
     @Override
-    public String getFakeText() {
-        return "4G";
-    }
-
-    @Override
     public void register() {
         if (dataListener != null)
             telephonyManager.listen(dataListener, PhoneStateListener.LISTEN_DATA_CONNECTION_STATE);

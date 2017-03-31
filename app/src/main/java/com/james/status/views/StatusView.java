@@ -394,7 +394,9 @@ public class StatusView extends FrameLayout {
                 setIconTint(((LinearLayout) view).getChildAt(i), color);
             }
         } else if (view instanceof TextView) {
-            ((TextView) view).setTextColor(color);
+            int curColor = ((TextView) view).getCurrentTextColor();
+            if (curColor == Color.WHITE || curColor == Color.BLACK)
+                ((TextView) view).setTextColor(color);
         } else if (view instanceof CustomImageView) {
             CustomImageView imageView = (CustomImageView) view;
             if (imageView.getDrawable() != null)

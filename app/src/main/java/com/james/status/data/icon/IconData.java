@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
 import android.support.annotation.ColorInt;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import com.james.status.R;
 import com.james.status.data.IconStyleData;
 import com.james.status.data.preference.BooleanPreferenceData;
+import com.james.status.data.preference.ColorPreferenceData;
 import com.james.status.data.preference.IconPreferenceData;
 import com.james.status.data.preference.IntegerPreferenceData;
 import com.james.status.data.preference.ListPreferenceData;
@@ -145,6 +147,10 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                 if (text != null) {
                     v.setVisibility(View.VISIBLE);
                     textView.setVisibility(View.VISIBLE);
+                    Integer color = getTextColor();
+                    if (color != null)
+                        textView.setTextColor(color);
+
                     textView.setText(text);
                 } else {
                     textView.setVisibility(View.GONE);
@@ -219,6 +225,12 @@ public abstract class IconData<T extends IconUpdateReceiver> {
         return size;
     }
 
+    @Nullable
+    @ColorInt
+    public final Integer getTextColor() {
+        return getIntegerPreference(PreferenceIdentifier.TEXT_COLOR);
+    }
+
     public final int getPosition() {
         Integer position = getIntegerPreference(PreferenceIdentifier.POSITION);
         if (position == null) position = 0;
@@ -245,10 +257,6 @@ public abstract class IconData<T extends IconUpdateReceiver> {
     public String getText() {
         if (hasText()) return text;
         else return null;
-    }
-
-    public String getFakeText() {
-        return "";
     }
 
     public String getTitle() {
@@ -401,6 +409,22 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                         }
                     }
             ));
+
+            Integer color = getTextColor();
+            preferences.add(new ColorPreferenceData(
+                    getContext(),
+                    new PreferenceData.Identifier(
+                            "Text Color"
+                    ),
+                    color != null ? color : Color.WHITE,
+                    new PreferenceData.OnPreferenceChangeListener<Integer>() {
+                        @Override
+                        public void onPreferenceChange(Integer preference) {
+                            putPreference(PreferenceIdentifier.TEXT_COLOR, preference);
+                            StaticUtils.updateStatusService(getContext());
+                        }
+                    }
+            ));
         }
 
         if (hasDrawable()) {
@@ -507,30 +531,6 @@ public abstract class IconData<T extends IconUpdateReceiver> {
             return null;
     }
 
-    @Nullable
-    public final int[] getResourceIntPreference(PreferenceIdentifier identifier, String resourceType) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        Resources resources = context.getResources();
-
-        if (prefs.contains(getIdentifierString(identifier) + "-length")) {
-            int length = 0;
-            try {
-                length = prefs.getInt(getIdentifierString(identifier) + "-length", 0);
-            } catch (ClassCastException ignored) {
-            }
-
-            int[] value = new int[length];
-
-            for (int i = 0; i < length; i++) {
-                if (prefs.contains(getIdentifierString(identifier) + "-" + i))
-                    value[i] = resources.getIdentifier(prefs.getString(getIdentifierString(identifier) + "-" + i, null), resourceType, context.getPackageName());
-                else return null;
-            }
-
-            return value;
-        } else return null;
-    }
-
     public final String[] getStringArrayPreference(PreferenceIdentifier identifier) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         if (prefs.contains(getIdentifierString(identifier) + "-length")) {
@@ -588,6 +588,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
         TEXT_VISIBILITY,
         TEXT_FORMAT,
         TEXT_SIZE,
+        TEXT_COLOR,
         ICON_VISIBILITY,
         ICON_STYLE,
         ICON_STYLE_NAMES,

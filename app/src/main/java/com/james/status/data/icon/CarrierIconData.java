@@ -41,11 +41,6 @@ public class CarrierIconData extends IconData {
     }
 
     @Override
-    public String getFakeText() {
-        return getTitle();
-    }
-
-    @Override
     public void register() {
         onTextUpdate(telephonyManager.getNetworkOperatorName());
     }
