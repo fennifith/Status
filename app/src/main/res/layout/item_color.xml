@@ -3,7 +3,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <com.james.status.views.CircleImageView
+    <com.james.status.views.ColorImageView
         android:id="@+id/color"
         android:layout_width="36dp"
         android:layout_height="36dp"

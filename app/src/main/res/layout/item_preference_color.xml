@@ -24,7 +24,7 @@
             android:textColor="?android:textColorPrimary"
             android:textSize="16sp" />
 
-        <com.james.status.views.CircleImageView
+        <com.james.status.views.ColorImageView
             android:id="@+id/color"
             android:layout_width="24dp"
             android:layout_height="24dp"

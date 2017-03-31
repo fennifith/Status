@@ -25,6 +25,7 @@ import com.james.status.R;
 import com.james.status.Status;
 import com.james.status.activities.ImagePickerActivity;
 import com.james.status.utils.ColorUtils;
+import com.james.status.views.ColorImageView;
 import com.james.status.views.CustomImageView;
 
 import java.io.IOException;
@@ -167,8 +168,8 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> implements Stat
         for (int preset : colors) {
             View v = inflater.inflate(R.layout.item_color, presetLayout, false);
 
-            CustomImageView colorView = (CustomImageView) v.findViewById(R.id.color);
-            colorView.setImageDrawable(new ColorDrawable(preset));
+            ColorImageView colorView = (ColorImageView) v.findViewById(R.id.color);
+            colorView.setColor(preset);
             colorView.setTag(preset);
             colorView.setOnClickListener(new View.OnClickListener() {
                 @Override

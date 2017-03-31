@@ -2,7 +2,6 @@ package com.james.status.data.preference;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.ColorInt;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +11,7 @@ import com.james.status.R;
 import com.james.status.dialogs.ColorPickerDialog;
 import com.james.status.dialogs.PreferenceDialog;
 import com.james.status.utils.PreferenceUtils;
-import com.james.status.views.CustomImageView;
+import com.james.status.views.ColorImageView;
 
 public class ColorPreferenceData extends PreferenceData<Integer> {
 
@@ -36,7 +35,7 @@ public class ColorPreferenceData extends PreferenceData<Integer> {
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
-        ((CustomImageView) holder.v.findViewById(R.id.color)).setImageDrawable(new ColorDrawable(value));
+        ((ColorImageView) holder.v.findViewById(R.id.color)).setColor(value);
     }
 
     @Override
@@ -45,7 +44,7 @@ public class ColorPreferenceData extends PreferenceData<Integer> {
             @Override
             public void onPreference(PreferenceDialog dialog, Integer color) {
                 value = color;
-                ((CustomImageView) v.findViewById(R.id.color)).transition(new ColorDrawable(color));
+                ((ColorImageView) v.findViewById(R.id.color)).setColor(color);
 
                 PreferenceUtils.PreferenceIdentifier identifier = getIdentifier().getPreference();
                 if (identifier != null)

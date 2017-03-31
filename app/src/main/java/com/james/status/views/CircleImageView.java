@@ -12,6 +12,7 @@ import android.util.AttributeSet;
 import com.james.status.utils.ImageUtils;
 
 public class CircleImageView extends CustomImageView {
+
     Paint paint;
 
     public CircleImageView(final Context context) {
