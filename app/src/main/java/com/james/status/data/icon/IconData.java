@@ -26,6 +26,7 @@ import com.james.status.data.preference.ListPreferenceData;
 import com.james.status.data.preference.PreferenceData;
 import com.james.status.receivers.IconUpdateReceiver;
 import com.james.status.utils.ColorUtils;
+import com.james.status.utils.PreferenceUtils;
 import com.james.status.utils.StaticUtils;
 import com.james.status.views.CustomImageView;
 
@@ -147,8 +148,12 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                 if (text != null) {
                     v.setVisibility(View.VISIBLE);
                     textView.setVisibility(View.VISIBLE);
+
+                    int curColor = textView.getCurrentTextColor();
                     Integer color = getTextColor();
-                    if (color != null)
+                    Boolean isContrast = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_DARK_ICONS);
+
+                    if (color != null && !((isContrast == null || isContrast) && curColor != Color.WHITE && curColor != Color.BLACK))
                         textView.setTextColor(color);
 
                     textView.setText(text);
