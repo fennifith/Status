@@ -44,7 +44,7 @@ public class BackupCreatorDialog extends AppCompatDialog implements View.OnClick
                 name = "backup" + i;
             }
 
-            file = new File(PreferenceUtils.getBackupsDir(getContext()), name + ".txt");
+            file = new File(PreferenceUtils.getBackupsDir(), name + ".txt");
             editText.setText(name);
         }
 
@@ -69,7 +69,7 @@ public class BackupCreatorDialog extends AppCompatDialog implements View.OnClick
                     return;
                 }
 
-                file = new File(PreferenceUtils.getBackupsDir(getContext()), name + ".txt");
+                file = new File(PreferenceUtils.getBackupsDir(), name + ".txt");
             }
 
             @Override

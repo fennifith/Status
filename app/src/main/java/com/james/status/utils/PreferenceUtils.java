@@ -2,6 +2,7 @@ package com.james.status.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
@@ -214,7 +215,7 @@ public class PreferenceUtils {
         return editor.commit();
     }
 
-    public static String getBackupsDir(Context context) {
-        return context.getApplicationInfo().dataDir + "/backups";
+    public static String getBackupsDir() {
+        return Environment.getExternalStorageDirectory() + "/status/backups";
     }
 }
