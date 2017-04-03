@@ -42,7 +42,7 @@ public class HelpFragment extends SimpleFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_faqs, container, false);
+        View v = inflater.inflate(R.layout.fragment_help, container, false);
 
         recycler = (RecyclerView) v.findViewById(R.id.recycler);
         progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
