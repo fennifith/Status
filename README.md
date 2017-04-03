@@ -12,6 +12,7 @@ Status is a status bar replacement that draws an overlay on top of the system-ge
 - Bluetooth: find if bluetooth is enabled & connected or not.
 - Location Services: finds if GPS is enabled.
 - Alarm: find if an alarm is set.
+- External Storage: backup/restore all settings from a file.
 
 ## Contributing
 ### Issues
