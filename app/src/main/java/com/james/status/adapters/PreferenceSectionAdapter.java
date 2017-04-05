@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.james.status.R;
 import com.james.status.data.preference.PreferenceData;
+import com.james.status.utils.PreferenceUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,12 +105,14 @@ public class PreferenceSectionAdapter extends RecyclerView.Adapter<PreferenceSec
                     continue;
                 }
 
-                if (string.contains(identifier.getPreference().toString().toLowerCase())) {
+                PreferenceUtils.PreferenceIdentifier preference = identifier.getPreference();
+                if (preference != null && preference.toString().toLowerCase().contains(string)) {
                     newDatas.add(data);
                     continue;
                 }
 
-                if (string.contains(identifier.getSection().toString().toLowerCase())) {
+                PreferenceData.Identifier.SectionIdentifier section = identifier.getSection();
+                if (section != null && string.contains(section.toString().toLowerCase())) {
                     newDatas.add(data);
                 }
             }
