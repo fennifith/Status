@@ -8,8 +8,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Handler;
@@ -175,9 +175,9 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                         if (packageManager != null) {
                             Intent homeIntent = new Intent(Intent.ACTION_MAIN);
                             homeIntent.addCategory(Intent.CATEGORY_HOME);
-                            ActivityInfo homeInfo = packageManager.resolveActivity(homeIntent, PackageManager.MATCH_DEFAULT_ONLY).activityInfo;
+                            ResolveInfo homeInfo = packageManager.resolveActivity(homeIntent, PackageManager.MATCH_DEFAULT_ONLY);
 
-                            if (packageName.toString().matches(homeInfo.packageName)) {
+                            if (homeInfo != null && packageName.toString().matches(homeInfo.activityInfo.packageName)) {
                                 setStatusBar(null, true, isFullscreen, false);
                                 notificationManager.cancel(NOTIFICATION_ID);
                                 return;
