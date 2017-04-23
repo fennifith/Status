@@ -142,7 +142,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                     final CharSequence className = event.getClassName();
                     Status.showDebug(this, event.toString(), Toast.LENGTH_LONG);
 
-                    if (packageName != null && packageName.length() > 0 && className != null && className.length() > 0) {
+                    if (packageManager != null && packageName != null && packageName.length() > 0 && className != null && className.length() > 0) {
                         try {
                             activityData = new AppData.ActivityData(packageManager, packageManager.getActivityInfo(new ComponentName(packageName.toString(), className.toString()), PackageManager.GET_META_DATA));
                         } catch (PackageManager.NameNotFoundException | NullPointerException e) {
@@ -172,14 +172,16 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
 
                         Boolean isFullscreen = activityData.getBooleanPreference(this, AppData.PreferenceIdentifier.FULLSCREEN);
 
-                        Intent homeIntent = new Intent(Intent.ACTION_MAIN);
-                        homeIntent.addCategory(Intent.CATEGORY_HOME);
-                        ActivityInfo homeInfo = packageManager.resolveActivity(homeIntent, PackageManager.MATCH_DEFAULT_ONLY).activityInfo;
+                        if (packageManager != null) {
+                            Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+                            homeIntent.addCategory(Intent.CATEGORY_HOME);
+                            ActivityInfo homeInfo = packageManager.resolveActivity(homeIntent, PackageManager.MATCH_DEFAULT_ONLY).activityInfo;
 
-                        if (packageName.toString().matches(homeInfo.packageName)) {
-                            setStatusBar(null, true, isFullscreen, false);
-                            notificationManager.cancel(NOTIFICATION_ID);
-                            return;
+                            if (packageName.toString().matches(homeInfo.packageName)) {
+                                setStatusBar(null, true, isFullscreen, false);
+                                notificationManager.cancel(NOTIFICATION_ID);
+                                return;
+                            }
                         }
 
                         Integer color = activityData.getIntegerPreference(this, AppData.PreferenceIdentifier.COLOR);
