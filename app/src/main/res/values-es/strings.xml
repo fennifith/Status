@@ -1,0 +1,287 @@
+<resources>
+    <string name="app_name">Status</string>
+    <string name="app_desc">Una barra de estado al estilo material design. No necesita root.</string>
+
+    <string name="action_settings">Ajustes</string>
+    <string name="action_setup">Configuración</string>
+    <string name="action_access_grant">Grant Access</string>
+    <string name="action_cancel">Cancelar</string>
+    <string name="action_ok">Aceptar</string>
+    <string name="action_more">Más</string>
+    <string name="action_add_apps">Añadir aplicaciones</string>
+    <string name="action_search">Buscar</string>
+    <string name="action_about">Acerca de</string>
+    <string name="action_gplus">Google+</string>
+    <string name="action_play">Play Store</string>
+    <string name="action_dribbble">Dribbble</string>
+    <string name="action_twitter">Twitter</string>
+    <string name="action_website">Web</string>
+    <string name="action_github">GitHub</string>
+    <string name="action_libraries">Explorar licencias</string>
+    <string name="action_enable">Activar</string>
+    <string name="action_disable">Desactivar</string>
+    <string name="action_reset">Reiniciar</string>
+    <string name="action_tutorial">Reiniciar tutorial</string>
+    <string name="action_pick_image_color">Elige un color de la imagen</string>
+    <string name="action_community">Foro de ayuda</string>
+    <string name="action_dismiss">Rechazar</string>
+    <string name="action_add_style">Añadir estilo</string>
+    <string name="action_delete">Eliminar</string>
+    <string name="action_edit_style">Editar estilo del icono</string>
+    <string name="action_policy">Politica de privacidad</string>
+    <string name="action_new_backup">Nueva copia de seg.</string>
+    <string name="action_save">Guardar</string>
+    <string name="action_delete_backup">Eliminar esta copia de seg.</string>
+    <string name="action_restore_backup">Restaurar esta copia de seg.</string>
+    <string name="action_save_backup">Sobrescribir copia de seg.</string>
+    <string name="action_create_backup">Crear copia de seg.</string>
+
+    <string name="reset_all">Reiniciar todo</string>
+    <string name="notifications_disable">Desactivar todas las notificaciones</string>
+    <string name="notifications_enable">Activar todas las notificaciones</string>
+
+    <string name="prompt_name">Introduce el nombre…</string>
+    <string name="prompt_backup_name">Nombre de la copia</string>
+
+    <string name="error_no_text_name">Introduce un nombre…</string>
+    <string name="error_name_exists">Ya existe un elemento con este nombre.</string>
+    <string name="error_missing_icons">Te faltan iconos por establecer.</string>
+
+    <string name="service_name">Servicio de Status</string>
+    <string name="service_name_general">Servicio de accesibilidad</string>
+    <string name="service_desc">Es necesario activar el \'servicio de Status\' para detectar los cambios y que se reflejen de forma actualizada en la barra de notificaciones. En algunos dispositivos, será necesario deslizar hasta la parte inferior de la pantalla antes de que se pueda ver.</string>
+
+    <string name="notifications_compat">Modo compatibilidad</string>
+    <string name="notifications_compat_desc">Algunos dispositivos Android no pueden usar la API de notificaciones estándar para mostrar los iconos. He encontrado una forma de que se puedan mostrar a través del servicio de accesibilidad, pero no se puede detectar cuando una notificación se rechaza. Por lo tanto, se eliminan todas las notificaciones al abrir el panel de notificaciones. Si no te gusta esto, puedes intentar actualizar tu firmware o desactivar las notificaciones desde el menú de ajustes. Recuerda: estos cambios en el menú de ajustes pueden generar problemas con los iconos de notificación en algunos dispositivos. Se recomienda no activar esta opción en versiones de Android superiores a Lollipop.</string>
+
+    <string name="service_start_stop">Servicio de la barra de estado</string>
+
+    <string name="notification_name">Acceso de notificaciones</string>
+    <string name="notification_desc">La aplicación necesita leer las notificaciones entrantes para poder mostrar los iconos en la barra de estado.</string>
+
+    <string name="permissions_name">Permisos adicionales</string>
+    <string name="permissions_desc">Esta aplicación necesita varios permisos adicionales para acceder a a todas las partes relevantes del dispositivo. Puedes encontrar una explicación más extensa acerca de esto en la página de Status en Play Store.</string>
+
+    <string name="overlay_name">Capas superpuestas</string>
+    <string name="overlay_desc">La aplicación necesita permiso para establecer capas y ventanas de forma superpuesta en la pantalla, permitiendo que se muestren las notificaciones en la barra de estado.</string>
+
+    <string name="tab_settings">Ajustes</string>
+    <string name="tab_icons">Iconos</string>
+    <string name="tab_apps">Aplicaciones</string>
+    <string name="tab_help">Ayuda</string>
+
+    <string name="preference_show_clock">Mostrar reloj</string>
+    <string name="preference_24h">Usar formato 24 horas</string>
+    <string name="preference_24h_desc">El reloj mostrará la hora en formato 24 horas si activas esto.</string>
+    <string name="preference_ampm">Usar formato AM/PM</string>
+    <string name="preference_ampm_desc">El reloj mostrará la hora en formato AM/PM si activas esto.</string>
+    <string name="preference_date">Mostrar la fecha</string>
+    <string name="preference_date_desc">El reloj mostrará la fecha junto a la hora si activas esto.</string>
+    <string name="preference_show_notifications">Mostrar notificaciones</string>
+    <string name="preference_heads_up">Mostrar superposiciones</string>
+    <string name="preference_heads_up_desc">Las notificaciones \'aparecerán\' en la parte superior de la pantalla al ser recibidas.</string>
+    <string name="preference_heads_up_duration">Duración de superposiciones (seg.)</string>
+    <string name="preference_heads_up_duration_desc">Establece la cantidad de tiempo que aparece la notificación en la barra al ser recibida.</string>
+    <string name="preference_battery_percent">Mostrar porcentaje de batería</string>
+    <string name="preference_battery_percent_desc">Muestra el porcentaje de la batería junto al icono de la barra de estado.</string>
+    <string name="preference_bar_color_auto">Color de la barra automático</string>
+    <string name="preference_bar_color_auto_desc">Adopta el color de la aplicación actual en la barra de estado. Esto puede reducir el rendimiento, según el dispositivo.</string>
+    <string name="preference_bar_color_chooser">Color de la barra estándar</string>
+    <string name="preference_app_colors">Color de la barra personalizado</string>
+    <string name="preference_app_colors_desc">Establece un color para utilizarse en una pantalla específica. Esto se sobrepondrá ante cualquier otra opción si el \'color de la barra automático\' está activado.</string>
+    <string name="preference_transparent_home">Transparencia en la pantalla de inicio</string>
+    <string name="preference_transparent_home_desc">Esta opción establece el fondo de la barra de estado de forma transparente al estar en la pantalla de inicio. Esta opción no funciona correctamente en los fondos de pantalla animados o si está activada la función de deslizamiento del fondo de pantalla.</string>
+    <string name="preference_dark_icons">Contraste de color de iconos</string>
+    <string name="preference_dark_icons_desc">Ajusta el color de los iconos para evitar que se queden invisibles o sea complicado verlos en el fondo de pantalla.</string>
+    <string name="preference_tinted_icons">Iconos tintados</string>
+    <string name="preference_tinted_icons_desc">Cambia el color de los iconos en lugar del fondo de la barra, que se pondrá en el color predeterminado.</string>
+    <string name="preference_show_battery_icon">Mostrar icono de batería</string>
+    <string name="preference_icon_style">Estilo de icono</string>
+    <string name="preference_show_network_icon">Mostrar icono de red</string>
+    <string name="preference_network_icon">Estilo del icono de red</string>
+    <string name="preference_dual_sim">SIM doble</string>
+    <string name="preference_dual_sim_desc">Si tu dispositivo tiene más de una tarjeta SIM, esta opción mostrará los dos indicadores de cobertura.</string>
+    <string name="preference_data">Mostrar conexión de datos</string>
+    <string name="preference_data_desc">Muestra la conexión de datos, ya sea 2G, 3G, 4G o no haya.</string>
+    <string name="preference_show_wifi_icon">Mostrar icono de WiFi</string>
+    <string name="preference_wifi_icon">Estilo del icono WiFi</string>
+    <string name="preference_show_gps_icon">Mostrar icono de GPS</string>
+    <string name="preference_gps_icon">Estilo del icono de GPS</string>
+    <string name="preference_show_bluetooth_icon">Mostrar icono Bluetooth</string>
+    <string name="preference_bluetooth_icon">Estilo del icono de Bluetooth</string>
+    <string name="preference_show_airplane_mode_icon">Mostrar icono de modo avión</string>
+    <string name="preference_airplane_mode_icon">Estilo del icono de modo avión</string>
+    <string name="preference_show_alarm_icon">Mostrar icono de alarma</string>
+    <string name="preference_alarm_icon">Estilo del icono de la alarma</string>
+    <string name="preference_show_ringer_icon">Mostrar icono de tono</string>
+    <string name="preference_ringer_icon">Estilo del icono de tono</string>
+    <string name="preference_icon_padding">Relleno horizontal (dp)</string>
+    <string name="preference_icon_scale">Tamaño de iconos (dp)</string>
+    <string name="preference_text_size">Tamaño de texto (sp)</string>
+    <string name="preference_color_notification">Color de notificaciones personalizado</string>
+    <string name="preference_color_notification_desc">La aplicación mostrará las notificaciones con el color de la aplicación si no se encuentra el color especificado.</string>
+    <string name="preference_gravity">Alineamiento</string>
+    <string name="preference_background_animations">Animaciones de color de fondo</string>
+    <string name="preference_background_animations_desc">Esta opción te permite activar o desactivar la animación del color de fondo de la barra de estado. Esto puede reducir el rendimiento, según el dispositivo.</string>
+    <string name="preference_icon_animations">Animaciones de iconos</string>
+    <string name="preference_icon_animations_desc">Esta opción te permite activar o desactivar la animación de los iconos. Esto puede reducir drásticamente el rendimiento, según el dispositivo y la cantidad de iconos que se mustren al mismo tiempo.</string>
+    <string name="preference_show_drawable">Mostrar/Ocultar iconos</string>
+    <string name="preference_show_text">Mostrar texto</string>
+    <string name="preference_notification_icon_size">Tamaño de iconos de notificación</string>
+    <string name="preference_time_format">Formato de hora</string>
+    <string name="preference_heads_up_layout">Estilo de notificaciones</string>
+    <string name="preference_default_color_icon">Color de iconos por defecto</string>
+    <string name="preference_hide_on_volume">Ocultar la barra al cambiar el volumen</string>
+    <string name="preference_hide_on_volume_desc">Esta opción establece la respuesta de la barra de estado ante el uso de los botones de volumen. Si la ventana de niveles de sonido no se superpone con la barra, esta opción no es necesaria. Esto puede no funcionar en algunos dispositivos.</string>
+    <string name="preference_debug">Mensajes de depuración</string>
+    <string name="preference_debug_desc">Muestra información detallada acerca de los cambios de ventanas.</string>
+    <string name="preference_status_color">Color principal</string>
+    <string name="preference_fullscreen">Ocultar barra</string>
+    <string name="preference_notifications">Notificaciones</string>
+    <string name="preference_persistent_notification">Mostrar notificaciones persistentes</string>
+    <string name="preference_persistent_notification_desc">Esto mantiene el servicio de Status en primer plano para que no se cierre automáticamente, como motivo de ahorro de batería. Al desactivar esto, puede aumentar el rendimiento, pero puede costar problemas de estabilidad en algunos dispositivos.</string>
+    <string name="preference_backups">Copiar/Restaurar ajustes</string>
+    <string name="preference_backups_desc">Te permite hacer una copia de seguridad o restaurar todos los ajustes de Status como un archivo de texto.</string>
+
+    <string name="icon_notifications">Notificaciones</string>
+    <string name="icon_clock">Reloj</string>
+    <string name="icon_battery">Icono de batería</string>
+    <string name="icon_network">Icono de red</string>
+    <string name="icon_data">Indicador de datos</string>
+    <string name="icon_wifi">Icono de WiFi</string>
+    <string name="icon_bluetooth">Icono de Bluetooth</string>
+    <string name="icon_gps">Icono de GPS</string>
+    <string name="icon_airplane">Icono de modo avión</string>
+    <string name="icon_alarm">Icono de alarma</string>
+    <string name="icon_ringer">Icono de tono</string>
+    <string name="icon_nfc">Icono NFC</string>
+    <string name="icon_headphone">Icono de auriculares</string>
+    <string name="icon_carrier">Nombre</string>
+    <string name="icon_orientation">Orientación de icono</string>
+
+    <string name="heads_up_plain">Liso</string>
+    <string name="heads_up_card">Tarjeta</string>
+    <string name="heads_up_condensed">Condensado</string>
+    <string name="heads_up_transparent">Transparente</string>
+
+    <string name="gravity_center">Centro</string>
+    <string name="gravity_left">Izquierda</string>
+    <string name="gravity_right">Derecha</string>
+
+    <string name="notification_color">Establecer color personalizado</string>
+    <string name="notification_color_desc">Si Status no puede encontrar una un color para la aplicación, se recurrirá al color por defecto. Puedes especificar un color pulsando en esta notificación.</string>
+
+    <string name="unit_dp">dp</string>
+    <string name="unit_sp">sp</string>
+    <string name="unit_seconds">" segundos"</string>
+    <string name="unit_mb">%1$f MB</string>
+    <string name="unit_kb">%1$f KB</string>
+
+    <string name="icon_style_android">Android</string>
+    <string name="icon_style_default">Por defecto</string>
+    <string name="icon_style_stock">Básico</string>
+    <string name="icon_style_circle">Circular</string>
+    <string name="icon_style_circle_outline">Contorno circular</string>
+    <string name="icon_style_classic">Clásico</string>
+    <string name="icon_style_clear">Limpio</string>
+    <string name="icon_style_clip">Clip</string>
+    <string name="icon_style_curved">Recortado</string>
+    <string name="icon_style_outline">Bordeado</string>
+    <string name="icon_style_dish">Resaltado</string>
+    <string name="icon_style_triangle">Triangular</string>
+    <string name="icon_style_square">Cuadrado</string>
+    <string name="icon_style_retro">Retro</string>
+    <string name="icon_style_pixel">Pixelado</string>
+    <string name="icon_style_balloon">Globo aerostático</string>
+    <string name="icon_style_radial">Radial</string>
+    <string name="icon_style_tap">Toque</string>
+    <string name="icon_style_school">Escuela</string>
+    <string name="icon_style_system">Sistema</string>
+
+    <string name="tutorial_enable">Activa la barra de Status</string>
+    <string name="tutorial_enable_desc">El interruptor de la parte superior de la pantalla permite activar o desactivar la barra personalizada. ¡Actívalo y pruébalo!</string>
+    <string name="tutorial_search">¿Buscas algo?</string>
+    <string name="tutorial_search_desc">Busca el ajuste exacto que quieres cambiar desde la barra de búsqueda de Status.</string>
+    <string name="tutorial_help">¿Necesitas ayuda?</string>
+    <string name="tutorial_help_desc">La sección de ayuda siempre se actualizar y contiene casi todos los problemas encontrados por otros usuarios.</string>
+    <string name="tutorial_image_picker">Selector de color de imagen</string>
+    <string name="tutorial_image_picker_desc">¿No consigues el color correcto? ¡Intenta seleccionarlo en una imagen!</string>
+    <string name="tutorial_icon_switch">¿No quieres un icono?</string>
+    <string name="tutorial_icon_switch_desc">Activa o desactiva un icono pulsando en la casilla junto al nombre.</string>
+    <string name="tutorial_icon_order">Reorganizar iconos</string>
+    <string name="tutorial_icon_order_desc">Cambia el orden de los iconos pulsando los botones de arriba y abajo, junto al nombre.</string>
+    <string name="tutorial_activities">¿No quieres modificar toda la aplicación?</string>
+    <string name="tutorial_activities_desc">Cambia entre pantallas individuales haciendo clci en el botón de \'expandir\', junto al nombre de la aplicación.</string>
+
+    <string name="red">Rojo</string>
+    <string name="green">Verde</string>
+    <string name="blue">Azul</string>
+
+    <string name="hint_format">
+        \n
+        h - Horas\n
+        HH - Horas (24h)\n
+        kk - Horas (24h)\n
+        mm - Minutos\n
+        a - AM/PM\n
+        Z - Zona horaria\n
+        \n
+        dd - Día del mes\n
+        EEE - Día de la semana\n
+        MM - Mes (numérico)\n
+        MMM - Mes\n
+        yyyy - Año
+    </string>
+
+    <string name="empty">Aquí no hay nada…</string>
+    <string name="reset_apps_confirm">¿Seguro que quieres reiniciar todas las preferencias específicas? Esta acción no se puede deshacer.</string>
+
+    <string name="james_name">James Fenn</string>
+    <string name="james_desc">Desarrollador de Android y comedor de coles profesional.</string>
+
+    <string name="anas_name">Anas Khan</string>
+    <string name="anas_desc">Más conocido como el señor de las Oreo, este tío puede añadir más leña a las interfaces cargadas.</string>
+
+    <string name="vuk_name">Vukašin Anđelković</string>
+    <string name="vuk_desc">El señor supremo de la estilización Material Design, se dedica a los iconos y todas esas cosas.</string>
+
+    <string name="ghost_name">Ghost Ninja</string>
+    <string name="ghost_desc">Diseñador gráfico y web, además es propietario de technologx.com.</string>
+
+    <string name="about_translators">Traductores</string>
+
+    <string name="ryo_name">Eugenio \"Ryo567\" Martínez Seguín</string>
+    <string name="ryo_desc">Traductor español y amante del Lancia Dedra.</string>
+
+    <string name="about_icons">Fuente de iconos</string>
+    <string name="about_icons_desc">Obviamente, sería difícil crear los más de 100 iconos que usa esta aplicación, así que esta aplicación usa iconos de distintas fuentes.</string>
+
+    <string name="google_icons">Google Design</string>
+    <string name="google_icons_desc">La mayoría de iconos pertenecen a Google Design, que contiene una gran base de datos de iconos entre los que elegir.</string>
+
+    <string name="md_icons">Iconos de estilo Material Design</string>
+    <string name="md_icons_desc">Están creados por distintos colaborades, esta colección de iconos contiene varios recursos que no están disponibles en Google Design.</string>
+
+    <string-array name="libraries">
+        <item>
+            <a href="https://github.com/bumptech/glide">Glide</a>
+            <i> - BSD, parte MIT y Apache 2.0</i>
+            <p>\nGlide es un framework de administración de archivos multimedia y subida de imágenes para Android que engloba el cifrado multimedia, la memoria y los cambios de disco, así como los recursos, en una interfaz de uso simple y sencilla.</p>
+        </item>
+        <item>
+            <a href="https://github.com/drozdzynski/Steppers">Steppers</a>
+            <i> - Apache 2.0</i>
+            <p>\nSteppers es una biblioteca de guías material design para Android.</p>
+        </item>
+        <item>
+            <a href="https://github.com/afollestad/async">Async</a>
+            <i> - Apache 2.0</i>
+            <p>\nAsync es una biblioteca diseñada para llevar a cabo la ejecución de procesos en Android fácilmente.</p>
+        </item>
+        <item>
+            <a href="https://github.com/google/gson">Gson</a>
+            <i> - Apache 2.0</i>
+            <p>\nGson es una biblioteca Java que puede utilizarse para convertir elementos Java en representaciones JSON.</p>
+        </item>
+    </string-array>
+</resources>

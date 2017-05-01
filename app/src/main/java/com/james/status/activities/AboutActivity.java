@@ -74,6 +74,8 @@ public class AboutActivity extends AppCompatActivity {
 
         findViewById(R.id.ghostGithub).setOnClickListener(new UrlClickListener("https://github.com/Technologx"));
 
+        findViewById(R.id.ryo).setOnClickListener(new UrlClickListener("https://github.com/Ryo567"));
+
         findViewById(R.id.google).setOnClickListener(new UrlClickListener("https://material.io/icons/"));
 
         findViewById(R.id.md).setOnClickListener(new UrlClickListener("https://github.com/Templarian/MaterialDesign"));

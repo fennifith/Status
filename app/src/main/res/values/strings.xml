@@ -248,6 +248,11 @@
     <string name="ghost_name">Ghost Ninja</string>
     <string name="ghost_desc">A graphic designer, web designer, and the owner of technologx.com.</string>
 
+    <string name="about_translators">Translators</string>
+
+    <string name="ryo_name">Eugenio \"Ryo567\" Martínez Seguín</string>
+    <string name="ryo_desc">Created the spanish translations for the app.</string>
+
     <string name="about_icons">Icon Sources</string>
     <string name="about_icons_desc">Obviously, it would be hard to make over 100 icons used in this app by myself, so (as well as the ones by the people above) the app uses icons from a few different sources.</string>
 
