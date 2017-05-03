@@ -12,12 +12,15 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.support.v7.graphics.Palette;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -35,6 +38,8 @@ import java.util.List;
 public class StatusView extends FrameLayout {
 
     private LinearLayout status, leftLayout, rightLayout, centerLayout;
+    private float x, y;
+    private int burnInOffsetX, burnInOffsetY;
 
     @ColorInt
     private Integer color, iconColor = Color.WHITE;
@@ -43,21 +48,83 @@ public class StatusView extends FrameLayout {
     private List<IconData> icons;
     private WallpaperManager wallpaperManager;
 
+    private Handler handler;
+    private Runnable burnInRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (status != null && status.getParent() != null) {
+                ViewGroup.LayoutParams layoutParams = status.getLayoutParams();
+
+                switch (burnInOffsetX) {
+                    case 0:
+                        status.setX(x - 1);
+                        burnInOffsetX++;
+                        break;
+                    case 2:
+                    case 3:
+                    case 4:
+                        status.setX(x + 1);
+                        burnInOffsetX++;
+                        break;
+                    case 6:
+                        status.setX(x - 1);
+                        burnInOffsetX++;
+                        break;
+                    case 7:
+                        status.setX(x - 1);
+                        burnInOffsetX = 0;
+                        break;
+                    default:
+                        status.setX(x);
+                        burnInOffsetX++;
+                }
+
+                switch (burnInOffsetY) {
+                    case 0:
+                    case 1:
+                    case 2:
+                        status.setY(y + 1);
+                        burnInOffsetY++;
+                        break;
+                    case 4:
+                    case 5:
+                    case 6:
+                        status.setY(y - 1);
+                        burnInOffsetY++;
+                        break;
+                    case 7:
+                        status.setY(y);
+                        burnInOffsetY = 0;
+                        break;
+                    default:
+                        status.setY(y);
+                        burnInOffsetY++;
+                }
+
+                status.setLayoutParams(layoutParams);
+            }
+
+            handler.postDelayed(this, 2000);
+        }
+    };
+
     public StatusView(Context context) {
-        super(context);
+        this(context, null);
     }
 
-    public StatusView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+    public StatusView(Context context, @Nullable AttributeSet attrs) {
+        this(context, attrs, 0);
     }
 
-    public StatusView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public StatusView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        handler = new Handler();
     }
 
     @TargetApi(21)
-    public StatusView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public StatusView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+        handler = new Handler();
     }
 
     public void setUp() {
@@ -94,6 +161,19 @@ public class StatusView extends FrameLayout {
         this.isContrastIcons = isContrastIcons != null ? isContrastIcons : true;
 
         addView(v);
+        status.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                x = status.getX();
+                y = status.getY();
+
+                Boolean isBurnInProtection = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_BURNIN_PROTECTION);
+                if (isBurnInProtection != null && isBurnInProtection)
+                    handler.post(burnInRunnable);
+
+                status.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        });
 
         Boolean isStatusColorAuto = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_AUTO);
         if (isStatusColorAuto != null && !isStatusColorAuto) {

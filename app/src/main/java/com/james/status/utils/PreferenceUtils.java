@@ -36,6 +36,7 @@ public class PreferenceUtils {
         STATUS_HEADS_UP_LAYOUT,
         STATUS_HIDE_ON_VOLUME,
         STATUS_PERSISTENT_NOTIFICATION,
+        STATUS_BURNIN_PROTECTION,
         STATUS_DEBUG
     }
 

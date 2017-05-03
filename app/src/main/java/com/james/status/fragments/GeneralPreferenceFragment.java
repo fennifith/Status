@@ -205,6 +205,17 @@ public class GeneralPreferenceFragment extends SimpleFragment implements Prefere
                         true,
                         this
                 ),
+                new BooleanPreferenceData(
+                        getContext(),
+                        new PreferenceData.Identifier(
+                                PreferenceUtils.PreferenceIdentifier.STATUS_BURNIN_PROTECTION,
+                                getString(R.string.preference_burnin_protection),
+                                getString(R.string.preference_burnin_protection_desc),
+                                PreferenceData.Identifier.SectionIdentifier.OTHER
+                        ),
+                        false,
+                        this
+                ),
                 new PreferenceData<Serializable>(
                         getContext(),
                         new PreferenceData.Identifier(
