@@ -171,22 +171,24 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                         }
 
                         Boolean isFullscreen = activityData.getBooleanPreference(this, AppData.PreferenceIdentifier.FULLSCREEN);
+                        Boolean isTransparentEnabled = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_HOME_TRANSPARENT);
+                        boolean isHome = false;
 
                         if (packageManager != null) {
                             Intent homeIntent = new Intent(Intent.ACTION_MAIN);
                             homeIntent.addCategory(Intent.CATEGORY_HOME);
                             ResolveInfo homeInfo = packageManager.resolveActivity(homeIntent, PackageManager.MATCH_DEFAULT_ONLY);
 
-                            if (homeInfo != null && packageName.toString().matches(homeInfo.activityInfo.packageName)) {
-                                setStatusBar(null, true, isFullscreen, false);
-                                notificationManager.cancel(NOTIFICATION_ID);
-                                return;
-                            }
+                            isHome = homeInfo != null && packageName.toString().matches(homeInfo.activityInfo.packageName);
                         }
 
                         Integer color = activityData.getIntegerPreference(this, AppData.PreferenceIdentifier.COLOR);
-                        if (color != null) {
+                        if (color != null && (!isHome || (isTransparentEnabled != null && !isTransparentEnabled))) {
                             setStatusBar(color, null, isFullscreen, false);
+                            return;
+                        } else if (isHome) {
+                            setStatusBar(null, true, isFullscreen, false);
+                            notificationManager.cancel(NOTIFICATION_ID);
                             return;
                         }
 
@@ -256,13 +258,14 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
         return color;
     }
 
-    private void setStatusBar(@Nullable @ColorInt Integer color, @Nullable Boolean isHomeScreen, @Nullable Boolean isFullscreen, @Nullable Boolean isSystemFullscreen) {
+    private void setStatusBar(@Nullable @ColorInt Integer color, @Nullable Boolean isTransparent, @Nullable Boolean isFullscreen, @Nullable Boolean isSystemFullscreen) {
         Intent intent = new Intent(StatusService.ACTION_UPDATE);
         intent.setClass(this, StatusService.class);
 
         if (color != null) intent.putExtra(StatusService.EXTRA_COLOR, color);
 
-        if (isHomeScreen != null) intent.putExtra(StatusService.EXTRA_IS_HOME_SCREEN, isHomeScreen);
+        if (isTransparent != null)
+            intent.putExtra(StatusService.EXTRA_IS_TRANSPARENT, isTransparent);
 
         if (isFullscreen != null) intent.putExtra(StatusService.EXTRA_IS_FULLSCREEN, isFullscreen);
 

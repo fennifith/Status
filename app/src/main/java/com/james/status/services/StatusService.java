@@ -72,7 +72,7 @@ public class StatusService extends Service {
     public static final String EXTRA_COLOR = "com.james.status.EXTRA_COLOR";
     public static final String EXTRA_IS_SYSTEM_FULLSCREEN = "com.james.status.EXTRA_IS_SYSTEM_FULLSCREEN";
     public static final String EXTRA_IS_FULLSCREEN = "com.james.status.EXTRA_IS_FULLSCREEN";
-    public static final String EXTRA_IS_HOME_SCREEN = "com.james.status.EXTRA_IS_HOME_SCREEN";
+    public static final String EXTRA_IS_TRANSPARENT = "com.james.status.EXTRA_IS_TRANSPARENT";
 
     public static final int HEADSUP_LAYOUT_PLAIN = 0;
     public static final int HEADSUP_LAYOUT_CARD = 1;
@@ -179,8 +179,8 @@ public class StatusService extends Service {
                 if (statusView != null) {
                     statusView.setLockscreen(keyguardManager.isKeyguardLocked());
 
-                    if (intent.hasExtra(EXTRA_IS_HOME_SCREEN) && intent.getBooleanExtra(EXTRA_IS_HOME_SCREEN, false))
-                        statusView.setHomeScreen();
+                    if (intent.hasExtra(EXTRA_IS_TRANSPARENT) && intent.getBooleanExtra(EXTRA_IS_TRANSPARENT, false))
+                        statusView.setTransparent();
                     else if (intent.hasExtra(EXTRA_COLOR) && headsUpView == null)
                         statusView.setColor(intent.getIntExtra(EXTRA_COLOR, Color.BLACK));
 

@@ -411,7 +411,7 @@ public class StatusView extends FrameLayout {
         return color;
     }
 
-    public void setHomeScreen() {
+    public void setTransparent() {
         if (status != null && wallpaperManager != null) {
             Drawable backgroundDrawable;
             WallpaperInfo wallpaperInfo = wallpaperManager.getWallpaperInfo();
