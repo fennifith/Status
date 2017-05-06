@@ -62,6 +62,9 @@
     <string name="permissions_name">Additional Permissions</string>
     <string name="permissions_desc">This app needs a few additional permissions in order to access parts of the phone relevant to the status bar. An explanation of why these are needed is provided in the Status\'s Play Store page.</string>
 
+    <string name="optimizations_name">Ignore Battery Optimizations</string>
+    <string name="optimizations_desc">Battery Optimizations will cause Status to stop working as the system will close Status to save battery life. This must be disabled in order for Status to function correctly.</string>
+
     <string name="overlay_name">Draw Overlays</string>
     <string name="overlay_desc">The app needs to be able to draw an overlay on top of the screen so that it can show the status bar.</string>
 

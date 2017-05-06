@@ -30,9 +30,9 @@ import me.drozdzynski.library.steppers.SteppersView;
 
 public class StartActivity extends AppCompatActivity {
 
-    public static final int REQUEST_ACCESSIBILITY = 7369, REQUEST_NOTIFICATION = 2285, REQUEST_PERMISSIONS = 9374, REQUEST_OVERLAY = 7451;
+    public static final int REQUEST_ACCESSIBILITY = 7369, REQUEST_NOTIFICATION = 2285, REQUEST_PERMISSIONS = 9374, REQUEST_OPTIMIZATION = 6264, REQUEST_OVERLAY = 7451;
 
-    SteppersItem accessibilityStep, notificationStep, permissionsStep, overlayStep;
+    SteppersItem accessibilityStep, notificationStep, permissionsStep, optimizationStep, overlayStep;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +90,15 @@ public class StartActivity extends AppCompatActivity {
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            optimizationStep = new SteppersItem();
+            optimizationStep.setLabel(getString(R.string.optimizations_name));
+            optimizationStep.setSubLabel(getString(R.string.optimizations_desc));
+            optimizationStep.setFragment(new OptimizationStepFragment());
+            optimizationStep.setPositiveButtonEnable(StaticUtils.isIgnoringOptimizations(this));
+
+            steps.add(optimizationStep);
+
+
             permissionsStep = new SteppersItem();
             permissionsStep.setLabel(getString(R.string.permissions_name));
             permissionsStep.setSubLabel(getString(R.string.permissions_desc));
@@ -121,13 +130,15 @@ public class StartActivity extends AppCompatActivity {
             notificationStep.setPositiveButtonEnable(StaticUtils.isNotificationGranted(this));
         if (permissionsStep != null)
             permissionsStep.setPositiveButtonEnable(StaticUtils.isPermissionsGranted(this));
+        if (optimizationStep != null)
+            optimizationStep.setPositiveButtonEnable(StaticUtils.isIgnoringOptimizations(this));
         if (overlayStep != null)
             overlayStep.setPositiveButtonEnable(StaticUtils.canDrawOverlays(this));
     }
 
     @Override
     public void onBackPressed() {
-        if (!StaticUtils.isAccessibilityGranted(this) || !StaticUtils.isNotificationGranted(this) || !StaticUtils.isPermissionsGranted(this) || !StaticUtils.canDrawOverlays(this))
+        if (!StaticUtils.isAccessibilityGranted(this) || !StaticUtils.isNotificationGranted(this) || !StaticUtils.isPermissionsGranted(this) || !StaticUtils.isIgnoringOptimizations(this) || !StaticUtils.canDrawOverlays(this))
             System.exit(0);
         else super.onBackPressed();
     }
@@ -145,6 +156,9 @@ public class StartActivity extends AppCompatActivity {
                 if (notificationStep != null)
                     notificationStep.setPositiveButtonEnable(StaticUtils.isNotificationGranted(this));
                 break;
+            case REQUEST_OPTIMIZATION:
+                if (optimizationStep != null)
+                    optimizationStep.setPositiveButtonEnable(StaticUtils.isIgnoringOptimizations(this));
             case REQUEST_OVERLAY:
                 if (overlayStep != null)
                     overlayStep.setPositiveButtonEnable(StaticUtils.canDrawOverlays(this));
@@ -219,6 +233,26 @@ public class StartActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     StaticUtils.requestPermissions(getActivity());
+                }
+            });
+
+            return button;
+        }
+    }
+
+    @TargetApi(23)
+    public static class OptimizationStepFragment extends Fragment {
+        @Nullable
+        @Override
+        public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            AppCompatButton button = new AppCompatButton(inflater.getContext());
+            button.setText(R.string.optimizations_name);
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+                    intent.setData(Uri.parse("package:" + getActivity().getPackageName()));
+                    startActivityForResult(intent, REQUEST_OPTIMIZATION);
                 }
             });
 

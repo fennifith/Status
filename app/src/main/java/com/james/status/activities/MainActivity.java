@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
         status = (Status) getApplicationContext();
 
-        if (!StaticUtils.isAccessibilityGranted(this) || !StaticUtils.isNotificationGranted(this) || !StaticUtils.isPermissionsGranted(this))
+        if (!StaticUtils.isAccessibilityGranted(this) || !StaticUtils.isNotificationGranted(this) || !StaticUtils.isPermissionsGranted(this) || !StaticUtils.isIgnoringOptimizations(this) || !StaticUtils.canDrawOverlays(this))
             startActivity(new Intent(this, StartActivity.class));
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));

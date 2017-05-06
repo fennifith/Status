@@ -12,6 +12,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.Build;
+import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
@@ -83,6 +84,12 @@ public class StaticUtils {
         return shouldUseCompatNotifications(context);
     }
 
+    public static boolean isIgnoringOptimizations(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            return ((PowerManager) context.getSystemService(Context.POWER_SERVICE)).isIgnoringBatteryOptimizations(context.getPackageName());
+        else return true;
+    }
+
     public static boolean canDrawOverlays(Context context) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return true;
         else return Settings.canDrawOverlays(context);
@@ -100,9 +107,10 @@ public class StaticUtils {
         if (info.requestedPermissions != null) {
             for (String permission : info.requestedPermissions) {
                 if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
-                    Log.wtf("Permission", permission);
-                    if (!permission.matches(Manifest.permission.SYSTEM_ALERT_WINDOW) && !permission.matches(Manifest.permission.GET_TASKS))
+                    if (!permission.matches(Manifest.permission.SYSTEM_ALERT_WINDOW) && (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M || !permission.matches("android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS")) && !permission.matches(Manifest.permission.GET_TASKS)) {
+                        Log.wtf("Permission", permission);
                         return false;
+                    }
                 }
             }
         }
