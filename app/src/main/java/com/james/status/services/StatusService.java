@@ -9,6 +9,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
@@ -20,6 +22,8 @@ import android.os.IBinder;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.util.ArrayMap;
 import android.support.v4.view.ViewCompat;
 import android.view.Gravity;
@@ -35,8 +39,10 @@ import android.widget.TextView;
 
 import com.james.status.BuildConfig;
 import com.james.status.R;
+import com.james.status.activities.AppSettingActivity;
 import com.james.status.activities.MainActivity;
 import com.james.status.data.ActionData;
+import com.james.status.data.AppData;
 import com.james.status.data.NotificationData;
 import com.james.status.data.icon.AirplaneModeIconData;
 import com.james.status.data.icon.AlarmIconData;
@@ -54,6 +60,7 @@ import com.james.status.data.icon.OrientationIconData;
 import com.james.status.data.icon.RingerIconData;
 import com.james.status.data.icon.TimeIconData;
 import com.james.status.data.icon.WifiIconData;
+import com.james.status.receivers.ActivityVisibilitySettingReceiver;
 import com.james.status.utils.PreferenceUtils;
 import com.james.status.utils.StaticUtils;
 import com.james.status.views.CustomImageView;
@@ -73,6 +80,8 @@ public class StatusService extends Service {
     public static final String EXTRA_IS_SYSTEM_FULLSCREEN = "com.james.status.EXTRA_IS_SYSTEM_FULLSCREEN";
     public static final String EXTRA_IS_FULLSCREEN = "com.james.status.EXTRA_IS_FULLSCREEN";
     public static final String EXTRA_IS_TRANSPARENT = "com.james.status.EXTRA_IS_TRANSPARENT";
+    public static final String EXTRA_PACKAGE = "com.james.status.EXTRA_PACKAGE";
+    public static final String EXTRA_ACTIVITY = "com.james.status.EXTRA_ACTIVITY";
 
     public static final int HEADSUP_LAYOUT_PLAIN = 0;
     public static final int HEADSUP_LAYOUT_CARD = 1;
@@ -87,6 +96,7 @@ public class StatusService extends Service {
 
     private KeyguardManager keyguardManager;
     private WindowManager windowManager;
+    private PackageManager packageManager;
 
     private NotificationReceiver notificationReceiver;
     private ArrayMap<String, NotificationData> notifications;
@@ -99,12 +109,16 @@ public class StatusService extends Service {
     private int headsUpDuration = 10000;
     private boolean isRegistered;
 
+    private String packageName;
+    private AppData.ActivityData activityData;
+
     @Override
     public void onCreate() {
         super.onCreate();
 
         windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
+        packageManager = getPackageManager();
 
         notificationReceiver = new NotificationReceiver();
 
@@ -159,16 +173,6 @@ public class StatusService extends Service {
         switch (action) {
             case ACTION_START:
                 setUp();
-
-                Boolean isForeground = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_PERSISTENT_NOTIFICATION);
-                if (isForeground == null || isForeground) {
-                    startForeground(ID_FOREGROUND, new NotificationCompat.Builder(this)
-                            .setSmallIcon(R.drawable.transparent)
-                            .setContentTitle(getString(R.string.app_name))
-                            .setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class), 0))
-                            .build()
-                    );
-                } else stopForeground(true);
                 break;
             case ACTION_STOP:
                 windowManager.removeView(statusView);
@@ -186,10 +190,102 @@ public class StatusService extends Service {
 
                     statusView.setSystemShowing(intent.getBooleanExtra(EXTRA_IS_SYSTEM_FULLSCREEN, statusView.isSystemShowing()));
                     statusView.setFullscreen(intent.getBooleanExtra(EXTRA_IS_FULLSCREEN, isFullscreen()));
+
+                    if (intent.hasExtra(EXTRA_PACKAGE) && intent.hasExtra(EXTRA_ACTIVITY)) {
+                        Boolean isForeground = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_PERSISTENT_NOTIFICATION);
+                        if (isForeground == null || isForeground) {
+                            packageName = intent.getStringExtra(EXTRA_PACKAGE);
+                            activityData = intent.getParcelableExtra(EXTRA_ACTIVITY);
+
+                            startForeground(packageName, activityData);
+                        } else stopForeground(true);
+                    }
                 }
-                break;
+                return START_STICKY;
         }
+
+        Boolean isForeground = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_PERSISTENT_NOTIFICATION);
+        if (isForeground == null || isForeground) {
+            if (packageName != null && activityData != null)
+                startForeground(packageName, activityData);
+            else {
+                Intent contentIntent = new Intent(this, MainActivity.class);
+                contentIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                TaskStackBuilder contentStackBuilder = TaskStackBuilder.create(this);
+                contentStackBuilder.addParentStack(MainActivity.class);
+                contentStackBuilder.addNextIntent(contentIntent);
+
+                startForeground(ID_FOREGROUND, new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.ic_notification)
+                        .setColor(ContextCompat.getColor(this, R.color.colorAccent))
+                        .setContentTitle(getString(R.string.app_name))
+                        .setContentIntent(contentStackBuilder.getPendingIntent(0, PendingIntent.FLAG_CANCEL_CURRENT))
+                        .build()
+                );
+            }
+        } else stopForeground(true);
+
         return START_STICKY;
+    }
+
+    private void startForeground(String packageName, AppData.ActivityData activityData) {
+        AppData appData;
+        try {
+            ApplicationInfo applicationInfo = packageManager.getApplicationInfo(packageName, PackageManager.GET_META_DATA);
+            PackageInfo packageInfo = packageManager.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES);
+            appData = new AppData(packageManager, applicationInfo, packageInfo);
+        } catch (PackageManager.NameNotFoundException e) {
+            return;
+        }
+
+        Intent contentIntent = new Intent(this, MainActivity.class);
+        contentIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        TaskStackBuilder contentStackBuilder = TaskStackBuilder.create(this);
+        contentStackBuilder.addParentStack(MainActivity.class);
+        contentStackBuilder.addNextIntent(contentIntent);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.ic_notification)
+                .setColor(ContextCompat.getColor(this, R.color.colorAccent))
+                .setContentTitle(getString(R.string.app_name))
+                .setContentText(activityData.name)
+                .setSubText(packageName)
+                .setContentIntent(contentStackBuilder.getPendingIntent(0, PendingIntent.FLAG_CANCEL_CURRENT));
+
+        Boolean isColorAuto = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_AUTO);
+        if (isColorAuto == null || isColorAuto) {
+            Intent colorIntent = new Intent(this, AppSettingActivity.class);
+            colorIntent.putExtra(AppSettingActivity.EXTRA_APP, appData);
+            colorIntent.putExtra(AppSettingActivity.EXTRA_ACTIVITY, activityData);
+            colorIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            TaskStackBuilder colorStackBuilder = TaskStackBuilder.create(this);
+            colorStackBuilder.addParentStack(AppSettingActivity.class);
+            colorStackBuilder.addNextIntent(colorIntent);
+
+            builder.addAction(R.drawable.ic_notification_color, getString(R.string.action_set_color), colorStackBuilder.getPendingIntent(0, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_CANCEL_CURRENT));
+        }
+
+        Boolean isFullscreen = activityData.getBooleanPreference(this, AppData.PreferenceIdentifier.FULLSCREEN);
+        Intent visibleIntent = new Intent(this, ActivityVisibilitySettingReceiver.class);
+        visibleIntent.putExtra(ActivityVisibilitySettingReceiver.EXTRA_ACTIVITY, activityData);
+        visibleIntent.putExtra(ActivityVisibilitySettingReceiver.EXTRA_VISIBILITY, isFullscreen != null && isFullscreen);
+
+        builder.addAction(R.drawable.ic_notification_visible, getString(isFullscreen != null && isFullscreen ? R.string.action_show_status : R.string.action_hide_status), PendingIntent.getBroadcast(this, 0, visibleIntent, PendingIntent.FLAG_CANCEL_CURRENT));
+
+        Intent settingsIntent = new Intent(this, AppSettingActivity.class);
+        settingsIntent.putExtra(AppSettingActivity.EXTRA_APP, appData);
+        settingsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        TaskStackBuilder settingsStackBuilder = TaskStackBuilder.create(this);
+        settingsStackBuilder.addParentStack(AppSettingActivity.class);
+        settingsStackBuilder.addNextIntent(settingsIntent);
+
+        builder.addAction(R.drawable.ic_notification_settings, getString(R.string.action_app_settings), settingsStackBuilder.getPendingIntent(0, PendingIntent.FLAG_CANCEL_CURRENT));
+
+        startForeground(ID_FOREGROUND, builder.build());
     }
 
     @Override

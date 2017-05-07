@@ -70,17 +70,6 @@ public class GeneralPreferenceFragment extends SimpleFragment implements Prefere
                 new BooleanPreferenceData(
                         getContext(),
                         new PreferenceData.Identifier(
-                                PreferenceUtils.PreferenceIdentifier.STATUS_COLORED_APPS_NOTIFICATIONS,
-                                getString(R.string.preference_color_notification),
-                                getString(R.string.preference_color_notification_desc),
-                                PreferenceData.Identifier.SectionIdentifier.COLORS
-                        ),
-                        true,
-                        null
-                ),
-                new BooleanPreferenceData(
-                        getContext(),
-                        new PreferenceData.Identifier(
                                 PreferenceUtils.PreferenceIdentifier.STATUS_HOME_TRANSPARENT,
                                 getString(R.string.preference_transparent_home),
                                 getString(R.string.preference_transparent_home_desc),

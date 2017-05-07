@@ -2,7 +2,6 @@ package com.james.status.services;
 
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.app.Notification;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -18,13 +17,11 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.NotificationCompat;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.Toast;
 
 import com.james.status.R;
 import com.james.status.Status;
-import com.james.status.activities.AppSettingActivity;
 import com.james.status.data.AppData;
 import com.james.status.data.NotificationData;
 import com.james.status.data.icon.NotificationsIconData;
@@ -40,10 +37,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
 
     public static final String
             ACTION_GET_COLOR = "com.james.status.ACTION_GET_COLOR",
-            ACTION_NOTIFY_COLOR = "com.james.status.ACTION_NOTIFY_COLOR",
             EXTRA_COMPONENT = "com.james.status.EXTRA_COMPONENT";
-
-    private static final int NOTIFICATION_ID = 7146;
 
     private PackageManager packageManager;
     private NotificationManagerCompat notificationManager;
@@ -66,29 +60,6 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                         i.setClass(this, StatusService.class);
                         i.putExtra(StatusService.EXTRA_COLOR, color);
                         startService(i);
-                        break;
-                    case ACTION_NOTIFY_COLOR:
-                        if (notificationManager != null)
-                            notificationManager.cancel(NOTIFICATION_ID);
-
-                        ComponentName component;
-
-                        if (intent.hasExtra(EXTRA_COMPONENT))
-                            component = intent.getParcelableExtra(EXTRA_COMPONENT);
-                        else break;
-
-                        AppData data;
-                        try {
-                            data = new AppData(packageManager, packageManager.getApplicationInfo(component.getPackageName(), PackageManager.GET_META_DATA), packageManager.getPackageInfo(component.getPackageName(), PackageManager.GET_ACTIVITIES));
-                        } catch (PackageManager.NameNotFoundException | NullPointerException e) {
-                            e.printStackTrace();
-                            break;
-                        }
-
-                        Intent appSettingIntent = new Intent(this, AppSettingActivity.class);
-                        appSettingIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        appSettingIntent.putExtra(AppSettingActivity.EXTRA_APP, data);
-                        startActivity(appSettingIntent);
                         break;
                 }
             }
@@ -151,10 +122,10 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                                     if (event.getText().toString().toLowerCase().contains("volume")) {
                                         if (event.getText().toString().toLowerCase().contains("hidden")) {
                                             volumeReceiver.cancel();
-                                            setStatusBar(null, false, null, false);
+                                            setStatusBar(null, false, null, false, null, null);
                                         } else if (!VolumeReceiver.canReceive())
                                             volumeReceiver.onVolumeChanged();
-                                    } else setStatusBar(null, false, null, true);
+                                    } else setStatusBar(null, false, null, true, null, null);
 
                                     if (StaticUtils.shouldUseCompatNotifications(this)) {
                                         for (NotificationData notification : notifications) {
@@ -165,7 +136,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
 
                                         notifications.clear();
                                     }
-                                } else setStatusBar(null, false, null, false);
+                                } else setStatusBar(null, false, null, false, null, null);
                             }
                             return;
                         }
@@ -184,30 +155,28 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
 
                         Integer color = activityData.getIntegerPreference(this, AppData.PreferenceIdentifier.COLOR);
                         if (color != null && (!isHome || (isTransparentEnabled != null && !isTransparentEnabled))) {
-                            setStatusBar(color, null, isFullscreen, false);
+                            setStatusBar(color, null, isFullscreen, false, packageName.toString(), activityData);
                             return;
                         } else if (isHome) {
-                            setStatusBar(null, true, isFullscreen, false);
-                            notificationManager.cancel(NOTIFICATION_ID);
+                            setStatusBar(null, true, isFullscreen, false, packageName.toString(), activityData);
                             return;
                         }
 
                         Boolean isColorAuto = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_AUTO);
                         if (isColorAuto != null && !isColorAuto) {
-                            setStatusBar(getDefaultColor(), null, isFullscreen, false);
+                            setStatusBar(getDefaultColor(), null, isFullscreen, false, packageName.toString(), activityData);
                             return;
                         }
 
                         if (packageName.toString().equals("com.android.systemui")) {
                             //prevents the creation of some pretty nasty looking color schemes below Lollipop
-                            setStatusBar(getDefaultColor(), null, false, false);
-                            notificationManager.cancel(NOTIFICATION_ID);
+                            setStatusBar(getDefaultColor(), null, false, false, packageName.toString(), activityData);
                             return;
                         }
 
                         if (packageName.toString().matches("com.james.status")) {
                             //prevents recursive heads up notifications
-                            setStatusBar(ContextCompat.getColor(this, R.color.colorPrimaryDark), null, isFullscreen, false);
+                            setStatusBar(ContextCompat.getColor(this, R.color.colorPrimaryDark), null, isFullscreen, false, packageName.toString(), activityData);
                             return;
                         }
 
@@ -225,27 +194,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                             }
                         }
 
-                        if (color == null) {
-                            color = getDefaultColor();
-
-                            Boolean notification = PreferenceUtils.getBooleanPreference(AccessibilityService.this, PreferenceUtils.PreferenceIdentifier.STATUS_COLORED_APPS_NOTIFICATIONS);
-                            if (notification != null && notification) {
-                                Intent intent = new Intent(ACTION_NOTIFY_COLOR);
-                                intent.setClass(AccessibilityService.this, AccessibilityService.class);
-                                intent.putExtra(EXTRA_COMPONENT, new ComponentName(packageName.toString(), className.toString()));
-
-                                notificationManager.notify(NOTIFICATION_ID, new NotificationCompat.Builder(AccessibilityService.this)
-                                        .setSmallIcon(R.mipmap.ic_colorize)
-                                        .setColor(ContextCompat.getColor(AccessibilityService.this, R.color.colorAccent))
-                                        .setContentTitle(getString(R.string.notification_color))
-                                        .setContentText(getString(R.string.notification_color_desc))
-                                        .setContentIntent(PendingIntent.getService(AccessibilityService.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT))
-                                        .build()
-                                );
-                            }
-                        } else notificationManager.cancel(NOTIFICATION_ID);
-
-                        setStatusBar(color, null, isFullscreen, false);
+                        setStatusBar(color != null ? color : getDefaultColor(), null, isFullscreen, false, packageName.toString(), activityData);
                     }
             }
         }
@@ -258,7 +207,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
         return color;
     }
 
-    private void setStatusBar(@Nullable @ColorInt Integer color, @Nullable Boolean isTransparent, @Nullable Boolean isFullscreen, @Nullable Boolean isSystemFullscreen) {
+    private void setStatusBar(@Nullable @ColorInt Integer color, @Nullable Boolean isTransparent, @Nullable Boolean isFullscreen, @Nullable Boolean isSystemFullscreen, @Nullable String packageName, @Nullable AppData.ActivityData activityData) {
         Intent intent = new Intent(StatusService.ACTION_UPDATE);
         intent.setClass(this, StatusService.class);
 
@@ -272,6 +221,12 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
         if (isSystemFullscreen != null)
             intent.putExtra(StatusService.EXTRA_IS_SYSTEM_FULLSCREEN, isSystemFullscreen);
 
+        if (packageName != null)
+            intent.putExtra(StatusService.EXTRA_PACKAGE, packageName);
+
+        if (activityData != null)
+            intent.putExtra(StatusService.EXTRA_ACTIVITY, activityData);
+
         startService(intent);
 
         if (color != null) this.color = color;
@@ -284,7 +239,6 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
     @Override
     public void onDestroy() {
         if (volumeReceiver != null) unregisterReceiver(volumeReceiver);
-        if (notificationManager != null) notificationManager.cancel(NOTIFICATION_ID);
         super.onDestroy();
     }
 
@@ -303,7 +257,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                     AccessibilityService service = reference.get();
                     if (service != null) {
                         Status.showDebug(service, "Volume callback called", Toast.LENGTH_SHORT);
-                        service.setStatusBar(null, false, null, false);
+                        service.setStatusBar(null, false, null, false, null, null);
                     }
                 }
             };
@@ -319,7 +273,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
             AccessibilityService service = reference.get();
             if (service != null && shouldHideOnVolume(service)) {
                 Status.showDebug(service, "Volume callback added", Toast.LENGTH_SHORT);
-                service.setStatusBar(null, false, null, true);
+                service.setStatusBar(null, false, null, true, null, null);
                 handler.removeCallbacks(runnable);
 
                 handler.postDelayed(runnable, 3000);

@@ -107,7 +107,7 @@ public class StaticUtils {
         if (info.requestedPermissions != null) {
             for (String permission : info.requestedPermissions) {
                 if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
-                    if (!permission.matches(Manifest.permission.SYSTEM_ALERT_WINDOW) && (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M || !permission.matches("android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS")) && !permission.matches(Manifest.permission.GET_TASKS)) {
+                    if (!permission.matches(Manifest.permission.SYSTEM_ALERT_WINDOW) && (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M || !permission.matches("android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS")) && !permission.matches("android.permission.GET_TASKS")) {
                         Log.wtf("Permission", permission);
                         return false;
                     }
@@ -132,7 +132,7 @@ public class StaticUtils {
             for (String permission : info.requestedPermissions) {
                 if (ContextCompat.checkSelfPermission(activity, permission) != PackageManager.PERMISSION_GRANTED) {
                     Log.wtf("Permission", permission);
-                    if (permission.length() > 0 && !permission.matches(Manifest.permission.SYSTEM_ALERT_WINDOW) && !permission.matches(Manifest.permission.GET_TASKS))
+                    if (permission.length() > 0 && !permission.matches(Manifest.permission.SYSTEM_ALERT_WINDOW) && !permission.matches("android.permission.GET_TASKS"))
                         unrequestedPermissions.add(permission);
                 }
             }

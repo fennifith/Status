@@ -54,6 +54,8 @@
 
         <activity android:name=".activities.AboutActivity" />
 
+        <receiver android:name=".receivers.ActivityVisibilitySettingReceiver" />
+
         <service android:name=".services.StatusService" />
 
         <service
