@@ -35,6 +35,10 @@
     <string name="action_restore_backup">Restaurar esta copia de seg.</string>
     <string name="action_save_backup">Sobrescribir copia de seg.</string>
     <string name="action_create_backup">Crear copia de seg.</string>
+    <string name="action_hide_status">Ocultar Status</string>
+    <string name="action_show_status">Mostrar Status</string>
+    <string name="action_app_settings">Ajustes de aplicación</string>
+    <string name="action_set_color">Colocar color</string>
 
     <string name="reset_all">Reiniciar todo</string>
     <string name="notifications_disable">Desactivar todas las notificaciones</string>
@@ -61,6 +65,9 @@
 
     <string name="permissions_name">Permisos adicionales</string>
     <string name="permissions_desc">Esta aplicación necesita varios permisos adicionales para acceder a a todas las partes relevantes del dispositivo. Puedes encontrar una explicación más extensa acerca de esto en la página de Status en Play Store.</string>
+
+    <string name="optimizations_name">Ignorar las optimizaciones de batería</string>
+    <string name="optimizations_desc">Las optimizaciones de batería harán que Status deje de funcionar, ya que el sistema cerrará Status para ahorrar batería. Es necesario desactivar esto para que Status funcione correctamente.</string>
 
     <string name="overlay_name">Capas superpuestas</string>
     <string name="overlay_desc">La aplicación necesita permiso para establecer capas y ventanas de forma superpuesta en la pantalla, permitiendo que se muestren las notificaciones en la barra de estado.</string>
@@ -142,6 +149,8 @@
     <string name="preference_persistent_notification_desc">Esto mantiene el servicio de Status en primer plano para que no se cierre automáticamente, como motivo de ahorro de batería. Al desactivar esto, puede aumentar el rendimiento, pero puede costar problemas de estabilidad en algunos dispositivos.</string>
     <string name="preference_backups">Copiar/Restaurar ajustes</string>
     <string name="preference_backups_desc">Te permite hacer una copia de seguridad o restaurar todos los ajustes de Status como un archivo de texto.</string>
+    <string name="preference_burnin_protection">Protección antiquemaduras</string>
+    <string name="preference_burnin_protection_desc">Impide que Status provoque quemaduras en algunas pantallas, moviendo los iconos cada dos segundos.</string>
 
     <string name="icon_notifications">Notificaciones</string>
     <string name="icon_clock">Reloj</string>
@@ -284,4 +293,5 @@
             <p>\nGson es una biblioteca Java que puede utilizarse para convertir elementos Java en representaciones JSON.</p>
         </item>
     </string-array>
+
 </resources>
