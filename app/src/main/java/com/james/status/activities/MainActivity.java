@@ -2,6 +2,7 @@ package com.james.status.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -182,6 +183,13 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                     @Override
                     public void onClick() {
                         if (viewPager != null) viewPager.setCurrentItem(3);
+                    }
+                });
+            } else if (StaticUtils.shouldShowTutorial(MainActivity.this, "donate", 3)) {
+                setTutorial(R.string.tutorial_donate, R.string.tutorial_donate_desc, new OnTutorialClickListener() {
+                    @Override
+                    public void onClick() {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=james.donate")));
                     }
                 });
             }
