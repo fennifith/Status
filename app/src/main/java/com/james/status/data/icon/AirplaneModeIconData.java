@@ -75,6 +75,13 @@ public class AirplaneModeIconData extends IconData<AirplaneModeIconData.Airplane
         return styles;
     }
 
+    @Override
+    public String[] getIconNames() {
+        return new String[]{
+                getContext().getString(R.string.icon_airplane)
+        };
+    }
+
     static class AirplaneModeReceiver extends IconUpdateReceiver<AirplaneModeIconData> {
 
         private AirplaneModeReceiver(AirplaneModeIconData iconData) {

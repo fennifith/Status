@@ -78,6 +78,14 @@ public class BluetoothIconData extends IconData<BluetoothIconData.BluetoothRecei
         return styles;
     }
 
+    @Override
+    public String[] getIconNames() {
+        return new String[]{
+                getContext().getString(R.string.icon_bluetooth_scanning),
+                getContext().getString(R.string.icon_bluetooth_connected)
+        };
+    }
+
     static class BluetoothReceiver extends IconUpdateReceiver<BluetoothIconData> {
 
         private BluetoothReceiver(BluetoothIconData iconData) {

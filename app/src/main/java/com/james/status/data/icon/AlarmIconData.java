@@ -97,6 +97,13 @@ public class AlarmIconData extends IconData<AlarmIconData.AlarmReceiver> {
         return styles;
     }
 
+    @Override
+    public String[] getIconNames() {
+        return new String[]{
+                getContext().getString(R.string.icon_alarm)
+        };
+    }
+
     static class AlarmReceiver extends IconUpdateReceiver<AlarmIconData> {
 
         private AlarmReceiver(AlarmIconData iconData) {

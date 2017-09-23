@@ -69,6 +69,14 @@ public class HeadphoneIconData extends IconData<HeadphoneIconData.HeadphoneRecei
         return styles;
     }
 
+    @Override
+    public String[] getIconNames() {
+        return new String[]{
+                getContext().getString(R.string.icon_headphone_headphones),
+                getContext().getString(R.string.icon_headphone_headset)
+        };
+    }
+
     static class HeadphoneReceiver extends IconUpdateReceiver<HeadphoneIconData> {
 
         private HeadphoneReceiver(HeadphoneIconData iconData) {

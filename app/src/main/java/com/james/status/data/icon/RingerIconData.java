@@ -87,6 +87,14 @@ public class RingerIconData extends IconData<RingerIconData.RingerReceiver> {
         return styles;
     }
 
+    @Override
+    public String[] getIconNames() {
+        return new String[]{
+                getContext().getString(R.string.icon_ringer_muted),
+                getContext().getString(R.string.icon_ringer_vibrate)
+        };
+    }
+
     static class RingerReceiver extends IconUpdateReceiver<RingerIconData> {
 
         private RingerReceiver(RingerIconData iconData) {

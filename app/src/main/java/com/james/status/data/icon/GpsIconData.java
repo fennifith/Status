@@ -102,6 +102,14 @@ public class GpsIconData extends IconData<GpsIconData.GpsReceiver> {
         return styles;
     }
 
+    @Override
+    public String[] getIconNames() {
+        return new String[]{
+                getContext().getString(R.string.icon_gps_searching),
+                getContext().getString(R.string.icon_gps_fixed)
+        };
+    }
+
     static class GpsReceiver extends IconUpdateReceiver<GpsIconData> {
 
         private GpsReceiver(GpsIconData iconData) {

@@ -124,6 +124,17 @@ public class NetworkIconData extends IconData {
         return styles;
     }
 
+    @Override
+    public String[] getIconNames() {
+        return new String[]{
+                getContext().getString(R.string.icon_network_no_connection),
+                getContext().getString(R.string.icon_network_1_bar),
+                getContext().getString(R.string.icon_network_2_bars),
+                getContext().getString(R.string.icon_network_3_bars),
+                getContext().getString(R.string.icon_network_4_bars)
+        };
+    }
+
     private static class NetworkListener extends PhoneStateListener {
 
         private SoftReference<NetworkIconData> reference;

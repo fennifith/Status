@@ -218,6 +218,27 @@ public class BatteryIconData extends IconData {
         return styles;
     }
 
+    @Override
+    public String[] getIconNames() {
+        return new String[]{
+                getContext().getString(R.string.icon_battery_alert),
+                getContext().getString(R.string.icon_battery_0_15),
+                getContext().getString(R.string.icon_battery_15_30),
+                getContext().getString(R.string.icon_battery_30_45),
+                getContext().getString(R.string.icon_battery_45_60),
+                getContext().getString(R.string.icon_battery_60_75),
+                getContext().getString(R.string.icon_battery_75_90),
+                getContext().getString(R.string.icon_battery_full),
+                getContext().getString(R.string.icon_battery_charging_0_15),
+                getContext().getString(R.string.icon_battery_charging_15_30),
+                getContext().getString(R.string.icon_battery_charging_30_45),
+                getContext().getString(R.string.icon_battery_charging_45_60),
+                getContext().getString(R.string.icon_battery_charging_60_75),
+                getContext().getString(R.string.icon_battery_charging_75_90),
+                getContext().getString(R.string.icon_battery_charging_full)
+        };
+    }
+
     static class BatteryReceiver extends IconUpdateReceiver<BatteryIconData> {
 
         private BatteryReceiver(BatteryIconData iconData) {

@@ -459,6 +459,10 @@ public abstract class IconData<T extends IconUpdateReceiver> {
         return 0;
     }
 
+    public String[] getIconNames() {
+        return new String[]{};
+    }
+
     public List<IconStyleData> getIconStyles() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 

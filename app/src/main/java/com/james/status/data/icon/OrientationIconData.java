@@ -105,6 +105,15 @@ public class OrientationIconData extends IconData<OrientationIconData.Orientatio
     }
 
     @Override
+    public String[] getIconNames() {
+        return new String[]{
+                getContext().getString(R.string.icon_orientation_auto),
+                getContext().getString(R.string.icon_orientation_portrait),
+                getContext().getString(R.string.icon_orientation_landscape)
+        };
+    }
+
+    @Override
     public String getTitle() {
         return getContext().getString(R.string.icon_orientation);
     }

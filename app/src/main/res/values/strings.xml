@@ -50,6 +50,7 @@
     <string name="error_no_text_name">Please type a name…</string>
     <string name="error_name_exists">An item with this name already exists.</string>
     <string name="error_missing_icons">You are missing one or more required icons.</string>
+    <string name="err_battery_already_ignored">Battery optimizations are already ignored! You can proceed to the next step.</string>
 
     <string name="service_name">Status Service</string>
     <string name="service_name_general">Accessibility Service</string>
@@ -145,6 +146,8 @@
     <string name="preference_status_color">Primary Color</string>
     <string name="preference_fullscreen">Hide Status</string>
     <string name="preference_notifications">Notifications</string>
+    <string name="preference_side_padding">Side Padding</string>
+    <string name="preference_side_padding_desc">Useful to prevent icons being cut off at the sides of the screen on phones with rounded screen edges.</string>
     <string name="preference_persistent_notification">Show Persistent Notification</string>
     <string name="preference_persistent_notification_desc">This keeps the Status service in the foreground and prevents it from being automatically shut down due to conserve memory or battery life. Disabling this setting could improve performance, but it could also cause various stability issues on some devices.</string>
     <string name="preference_backups">Backup/Restore Settings</string>
@@ -154,19 +157,67 @@
 
     <string name="icon_notifications">Notifications</string>
     <string name="icon_clock">Clock</string>
+
     <string name="icon_battery">Battery Icon</string>
+    <string name="icon_battery_alert">Alert</string>
+    <string name="icon_battery_0_15">0% - 15%</string>
+    <string name="icon_battery_15_30">15% - 30%</string>
+    <string name="icon_battery_30_45">30% - 45%</string>
+    <string name="icon_battery_45_60">45% - 60%</string>
+    <string name="icon_battery_60_75">60% - 75%</string>
+    <string name="icon_battery_75_90">75% - 90%</string>
+    <string name="icon_battery_full">Full</string>
+    <string name="icon_battery_charging_0_15">Charging 0% - 15%</string>
+    <string name="icon_battery_charging_15_30">Charging 15% - 30%</string>
+    <string name="icon_battery_charging_30_45">Charging 30% - 45%</string>
+    <string name="icon_battery_charging_45_60">Charging 45% - 60%</string>
+    <string name="icon_battery_charging_60_75">Charging 60% - 75%</string>
+    <string name="icon_battery_charging_75_90">Charging 75% - 90%</string>
+    <string name="icon_battery_charging_full">Full (On Charger)</string>
+
     <string name="icon_network">Network Icon</string>
+    <string name="icon_network_no_connection">No Connection</string>
+    <string name="icon_network_1_bar">1 Bar</string>
+    <string name="icon_network_2_bars">2 Bars</string>
+    <string name="icon_network_3_bars">3 Bars</string>
+    <string name="icon_network_4_bars">4 Bars</string>
+
     <string name="icon_data">Data Indicator</string>
+
     <string name="icon_wifi">WiFi Icon</string>
+    <string name="icon_wifi_no_signal">No Signal</string>
+    <string name="icon_wifi_1_bar">1 Bar</string>
+    <string name="icon_wifi_2_bars">2 Bars</string>
+    <string name="icon_wifi_3_bars">3 Bars</string>
+    <string name="icon_wifi_4_bars">4 Bars</string>
+
     <string name="icon_bluetooth">Bluetooth Icon</string>
+    <string name="icon_bluetooth_scanning">Scanning</string>
+    <string name="icon_bluetooth_connected">Connected</string>
+
     <string name="icon_gps">Gps Icon</string>
+    <string name="icon_gps_searching">Searching</string>
+    <string name="icon_gps_fixed">Fixed</string>
+
     <string name="icon_airplane">Airplane Mode Icon</string>
     <string name="icon_alarm">Alarm Icon</string>
+
     <string name="icon_ringer">Ringer Volume Icon</string>
+    <string name="icon_ringer_muted">Muted</string>
+    <string name="icon_ringer_vibrate">Vibrate</string>
+
     <string name="icon_nfc">NFC Icon</string>
+
     <string name="icon_headphone">Headphones Icon</string>
+    <string name="icon_headphone_headphones">Headphones</string>
+    <string name="icon_headphone_headset">Headset</string>
+
     <string name="icon_carrier">Carrier Name</string>
+
     <string name="icon_orientation">Orientation Icon</string>
+    <string name="icon_orientation_auto">Auto</string>
+    <string name="icon_orientation_portrait">Locked Portrait</string>
+    <string name="icon_orientation_landscape">Locked Landscape</string>
 
     <string name="heads_up_plain">Plain</string>
     <string name="heads_up_card">Cards</string>
@@ -206,6 +257,16 @@
     <string name="icon_style_tap">Tap</string>
     <string name="icon_style_school">School</string>
     <string name="icon_style_system">System</string>
+    <string name="icon_style_round">Round</string>
+    <string name="icon_style_dish2">Dish 2</string>
+    <string name="icon_style_satellite">Satellite</string>
+    <string name="icon_style_satellite_outline">Satellite Outline</string>
+    <string name="icon_style_front">Front</string>
+    <string name="icon_style_propeller">Propeller</string>
+    <string name="icon_style_pilot_hat">Pilot Hat</string>
+    <string name="icon_style_boxy">Boxy</string>
+    <string name="icon_style_sideways">Sideways</string>
+    <string name="icon_style_bell">Bell</string>
 
     <string name="tutorial_enable">Enable the Status Bar</string>
     <string name="tutorial_enable_desc">The switch at the top of the screen allows you to enable and disable the customized status bar. Turn it on to try it!</string>
@@ -272,21 +333,9 @@
 
     <string name="md_icons">Material Design Icons</string>
     <string name="md_icons_desc">Made by many various contributors, this collection of icons contains useful resources unavailable from Google\'s site.</string>
-    <string name="err_battery_already_ignored">Battery optimizations are already ignored! You can proceed to the next step.</string>
-    <string name="preference_side_padding">Side Padding</string>
-    <string name="preference_side_padding_desc">Useful to prevent icons being cut off at the sides of the screen on phones with rounded screen edges.</string>
-    <string name="icon_style_bell">Bell</string>
+
     <string name="icons8_icons">Icons8</string>
     <string name="icons8_icons_desc">57,700 free flat icons in any format, size and color in 20 seconds.</string>
-    <string name="icon_style_round">Round</string>
-    <string name="icon_style_dish2">Dish 2</string>
-    <string name="icon_style_satellite">Satellite</string>
-    <string name="icon_style_satellite_outline">Satellite Outline</string>
-    <string name="icon_style_front">Front</string>
-    <string name="icon_style_propeller">Propeller</string>
-    <string name="icon_style_pilot_hat">Pilot Hat</string>
-    <string name="icon_style_boxy">Boxy</string>
-    <string name="icon_style_sideways">Sideways</string>
 
     <string-array name="libraries">
         <item>

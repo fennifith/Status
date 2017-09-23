@@ -85,6 +85,13 @@ public class NfcIconData extends IconData<NfcIconData.NfcReceiver> {
         return styles;
     }
 
+    @Override
+    public String[] getIconNames() {
+        return new String[]{
+                getContext().getString(R.string.icon_nfc)
+        };
+    }
+
     static class NfcReceiver extends IconUpdateReceiver<NfcIconData> {
 
         private NfcReceiver(NfcIconData iconData) {

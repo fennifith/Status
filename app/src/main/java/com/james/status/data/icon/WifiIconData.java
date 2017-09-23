@@ -120,6 +120,17 @@ public class WifiIconData extends IconData<WifiIconData.WifiReceiver> {
         return styles;
     }
 
+    @Override
+    public String[] getIconNames() {
+        return new String[]{
+                getContext().getString(R.string.icon_wifi_no_signal),
+                getContext().getString(R.string.icon_wifi_1_bar),
+                getContext().getString(R.string.icon_wifi_2_bars),
+                getContext().getString(R.string.icon_wifi_3_bars),
+                getContext().getString(R.string.icon_wifi_4_bars)
+        };
+    }
+
     static class WifiReceiver extends IconUpdateReceiver<WifiIconData> {
 
         private WifiReceiver(WifiIconData iconData) {
