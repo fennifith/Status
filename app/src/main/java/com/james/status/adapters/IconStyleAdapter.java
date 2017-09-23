@@ -77,7 +77,7 @@ public class IconStyleAdapter extends RecyclerView.Adapter<IconStyleAdapter.View
                     if (styles.size() > 0) setIconStyle(styles.get(0));
                     else notifyDataSetChanged();
 
-                    new IconCreatorDialog(context, style, icon.getStringArrayPreference(IconData.PreferenceIdentifier.ICON_STYLE_NAMES)).setListener(new IconCreatorDialog.OnIconStyleListener() {
+                    new IconCreatorDialog(context, style, icon.getStringArrayPreference(IconData.PreferenceIdentifier.ICON_STYLE_NAMES), icon.getIconNames()).setListener(new IconCreatorDialog.OnIconStyleListener() {
                         @Override
                         public void onIconStyle(IconStyleData style) {
                             icon.addIconStyle(style);

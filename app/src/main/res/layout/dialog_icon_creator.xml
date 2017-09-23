@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:minHeight="400dp"
-    android:minWidth="300dp"
+    android:minWidth="500dp"
     android:orientation="vertical">
 
     <android.support.v7.widget.AppCompatEditText

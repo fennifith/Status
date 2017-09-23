@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="42dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="?attr/selectableItemBackground"
     android:orientation="horizontal"
     android:padding="8dp">
@@ -20,6 +21,7 @@
         android:layout_height="24dp"
         android:layout_gravity="center_vertical"
         android:scaleType="centerInside"
-        android:tint="@android:color/black" />
+        android:tint="@android:color/black"
+        app:srcCompat="@drawable/ic_add_box" />
 
 </LinearLayout>

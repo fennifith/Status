@@ -31,10 +31,11 @@ public class IconCreatorDialog extends AppCompatDialog {
 
     private String name;
     private String[] paths = new String[0];
+    private String[] iconNames;
 
     private EditText editText;
 
-    public IconCreatorDialog(Context context, int size, String[] names) {
+    public IconCreatorDialog(Context context, int size, String[] names, String[] iconNames) {
         super(context, R.style.AppTheme_Dialog);
         setTitle(R.string.action_edit_style);
 
@@ -44,9 +45,10 @@ public class IconCreatorDialog extends AppCompatDialog {
         if (names != null) this.names = names;
 
         paths = new String[size];
+        this.iconNames = iconNames;
     }
 
-    public IconCreatorDialog(Context context, IconStyleData style, String[] names) {
+    public IconCreatorDialog(Context context, IconStyleData style, String[] names, String[] iconNames) {
         super(context, R.style.AppTheme_Dialog);
         setTitle(R.string.action_edit_style);
 
@@ -57,6 +59,7 @@ public class IconCreatorDialog extends AppCompatDialog {
 
         name = style.name;
         paths = style.path;
+        this.iconNames = iconNames;
     }
 
     @Override
@@ -90,7 +93,7 @@ public class IconCreatorDialog extends AppCompatDialog {
         LinearLayout layout = (LinearLayout) findViewById(R.id.layout);
         for (int i = 0; i < size; i++) {
             final View v = LayoutInflater.from(getContext()).inflate(R.layout.item_icon_create, null);
-            ((TextView) v.findViewById(R.id.number)).setText(String.valueOf(i + 1));
+            ((TextView) v.findViewById(R.id.number)).setText(iconNames[i]);
             if (paths[i] != null) {
                 Drawable drawable = null;
                 try {

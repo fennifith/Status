@@ -12,9 +12,29 @@
 
         <include
             layout="@layout/item_radio_button"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+        <HorizontalScrollView
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:scrollbars="horizontal"
+            android:fadingEdgeLength="8dp"
+            android:requiresFadingEdge="horizontal"
+            android:fadingEdge="horizontal">
+
+            <LinearLayout
+                android:id="@+id/icons"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:gravity="center_vertical|end"
+                android:orientation="horizontal"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp" />
+
+        </HorizontalScrollView>
 
         <com.james.status.views.SquareImageView
             android:id="@+id/edit"
@@ -28,14 +48,5 @@
             app:srcCompat="@drawable/ic_edit" />
 
     </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/icons"
-        android:layout_width="match_parent"
-        android:layout_height="42dp"
-        android:gravity="center_vertical|end"
-        android:orientation="horizontal"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp" />
 
 </LinearLayout>

@@ -62,7 +62,7 @@ public class IconDialog extends PreferenceDialog<IconStyleData> implements IconS
         findViewById(R.id.add).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new IconCreatorDialog(getContext(), getPreference().getSize(), icon.getStringArrayPreference(IconData.PreferenceIdentifier.ICON_STYLE_NAMES)).setListener(new IconCreatorDialog.OnIconStyleListener() {
+                new IconCreatorDialog(getContext(), styles.get(0).getSize(), icon.getStringArrayPreference(IconData.PreferenceIdentifier.ICON_STYLE_NAMES), icon.getIconNames()).setListener(new IconCreatorDialog.OnIconStyleListener() {
                     @Override
                     public void onIconStyle(IconStyleData style) {
                         icon.addIconStyle(style);
