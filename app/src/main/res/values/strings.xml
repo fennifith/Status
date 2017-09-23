@@ -273,6 +273,8 @@
     <string name="md_icons">Material Design Icons</string>
     <string name="md_icons_desc">Made by many various contributors, this collection of icons contains useful resources unavailable from Google\'s site.</string>
     <string name="err_battery_already_ignored">Battery optimizations are already ignored! You can proceed to the next step.</string>
+    <string name="preference_side_padding">Side Padding</string>
+    <string name="preference_side_padding_desc">Useful to prevent icons being cut off at the sides of the screen on phones with rounded screen edges.</string>
 
     <string-array name="libraries">
         <item>

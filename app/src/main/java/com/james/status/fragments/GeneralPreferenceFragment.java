@@ -194,6 +194,20 @@ public class GeneralPreferenceFragment extends SimpleFragment implements Prefere
                         true,
                         this
                 ),
+                new IntegerPreferenceData(
+                        getContext(),
+                        new PreferenceData.Identifier(
+                                PreferenceUtils.PreferenceIdentifier.STATUS_SIDE_PADDING,
+                                getString(R.string.preference_side_padding),
+                                getString(R.string.preference_side_padding_desc),
+                                PreferenceData.Identifier.SectionIdentifier.OTHER
+                        ),
+                        0,
+                        getString(R.string.unit_dp),
+                        0,
+                        100,
+                        this
+                ),
                 new BooleanPreferenceData(
                         getContext(),
                         new PreferenceData.Identifier(

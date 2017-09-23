@@ -185,6 +185,12 @@ public class StatusView extends FrameLayout {
         Integer defaultIconColor = PreferenceUtils.getIntegerPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_ICON_COLOR);
         if (defaultIconColor != null) iconColor = defaultIconColor;
 
+        Integer sidePadding = PreferenceUtils.getIntegerPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_SIDE_PADDING);
+        if (sidePadding != null) {
+            sidePadding = (int) StaticUtils.getPixelsFromDp(sidePadding);
+            status.setPadding(sidePadding, 0, sidePadding, 0);
+        }
+
         if (wallpaperManager == null) wallpaperManager = WallpaperManager.getInstance(getContext());
     }
 
