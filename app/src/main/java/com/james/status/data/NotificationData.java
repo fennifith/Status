@@ -102,6 +102,9 @@ public class NotificationData implements Parcelable {
         if (largeIcon == null && Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
             largeIcon = notification.largeIcon;
 
+        if (largeIcon != null && largeIcon.getByteCount() > 1000)
+            largeIcon = null;
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             unloadedLargeIcon = notification.getLargeIcon();
 
