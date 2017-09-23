@@ -77,6 +77,24 @@ public class GpsIconData extends IconData<GpsIconData.GpsReceiver> {
                                 IconStyleData.TYPE_VECTOR,
                                 R.drawable.ic_gps_dish_searching,
                                 R.drawable.ic_gps_dish_fixed
+                        ),
+                        new IconStyleData(
+                                getContext().getString(R.string.icon_style_dish2),
+                                IconStyleData.TYPE_VECTOR,
+                                R.drawable.ic_gps_dish2_searching,
+                                R.drawable.ic_gps_dish2_fixed
+                        ),
+                        new IconStyleData(
+                                getContext().getString(R.string.icon_style_satellite),
+                                IconStyleData.TYPE_VECTOR,
+                                R.drawable.ic_gps_satellite_searching,
+                                R.drawable.ic_gps_satellite_fixed
+                        ),
+                        new IconStyleData(
+                                getContext().getString(R.string.icon_style_satellite_outline),
+                                IconStyleData.TYPE_VECTOR,
+                                R.drawable.ic_gps_satellite_outline_searching,
+                                R.drawable.ic_gps_satellite_outline_fixed
                         )
                 )
         );

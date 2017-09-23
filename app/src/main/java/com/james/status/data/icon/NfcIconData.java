@@ -70,6 +70,11 @@ public class NfcIconData extends IconData<NfcIconData.NfcReceiver> {
                                 R.drawable.ic_nfc_radial
                         ),
                         new IconStyleData(
+                                getContext().getString(R.string.icon_style_square),
+                                IconStyleData.TYPE_VECTOR,
+                                R.drawable.ic_nfc_square
+                        ),
+                        new IconStyleData(
                                 getContext().getString(R.string.icon_style_tap),
                                 IconStyleData.TYPE_VECTOR,
                                 R.drawable.ic_nfc_tap

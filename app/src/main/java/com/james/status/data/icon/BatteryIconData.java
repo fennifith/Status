@@ -118,6 +118,25 @@ public class BatteryIconData extends IconData {
                                 R.drawable.ic_battery_outline_charging_full
                         ),
                         new IconStyleData(
+                                getContext().getString(R.string.icon_style_sideways),
+                                IconStyleData.TYPE_VECTOR,
+                                R.drawable.ic_battery_sideways_alert,
+                                R.drawable.ic_battery_sideways_20,
+                                R.drawable.ic_battery_sideways_40,
+                                R.drawable.ic_battery_sideways_40,
+                                R.drawable.ic_battery_sideways_60,
+                                R.drawable.ic_battery_sideways_60,
+                                R.drawable.ic_battery_sideways_80,
+                                R.drawable.ic_battery_sideways_full,
+                                R.drawable.ic_battery_sideways_charging,
+                                R.drawable.ic_battery_sideways_charging,
+                                R.drawable.ic_battery_sideways_charging,
+                                R.drawable.ic_battery_sideways_charging,
+                                R.drawable.ic_battery_sideways_charging,
+                                R.drawable.ic_battery_sideways_charging,
+                                R.drawable.ic_battery_sideways_full
+                        ),
+                        new IconStyleData(
                                 getContext().getString(R.string.icon_style_stock),
                                 IconStyleData.TYPE_VECTOR,
                                 R.drawable.ic_battery_stock_alert,

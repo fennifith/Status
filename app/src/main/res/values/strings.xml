@@ -275,6 +275,18 @@
     <string name="err_battery_already_ignored">Battery optimizations are already ignored! You can proceed to the next step.</string>
     <string name="preference_side_padding">Side Padding</string>
     <string name="preference_side_padding_desc">Useful to prevent icons being cut off at the sides of the screen on phones with rounded screen edges.</string>
+    <string name="icon_style_bell">Bell</string>
+    <string name="icons8_icons">Icons8</string>
+    <string name="icons8_icons_desc">57,700 free flat icons in any format, size and color in 20 seconds.</string>
+    <string name="icon_style_round">Round</string>
+    <string name="icon_style_dish2">Dish 2</string>
+    <string name="icon_style_satellite">Satellite</string>
+    <string name="icon_style_satellite_outline">Satellite Outline</string>
+    <string name="icon_style_front">Front</string>
+    <string name="icon_style_propeller">Propeller</string>
+    <string name="icon_style_pilot_hat">Pilot Hat</string>
+    <string name="icon_style_boxy">Boxy</string>
+    <string name="icon_style_sideways">Sideways</string>
 
     <string-array name="libraries">
         <item>

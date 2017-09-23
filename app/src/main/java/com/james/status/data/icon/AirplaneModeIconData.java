@@ -50,6 +50,21 @@ public class AirplaneModeIconData extends IconData<AirplaneModeIconData.Airplane
                                 R.drawable.ic_airplane
                         ),
                         new IconStyleData(
+                                getContext().getString(R.string.icon_style_front),
+                                IconStyleData.TYPE_VECTOR,
+                                R.drawable.ic_airplane_front
+                        ),
+                        new IconStyleData(
+                                getContext().getString(R.string.icon_style_propeller),
+                                IconStyleData.TYPE_VECTOR,
+                                R.drawable.ic_airplane_propeller
+                        ),
+                        new IconStyleData(
+                                getContext().getString(R.string.icon_style_pilot_hat),
+                                IconStyleData.TYPE_VECTOR,
+                                R.drawable.ic_airplane_pilot_hat
+                        ),
+                        new IconStyleData(
                                 getContext().getString(R.string.icon_style_balloon),
                                 IconStyleData.TYPE_VECTOR,
                                 R.drawable.ic_airplane_air_balloon

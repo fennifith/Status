@@ -80,6 +80,8 @@ public class AboutActivity extends AppCompatActivity {
 
         findViewById(R.id.md).setOnClickListener(new UrlClickListener("https://github.com/Templarian/MaterialDesign"));
 
+        findViewById(R.id.icons8).setOnClickListener(new UrlClickListener("https://icons8.com/"));
+
         findViewById(R.id.libraries).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

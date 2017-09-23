@@ -56,8 +56,12 @@ public class HeadphoneIconData extends IconData<HeadphoneIconData.HeadphoneRecei
                         new IconStyleData(
                                 getContext().getString(R.string.icon_style_system),
                                 IconStyleData.TYPE_IMAGE,
-                                android.R.drawable.stat_sys_headset,
                                 android.R.drawable.stat_sys_headset
+                        ),
+                        new IconStyleData(
+                                "Earbuds",
+                                IconStyleData.TYPE_VECTOR,
+                                R.drawable.ic_headset_earbuds
                         )
                 )
         );

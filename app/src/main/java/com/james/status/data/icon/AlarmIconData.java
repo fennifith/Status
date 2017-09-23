@@ -82,6 +82,11 @@ public class AlarmIconData extends IconData<AlarmIconData.AlarmReceiver> {
                                 R.drawable.ic_alarm_clear
                         ),
                         new IconStyleData(
+                                getContext().getString(R.string.icon_style_bell),
+                                IconStyleData.TYPE_VECTOR,
+                                R.drawable.ic_alarm_bell
+                        ),
+                        new IconStyleData(
                                 getContext().getString(R.string.icon_style_school),
                                 IconStyleData.TYPE_VECTOR,
                                 R.drawable.ic_alarm_school

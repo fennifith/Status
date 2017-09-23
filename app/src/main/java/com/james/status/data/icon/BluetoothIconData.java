@@ -61,6 +61,16 @@ public class BluetoothIconData extends IconData<BluetoothIconData.BluetoothRecei
                                 IconStyleData.TYPE_VECTOR,
                                 R.drawable.ic_bluetooth,
                                 R.drawable.ic_bluetooth_connected
+                        ),
+                        new IconStyleData(
+                                getContext().getString(R.string.icon_style_round),
+                                IconStyleData.TYPE_VECTOR,
+                                R.drawable.ic_bluetooth_round
+                        ),
+                        new IconStyleData(
+                                getContext().getString(R.string.icon_style_outline),
+                                IconStyleData.TYPE_VECTOR,
+                                R.drawable.ic_bluetooth_outline
                         )
                 )
         );
