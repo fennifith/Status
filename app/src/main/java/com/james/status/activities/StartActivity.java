@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.james.status.R;
 import com.james.status.utils.StaticUtils;
@@ -59,13 +60,32 @@ public class StartActivity extends AppCompatActivity {
 
         ArrayList<SteppersItem> steps = new ArrayList<>();
 
-        accessibilityStep = new SteppersItem();
-        accessibilityStep.setLabel(getString(R.string.service_name));
-        accessibilityStep.setSubLabel(getString(R.string.service_desc));
-        accessibilityStep.setFragment(new AccessibilityStepFragment());
-        accessibilityStep.setPositiveButtonEnable(StaticUtils.isAccessibilityGranted(this));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            optimizationStep = new SteppersItem();
+            optimizationStep.setLabel(getString(R.string.optimizations_name));
+            optimizationStep.setSubLabel(getString(R.string.optimizations_desc));
+            optimizationStep.setFragment(new OptimizationStepFragment());
+            optimizationStep.setPositiveButtonEnable(true);
 
-        steps.add(accessibilityStep);
+            steps.add(optimizationStep);
+
+
+            permissionsStep = new SteppersItem();
+            permissionsStep.setLabel(getString(R.string.permissions_name));
+            permissionsStep.setSubLabel(getString(R.string.permissions_desc));
+            permissionsStep.setFragment(new PermissionsStepFragment());
+            permissionsStep.setPositiveButtonEnable(StaticUtils.isPermissionsGranted(this));
+
+            steps.add(permissionsStep);
+
+            overlayStep = new SteppersItem();
+            overlayStep.setLabel(getString(R.string.overlay_name));
+            overlayStep.setSubLabel(getString(R.string.overlay_desc));
+            overlayStep.setFragment(new OverlayStepFragment());
+            overlayStep.setPositiveButtonEnable(StaticUtils.canDrawOverlays(this));
+
+            steps.add(overlayStep);
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             notificationStep = new SteppersItem();
@@ -89,32 +109,13 @@ public class StartActivity extends AppCompatActivity {
                     .show();
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            optimizationStep = new SteppersItem();
-            optimizationStep.setLabel(getString(R.string.optimizations_name));
-            optimizationStep.setSubLabel(getString(R.string.optimizations_desc));
-            optimizationStep.setFragment(new OptimizationStepFragment());
-            optimizationStep.setPositiveButtonEnable(StaticUtils.isIgnoringOptimizations(this));
+        accessibilityStep = new SteppersItem();
+        accessibilityStep.setLabel(getString(R.string.service_name));
+        accessibilityStep.setSubLabel(getString(R.string.service_desc));
+        accessibilityStep.setFragment(new AccessibilityStepFragment());
+        accessibilityStep.setPositiveButtonEnable(StaticUtils.isAccessibilityGranted(this));
 
-            steps.add(optimizationStep);
-
-
-            permissionsStep = new SteppersItem();
-            permissionsStep.setLabel(getString(R.string.permissions_name));
-            permissionsStep.setSubLabel(getString(R.string.permissions_desc));
-            permissionsStep.setFragment(new PermissionsStepFragment());
-            permissionsStep.setPositiveButtonEnable(StaticUtils.isPermissionsGranted(this));
-
-            steps.add(permissionsStep);
-
-            overlayStep = new SteppersItem();
-            overlayStep.setLabel(getString(R.string.overlay_name));
-            overlayStep.setSubLabel(getString(R.string.overlay_desc));
-            overlayStep.setFragment(new OverlayStepFragment());
-            overlayStep.setPositiveButtonEnable(StaticUtils.canDrawOverlays(this));
-
-            steps.add(overlayStep);
-        }
+        steps.add(accessibilityStep);
 
         steppersView.setConfig(steppersViewConfig);
         steppersView.setItems(steps);
@@ -130,15 +131,13 @@ public class StartActivity extends AppCompatActivity {
             notificationStep.setPositiveButtonEnable(StaticUtils.isNotificationGranted(this));
         if (permissionsStep != null)
             permissionsStep.setPositiveButtonEnable(StaticUtils.isPermissionsGranted(this));
-        if (optimizationStep != null)
-            optimizationStep.setPositiveButtonEnable(StaticUtils.isIgnoringOptimizations(this));
         if (overlayStep != null)
             overlayStep.setPositiveButtonEnable(StaticUtils.canDrawOverlays(this));
     }
 
     @Override
     public void onBackPressed() {
-        if (!StaticUtils.isAccessibilityGranted(this) || !StaticUtils.isNotificationGranted(this) || !StaticUtils.isPermissionsGranted(this) || !StaticUtils.isIgnoringOptimizations(this) || !StaticUtils.canDrawOverlays(this))
+        if (!StaticUtils.isAccessibilityGranted(this) || !StaticUtils.isNotificationGranted(this) || !StaticUtils.isPermissionsGranted(this) || !StaticUtils.canDrawOverlays(this))
             System.exit(0);
         else super.onBackPressed();
     }
@@ -156,9 +155,6 @@ public class StartActivity extends AppCompatActivity {
                 if (notificationStep != null)
                     notificationStep.setPositiveButtonEnable(StaticUtils.isNotificationGranted(this));
                 break;
-            case REQUEST_OPTIMIZATION:
-                if (optimizationStep != null)
-                    optimizationStep.setPositiveButtonEnable(StaticUtils.isIgnoringOptimizations(this));
             case REQUEST_OVERLAY:
                 if (overlayStep != null)
                     overlayStep.setPositiveButtonEnable(StaticUtils.canDrawOverlays(this));
@@ -250,9 +246,10 @@ public class StartActivity extends AppCompatActivity {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
-                    intent.setData(Uri.parse("package:" + getActivity().getPackageName()));
-                    startActivityForResult(intent, REQUEST_OPTIMIZATION);
+                    if (StaticUtils.isIgnoringOptimizations(getContext()))
+                        startActivityForResult(new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS), REQUEST_OPTIMIZATION);
+                    else
+                        Toast.makeText(getContext(), R.string.err_battery_already_ignored, Toast.LENGTH_SHORT).show();
                 }
             });
 
