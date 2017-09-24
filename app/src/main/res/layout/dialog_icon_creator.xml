@@ -40,9 +40,10 @@
         android:padding="16dp">
 
         <TextView
-            android:id="@+id/cancel"
-            android:layout_width="wrap_content"
+            android:id="@+id/delete"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:background="?attr/selectableItemBackground"
             android:paddingBottom="8dp"
             android:paddingLeft="12dp"
@@ -51,7 +52,23 @@
             android:text="@string/action_delete"
             android:textAllCaps="true"
             android:textColor="@color/colorAccent"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:paddingBottom="8dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:paddingTop="8dp"
+            android:text="@string/action_cancel"
+            android:textAllCaps="true"
+            android:textColor="@color/colorAccent"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/confirm"
@@ -65,7 +82,8 @@
             android:text="@string/action_ok"
             android:textAllCaps="true"
             android:textColor="@color/colorAccent"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
     </LinearLayout>
 

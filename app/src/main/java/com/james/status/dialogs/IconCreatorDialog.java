@@ -28,16 +28,18 @@ public class IconCreatorDialog extends AppCompatDialog {
     private OnIconStyleListener listener;
     private int size;
     private String[] names = new String[0];
+    private boolean isCreate;
 
-    private String name;
-    private String[] paths = new String[0];
+    private String name, originalName;
+    private String[] paths, originalPaths;
     private String[] iconNames;
 
     private EditText editText;
 
     public IconCreatorDialog(Context context, int size, String[] names, String[] iconNames) {
         super(context, R.style.AppTheme_Dialog);
-        setTitle(R.string.action_edit_style);
+        setTitle(R.string.action_create_style);
+        isCreate = true;
 
         status = (Status) context.getApplicationContext();
 
@@ -59,6 +61,8 @@ public class IconCreatorDialog extends AppCompatDialog {
 
         name = style.name;
         paths = style.path;
+        originalName = name;
+        originalPaths = paths;
         this.iconNames = iconNames;
     }
 
@@ -169,7 +173,7 @@ public class IconCreatorDialog extends AppCompatDialog {
                     }
 
                     if (listener != null) listener.onIconStyle(new IconStyleData(name, paths));
-                    if (isShowing()) dismiss();
+                    if (isShowing()) dismiss(false);
                 } else {
                     if (name == null)
                         editText.setError(getContext().getString(R.string.error_no_text_name));
@@ -179,12 +183,40 @@ public class IconCreatorDialog extends AppCompatDialog {
             }
         });
 
+        View delete = findViewById(R.id.delete);
+        delete.setVisibility(isCreate ? View.GONE : View.VISIBLE);
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isShowing()) dismiss(false);
+            }
+        });
+
         findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (isShowing()) dismiss();
             }
         });
+    }
+
+    public void dismiss(boolean shouldCreate) {
+        if (shouldCreate)
+            dismiss();
+        else super.dismiss();
+    }
+
+    @Override
+    public void dismiss() {
+        super.dismiss();
+        if (!isCreate && originalName != null && originalPaths != null && listener != null) {
+            for (String path : originalPaths) {
+                if (path == null)
+                    return;
+            }
+
+            listener.onIconStyle(new IconStyleData(originalName, originalPaths));
+        }
     }
 
     public IconCreatorDialog setListener(OnIconStyleListener listener) {

@@ -343,6 +343,8 @@
 
     <string name="icons8_icons">Icons8</string>
     <string name="icons8_icons_desc">57,700 free flat icons in any format, size and color in 20 seconds.</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_create_style">Create Icon Style</string>
 
     <string-array name="libraries">
         <item>
