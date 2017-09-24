@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.james.status.R;
+import com.james.status.utils.WhileHeldListener;
 
 public class IntegerPickerDialog extends PreferenceDialog<Integer> {
 
@@ -39,9 +40,9 @@ public class IntegerPickerDialog extends PreferenceDialog<Integer> {
 
         ((TextView) findViewById(R.id.unit)).setText(unit);
 
-        findViewById(R.id.scaleUp).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.scaleUp).setOnTouchListener(new WhileHeldListener() {
             @Override
-            public void onClick(View view) {
+            public void onHeld() {
                 Integer preference = getPreference();
                 if (preference != null) {
                     preference++;
@@ -55,9 +56,9 @@ public class IntegerPickerDialog extends PreferenceDialog<Integer> {
             }
         });
 
-        findViewById(R.id.scaleDown).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.scaleDown).setOnTouchListener(new WhileHeldListener() {
             @Override
-            public void onClick(View view) {
+            public void onHeld() {
                 Integer preference = getPreference();
                 if (preference != null) {
                     preference--;
