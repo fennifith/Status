@@ -366,13 +366,13 @@ public class StatusService extends Service {
         }
 
         if (fullscreenView != null) {
-            if (fullscreenView.getParent() != null) windowManager.removeView(fullscreenView);
+            windowManager.removeView(fullscreenView);
             fullscreenView = null;
         }
 
         if (statusView != null) {
             if (statusView.isRegistered()) statusView.unregister();
-            if (statusView.getParent() != null) windowManager.removeView(statusView);
+            windowManager.removeView(statusView);
             statusView = null;
         }
 

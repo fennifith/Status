@@ -39,7 +39,8 @@
             android:text="@string/action_delete_backup"
             android:textAllCaps="true"
             android:textColor="@color/colorAccent"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/restore"
@@ -54,7 +55,8 @@
             android:text="@string/action_restore_backup"
             android:textAllCaps="true"
             android:textColor="@color/colorAccent"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/save"
@@ -69,7 +71,8 @@
             android:text="@string/action_save_backup"
             android:textAllCaps="true"
             android:textColor="@color/colorAccent"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
     </LinearLayout>
 

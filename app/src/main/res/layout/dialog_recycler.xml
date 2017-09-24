@@ -33,7 +33,8 @@
             android:text="@string/action_dismiss"
             android:textAllCaps="true"
             android:textColor="@color/colorAccent"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
     </LinearLayout>
 

@@ -71,7 +71,8 @@
             android:text="@string/action_cancel"
             android:textAllCaps="true"
             android:textColor="@color/textColorSecondaryInverse"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/confirm"
@@ -85,7 +86,8 @@
             android:text="@string/action_ok"
             android:textAllCaps="true"
             android:textColor="@color/textColorPrimaryInverse"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
     </LinearLayout>
 
