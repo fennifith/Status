@@ -128,7 +128,7 @@ public class StatusView extends FrameLayout {
     }
 
     public void setUp() {
-        if (status != null && status.getParent() != null) removeView(status);
+        removeAllViews();
 
         View v = LayoutInflater.from(getContext()).inflate(R.layout.layout_status, this, false);
         status = (LinearLayout) v.findViewById(R.id.status);
