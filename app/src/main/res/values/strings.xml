@@ -51,6 +51,9 @@
     <string name="error_name_exists">An item with this name already exists.</string>
     <string name="error_missing_icons">You are missing one or more required icons.</string>
     <string name="err_battery_already_ignored">Battery optimizations are already ignored! You can proceed to the next step.</string>
+    <string name="msg_notification_switch_enable">Please enable the switch next to \"Status Service\".</string>
+    <string name="msg_battery_optimizations_switch_enable">Turn on the switch next to \"Status\". You may need to scroll down… a lot.</string>
+    <string name="msg_accessibility_switch_enable">Please turn on the service titled \"Status Service\". You may need to scroll down for it to become visible.</string>
 
     <string name="service_name">Status Service</string>
     <string name="service_name_general">Accessibility Service</string>
@@ -154,6 +157,9 @@
     <string name="preference_backups_desc">Allows you to backup or restore all the settings in Status as a text file.</string>
     <string name="preference_burnin_protection">Burn-In Protection</string>
     <string name="preference_burnin_protection_desc">Prevents Status from causing a burn-in on some screens by moving the icons around every two seconds.</string>
+    <string name="preference_text_color">Text Color</string>
+    <string name="preference_height">Status Bar Height</string>
+    <string name="preference_height_desc">This setting will change the height of the status bar, but not the content underneath it! Setting this to 0 will cause Status to use the default height defined by the system.</string>
 
     <string name="icon_notifications">Notifications</string>
     <string name="icon_clock">Clock</string>
@@ -236,6 +242,7 @@
     <string name="unit_seconds">" seconds"</string>
     <string name="unit_mb">%1$f Mb</string>
     <string name="unit_kb">%1$f Kb</string>
+    <string name="unit_px">px</string>
 
     <string name="icon_style_android">Android</string>
     <string name="icon_style_default">Default</string>
@@ -336,10 +343,6 @@
 
     <string name="icons8_icons">Icons8</string>
     <string name="icons8_icons_desc">57,700 free flat icons in any format, size and color in 20 seconds.</string>
-    <string name="preference_text_color">Text Color</string>
-    <string name="preference_height">Status Bar Height</string>
-    <string name="unit_px">px</string>
-    <string name="preference_height_desc">This setting will change the height of the status bar, but not the content underneath it! Setting this to 0 will cause Status to use the default height defined by the system.</string>
 
     <string-array name="libraries">
         <item>

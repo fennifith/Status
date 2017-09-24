@@ -178,6 +178,7 @@ public class StartActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     startActivityForResult(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS), REQUEST_ACCESSIBILITY);
+                    Toast.makeText(getContext(), R.string.msg_notification_switch_enable, Toast.LENGTH_LONG).show();
                 }
             });
 
@@ -198,6 +199,7 @@ public class StartActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         startActivityForResult(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"), REQUEST_NOTIFICATION);
+                        Toast.makeText(getContext(), R.string.msg_accessibility_switch_enable, Toast.LENGTH_LONG).show();
                     }
                 });
 
@@ -246,10 +248,8 @@ public class StartActivity extends AppCompatActivity {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (StaticUtils.isIgnoringOptimizations(getContext()))
-                        startActivityForResult(new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS), REQUEST_OPTIMIZATION);
-                    else
-                        Toast.makeText(getContext(), R.string.err_battery_already_ignored, Toast.LENGTH_SHORT).show();
+                    startActivityForResult(new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS), REQUEST_OPTIMIZATION);
+                    Toast.makeText(getContext(), R.string.msg_battery_optimizations_switch_enable, Toast.LENGTH_LONG).show();
                 }
             });
 
