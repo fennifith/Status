@@ -37,6 +37,7 @@ public class PreferenceUtils {
         STATUS_PERSISTENT_NOTIFICATION,
         STATUS_BURNIN_PROTECTION,
         STATUS_SIDE_PADDING,
+        STATUS_HEIGHT,
         STATUS_DEBUG
     }
 

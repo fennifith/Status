@@ -420,7 +420,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
             preferences.add(new ColorPreferenceData(
                     getContext(),
                     new PreferenceData.Identifier(
-                            "Text Color"
+                            getContext().getString(R.string.preference_text_color)
                     ),
                     color != null ? color : Color.WHITE,
                     new PreferenceData.OnPreferenceChangeListener<Integer>() {

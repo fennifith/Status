@@ -336,6 +336,10 @@
 
     <string name="icons8_icons">Icons8</string>
     <string name="icons8_icons_desc">57,700 free flat icons in any format, size and color in 20 seconds.</string>
+    <string name="preference_text_color">Text Color</string>
+    <string name="preference_height">Status Bar Height</string>
+    <string name="unit_px">px</string>
+    <string name="preference_height_desc">This setting will change the height of the status bar, but not the content underneath it! Setting this to 0 will cause Status to use the default height defined by the system.</string>
 
     <string-array name="libraries">
         <item>

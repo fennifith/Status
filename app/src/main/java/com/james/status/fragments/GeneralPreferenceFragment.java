@@ -197,6 +197,20 @@ public class GeneralPreferenceFragment extends SimpleFragment implements Prefere
                 new IntegerPreferenceData(
                         getContext(),
                         new PreferenceData.Identifier(
+                                PreferenceUtils.PreferenceIdentifier.STATUS_HEIGHT,
+                                getString(R.string.preference_height),
+                                getString(R.string.preference_height_desc),
+                                PreferenceData.Identifier.SectionIdentifier.OTHER
+                        ),
+                        0,
+                        getString(R.string.unit_px),
+                        0,
+                        Integer.MAX_VALUE,
+                        this
+                ),
+                new IntegerPreferenceData(
+                        getContext(),
+                        new PreferenceData.Identifier(
                                 PreferenceUtils.PreferenceIdentifier.STATUS_SIDE_PADDING,
                                 getString(R.string.preference_side_padding),
                                 getString(R.string.preference_side_padding_desc),

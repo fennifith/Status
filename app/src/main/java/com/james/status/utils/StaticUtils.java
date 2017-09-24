@@ -31,6 +31,10 @@ import java.util.List;
 public class StaticUtils {
 
     public static int getStatusBarHeight(Context context) {
+        Integer height = PreferenceUtils.getIntegerPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_HEIGHT);
+        if (height != null && height > 0)
+            return height;
+
         int resId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (resId > 0) return context.getResources().getDimensionPixelSize(resId);
         else return 0;
