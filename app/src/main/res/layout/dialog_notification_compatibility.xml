@@ -31,7 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="12dp"
-                android:lineSpacingMultiplier="1.5"
+                android:lineSpacingMultiplier="1.2"
                 android:text="@string/notifications_compat_desc"
                 android:textColor="@color/textColorSecondary"
                 android:textSize="14sp" />
@@ -70,7 +70,7 @@
             android:paddingTop="8dp"
             android:text="@string/action_cancel"
             android:textAllCaps="true"
-            android:textColor="@color/textColorSecondaryInverse"
+            android:textColor="@color/textColorPrimary"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -85,7 +85,7 @@
             android:paddingTop="8dp"
             android:text="@string/action_ok"
             android:textAllCaps="true"
-            android:textColor="@color/textColorPrimaryInverse"
+            android:textColor="@color/textColorPrimary"
             android:textSize="16sp"
             android:textStyle="bold" />
 
