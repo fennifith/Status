@@ -113,6 +113,17 @@ public class GeneralPreferenceFragment extends SimpleFragment implements Prefere
                 new BooleanPreferenceData(
                         getContext(),
                         new PreferenceData.Identifier(
+                                PreferenceUtils.PreferenceIdentifier.STATUS_BUMP_MODE,
+                                getString(R.string.preference_bump_mode),
+                                getString(R.string.preference_bump_mode_desc),
+                                PreferenceData.Identifier.SectionIdentifier.ICONS
+                        ),
+                        false,
+                        this
+                ),
+                new BooleanPreferenceData(
+                        getContext(),
+                        new PreferenceData.Identifier(
                                 PreferenceUtils.PreferenceIdentifier.STATUS_BACKGROUND_ANIMATIONS,
                                 getString(R.string.preference_background_animations),
                                 getString(R.string.preference_background_animations_desc),

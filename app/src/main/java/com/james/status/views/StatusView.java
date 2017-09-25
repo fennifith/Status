@@ -43,7 +43,7 @@ public class StatusView extends FrameLayout {
 
     @ColorInt
     private Integer color, iconColor = Color.WHITE;
-    private boolean isSystemShowing, isFullscreen, isAnimations, isIconAnimations, isTintedIcons, isContrastIcons, isRegistered;
+    private boolean isSystemShowing, isFullscreen, isAnimations, isIconAnimations, isTintedIcons, isContrastIcons, isRegistered, isBumpMode;
 
     private List<IconData> icons;
     private WallpaperManager wallpaperManager;
@@ -191,6 +191,16 @@ public class StatusView extends FrameLayout {
             status.setPadding(sidePadding, 0, sidePadding, 0);
         }
 
+        Boolean bumpMode = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_BUMP_MODE);
+        isBumpMode = bumpMode != null && bumpMode;
+        if (isBumpMode) {
+            int padding = (int) StaticUtils.getPixelsFromDp(16);
+            leftLayout.setBackgroundResource(R.drawable.bump_outer_left);
+            centerLayout.setPadding(padding, 0, padding, 0);
+            centerLayout.setBackgroundResource(R.drawable.bump_inner);
+            rightLayout.setBackgroundResource(R.drawable.bump_outer_right);
+        }
+
         if (wallpaperManager == null) wallpaperManager = WallpaperManager.getInstance(getContext());
     }
 
@@ -236,11 +246,12 @@ public class StatusView extends FrameLayout {
                 @Override
                 public void onUpdate(@Nullable Drawable drawable) {
                     CustomImageView iconView = (CustomImageView) item.findViewById(R.id.icon);
+                    int color = iconData.getGravity() == IconData.CENTER_GRAVITY && isBumpMode ? Color.WHITE : iconColor;
 
                     if (drawable != null && iconView != null)
-                        iconView.setImageDrawable(drawable, iconColor);
+                        iconView.setImageDrawable(drawable, color);
                     else if (iconView == null || !iconView.getParent().equals(item))
-                        setIconTint(item, iconColor);
+                        setIconTint(item, color);
                 }
             });
 
@@ -477,7 +488,7 @@ public class StatusView extends FrameLayout {
 
         if (view instanceof LinearLayout) {
             for (int i = 0; i < ((LinearLayout) view).getChildCount(); i++) {
-                setIconTint(((LinearLayout) view).getChildAt(i), color);
+                setIconTint(((LinearLayout) view).getChildAt(i), view.equals(centerLayout) && isBumpMode ? Color.WHITE : color);
             }
         } else if (view instanceof TextView) {
             if (view.getTag() == null)

@@ -345,6 +345,8 @@
     <string name="icons8_icons_desc">57,700 free flat icons in any format, size and color in 20 seconds.</string>
     <string name="action_edit">Edit</string>
     <string name="action_create_style">Create Icon Style</string>
+    <string name="preference_bump_mode">Bump Mode</string>
+    <string name="preference_bump_mode_desc">Creates a fake (and really ugly) \"camera bump\" around the center aligned items in the status bar. Please don\'t ever enable this option.</string>
 
     <string-array name="libraries">
         <item>
