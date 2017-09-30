@@ -303,7 +303,11 @@ public class StatusService extends Service {
 
     public void setUp() {
         if (statusView == null || statusView.getParent() == null) {
-            if (statusView != null) windowManager.removeView(statusView);
+            if (statusView != null) {
+                windowManager.removeView(statusView);
+                statusView.unregister();
+            }
+
             statusView = new StatusView(this);
 
             WindowManager.LayoutParams params = new WindowManager.LayoutParams(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN, PixelFormat.TRANSLUCENT);
