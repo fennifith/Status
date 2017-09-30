@@ -241,7 +241,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
 
     public final Integer getTextEffect() {
         Integer textEffect = getIntegerPreference(PreferenceIdentifier.TEXT_EFFECT);
-        if (textEffect == null) textEffect = Typeface.NORMAL;
+        if (textEffect == null) textEffect = Typeface.BOLD;
         return textEffect;
     }
 
