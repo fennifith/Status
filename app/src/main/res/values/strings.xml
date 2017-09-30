@@ -290,7 +290,7 @@
     <string name="tutorial_activities">Don\'t want to modify an entire app?</string>
     <string name="tutorial_activities_desc">Change individual screens by clicking the \'expand\' button next to the app\'s name.</string>
     <string name="tutorial_donate">Do you like Status?</string>
-    <string name="tutorial_donate_desc">Donate to help keep Status and other apps like it free to use without advertisements.</string>
+    <string name="tutorial_donate_desc">Status is open source and free to use without any advertisements or paid features. In order to support Status and other apps like it, please consider making a donation.</string>
 
     <string name="red">Red</string>
     <string name="green">Green</string>

@@ -1,5 +1,6 @@
 package com.james.status.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -14,6 +15,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SwitchCompat;
@@ -186,12 +188,24 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                     }
                 });
             } else if (StaticUtils.shouldShowTutorial(MainActivity.this, "donate", 3)) {
-                setTutorial(R.string.tutorial_donate, R.string.tutorial_donate_desc, new OnTutorialClickListener() {
-                    @Override
-                    public void onClick() {
-                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=james.donate")));
-                    }
-                });
+                new AlertDialog.Builder(this)
+                        .setTitle(R.string.tutorial_donate)
+                        .setMessage(R.string.tutorial_donate_desc)
+                        .setCancelable(false)
+                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=james.donate")));
+                                dialog.dismiss();
+                            }
+                        })
+                        .show();
             }
         }
     }
