@@ -5,6 +5,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
 import android.support.annotation.ColorInt;
@@ -157,6 +158,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                         textView.setTag(color);
                     } else textView.setTag(null);
 
+                    textView.setTypeface(null, getTextEffect());
                     textView.setText(text);
                 } else {
                     textView.setVisibility(View.GONE);
@@ -235,6 +237,12 @@ public abstract class IconData<T extends IconUpdateReceiver> {
     @ColorInt
     public final Integer getTextColor() {
         return getIntegerPreference(PreferenceIdentifier.TEXT_COLOR);
+    }
+
+    public final Integer getTextEffect() {
+        Integer textEffect = getIntegerPreference(PreferenceIdentifier.TEXT_EFFECT);
+        if (textEffect == null) textEffect = Typeface.NORMAL;
+        return textEffect;
     }
 
     public final int getPosition() {
@@ -431,6 +439,24 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                         }
                     }
             ));
+
+            preferences.add(new ListPreferenceData(
+                    getContext(),
+                    new PreferenceData.Identifier(getContext().getString(R.string.preference_text_effect)),
+                    new PreferenceData.OnPreferenceChangeListener<Integer>() {
+                        @Override
+                        public void onPreferenceChange(Integer preference) {
+                            putPreference(PreferenceIdentifier.TEXT_EFFECT, preference);
+                            StaticUtils.updateStatusService(getContext());
+                        }
+                    },
+                    Typeface.NORMAL,
+                    new ListPreferenceData.ListPreference(getContext().getString(R.string.text_effect_none), Typeface.NORMAL),
+                    new ListPreferenceData.ListPreference(getContext().getString(R.string.text_effect_bold), Typeface.BOLD),
+                    new ListPreferenceData.ListPreference(getContext().getString(R.string.text_effect_italic), Typeface.ITALIC),
+                    new ListPreferenceData.ListPreference(getContext().getString(R.string.text_effect_bold_italic), Typeface.BOLD_ITALIC)
+
+            ));
         }
 
         if (hasDrawable()) {
@@ -599,6 +625,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
         TEXT_FORMAT,
         TEXT_SIZE,
         TEXT_COLOR,
+        TEXT_EFFECT,
         ICON_VISIBILITY,
         ICON_STYLE,
         ICON_STYLE_NAMES,
