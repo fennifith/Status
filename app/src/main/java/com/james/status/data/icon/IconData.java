@@ -450,7 +450,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                             StaticUtils.updateStatusService(getContext());
                         }
                     },
-                    Typeface.NORMAL,
+                    getTextEffect(),
                     new ListPreferenceData.ListPreference(getContext().getString(R.string.text_effect_none), Typeface.NORMAL),
                     new ListPreferenceData.ListPreference(getContext().getString(R.string.text_effect_bold), Typeface.BOLD),
                     new ListPreferenceData.ListPreference(getContext().getString(R.string.text_effect_italic), Typeface.ITALIC),
