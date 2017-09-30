@@ -12,6 +12,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
@@ -195,10 +196,12 @@ public class StatusView extends FrameLayout {
         isBumpMode = bumpMode != null && bumpMode;
         if (isBumpMode) {
             int padding = (int) StaticUtils.getPixelsFromDp(16);
-            leftLayout.setBackgroundResource(R.drawable.bump_outer_left);
             centerLayout.setPadding(padding, 0, padding, 0);
             centerLayout.setBackgroundResource(R.drawable.bump_inner);
-            rightLayout.setBackgroundResource(R.drawable.bump_outer_right);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                leftLayout.setBackgroundResource(R.drawable.bump_outer_left);
+                rightLayout.setBackgroundResource(R.drawable.bump_outer_right);
+            }
         }
 
         if (wallpaperManager == null) wallpaperManager = WallpaperManager.getInstance(getContext());
