@@ -129,19 +129,21 @@ public class NotificationData implements Parcelable {
         color = in.readInt();
         iconRes = in.readInt();
         isAlert = in.readByte() == 1;
-        if (in.readByte() == 1) largeIcon = Bitmap.CREATOR.createFromParcel(in);
+        if (isAlert) {
+            if (in.readByte() == 1) largeIcon = Bitmap.CREATOR.createFromParcel(in);
 
-        intent = PendingIntent.readPendingIntentOrNullFromParcel(in);
+            intent = PendingIntent.readPendingIntentOrNullFromParcel(in);
 
-        int length = in.readInt();
-        actions = new ActionData[length];
-        for (int i = 0; i < length; i++) {
-            actions[i] = in.readParcelable(ActionData.class.getClassLoader());
-        }
+            int length = in.readInt();
+            actions = new ActionData[length];
+            for (int i = 0; i < length; i++) {
+                actions[i] = in.readParcelable(ActionData.class.getClassLoader());
+            }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            unloadedIcon = in.readParcelable(Icon.class.getClassLoader());
-            unloadedLargeIcon = in.readParcelable(Icon.class.getClassLoader());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                unloadedIcon = in.readParcelable(Icon.class.getClassLoader());
+                unloadedLargeIcon = in.readParcelable(Icon.class.getClassLoader());
+            }
         }
     }
 
@@ -273,21 +275,23 @@ public class NotificationData implements Parcelable {
         dest.writeInt(color);
         dest.writeInt(iconRes);
         dest.writeByte((byte) (isAlert ? 1 : 0));
-        if (largeIcon != null) {
-            dest.writeByte((byte) 1);
-            largeIcon.writeToParcel(dest, flags);
-        } else dest.writeByte((byte) 0);
+        if (isAlert) {
+            if (largeIcon != null) {
+                dest.writeByte((byte) 1);
+                largeIcon.writeToParcel(dest, flags);
+            } else dest.writeByte((byte) 0);
 
-        PendingIntent.writePendingIntentOrNullToParcel(intent, dest);
+            PendingIntent.writePendingIntentOrNullToParcel(intent, dest);
 
-        dest.writeInt(actions.length);
-        for (ActionData action : actions) {
-            dest.writeParcelable(action, flags);
-        }
+            dest.writeInt(actions.length);
+            for (ActionData action : actions) {
+                dest.writeParcelable(action, flags);
+            }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            dest.writeParcelable(unloadedIcon, flags);
-            dest.writeParcelable(unloadedLargeIcon, flags);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                dest.writeParcelable(unloadedIcon, flags);
+                dest.writeParcelable(unloadedLargeIcon, flags);
+            }
         }
     }
 }
