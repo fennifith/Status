@@ -21,6 +21,7 @@ import com.james.status.R;
 import com.james.status.data.IconStyleData;
 import com.james.status.data.preference.BooleanPreferenceData;
 import com.james.status.data.preference.ColorPreferenceData;
+import com.james.status.data.preference.FontPreferenceData;
 import com.james.status.data.preference.IconPreferenceData;
 import com.james.status.data.preference.IntegerPreferenceData;
 import com.james.status.data.preference.ListPreferenceData;
@@ -43,6 +44,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
     private DrawableListener drawableListener;
     private TextListener textListener;
     private IconStyleData style;
+    private Typeface typeface;
     private T receiver;
 
     private Drawable drawable;
@@ -158,7 +160,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                         textView.setTag(color);
                     } else textView.setTag(null);
 
-                    textView.setTypeface(null, getTextEffect());
+                    textView.setTypeface(getTypeface(), getTextEffect());
                     textView.setText(text);
                 } else {
                     textView.setVisibility(View.GONE);
@@ -243,6 +245,26 @@ public abstract class IconData<T extends IconUpdateReceiver> {
         Integer textEffect = getIntegerPreference(PreferenceIdentifier.TEXT_EFFECT);
         if (textEffect == null) textEffect = Typeface.BOLD;
         return textEffect;
+    }
+
+    @Nullable
+    public String getTypefaceName() {
+        return getStringPreference(PreferenceIdentifier.TEXT_TYPEFACE);
+    }
+
+    @Nullable
+    public Typeface getTypeface() {
+        if (typeface == null) {
+            String name = getTypefaceName();
+            if (name != null) {
+                try {
+                    typeface = Typeface.createFromAsset(getContext().getAssets(), name);
+                } catch (Exception ignored) {
+                }
+            }
+        }
+
+        return typeface;
     }
 
     public final int getPosition() {
@@ -440,6 +462,35 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                     }
             ));
 
+            preferences.add(new FontPreferenceData(
+                    getContext(),
+                    new PreferenceData.Identifier("Text Font"),
+                    new PreferenceData.OnPreferenceChangeListener<String>() {
+                        @Override
+                        public void onPreferenceChange(String preference) {
+                            putPreference(PreferenceIdentifier.TEXT_TYPEFACE, preference);
+                            StaticUtils.updateStatusService(getContext());
+                        }
+                    },
+                    getTypefaceName(),
+                    "Audiowide.ttf",
+                    "BlackOpsOne.ttf",
+                    "HennyPenny.ttf",
+                    "Iceland.ttf",
+                    "Megrim.ttf",
+                    "Monoton.ttf",
+                    "NewRocker.ttf",
+                    "Nosifer.ttf",
+                    "PermanentMarker.ttf",
+                    "Playball.ttf",
+                    "Righteous.ttf",
+                    "Roboto.ttf",
+                    "RobotoCondensed.ttf",
+                    "RobotoSlab.ttf",
+                    "VT323.ttf",
+                    "Wallpoet.ttf"
+            ));
+
             preferences.add(new ListPreferenceData(
                     getContext(),
                     new PreferenceData.Identifier(getContext().getString(R.string.preference_text_effect)),
@@ -625,6 +676,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
         TEXT_FORMAT,
         TEXT_SIZE,
         TEXT_COLOR,
+        TEXT_TYPEFACE,
         TEXT_EFFECT,
         ICON_VISIBILITY,
         ICON_STYLE,

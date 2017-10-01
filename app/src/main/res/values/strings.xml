@@ -164,7 +164,7 @@
     <string name="preference_height_desc">This setting will change the height of the status bar, but not the content underneath it! Setting this to 0 will cause Status to use the default height defined by the system.</string>
     <string name="preference_bump_mode">Bump Mode</string>
     <string name="preference_bump_mode_desc">Creates a fake (and really ugly) \"camera bump\" around the center aligned items in the status bar. Please don\'t ever enable this option.</string>
-    <string name="preference_text_effect">Text Effect</string>
+    <string name="preference_text_effect">Text Style</string>
 
     <string name="icon_notifications">Notifications</string>
     <string name="icon_clock">Clock</string>
@@ -301,6 +301,13 @@
     <string name="green">Green</string>
     <string name="blue">Blue</string>
 
+    <string name="text_effect_none">None</string>
+    <string name="text_effect_bold">Bold</string>
+    <string name="text_effect_italic">Italic</string>
+    <string name="text_effect_bold_italic">Bold &amp; Italic</string>
+
+    <string name="font_default">Default</string>
+
     <string name="hint_format">
         \n
         h - Hours\n
@@ -348,11 +355,6 @@
 
     <string name="icons8_icons">Icons8</string>
     <string name="icons8_icons_desc">57,700 free flat icons in any format, size and color in 20 seconds.</string>
-
-    <string name="text_effect_none">None</string>
-    <string name="text_effect_bold">Bold</string>
-    <string name="text_effect_italic">Italic</string>
-    <string name="text_effect_bold_italic">Bold &amp; Italic</string>
 
     <string-array name="libraries">
         <item>
