@@ -11,12 +11,12 @@
     <string name="action_add_apps">Add Apps</string>
     <string name="action_search">Search</string>
     <string name="action_about">About</string>
-    <string name="action_gplus">Google+</string>
+    <string name="action_gplus" translatable="false">Google+</string>
     <string name="action_play">Play Store</string>
-    <string name="action_dribbble">Dribbble</string>
-    <string name="action_twitter">Twitter</string>
+    <string name="action_dribbble" translatable="false">Dribbble</string>
+    <string name="action_twitter" translatable="false">Twitter</string>
     <string name="action_website">Website</string>
-    <string name="action_github">GitHub</string>
+    <string name="action_github" translatable="false">GitHub</string>
     <string name="action_libraries">Open Source Licenses</string>
     <string name="action_enable">Enable</string>
     <string name="action_disable">Disable</string>
@@ -171,12 +171,12 @@
 
     <string name="icon_battery">Battery Icon</string>
     <string name="icon_battery_alert">Alert</string>
-    <string name="icon_battery_0_15">0% - 15%</string>
-    <string name="icon_battery_15_30">15% - 30%</string>
-    <string name="icon_battery_30_45">30% - 45%</string>
-    <string name="icon_battery_45_60">45% - 60%</string>
-    <string name="icon_battery_60_75">60% - 75%</string>
-    <string name="icon_battery_75_90">75% - 90%</string>
+    <string name="icon_battery_0_15" translatable="false">0% - 15%</string>
+    <string name="icon_battery_15_30" translatable="false">15% - 30%</string>
+    <string name="icon_battery_30_45" translatable="false">30% - 45%</string>
+    <string name="icon_battery_45_60" translatable="false">45% - 60%</string>
+    <string name="icon_battery_60_75" translatable="false">60% - 75%</string>
+    <string name="icon_battery_75_90" translatable="false">75% - 90%</string>
     <string name="icon_battery_full">Full</string>
     <string name="icon_battery_charging_0_15">Charging 0% - 15%</string>
     <string name="icon_battery_charging_15_30">Charging 15% - 30%</string>
@@ -242,12 +242,12 @@
     <string name="notification_color">Set Screen-Specific Color</string>
     <string name="notification_color_desc">Status couldn\'t find a color to use for this application, so it\'s reverted to the default color. You can specify a color to use by clicking this notification.</string>
 
-    <string name="unit_dp">dp</string>
-    <string name="unit_sp">sp</string>
+    <string name="unit_dp" translatable="false">dp</string>
+    <string name="unit_sp" translatable="false">sp</string>
     <string name="unit_seconds">" seconds"</string>
-    <string name="unit_mb">%1$f Mb</string>
-    <string name="unit_kb">%1$f Kb</string>
-    <string name="unit_px">px</string>
+    <string name="unit_mb" translatable="false">%1$f Mb</string>
+    <string name="unit_kb" translatable="false">%1$f Kb</string>
+    <string name="unit_px" translatable="false">px</string>
 
     <string name="icon_style_android">Android</string>
     <string name="icon_style_default">Default</string>
@@ -353,7 +353,7 @@
     <string name="md_icons">Material Design Icons</string>
     <string name="md_icons_desc">Made by many various contributors, this collection of icons contains useful resources unavailable from Google\'s site.</string>
 
-    <string name="icons8_icons">Icons8</string>
+    <string name="icons8_icons" translatable="false">Icons8</string>
     <string name="icons8_icons_desc">57,700 free flat icons in any format, size and color in 20 seconds.</string>
 
     <string-array name="libraries">
