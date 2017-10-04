@@ -61,14 +61,15 @@ public class StartActivity extends AppCompatActivity {
         ArrayList<SteppersItem> steps = new ArrayList<>();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            optimizationStep = new SteppersItem();
-            optimizationStep.setLabel(getString(R.string.optimizations_name));
-            optimizationStep.setSubLabel(getString(R.string.optimizations_desc));
-            optimizationStep.setFragment(new OptimizationStepFragment());
-            optimizationStep.setPositiveButtonEnable(true);
+            if (new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS).resolveActivity(getPackageManager()) != null) {
+                optimizationStep = new SteppersItem();
+                optimizationStep.setLabel(getString(R.string.optimizations_name));
+                optimizationStep.setSubLabel(getString(R.string.optimizations_desc));
+                optimizationStep.setFragment(new OptimizationStepFragment());
+                optimizationStep.setPositiveButtonEnable(true);
 
-            steps.add(optimizationStep);
-
+                steps.add(optimizationStep);
+            }
 
             permissionsStep = new SteppersItem();
             permissionsStep.setLabel(getString(R.string.permissions_name));
