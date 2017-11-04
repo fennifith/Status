@@ -44,7 +44,16 @@ public class StatusView extends FrameLayout {
 
     @ColorInt
     private Integer color, iconColor = Color.WHITE;
-    private boolean isSystemShowing, isFullscreen, isAnimations, isIconAnimations, isTintedIcons, isContrastIcons, isRegistered, isBumpMode;
+    private boolean isSystemShowing;
+    private boolean isFullscreen;
+    private boolean isAnimations;
+    private boolean isIconAnimations;
+    private boolean isTintedIcons;
+    private boolean isContrastIcons;
+    private boolean isRegistered;
+    private boolean isBumpMode;
+    private boolean isBurnInProtection;
+    private boolean isBurnInProtectionStarted;
 
     private List<IconData> icons;
     private WallpaperManager wallpaperManager;
@@ -53,6 +62,10 @@ public class StatusView extends FrameLayout {
     private Runnable burnInRunnable = new Runnable() {
         @Override
         public void run() {
+            if (isBurnInProtection)
+                handler.postDelayed(this, 2000);
+            else isBurnInProtectionStarted = false;
+
             if (status != null && status.getParent() != null) {
                 ViewGroup.LayoutParams layoutParams = status.getLayoutParams();
 
@@ -104,8 +117,6 @@ public class StatusView extends FrameLayout {
 
                 status.setLayoutParams(layoutParams);
             }
-
-            handler.postDelayed(this, 2000);
         }
     };
 
@@ -162,15 +173,18 @@ public class StatusView extends FrameLayout {
         this.isContrastIcons = isContrastIcons != null ? isContrastIcons : true;
 
         addView(v);
+        Boolean isBurnInProtection = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_BURNIN_PROTECTION);
+        this.isBurnInProtection = isBurnInProtection != null && isBurnInProtection;
         status.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 x = status.getX();
                 y = status.getY();
 
-                Boolean isBurnInProtection = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_BURNIN_PROTECTION);
-                if (isBurnInProtection != null && isBurnInProtection)
+                if (StatusView.this.isBurnInProtection && !isBurnInProtectionStarted) {
                     handler.post(burnInRunnable);
+                    isBurnInProtectionStarted = false;
+                }
 
                 status.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
