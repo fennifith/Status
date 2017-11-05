@@ -219,6 +219,17 @@ public class GeneralPreferenceFragment extends SimpleFragment implements Prefere
                         Integer.MAX_VALUE,
                         this
                 ),
+                new BooleanPreferenceData(
+                        getContext(),
+                        new PreferenceData.Identifier(
+                                PreferenceUtils.PreferenceIdentifier.STATUS_TRANSPARENT_MODE,
+                                getString(R.string.preference_transparent_mode),
+                                getString(R.string.preference_transparent_mode_desc),
+                                PreferenceData.Identifier.SectionIdentifier.OTHER
+                        ),
+                        false,
+                        this
+                ),
                 new IntegerPreferenceData(
                         getContext(),
                         new PreferenceData.Identifier(

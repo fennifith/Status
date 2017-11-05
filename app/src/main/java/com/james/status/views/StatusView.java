@@ -38,7 +38,10 @@ import java.util.List;
 
 public class StatusView extends FrameLayout {
 
-    private LinearLayout status, leftLayout, rightLayout, centerLayout;
+    private LinearLayout status;
+    private LinearLayout leftLayout;
+    private LinearLayout rightLayout;
+    private LinearLayout centerLayout;
     private float x, y;
     private int burnInOffsetX, burnInOffsetY;
 
@@ -52,8 +55,8 @@ public class StatusView extends FrameLayout {
     private boolean isContrastIcons;
     private boolean isRegistered;
     private boolean isBumpMode;
-    private boolean isBurnInProtection;
-    private boolean isBurnInProtectionStarted;
+    private boolean isTransparentMode;
+    private boolean isBurnInProtection, isBurnInProtectionStarted;
 
     private List<IconData> icons;
     private WallpaperManager wallpaperManager;
@@ -171,6 +174,9 @@ public class StatusView extends FrameLayout {
 
         Boolean isContrastIcons = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_DARK_ICONS);
         this.isContrastIcons = isContrastIcons != null ? isContrastIcons : true;
+
+        Boolean isTransparentMode = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_TRANSPARENT_MODE);
+        this.isTransparentMode = isTransparentMode != null ? isTransparentMode : false;
 
         addView(v);
         Boolean isBurnInProtection = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_BURNIN_PROTECTION);
@@ -385,12 +391,12 @@ public class StatusView extends FrameLayout {
                     public void onAnimationUpdate(ValueAnimator animation) {
                         int color = (int) animation.getAnimatedValue();
                         if (status != null)
-                            status.setBackgroundColor(Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
+                            setStatusBackgroundColor(color);
                     }
                 });
                 animator.start();
             } else
-                status.setBackgroundColor(Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
+                setStatusBackgroundColor(color);
 
             setDarkMode(!ColorUtils.isColorDark(color));
         } else if (status != null) {
@@ -400,7 +406,7 @@ public class StatusView extends FrameLayout {
                 else if (color == Color.WHITE) color = Color.BLACK;
             }
 
-            status.setBackgroundColor(backgroundColor);
+            setStatusBackgroundColor(backgroundColor);
 
             if (isContrastIcons)
                 color = ColorUtils.isColorDark(backgroundColor) ? ColorUtils.lightColor(color) : ColorUtils.darkColor(color);
@@ -443,6 +449,10 @@ public class StatusView extends FrameLayout {
         Integer color = PreferenceUtils.getIntegerPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_ICON_COLOR);
         if (color == null) color = Color.WHITE;
         return color;
+    }
+
+    private void setStatusBackgroundColor(@ColorInt int color) {
+        status.setBackgroundColor(isTransparentMode ? Color.TRANSPARENT : Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
     }
 
     public void setTransparent() {

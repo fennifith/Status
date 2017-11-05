@@ -355,6 +355,8 @@
 
     <string name="icons8_icons" translatable="false">Icons8</string>
     <string name="icons8_icons_desc">57,700 free flat icons in any format, size and color in 20 seconds.</string>
+    <string name="preference_transparent_mode">Transparent Mode</string>
+    <string name="preference_transparent_mode_desc">Makes the background of the status bar transparent at all times. Keep in mind that the original status bar will still be visible behind this one; the only times this option might be useful is if you disable all status bar icons using SystemUI tuner on Android Nougat or above.</string>
 
     <string-array name="libraries">
         <item>
