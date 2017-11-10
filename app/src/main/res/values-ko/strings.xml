@@ -1,0 +1,345 @@
+<resources>
+    <string name="app_name">Status</string>
+    <string name="app_desc">대체 가능한 머티리얼 디자인의 상태바입니다. 루팅은 필요하지 않습니다.</string>
+
+    <string name="action_settings">설정</string>
+    <string name="action_setup">설정</string>
+    <string name="action_access_grant">접근 동의</string>
+    <string name="action_cancel">취소</string>
+    <string name="action_ok">확인</string>
+    <string name="action_more">더보기</string>
+    <string name="action_add_apps">앱 추가</string>
+    <string name="action_search">찾기</string>
+    <string name="action_about">자세히</string>
+    <string name="action_play">Play Store</string>
+    <string name="action_website">웹사이트</string>
+    <string name="action_libraries">오픈소스 라이선스</string>
+    <string name="action_enable">활성화</string>
+    <string name="action_disable">비활성화</string>
+    <string name="action_reset">초기화</string>
+    <string name="action_tutorial">튜토리얼 초기화</string>
+    <string name="action_pick_image_color">이미지에서 색상 선택</string>
+    <string name="action_community">포럼 도움말</string>
+    <string name="action_dismiss">해산하다</string>
+    <string name="action_add_style">스타일 추가</string>
+    <string name="action_delete">삭제</string>
+    <string name="action_edit_style">아이콘 스타일 추가</string>
+    <string name="action_policy">개인 보호 정책</string>
+    <string name="action_new_backup">새 백업</string>
+    <string name="action_save">저장</string>
+    <string name="action_delete_backup">이 백업 삭제</string>
+    <string name="action_restore_backup">이 백업으로 복원</string>
+    <string name="action_save_backup">백업 덮어쓰기</string>
+    <string name="action_create_backup">백업 생성</string>
+    <string name="action_set_color">색상 선택</string>
+    <string name="action_show_status">Status 보이기</string>
+    <string name="action_hide_status">Status 숨기기</string>
+    <string name="action_app_settings">앱 설정</string>
+    <string name="action_edit">수정</string>
+    <string name="action_create_style">아이콘 스타일 생성</string>
+
+    <string name="reset_all">모두 초기화</string>
+    <string name="notifications_disable">모든 알림 비활성화</string>
+    <string name="notifications_enable">모든 알림 활성화</string>
+
+    <string name="prompt_name">여기에 이름을 해주시기 바랍니다…</string>
+    <string name="prompt_backup_name">백업 이름</string>
+
+    <string name="error_no_text_name">이름을 작성해 주세요…</string>
+    <string name="error_name_exists">해당 이름은 이미 존재합니다.</string>
+    <string name="error_missing_icons">필요한 아이콘을 찾을 수 없습니다.</string>
+    <string name="err_battery_already_ignored">배터리 최적화가 이미 거부되었습니다! 다음 단계로 넘어갈 수 있습니다.</string>
+    <string name="msg_notification_switch_enable">\"Status Service\"를 활성화 해주세요.</string>
+    <string name="msg_battery_optimizations_switch_enable">\"Status\"를 활성화 해주세요. 아래로 스크롤해야 할 수 있습니다... 아주 많이.</string>
+    <string name="msg_accessibility_switch_enable">\"Status Service\"란 이름의 서비스를 활성화 해주세요. 아래로 스크롤해야 보일 수 있습니다.</string>
+
+    <string name="service_name">Status Service</string>
+    <string name="service_name_general">접근성 서비스</string>
+    <string name="service_desc">창의 상태을 감지하여 상태바를 바꾸기 위해 \'Status Service\'를 활성화 해야합니다. 일부 휴대폰에서 보이기전에 화면 하단을 스크롤해야 할 수 있습니다.</string>
+
+    <string name="notifications_compat">호환성 모드</string>
+    <string name="notifications_compat_desc">일부 안드로이드 버전에서 알림 아이콘을 보여주기 위한 표준 notification listener API을 사용할 수 없습니다. 접근성 서비스를 사용하지 않고 탐지할 수 있는 방법을 찾았지만, 이는 알림이 해제됬을 때는 탐지하지 못합니다. 그러므로 알림 패널이 열릴때마다 모든 알림이 삭제됩니다. 이것을 하고싶지 않으시면, 펌웨어 업데이트를 확인하시거나 설정메뉴에서 알림을 비활성화 할 수 있습니다. 참고: 이 설정은 일부 기기에서 알림이 깨질수 있습니다. 안드로이드 버전이 롤리팝보다 최신버전에서는 활성화 하는것은 추천드리지 않습니다.</string>
+
+    <string name="service_start_stop">상태바 서비스</string>
+
+    <string name="notification_name">알림 접근</string>
+    <string name="notification_desc">상태바에 알림 아이콘을 보여주기 위해 알림을 읽어야 합니다.</string>
+
+    <string name="permissions_name">추가 권한</string>
+    <string name="permissions_desc">상태바와 관련된 전화의 부분적인 접근을 위해 몇개의 추가 권한이 필요합니다. 이들이 왜 필요한지에 대한 설명은 Status의 Play Store페이지에서 제공하고 있습니다.</string>
+
+    <string name="optimizations_name">배터리 최적화 거부 (선택사항)</string>
+    <string name="optimizations_desc">시스템이 배터리 수명을 늘리기위해 Status를 가끔 종료하는 배터리 최적화는 Status가 중단되는 원인입니다. 목록에서 Status를 착을려면 꽤 많은 스크롤을 해야할 수도 있습니다.</string>
+
+    <string name="overlay_name">오버레이 그리기</string>
+    <string name="overlay_desc">앱이 화면 상단에 오버레이를 그릴 수 있어야 합니다. 그래야만 상태바를 보여줄수 있습니다.</string>
+
+    <string name="tab_settings">설정</string>
+    <string name="tab_icons">아이콘</string>
+    <string name="tab_apps">앱</string>
+    <string name="tab_help">도움말</string>
+
+    <string name="preference_show_clock">시계 보이기</string>
+    <string name="preference_24h">24시간 형식 사용</string>
+    <string name="preference_24h_desc">이것을 켜게되면 시계가 24시간 형식으로 보이게 됩니다.</string>
+    <string name="preference_ampm">시계에 오전/오후 보이기</string>
+    <string name="preference_ampm_desc">시계에 오전/오후를 보여주는지 선택합니다.</string>
+    <string name="preference_date">현재 날짜 보이기</string>
+    <string name="preference_date_desc">시계의 시간옆에 날짜를 보여줍니다.</string>
+    <string name="preference_show_notifications">알림 보이기</string>
+    <string name="preference_heads_up">헤드업 보이기</string>
+    <string name="preference_heads_up_desc">중요한 알림을 받으면 알림이 화면 상단에 \'살짝\' 보입니다.</string>
+    <string name="preference_heads_up_duration">헤드업 지속시간 (초)</string>
+    <string name="preference_heads_up_duration_desc">헤드업 알림이 보이는 시간을 설정합니다.</string>
+    <string name="preference_battery_percent">배터리 퍼센트 보이기</string>
+    <string name="preference_battery_percent_desc">상태바 아이콘 옆에 배터리 퍼센트를 보여줍니다.</string>
+    <string name="preference_bar_color_auto">리소스 기반 색상</string>
+    <string name="preference_bar_color_auto_desc">상태바 색상을 현재 어플리케이션에서 가져옵니다. 기기의 따라 중대한 성능 저하를 초래할 수 있습니다.</string>
+    <string name="preference_bar_color_chooser">기본 상태바 색상</string>
+    <string name="preference_app_colors">특정 화면 색상</string>
+    <string name="preference_app_colors_desc">특정화면을 사용할때 상태바의 색상을 설정합니다. \'자동 상태바 색상\' 옵션이 켜져 어떠한 색상이어도 덮어씌워집니다.</string>
+    <string name="preference_transparent_home">홈 화면에서 투명화</string>
+    <string name="preference_transparent_home_desc">이 옵션은 홈 화면이 보일때 상태바의 배경이 현재 배경화면이 되도록 설정합니다. 이 옵션은 라이브 배경화면을 사용하거나 홈화면의 스크롤되는 배경화면 옵션이 켜지면 작동이 안될것입니다.</string>
+    <string name="preference_dark_icons">대비된 아이콘 색상</string>
+    <string name="preference_dark_icons_desc">밝은 배경에서 아이콘이 보기 어렵거나 안보이는것을 피하기위해 아이콘 색상을 조정합니다.</string>
+    <string name="preference_tinted_icons">Tinted Icons</string>
+    <string name="preference_tinted_icons_desc">기본 색상으로 설정된 상태바 배경을 대신해 아이콘의 색상을 변경합니다.</string>
+    <string name="preference_show_battery_icon">배터리 아이콘 보이기</string>
+    <string name="preference_icon_style">아이콘 스타일</string>
+    <string name="preference_show_network_icon">네트워크 아이콘 보이기</string>
+    <string name="preference_network_icon">네트워크 아이콘 스타일</string>
+    <string name="preference_dual_sim">듀얼심</string>
+    <string name="preference_dual_sim_desc">심카드가 1개를 초과할 경우, 신호상태를 1개 대신 2개를 보여주는 옵션입니다.</string>
+    <string name="preference_data">데이터 연결 보이기</string>
+    <string name="preference_data_desc">데이터 연결이 2G, 3G, 4G 또는 알수없음/없음 인지 보여줍니다.(안보여주지 않습니다)</string>
+    <string name="preference_show_wifi_icon">WiFi 아이콘 보이기</string>
+    <string name="preference_wifi_icon">WiFi 아이콘 스타일</string>
+    <string name="preference_show_gps_icon">GPS 아이콘 보이기</string>
+    <string name="preference_gps_icon">GPS 아이콘 스타일</string>
+    <string name="preference_show_bluetooth_icon">블루투스 아이콘</string>
+    <string name="preference_bluetooth_icon">블루투스 아이콘 스타일</string>
+    <string name="preference_show_airplane_mode_icon">비행기 모드 아이콘</string>
+    <string name="preference_airplane_mode_icon">비행기 모드 아이콘 스타일</string>
+    <string name="preference_show_alarm_icon">알람 아이콘</string>
+    <string name="preference_alarm_icon">알람 아이콘 스타일</string>
+    <string name="preference_show_ringer_icon">전화 아이콘</string>
+    <string name="preference_ringer_icon">벨소리 아이콘</string>
+    <string name="preference_icon_padding">가로 여백 (dp)</string>
+    <string name="preference_icon_scale">아이콘 크기 (dp)</string>
+    <string name="preference_text_size">글자 크기 (sp)</string>
+    <string name="preference_color_notification">특정화면 알림 색상</string>
+    <string name="preference_color_notification_desc">앱의 색상을 찾을 수 없으면 앱을 위한 색상이 적용된 바로가기 알림을 보여줍니다.</string>
+    <string name="preference_gravity">정렬</string>
+    <string name="preference_background_animations">배경 색상 애니메이션</string>
+    <string name="preference_background_animations_desc">이 옵션은 상태바의 배경 색상이 움직이는걸 활성화하거나 비활성화 할 수 있습니다. 느린 기기에서는 성능에 영향을 줄 수 있습니다.</string>
+    <string name="preference_icon_animations">아이콘 애니메이션</string>
+    <string name="preference_icon_animations_desc">이 옵션은 아이콘이 움직이는걸 전환할 수 있습니다. 한번에 많은 아이콘이 보여지면 느린 기기에서는 성능에 큰 영향을 끼칠 수 있습니다.</string>
+    <string name="preference_show_drawable">아이콘 보이기/숨기기</string>
+    <string name="preference_show_text">글자 보이기</string>
+    <string name="preference_notification_icon_size">알림 아이콘 크기</string>
+    <string name="preference_time_format">시간 양식</string>
+    <string name="preference_heads_up_layout">헤드업 알림 스타일</string>
+    <string name="preference_default_color_icon">기본 아이콘 색상</string>
+    <string name="preference_hide_on_volume">볼륨 조절중 Status 숨기기</string>
+    <string name="preference_hide_on_volume_desc">이 옵션은 어떻게 상태바가 볼륨 팝업에 반응하는지 정할 수 있습니다. 상태바에 덮어지지 않는다면, 체크할 필요가 없습니다. 일부 기기에서는 작동되지 않을 수 있습니다.</string>
+    <string name="preference_debug">디버그 메시지</string>
+    <string name="preference_debug_desc">창 변화에 대한 디버그 정보를 보여줍니다.</string>
+    <string name="preference_status_color">주요 색상</string>
+    <string name="preference_fullscreen">Status 숨기기</string>
+    <string name="preference_notifications">알림</string>
+    <string name="preference_side_padding">옆쪽 여백</string>
+    <string name="preference_side_padding_desc">Useful to prevent icons being cut off at the sides of the screen on phones with rounded screen edges.</string>
+    <string name="preference_persistent_notification">지속되는 알림 보이기</string>
+    <string name="preference_persistent_notification_desc">This keeps the Status service in the foreground and prevents it from being automatically shut down due to conserve memory or battery life. Disabling this setting could improve performance, but it could also cause various stability issues on some devices.</string>
+    <string name="preference_backups">설정 백업/복원</string>
+    <string name="preference_backups_desc">Status의 모든 설정을 텍스트 파일로 백업이나 복원을 할 수 있도록 해줍니다.</string>
+    <string name="preference_burnin_protection">번인 방지</string>
+    <string name="preference_burnin_protection_desc">인해 일부 화면에 번인이 발생는 Status의 아이콘을 2초마다 움직입니다.</string>
+    <string name="preference_text_color">글자 색상</string>
+    <string name="preference_height">상태바 높이</string>
+    <string name="preference_height_desc">상태바의 높이를 바꿉니다. 하지만 내용보다 아래로 늘릴 수 없습니다! 0으로 설정이 되면 Status가 시스템에 정의된 기본높이를 사용합니다.</string>
+    <string name="preference_bump_mode">범프 모드</string>
+    <string name="preference_bump_mode_desc">상태바의 가운데로 정렬된 항목에 가짜(그리고 정말 추한) \"카메라 범프\"를 만듭니다. 이 옵션을 절대로 활성화하지 말아주세요.</string>
+    <string name="preference_text_effect">글자 스타일</string>
+
+    <string name="icon_notifications">알림</string>
+    <string name="icon_clock">시계</string>
+
+    <string name="icon_battery">배터리 아이콘</string>
+    <string name="icon_battery_alert">경고</string>
+    <string name="icon_battery_full">충전완료</string>
+    <string name="icon_battery_charging_0_15">"충전중 0% - 15%"</string>
+    <string name="icon_battery_charging_15_30">충전중 15% - 30%</string>
+    <string name="icon_battery_charging_30_45">충전중 30% - 45%</string>
+    <string name="icon_battery_charging_45_60">충전중 45% - 60%</string>
+    <string name="icon_battery_charging_60_75">충전중 60% - 75%</string>
+    <string name="icon_battery_charging_75_90">충전중 75% - 90%</string>
+    <string name="icon_battery_charging_full">충전완료 (충전기연결됨)</string>
+
+    <string name="icon_network">네트워크 아이콘</string>
+    <string name="icon_network_no_connection">연결되지 않음</string>
+    <string name="icon_network_1_bar">1칸</string>
+    <string name="icon_network_2_bars">2칸</string>
+    <string name="icon_network_3_bars">3칸</string>
+    <string name="icon_network_4_bars">4칸</string>
+
+    <string name="icon_data">데이터 표시기</string>
+
+    <string name="icon_wifi">WiFi 아이콘</string>
+    <string name="icon_wifi_no_signal">신호 없음</string>
+    <string name="icon_wifi_1_bar">1칸</string>
+    <string name="icon_wifi_2_bars">2칸</string>
+    <string name="icon_wifi_3_bars">3칸</string>
+    <string name="icon_wifi_4_bars">4칸</string>
+
+    <string name="icon_bluetooth">블루투스 아이콘</string>
+    <string name="icon_bluetooth_scanning">찾는중</string>
+    <string name="icon_bluetooth_connected">연결됨</string>
+
+    <string name="icon_gps">GPS 아이콘</string>
+    <string name="icon_gps_searching">찾는중</string>
+    <string name="icon_gps_fixed">고정됨</string>
+
+    <string name="icon_airplane">비행기 모드 아이콘</string>
+    <string name="icon_alarm">알람 아이콘</string>
+
+    <string name="icon_ringer">벨소리 볼륨 아이콘</string>
+    <string name="icon_ringer_muted">음소거</string>
+    <string name="icon_ringer_vibrate">진동</string>
+
+    <string name="icon_nfc">NFC 아이콘</string>
+
+    <string name="icon_headphone">헤드폰 아이콘</string>
+    <string name="icon_headphone_headphones">헤드폰</string>
+    <string name="icon_headphone_headset">헤드셋</string>
+
+    <string name="icon_carrier">통신사 이름</string>
+
+    <string name="icon_orientation">방향 아이콘</string>
+    <string name="icon_orientation_auto">자동</string>
+    <string name="icon_orientation_portrait">세로 고정</string>
+    <string name="icon_orientation_landscape">가로 고정</string>
+
+    <string name="heads_up_plain">평평한</string>
+    <string name="heads_up_card">카드</string>
+    <string name="heads_up_condensed">간결한</string>
+    <string name="heads_up_transparent">투명</string>
+
+    <string name="gravity_center">중앙</string>
+    <string name="gravity_left">왼쪽</string>
+    <string name="gravity_right">오른쪽</string>
+
+    <string name="notification_color">특정한 화면 색상 설정</string>
+    <string name="notification_color_desc">Status는 이 어플리캐이션이 사용하는 색상을 찾을 수 없어서, 기본 색상으로 돌려놓습니다. 이 알림을 눌러 사용할 색상을 지정할 수 있습니다.</string>
+
+    <string name="unit_seconds">" 초"</string>
+
+    <string name="icon_style_android">안드로이드</string>
+    <string name="icon_style_default">기본값</string>
+    <string name="icon_style_stock">순정</string>
+    <string name="icon_style_circle">원</string>
+    <string name="icon_style_circle_outline">원형 테두리</string>
+    <string name="icon_style_classic">고전</string>
+    <string name="icon_style_clear">Clear</string>
+    <string name="icon_style_clip">클립</string>
+    <string name="icon_style_curved">Curved</string>
+    <string name="icon_style_outline">테두리</string>
+    <string name="icon_style_dish">그릇</string>
+    <string name="icon_style_triangle">삼각형</string>
+    <string name="icon_style_square">사각형</string>
+    <string name="icon_style_retro">복고</string>
+    <string name="icon_style_pixel">Pixelated</string>
+    <string name="icon_style_balloon">열기구</string>
+    <string name="icon_style_radial">반원</string>
+    <string name="icon_style_tap">Tap</string>
+    <string name="icon_style_school">학교</string>
+    <string name="icon_style_system">시스템</string>
+    <string name="icon_style_round">둥원</string>
+    <string name="icon_style_dish2">그릇 2</string>
+    <string name="icon_style_satellite">위성</string>
+    <string name="icon_style_satellite_outline">위성 테두리</string>
+    <string name="icon_style_front">Front</string>
+    <string name="icon_style_propeller">Propeller</string>
+    <string name="icon_style_pilot_hat">Pilot Hat</string>
+    <string name="icon_style_boxy">상자</string>
+    <string name="icon_style_sideways">Sideways</string>
+    <string name="icon_style_bell">벨</string>
+
+    <string name="tutorial_enable">상태바 활성화</string>
+    <string name="tutorial_enable_desc">화면 상단의 스위치로 맞춤화된 상태바를 활성화나 비활성화 할 수 있습니다. 활성화해서 사용해보세요!</string>
+    <string name="tutorial_search">뭔가 찾고 있습니까?</string>
+    <string name="tutorial_search_desc">Status의 검색바를 이용해 원하는 설정을 찾을 수 있습니다.</string>
+    <string name="tutorial_help">도움이 필요합니까?</string>
+    <string name="tutorial_help_desc">도움말은 항상 업데이트 되고 이 앱을 사용중인 다른 사용자가 발견한 거의 모든 문제를 포함하고 있습니다.</string>
+    <string name="tutorial_image_picker">이미지 색상 선택</string>
+    <string name="tutorial_image_picker_desc">정확한 색상을 찾을 수 없습니까? 이미지에서 색상을 선택해보세요!</string>
+    <string name="tutorial_icon_switch">아이콘이 마음에 들지 않나요?</string>
+    <string name="tutorial_icon_switch_desc">아이콘 항목 이름 옆에 있는 체크박스를 클릭해서 아이콘을 활성화하거나 비활성화를 할 수 있습니다.</string>
+    <string name="tutorial_icon_order">아이콘 재정렬</string>
+    <string name="tutorial_icon_order_desc">아이콘 항목 이름 옆에있는 위 아래 버튼을 통해 아이콘 순서를 바꿀 수 있습니다.</string>
+    <string name="tutorial_activities">모든 앱을 수 정하고 싶지 않습니까?Don\'t want to modify an entire app?</string>
+    <string name="tutorial_activities_desc">앱 이름 옆에있는 \'확장\' 버튼을 눌러 개별적인 화면을 바꿀 수 있습니다.</string>
+    <string name="tutorial_donate">Status가 마음에 듭니까?</string>
+    <string name="tutorial_donate_desc">Status는 오픈소스고 광고나 돈을 지불하지 않아도 무료로 사용할 수 있습니다. Status를 지원하거나 다른 앱을 좋아하시면, 기부를 고려해주세요.</string>
+
+    <string name="red">빨강색</string>
+    <string name="green">초록색</string>
+    <string name="blue">파랑색</string>
+
+    <string name="text_effect_none">없음</string>
+    <string name="text_effect_bold">굵게</string>
+    <string name="text_effect_italic">이탤릭체</string>
+    <string name="text_effect_bold_italic">굵게 &amp; 이탤릭체</string>
+
+    <string name="font_default">기본</string>
+
+    <string name="hint_format">
+        \n
+        h - 시간\n
+        HH - 시간 (24h)\n
+        kk - 시간 (24h)\n
+        mm - 분\n
+        a - 오전/오후\n
+        Z - 시간대\n
+        \n
+        dd - 날짜\n
+        EEE - 요일\n
+        MM - 월 (숫자)\n
+        MMM - 월\n
+        yyyy - 연도
+    </string>
+
+    <string name="empty">아무것도 없습니다…</string>
+    <string name="reset_apps_confirm">앱 설정을 초기화 하시겠습니까? 되돌릴 수 없습니다.</string>
+
+    <string name="james_name">James Fenn</string>
+    <string name="james_desc">Android developer and professional cabbage eater.</string>
+
+    <string name="anas_name">Anas Khan</string>
+    <string name="anas_desc">Better known as the Oreo lord, this guy can add more butter to buttery interfaces.</string>
+
+    <string name="vuk_name">Vukašin Anđelković</string>
+    <string name="vuk_desc">머티리얼 디자인의 거물, 아이콘을 만들고 채워 넣었습니다.</string>
+
+    <string name="ghost_name">Ghost Ninja</string>
+    <string name="ghost_desc">그래픽 디자이너, 웹 디자이너 그리고 technologx.com 소유자.</string>
+
+    <string name="about_translators">역자</string>
+
+    <string name="ryo_name">Eugenio \"Ryo567\" Martínez Seguín</string>
+    <string name="ryo_desc">앱 스페인어 번역</string>
+
+    <string name="about_icons">아이콘 출처</string>
+    <string name="about_icons_desc">분명히 이 앱에 사용된 100개 이상의 아이콘을 만드는건 힘들어서, (위의 사람들뿐만 아니라) 몇몇 다른 곳의 아이콘을 사용합니다.</string>
+
+    <string name="google_icons">Google Design</string>
+    <string name="google_icons_desc">앱에 있는 대부분의 아이콘은 Google Design의 큰 아이콘 데이터베이스에서 선택했습니다.</string>
+
+    <string name="md_icons">머티리얼 디자인 아이콘</string>
+    <string name="md_icons_desc">많은 기여자들이 만들었으며, Google에서는 만날 수 없는 유용한 아이콘 모음입니다.</string>
+
+    <string name="icons8_icons_desc">20초만에 어떠한 형식, 크기 그리고 색상으로 만들 수 있는 57,700개의 무료 플랫 아이콘.</string>
+    <string name="preference_transparent_mode">투명 모드</string>
+    <string name="preference_transparent_mode_desc">항상 상태바의 배경을 투명으로 만듭니다. 기존의 상태바가 뒤로 보인다는 것을 명심하세요. 안드로이드 누가 이상에서 SystemUI 튜너를 이용해 상태바의 모든 아이콘을 해제하면 이 옵션은 매우 유용합니다.</string>
+
+</resources>
