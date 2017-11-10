@@ -102,7 +102,7 @@
     <string name="preference_transparent_home_desc">이 옵션은 홈 화면이 보일때 상태바의 배경이 현재 배경화면이 되도록 설정합니다. 이 옵션은 라이브 배경화면을 사용하거나 홈화면의 스크롤되는 배경화면 옵션이 켜지면 작동이 안될것입니다.</string>
     <string name="preference_dark_icons">대비된 아이콘 색상</string>
     <string name="preference_dark_icons_desc">밝은 배경에서 아이콘이 보기 어렵거나 안보이는것을 피하기위해 아이콘 색상을 조정합니다.</string>
-    <string name="preference_tinted_icons">Tinted Icons</string>
+    <string name="preference_tinted_icons">아이콘 착색</string>
     <string name="preference_tinted_icons_desc">기본 색상으로 설정된 상태바 배경을 대신해 아이콘의 색상을 변경합니다.</string>
     <string name="preference_show_battery_icon">배터리 아이콘 보이기</string>
     <string name="preference_icon_style">아이콘 스타일</string>
@@ -148,9 +148,9 @@
     <string name="preference_fullscreen">Status 숨기기</string>
     <string name="preference_notifications">알림</string>
     <string name="preference_side_padding">옆쪽 여백</string>
-    <string name="preference_side_padding_desc">Useful to prevent icons being cut off at the sides of the screen on phones with rounded screen edges.</string>
+    <string name="preference_side_padding_desc">모서리가 둥근 화면의 휴대폰에서 양옆의 아이콘이 잘릴때 유용합니다.</string>
     <string name="preference_persistent_notification">지속되는 알림 보이기</string>
-    <string name="preference_persistent_notification_desc">This keeps the Status service in the foreground and prevents it from being automatically shut down due to conserve memory or battery life. Disabling this setting could improve performance, but it could also cause various stability issues on some devices.</string>
+    <string name="preference_persistent_notification_desc">전면에서 Status 서비스가 지속되고 메모리나 배터리 수명을 절약하는 동안 자동으로 꺼지는 것을 방지합니다. 비활성화하면 성능을 개선 할 수 있지만, 일부 기기에서 많은 안정성 문제가 발생할 수 있습니다.</string>
     <string name="preference_backups">설정 백업/복원</string>
     <string name="preference_backups_desc">Status의 모든 설정을 텍스트 파일로 백업이나 복원을 할 수 있도록 해줍니다.</string>
     <string name="preference_burnin_protection">번인 방지</string>
@@ -342,4 +342,9 @@
     <string name="preference_transparent_mode">투명 모드</string>
     <string name="preference_transparent_mode_desc">항상 상태바의 배경을 투명으로 만듭니다. 기존의 상태바가 뒤로 보인다는 것을 명심하세요. 안드로이드 누가 이상에서 SystemUI 튜너를 이용해 상태바의 모든 아이콘을 해제하면 이 옵션은 매우 유용합니다.</string>
 
+    <!-- Steppers Library -->
+    <string name="step_continue">계속</string>
+    <string name="step_finish">완료</string>
+    <string name="step_cancel">취소</string>
+    <string name="step_skip">넘어가기</string>
 </resources>
