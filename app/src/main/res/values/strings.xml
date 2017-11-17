@@ -165,6 +165,8 @@
     <string name="preference_bump_mode">Bump Mode</string>
     <string name="preference_bump_mode_desc">Creates a fake (and really ugly) \"camera bump\" around the center aligned items in the status bar. Please don\'t ever enable this option.</string>
     <string name="preference_text_effect">Text Style</string>
+    <string name="preference_transparent_mode">Transparent Mode</string>
+    <string name="preference_transparent_mode_desc">Makes the background of the status bar transparent at all times. Keep in mind that the original status bar will still be visible behind this one; the only times this option might be useful is if you disable all status bar icons using SystemUI tuner on Android Nougat or above.</string>
 
     <string name="icon_notifications">Notifications</string>
     <string name="icon_clock">Clock</string>
@@ -344,6 +346,9 @@
     <string name="ryo_name">Eugenio \"Ryo567\" Martínez Seguín</string>
     <string name="ryo_desc">Created the spanish translations for the app.</string>
 
+    <string name="opnay_name">Kim Inseop</string>
+    <string name="opnay_desc">Android developer, translated the app into Korean :D</string>
+
     <string name="about_icons">Icon Sources</string>
     <string name="about_icons_desc">Obviously, it would be hard to make over 100 icons used in this app by myself, so (as well as the ones by the people above) the app uses icons from a few different sources.</string>
 
@@ -355,8 +360,6 @@
 
     <string name="icons8_icons" translatable="false">Icons8</string>
     <string name="icons8_icons_desc">57,700 free flat icons in any format, size and color in 20 seconds.</string>
-    <string name="preference_transparent_mode">Transparent Mode</string>
-    <string name="preference_transparent_mode_desc">Makes the background of the status bar transparent at all times. Keep in mind that the original status bar will still be visible behind this one; the only times this option might be useful is if you disable all status bar icons using SystemUI tuner on Android Nougat or above.</string>
 
     <string-array name="libraries">
         <item>
