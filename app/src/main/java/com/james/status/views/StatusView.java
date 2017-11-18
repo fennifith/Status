@@ -159,9 +159,9 @@ public class StatusView extends FrameLayout {
         status = (LinearLayout) v.findViewById(R.id.status);
         status.getLayoutParams().height = StaticUtils.getStatusBarHeight(getContext());
 
-        leftLayout = (OverflowLinearLayout) v.findViewById(R.id.notificationIcons);
-        rightLayout = (OverflowLinearLayout) v.findViewById(R.id.statusIcons);
-        centerLayout = (LinearLayout) v.findViewById(R.id.statusCenterIcons);
+        leftLayout = (OverflowLinearLayout) v.findViewById(R.id.leftLayout);
+        rightLayout = (OverflowLinearLayout) v.findViewById(R.id.rightLayout);
+        centerLayout = (LinearLayout) v.findViewById(R.id.centerLayout);
 
         Boolean isAnimations = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_BACKGROUND_ANIMATIONS);
         this.isAnimations = isAnimations != null ? isAnimations : true;
