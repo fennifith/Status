@@ -38,9 +38,9 @@ import java.util.List;
 public class StatusView extends FrameLayout {
 
     private LinearLayout status;
-    private LinearLayout leftLayout;
+    private OverflowLinearLayout leftLayout;
     private float leftX, leftY;
-    private LinearLayout rightLayout;
+    private OverflowLinearLayout rightLayout;
     private float rightX, rightY;
     private LinearLayout centerLayout;
     private float centerX, centerY;
@@ -58,6 +58,7 @@ public class StatusView extends FrameLayout {
     private boolean isBumpMode;
     private boolean isTransparentMode;
     private boolean isBurnInProtection, isBurnInProtectionStarted;
+    private boolean isIconOverlapPrevention;
 
     private List<IconData> icons;
     private WallpaperManager wallpaperManager;
@@ -158,8 +159,8 @@ public class StatusView extends FrameLayout {
         status = (LinearLayout) v.findViewById(R.id.status);
         status.getLayoutParams().height = StaticUtils.getStatusBarHeight(getContext());
 
-        leftLayout = (LinearLayout) v.findViewById(R.id.notificationIcons);
-        rightLayout = (LinearLayout) v.findViewById(R.id.statusIcons);
+        leftLayout = (OverflowLinearLayout) v.findViewById(R.id.notificationIcons);
+        rightLayout = (OverflowLinearLayout) v.findViewById(R.id.statusIcons);
         centerLayout = (LinearLayout) v.findViewById(R.id.statusCenterIcons);
 
         Boolean isAnimations = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_BACKGROUND_ANIMATIONS);
@@ -186,6 +187,9 @@ public class StatusView extends FrameLayout {
 
         Boolean isTransparentMode = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_TRANSPARENT_MODE);
         this.isTransparentMode = isTransparentMode != null ? isTransparentMode : false;
+
+        Boolean isIconOverlapPrevention = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_PREVENT_ICON_OVERLAP);
+        this.isIconOverlapPrevention = isIconOverlapPrevention != null && isIconOverlapPrevention;
 
         addView(v);
         Boolean isBurnInProtection = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_BURNIN_PROTECTION);
@@ -302,6 +306,11 @@ public class StatusView extends FrameLayout {
                     rightLayout.addView(item, 0);
                     break;
             }
+        }
+
+        if (isIconOverlapPrevention) {
+            leftLayout.onViewsChanged();
+            rightLayout.onViewsChanged();
         }
     }
 
@@ -432,12 +441,12 @@ public class StatusView extends FrameLayout {
                     public void onAnimationUpdate(ValueAnimator animation) {
                         int color = (int) animation.getAnimatedValue();
                         if (status != null)
-                            setIconTint(status, Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
+                            setIconTint(Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
                     }
                 });
                 animator.start();
             } else
-                setIconTint(status, Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
+                setIconTint(Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
 
             iconColor = color;
         }
@@ -510,22 +519,28 @@ public class StatusView extends FrameLayout {
                     public void onAnimationUpdate(ValueAnimator animation) {
                         int color = (int) animation.getAnimatedValue();
                         if (status != null)
-                            setIconTint(status, Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
+                            setIconTint(Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
                     }
                 });
                 animator.start();
             } else
-                setIconTint(status, Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
+                setIconTint(Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
 
             iconColor = color;
         }
     }
 
-    private void setIconTint(View view, @ColorInt int color) {
+    private void setIconTint(@ColorInt int color) {
         for (IconData icon : getIcons()) {
             icon.setColor(color);
         }
 
+        leftLayout.setColor(color);
+        rightLayout.setColor(color);
+        setIconTint(status, color);
+    }
+
+    private void setIconTint(View view, @ColorInt int color) {
         if (view instanceof LinearLayout) {
             for (int i = 0; i < ((LinearLayout) view).getChildCount(); i++) {
                 setIconTint(((LinearLayout) view).getChildAt(i), view.equals(centerLayout) && isBumpMode ? Color.WHITE : color);

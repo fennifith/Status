@@ -22,6 +22,7 @@ import com.james.status.services.NotificationService;
 import com.james.status.utils.PreferenceUtils;
 import com.james.status.utils.StaticUtils;
 import com.james.status.views.CustomImageView;
+import com.james.status.views.OverflowLinearLayout;
 
 import java.util.List;
 
@@ -203,8 +204,13 @@ public class NotificationsIconData extends IconData<NotificationsIconData.Notifi
 
     static class NotificationReceiver extends IconUpdateReceiver<NotificationsIconData> {
 
+        boolean isIconOverlapPrevention;
+
         private NotificationReceiver(NotificationsIconData iconData) {
             super(iconData);
+
+            Boolean isIconOverlapPrevention = PreferenceUtils.getBooleanPreference(iconData.getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_PREVENT_ICON_OVERLAP);
+            this.isIconOverlapPrevention = isIconOverlapPrevention != null && isIconOverlapPrevention;
         }
 
         @Override
@@ -226,6 +232,9 @@ public class NotificationsIconData extends IconData<NotificationsIconData.Notifi
                     icon.removeNotification(notification);
                     break;
             }
+
+            if (isIconOverlapPrevention && icon.getIconView().getParent() != null && icon.getIconView().getParent() instanceof OverflowLinearLayout)
+                ((OverflowLinearLayout) icon.getIconView().getParent()).onViewsChanged();
         }
     }
 }

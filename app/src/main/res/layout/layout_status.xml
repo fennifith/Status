@@ -15,7 +15,7 @@
         android:paddingLeft="4dp"
         android:paddingRight="4dp">
 
-        <LinearLayout
+        <com.james.status.views.OverflowLinearLayout
             android:id="@+id/notificationIcons"
             android:layout_width="0dp"
             android:layout_height="24dp"
@@ -32,7 +32,7 @@
             android:gravity="center"
             android:orientation="horizontal" />
 
-        <LinearLayout
+        <com.james.status.views.OverflowLinearLayout
             android:id="@+id/statusIcons"
             android:layout_width="0dp"
             android:layout_height="24dp"

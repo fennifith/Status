@@ -102,6 +102,17 @@ public class GeneralPreferenceFragment extends SimpleFragment implements Prefere
                 new BooleanPreferenceData(
                         getContext(),
                         new PreferenceData.Identifier(
+                                PreferenceUtils.PreferenceIdentifier.STATUS_PREVENT_ICON_OVERLAP,
+                                getString(R.string.preference_prevent_icon_overlap),
+                                getString(R.string.preference_prevent_icon_overlap_desc),
+                                PreferenceData.Identifier.SectionIdentifier.ICONS
+                        ),
+                        false,
+                        this
+                ),
+                new BooleanPreferenceData(
+                        getContext(),
+                        new PreferenceData.Identifier(
                                 PreferenceUtils.PreferenceIdentifier.STATUS_TINTED_ICONS,
                                 getString(R.string.preference_tinted_icons),
                                 getString(R.string.preference_tinted_icons_desc),
