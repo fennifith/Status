@@ -354,5 +354,27 @@
     <string name="preference_prevent_icon_overlap_desc">Prevents icon \"sections\" from overlapping each other when there are too many icons displaying at once. This setting will cause battery drain with too many updates (music player notifications can be particularly taxing, especially if they update once every second), so be careful with it.</string>
     <string name="tutorial_too_many_icons">Running Out Of Space?</string>
     <string name="tutorial_too_many_icons_desc">It appears that there are too many icons in the status bar and it doesn\'t have room to display them all. To prevent them from being cut off, you could enable the \"Prevent Overlap\" option in the settings or increase available space by reducing padding and icon scale.</string>
+    <string-array name="libraries">
+        <item>
+            <a href="https://github.com/bumptech/glide">Glide</a>
+            <i> - BSD, part MIT and Apache 2.0</i>
+            <p>\nGlide is a fast and efficient open source media management and image loading framework for Android that wraps media decoding, memory and disk caching, and resource pooling into a simple and easy to use interface.</p>
+        </item>
+        <item>
+            <a href="https://github.com/drozdzynski/Steppers">Steppers</a>
+            <i> - Apache 2.0</i>
+            <p>\nSteppers is a view library for Android based on Material Design guidelines.</p>
+        </item>
+        <item>
+            <a href="https://github.com/afollestad/async">Async</a>
+            <i> - Apache 2.0</i>
+            <p>\nA library designed to make the organized execution of async processes in Android easy.</p>
+        </item>
+        <item>
+            <a href="https://github.com/google/gson">Gson</a>
+            <i> - Apache 2.0</i>
+            <p>\nGson is a Java library that can be used to convert Java Objects into their JSON representation.</p>
+        </item>
+    </string-array>
 
 </resources>
