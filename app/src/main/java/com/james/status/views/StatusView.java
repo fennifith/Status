@@ -20,7 +20,6 @@ import android.support.v7.graphics.Palette;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -40,9 +39,11 @@ public class StatusView extends FrameLayout {
 
     private LinearLayout status;
     private LinearLayout leftLayout;
+    private float leftX, leftY;
     private LinearLayout rightLayout;
+    private float rightX, rightY;
     private LinearLayout centerLayout;
-    private float x, y;
+    private float centerX, centerY;
     private int burnInOffsetX, burnInOffsetY;
 
     @ColorInt
@@ -70,29 +71,27 @@ public class StatusView extends FrameLayout {
             else isBurnInProtectionStarted = false;
 
             if (status != null && status.getParent() != null) {
-                ViewGroup.LayoutParams layoutParams = status.getLayoutParams();
-
                 switch (burnInOffsetX) {
                     case 0:
-                        status.setX(x - 1);
+                        setLayoutX(-1);
                         burnInOffsetX++;
                         break;
                     case 2:
                     case 3:
                     case 4:
-                        status.setX(x + 1);
+                        setLayoutX(1);
                         burnInOffsetX++;
                         break;
                     case 6:
-                        status.setX(x - 1);
+                        setLayoutX(-1);
                         burnInOffsetX++;
                         break;
                     case 7:
-                        status.setX(x - 1);
+                        setLayoutX(-1);
                         burnInOffsetX = 0;
                         break;
                     default:
-                        status.setX(x);
+                        setLayoutX(0);
                         burnInOffsetX++;
                 }
 
@@ -100,26 +99,36 @@ public class StatusView extends FrameLayout {
                     case 0:
                     case 1:
                     case 2:
-                        status.setY(y + 1);
+                        setLayoutY(1);
                         burnInOffsetY++;
                         break;
                     case 4:
                     case 5:
                     case 6:
-                        status.setY(y - 1);
+                        setLayoutY(-1);
                         burnInOffsetY++;
                         break;
                     case 7:
-                        status.setY(y);
+                        setLayoutY(0);
                         burnInOffsetY = 0;
                         break;
                     default:
-                        status.setY(y);
+                        setLayoutY(0);
                         burnInOffsetY++;
                 }
-
-                status.setLayoutParams(layoutParams);
             }
+        }
+
+        private void setLayoutX(float x) {
+            leftLayout.setX(leftX + x);
+            rightLayout.setX(rightX + x);
+            centerLayout.setX(centerX + x);
+        }
+
+        private void setLayoutY(float y) {
+            leftLayout.setY(leftY + y);
+            rightLayout.setY(rightY + y);
+            centerLayout.setY(centerY + y);
         }
     };
 
@@ -184,8 +193,12 @@ public class StatusView extends FrameLayout {
         status.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                x = status.getX();
-                y = status.getY();
+                leftX = leftLayout.getX();
+                leftY = leftLayout.getY();
+                rightX = rightLayout.getX();
+                rightY = rightLayout.getY();
+                centerX = centerLayout.getX();
+                centerY = centerLayout.getY();
 
                 if (StatusView.this.isBurnInProtection && !isBurnInProtectionStarted) {
                     handler.post(burnInRunnable);
