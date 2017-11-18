@@ -313,21 +313,16 @@
     <string name="empty">什么都没有…</string>
     <string name="reset_apps_confirm">你确定要重置所有应用指定的首选项? 此操作不可逆。</string>
 
-    <string name="james_name">James Fenn</string>
     <string name="james_desc">Android developer and professional cabbage eater.</string>
 
-    <string name="anas_name">Anas Khan</string>
     <string name="anas_desc">Better known as the Oreo lord, this guy can add more butter to buttery interfaces.</string>
 
-    <string name="vuk_name">Vukašin Anđelković</string>
     <string name="vuk_desc">The great lord of Material Design, yeah he makes icons and stuff.</string>
 
-    <string name="ghost_name">Ghost Ninja</string>
     <string name="ghost_desc">A graphic designer, web designer, and the owner of technologx.com.</string>
 
     <string name="about_translators">Translators</string>
 
-    <string name="ryo_name">Eugenio \"Ryo567\" Martínez Seguín</string>
     <string name="ryo_desc">Created the spanish translations for the app.</string>
 
     <string name="about_icons">Icon Sources</string>
@@ -363,4 +358,23 @@
             <p>\nGson is a Java library that can be used to convert Java Objects into their JSON representation.</p>
         </item>
     </string-array>
+
+    <string name="opnay_name">Kim Inseop</string>
+
+    <!-- untranslated strings -->
+    <string name="opnay_desc">Android developer, translated the app into Korean :D</string>
+    <string name="preference_transparent_mode">Transparent Mode</string>
+    <string name="preference_transparent_mode_desc">Makes the background of the status bar transparent at all times. Keep in mind that the original status bar will still be visible behind this one; the only times this option might be useful is if you disable all status bar icons using SystemUI tuner on Android Nougat or above.</string>
+    <string name="step_continue">Continue</string>
+    <string name="step_finish">Finish</string>
+    <string name="step_cancel">Cancel</string>
+    <string name="step_skip">Skip</string>
+    <string name="service_desc_short">Status uses this accessibility service to detect screen updates and notifications on older devices.</string>
+    <string name="service_desc_long"><![CDATA[Status allows users to customize their status bar for better readability, aesthetic, or functionality, allowing them easier and faster use of their devices. \n\nStatus requires this accessibility service to detect the current app that is displaying on the screen in order to adapt to its color scheme and layout. It also uses this service to listen for notifications on older devices that do not have the NotificationListenerService API.]]></string>
+    <string name="majida_desc">Created Chinese translations for this app.</string>
+    <string name="preference_prevent_icon_overlap">Prevent Icon Overlap</string>
+    <string name="preference_prevent_icon_overlap_desc">Prevents icon \"sections\" from overlapping each other when there are too many icons displaying at once. This setting will cause battery drain with too many updates (music player notifications can be particularly taxing, especially if they update once every second), so be careful with it.</string>
+    <string name="tutorial_too_many_icons">Running Out Of Space?</string>
+    <string name="tutorial_too_many_icons_desc">It appears that there are too many icons in the status bar and it doesn\'t have room to display them all. To prevent them from being cut off, you could enable the \"Prevent Overlap\" option in the settings or increase available space by reducing padding and icon scale.</string>
+
 </resources>

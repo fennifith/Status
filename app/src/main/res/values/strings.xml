@@ -336,27 +336,27 @@
     <string name="empty">Nothing here…</string>
     <string name="reset_apps_confirm">Are you sure you want to reset all the app-specific preferences? This cannot be undone.</string>
 
-    <string name="james_name">James Fenn</string>
+    <string name="james_name" translatable="false">James Fenn</string>
     <string name="james_desc">Android developer and professional cabbage eater.</string>
 
-    <string name="anas_name">Anas Khan</string>
+    <string name="anas_name" translatable="false">Anas Khan</string>
     <string name="anas_desc">Better known as the Oreo lord, this guy can add more butter to buttery interfaces.</string>
 
-    <string name="vuk_name">Vukašin Anđelković</string>
+    <string name="vuk_name" translatable="false">Vukašin Anđelković</string>
     <string name="vuk_desc">The great lord of Material Design, yeah he makes icons and stuff.</string>
 
-    <string name="ghost_name">Ghost Ninja</string>
+    <string name="ghost_name" translatable="false">Ghost Ninja</string>
     <string name="ghost_desc">A graphic designer, web designer, and the owner of technologx.com.</string>
 
     <string name="about_translators">Translators</string>
 
-    <string name="ryo_name">Eugenio \"Ryo567\" Martínez Seguín</string>
+    <string name="ryo_name" translatable="false">Eugenio \"Ryo567\" Martínez Seguín</string>
     <string name="ryo_desc">Created the spanish translations for the app.</string>
 
     <string name="opnay_name">Kim Inseop</string>
     <string name="opnay_desc">Android developer, translated the app into Korean :D</string>
 
-    <string name="majida_name">Majida Whale</string>
+    <string name="majida_name" translatable="false">Majida Whale</string>
     <string name="majida_desc">Created Chinese translations for this app.</string>
 
     <string name="about_icons">Icon Sources</string>
@@ -393,4 +393,10 @@
             <p>\nGson is a Java library that can be used to convert Java Objects into their JSON representation.</p>
         </item>
     </string-array>
+
+    <string name="step_continue">Continue</string>
+    <string name="step_finish">Finish</string>
+    <string name="step_cancel">Cancel</string>
+    <string name="step_skip">Skip</string>
+
 </resources>

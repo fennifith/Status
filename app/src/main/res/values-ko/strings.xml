@@ -312,16 +312,12 @@
     <string name="empty">아무것도 없습니다…</string>
     <string name="reset_apps_confirm">앱 설정을 초기화 하시겠습니까? 되돌릴 수 없습니다.</string>
 
-    <string name="james_name">James Fenn</string>
     <string name="james_desc">Android developer and professional cabbage eater.</string>
 
-    <string name="anas_name">Anas Khan</string>
     <string name="anas_desc">Better known as the Oreo lord, this guy can add more butter to buttery interfaces.</string>
 
-    <string name="vuk_name">Vukašin Anđelković</string>
     <string name="vuk_desc">머티리얼 디자인의 거물, 아이콘을 만들고 채워 넣었습니다.</string>
 
-    <string name="ghost_name">Ghost Ninja</string>
     <string name="ghost_desc">그래픽 디자이너, 웹 디자이너 그리고 technologx.com 소유자.</string>
 
     <string name="opnay_name">김인섭</string>
@@ -329,7 +325,6 @@
 
     <string name="about_translators">역자</string>
 
-    <string name="ryo_name">Eugenio \"Ryo567\" Martínez Seguín</string>
     <string name="ryo_desc">앱 스페인어 번역</string>
 
     <string name="about_icons">아이콘 출처</string>
@@ -350,4 +345,14 @@
     <string name="step_finish">완료</string>
     <string name="step_cancel">취소</string>
     <string name="step_skip">넘어가기</string>
+
+    <!-- untranslated strings -->
+    <string name="service_desc_short">Status uses this accessibility service to detect screen updates and notifications on older devices.</string>
+    <string name="service_desc_long"><![CDATA[Status allows users to customize their status bar for better readability, aesthetic, or functionality, allowing them easier and faster use of their devices. \n\nStatus requires this accessibility service to detect the current app that is displaying on the screen in order to adapt to its color scheme and layout. It also uses this service to listen for notifications on older devices that do not have the NotificationListenerService API.]]></string>
+    <string name="majida_desc">Created Chinese translations for this app.</string>
+    <string name="preference_prevent_icon_overlap">Prevent Icon Overlap</string>
+    <string name="preference_prevent_icon_overlap_desc">Prevents icon \"sections\" from overlapping each other when there are too many icons displaying at once. This setting will cause battery drain with too many updates (music player notifications can be particularly taxing, especially if they update once every second), so be careful with it.</string>
+    <string name="tutorial_too_many_icons">Running Out Of Space?</string>
+    <string name="tutorial_too_many_icons_desc">It appears that there are too many icons in the status bar and it doesn\'t have room to display them all. To prevent them from being cut off, you could enable the \"Prevent Overlap\" option in the settings or increase available space by reducing padding and icon scale.</string>
+
 </resources>
