@@ -60,6 +60,8 @@
     <string name="service_name">Status Service</string>
     <string name="service_name_general">Accessibility Service</string>
     <string name="service_desc">\'Status Service\' needs to be enabled in order to detect window changes to update the status bar. On some phones you may need to scroll to the bottom of the screen before it becomes visible.</string>
+    <string name="service_desc_short">Status uses this accessibility service to detect screen updates and notifications on older devices.</string>
+    <string name="service_desc_long"><![CDATA[Status allows users to customize their status bar for better readability, aesthetic, or functionality, allowing them easier and faster use of their devices. \n\nStatus requires this accessibility service to detect the current app that is displaying on the screen in order to adapt to its color scheme and layout. It also uses this service to listen for notifications on older devices that do not have the NotificationListenerService API.]]></string>
 
     <string name="notifications_compat">Compatibility Mode</string>
     <string name="notifications_compat_desc">On some versions of android the app cannot use the standard notification listener API to display the notification icons. I have found a way to detect them through the accessibility service, however it cannot detect when a notification has been dismissed. Thus, it removes all notifications whenever the notification panel is opened. If you do not like this, you can either check for a firmware update or disable the notifications in the settings menu. Please note: this setting will break the notification icons on some devices. It is recommended not to enable this feature on versions of android that are newer than Lollipop.</string>
