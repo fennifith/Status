@@ -303,6 +303,9 @@
     <string name="tutorial_donate">Do you like Status?</string>
     <string name="tutorial_donate_desc">Status is open source and free to use without any advertisements or paid features. In order to support Status and other apps like it, please consider making a donation.</string>
 
+    <string name="tutorial_too_many_icons">Running Out Of Space?</string>
+    <string name="tutorial_too_many_icons_desc">It appears that there are too many icons in the status bar and it doesn\'t have room to display them all. To prevent them from being cut off, you could enable the \"Prevent Overlap\" option in the settings or increase available space by reducing padding and icon scale.</string>
+
     <string name="red">Red</string>
     <string name="green">Green</string>
     <string name="blue">Blue</string>

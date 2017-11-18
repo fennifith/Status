@@ -535,8 +535,6 @@ public class StatusView extends FrameLayout {
             icon.setColor(color);
         }
 
-        leftLayout.setColor(color);
-        rightLayout.setColor(color);
         setIconTint(status, color);
     }
 

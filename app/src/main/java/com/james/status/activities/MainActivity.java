@@ -1,7 +1,10 @@
 package com.james.status.activities;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,6 +15,7 @@ import android.support.annotation.StringRes;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.TabLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
@@ -20,10 +24,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.james.status.R;
@@ -39,6 +45,9 @@ import com.james.status.utils.StaticUtils;
 
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
 
+    public static final String ACTION_TOO_MANY_ICONS = "com.james.status.MainActivity.TOO_MANY_ICONS";
+    public static final String EXTRA_MANY_ICONS = "com.james.status.MainActivity.EXTRA_MANY_ICONS";
+
     private Status status;
 
     private SwitchCompat service;
@@ -48,11 +57,14 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private SimplePagerAdapter adapter;
-    private View bottomSheet, expand;
+    private View bottomSheet;
+    ImageView expand;
     private TextView title, content;
 
     private BottomSheetBehavior behavior;
     private MenuItem resetItem, notificationItem;
+
+    private TooManyIconsReceiver tooManyIconsReceiver;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         service = (SwitchCompat) findViewById(R.id.serviceEnabled);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         bottomSheet = findViewById(R.id.bottomSheet);
-        expand = findViewById(R.id.expand);
+        expand = (ImageView) findViewById(R.id.expand);
         title = (TextView) findViewById(R.id.title);
         content = (TextView) findViewById(R.id.content);
 
@@ -104,8 +116,11 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                     behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 else if (behavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
                     OnTutorialClickListener listener = (OnTutorialClickListener) v.getTag();
-                    if (listener != null) listener.onClick();
-                    behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                    if (listener != null)
+                        listener.onClick();
+
+                    if (behavior.isHideable())
+                        behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
                 }
             }
         });
@@ -151,14 +166,38 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         viewPager.addOnPageChangeListener(this);
 
         tabLayout.setupWithViewPager(viewPager);
+
+        tooManyIconsReceiver = new TooManyIconsReceiver(this);
+        registerReceiver(tooManyIconsReceiver, new IntentFilter(ACTION_TOO_MANY_ICONS));
     }
 
-    public void setTutorial(@StringRes int titleRes, @StringRes int contentRes, OnTutorialClickListener listener) {
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(tooManyIconsReceiver);
+    }
+
+    public void setTutorial(@StringRes int titleRes, @StringRes int contentRes, OnTutorialClickListener listener, boolean forceRead) {
         title.setText(titleRes);
         content.setText(contentRes);
         behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        behavior.setHideable(!forceRead);
         appbar.setExpanded(true, true);
         bottomSheet.setTag(listener);
+
+        if (forceRead) {
+            bottomSheet.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDarkPrimary));
+            int textColorPrimary = ContextCompat.getColor(this, R.color.textColorPrimaryInverse);
+            title.setTextColor(textColorPrimary);
+            expand.setColorFilter(textColorPrimary);
+            content.setTextColor(ContextCompat.getColor(this, R.color.textColorSecondaryInverse));
+        } else {
+            bottomSheet.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
+            int textColorPrimary = ContextCompat.getColor(this, R.color.textColorPrimary);
+            title.setTextColor(textColorPrimary);
+            expand.setColorFilter(textColorPrimary);
+            content.setTextColor(ContextCompat.getColor(this, R.color.textColorSecondary));
+        }
     }
 
     @Override
@@ -172,21 +211,21 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                     public void onClick() {
                         if (service != null) service.setChecked(true);
                     }
-                });
+                }, false);
             } else if (searchView != null && StaticUtils.shouldShowTutorial(MainActivity.this, "search", 1)) {
                 setTutorial(R.string.tutorial_search, R.string.tutorial_search_desc, new OnTutorialClickListener() {
                     @Override
                     public void onClick() {
                         if (searchView != null) searchView.setIconified(false);
                     }
-                });
+                }, false);
             } else if (tabLayout != null && viewPager != null && viewPager.getCurrentItem() != 3 && StaticUtils.shouldShowTutorial(MainActivity.this, "faqs", 2)) {
                 setTutorial(R.string.tutorial_help, R.string.tutorial_help_desc, new OnTutorialClickListener() {
                     @Override
                     public void onClick() {
                         if (viewPager != null) viewPager.setCurrentItem(3);
                     }
-                });
+                }, false);
             } else if (StaticUtils.shouldShowTutorial(MainActivity.this, "donate", 3)) {
                 new AlertDialog.Builder(this)
                         .setTitle(R.string.tutorial_donate)
@@ -306,14 +345,14 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             switch (position) {
                 case 1:
                     if (StaticUtils.shouldShowTutorial(this, "disableicon")) {
-                        setTutorial(R.string.tutorial_icon_switch, R.string.tutorial_icon_switch_desc, null);
+                        setTutorial(R.string.tutorial_icon_switch, R.string.tutorial_icon_switch_desc, null, false);
                     } else if (StaticUtils.shouldShowTutorial(this, "moveicon", 1)) {
-                        setTutorial(R.string.tutorial_icon_order, R.string.tutorial_icon_order_desc, null);
+                        setTutorial(R.string.tutorial_icon_order, R.string.tutorial_icon_order_desc, null, false);
                     }
                     break;
                 case 2:
                     if (StaticUtils.shouldShowTutorial(this, "activities")) {
-                        setTutorial(R.string.tutorial_activities, R.string.tutorial_activities_desc, null);
+                        setTutorial(R.string.tutorial_activities, R.string.tutorial_activities_desc, null, false);
                     }
                     break;
             }
@@ -327,5 +366,27 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     public interface OnTutorialClickListener {
         void onClick();
+    }
+
+    public static class TooManyIconsReceiver extends BroadcastReceiver {
+
+        private MainActivity activity;
+
+        public TooManyIconsReceiver(MainActivity activity) {
+            this.activity = activity;
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d("Broadcast", "received");
+            if (intent != null && intent.getAction() != null && intent.getAction().equals(ACTION_TOO_MANY_ICONS)) {
+                if (intent.getBooleanExtra(EXTRA_MANY_ICONS, true))
+                    activity.setTutorial(R.string.tutorial_too_many_icons, R.string.tutorial_too_many_icons_desc, null, true);
+                else if (!activity.behavior.isHideable()) {
+                    activity.behavior.setHideable(true);
+                    activity.behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                }
+            }
+        }
     }
 }
