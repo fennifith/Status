@@ -351,6 +351,9 @@
     <string name="opnay_name">Kim Inseop</string>
     <string name="opnay_desc">Android developer, translated the app into Korean :D</string>
 
+    <string name="majida_name">Majida Whale</string>
+    <string name="majida_desc">Created Chinese translations for this app.</string>
+
     <string name="about_icons">Icon Sources</string>
     <string name="about_icons_desc">Obviously, it would be hard to make over 100 icons used in this app by myself, so (as well as the ones by the people above) the app uses icons from a few different sources.</string>
 

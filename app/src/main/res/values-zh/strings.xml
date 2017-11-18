@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Status</string>
+    <string name="app_desc">一款美观的质感设计状态栏。无需 Root 。</string>
+
+    <string name="action_settings">设置</string>
+    <string name="action_setup">设定</string>
+    <string name="action_access_grant">授予访问权</string>
+    <string name="action_cancel">取消</string>
+    <string name="action_ok">确定</string>
+    <string name="action_more">更多</string>
+    <string name="action_add_apps">添加应用</string>
+    <string name="action_search">搜索</string>
+    <string name="action_about">关于</string>
+    <string name="action_play">Play 商店</string>
+    <string name="action_website">网站</string>
+    <string name="action_libraries">开源许可证</string>
+    <string name="action_enable">启用</string>
+    <string name="action_disable">停用</string>
+    <string name="action_reset">重置</string>
+    <string name="action_tutorial">重置教程</string>
+    <string name="action_pick_image_color">从图片选取颜色</string>
+    <string name="action_community">帮助论坛</string>
+    <string name="action_dismiss">关闭</string>
+    <string name="action_add_style">添加样式</string>
+    <string name="action_delete">删除</string>
+    <string name="action_edit_style">编辑图标样式</string>
+    <string name="action_policy">隐私政策</string>
+    <string name="action_new_backup">新建备份</string>
+    <string name="action_save">保存</string>
+    <string name="action_delete_backup">删除此备份</string>
+    <string name="action_restore_backup">从此备份中还原</string>
+    <string name="action_save_backup">覆盖备份</string>
+    <string name="action_create_backup">创建备份</string>
+    <string name="action_set_color">设定颜色</string>
+    <string name="action_show_status">显示状态</string>
+    <string name="action_hide_status">隐藏状态</string>
+    <string name="action_app_settings">应用主题</string>
+    <string name="action_edit">编辑</string>
+    <string name="action_create_style">创建图标样式</string>
+
+    <string name="reset_all">全部重置</string>
+    <string name="notifications_disable">停用所有通知</string>
+    <string name="notifications_enable">启用所有通知</string>
+
+    <string name="prompt_name">在此键入名称…</string>
+    <string name="prompt_backup_name">备份名称</string>
+
+    <string name="error_no_text_name">请键入名称…</string>
+    <string name="error_name_exists">同名项目已存在</string>
+    <string name="error_missing_icons">缺失一个或多个所需图标</string>
+    <string name="err_battery_already_ignored">电池优化已忽略！你可以进行下一步。</string>
+    <string name="msg_notification_switch_enable">请启用 \"Status Service\" 旁边的开关</string>
+    <string name="msg_battery_optimizations_switch_enable">开启 \"Status\" 旁边的开关。你可能需要向下滚动… 一点点</string>
+    <string name="msg_accessibility_switch_enable">请开启标题为 \"Status Service\" 的服务。你可能需要向下滚动才能看到。</string>
+
+    <string name="service_name">Status 服务</string>
+    <string name="service_name_general">无障碍服务</string>
+    <string name="service_desc">需要启用 \'Status 服务\' 才能检测窗口变化以更新状态栏。在一些手机上，你需要滚动到屏幕底部才能看得到。</string>
+
+    <string name="notifications_compat">兼容模式</string>
+    <string name="notifications_compat_desc">在一些 Android 版本上，本应用无法使用标准通知监听器 API 以显示通知图标。我找到通过无障碍服务检测它们的方法，然而其无法在通知已清除时检测到。因此，打开通知面板时都会清除所有通知。如果你不喜欢这样，你既可以检查固件更新或者在设置菜单中停用通知。请谨记: 在一些设备上，这个设置会在一些设备上造成通知图标受损。推荐在 Lollipop 以上的 Android 版本启用这个功能。</string>
+
+    <string name="service_start_stop">状态栏服务</string>
+
+    <string name="notification_name">通知访问权</string>
+    <string name="notification_desc">本应用需要读取通知权限才能在状态栏上显示通知图标。</string>
+
+    <string name="permissions_name">额外权限</string>
+    <string name="permissions_desc">本应用需要若干额外权限才能访问手机与状态栏有关的部分。在 Play 商店页面有解释为什么要提供这些权限的说明。</string>
+
+    <string name="optimizations_name">忽略电池优化 (可选)</string>
+    <string name="optimizations_desc">电池优化会导致 Status 停止运行，系统会时而关闭 Status 以节省电池寿命。你需要稍微滚动一番才能在列表中找到 Status 。</string>
+
+    <string name="overlay_name">绘制叠加层</string>
+    <string name="overlay_desc">本应用需要在屏幕顶部显示内容才能显示状态栏。</string>
+
+    <string name="tab_settings">设置</string>
+    <string name="tab_icons">图标</string>
+    <string name="tab_apps">应用</string>
+    <string name="tab_help">帮助</string>
+
+    <string name="preference_show_clock">显示时钟</string>
+    <string name="preference_24h">使用 24 小时制</string>
+    <string name="preference_24h_desc">如启用。时钟将以 24 小时格式显示</string>
+    <string name="preference_ampm">时钟以 上午/下午 格式显示</string>
+    <string name="preference_ampm_desc">选择是否在时钟显示 上午/下午 指示器</string>
+    <string name="preference_date">显示当前日期</string>
+    <string name="preference_date_desc">在时钟旁边显示日期</string>
+    <string name="preference_show_notifications">显示通知</string>
+    <string name="preference_heads_up">显示浮动通知</string>
+    <string name="preference_heads_up_desc">当接收到重要通知时会在屏幕顶部显示浮动窗口。</string>
+    <string name="preference_heads_up_duration">浮动通知停留时长 (秒)</string>
+    <string name="preference_heads_up_duration_desc">设定浮动通知要显示的持续时间</string>
+    <string name="preference_battery_percent">显示电量百分比</string>
+    <string name="preference_battery_percent_desc">在状态栏图标旁边显示电量百分比。</string>
+    <string name="preference_bar_color_auto">基于资源的颜色</string>
+    <string name="preference_bar_color_auto_desc">从当前应用程序拾取状态栏颜色。此选项可能会极大地降低设备的性能。</string>
+    <string name="preference_bar_color_chooser">默认状态栏颜色</string>
+    <string name="preference_app_colors">屏幕指定颜色</string>
+    <string name="preference_app_colors_desc">设定用于指定屏幕的状态栏颜色。这将覆盖\'自动着色状态栏\'选项提供的任何其他颜色。</string>
+    <string name="preference_transparent_home">主屏幕透明</string>
+    <string name="preference_transparent_home_desc">这个选项会在主屏幕显示时将状态栏的背景设为当前壁纸。这个设置对动态壁纸或者你的主屏幕的滚动壁纸选项已启用时不可用。</string>
+    <string name="preference_dark_icons">对比图标颜色</string>
+    <string name="preference_dark_icons_desc">调整图标颜色以避免不可见或者难以在亮色背景下看到图标。</string>
+    <string name="preference_tinted_icons">着色图标</string>
+    <string name="preference_tinted_icons_desc">变更图标颜色而不是状态栏背景，状态栏将设为默认颜色。</string>
+    <string name="preference_show_battery_icon">显示电池图标</string>
+    <string name="preference_icon_style">图标样式</string>
+    <string name="preference_show_network_icon">显示网络图标</string>
+    <string name="preference_network_icon">网络图标样式</string>
+    <string name="preference_dual_sim">双卡</string>
+    <string name="preference_dual_sim_desc">如果你的手机有超过一张的 SIM 卡，这个会显示两个信号指示器而不是一个。</string>
+    <string name="preference_data">显示数据连接</string>
+    <string name="preference_data_desc">显示 2G、3G、4G、或者未知/无 (不显示) 的数据连接</string>
+    <string name="preference_show_wifi_icon">显示 WiFi 图标</string>
+    <string name="preference_wifi_icon">WiFi 图标样式</string>
+    <string name="preference_show_gps_icon">显示 GPS 图标</string>
+    <string name="preference_gps_icon">GPS 图标样式</string>
+    <string name="preference_show_bluetooth_icon">显示蓝牙图标</string>
+    <string name="preference_bluetooth_icon">蓝牙图标样式</string>
+    <string name="preference_show_airplane_mode_icon">显示飞行模式图标</string>
+    <string name="preference_airplane_mode_icon">飞行模式图标样式</string>
+    <string name="preference_show_alarm_icon">显示闹钟图标</string>
+    <string name="preference_alarm_icon">闹钟图标样式</string>
+    <string name="preference_show_ringer_icon">显示铃声图标</string>
+    <string name="preference_ringer_icon">铃声图标样式</string>
+    <string name="preference_icon_padding">水平填充 (dp)</string>
+    <string name="preference_icon_scale">图标缩放 (dp)</string>
+    <string name="preference_text_size">文本大小 (sp)</string>
+    <string name="preference_color_notification">屏幕指定颜色通知</string>
+    <string name="preference_color_notification_desc">本应用会将通知显示为可在未发现颜色时为应用设定颜色的快捷方式。</string>
+    <string name="preference_gravity">校准</string>
+    <string name="preference_background_animations">背景颜色动画</string>
+    <string name="preference_background_animations_desc">这个选项允许你启用或停用状态栏背景颜色的动画。可能会影响到设备的性能。</string>
+    <string name="preference_icon_animations">图标动画</string>
+    <string name="preference_icon_animations_desc">这个选项能让你开/关图标动画，如果一次性显示多个图标的话，会大幅度地影响到设备的性能。</string>
+    <string name="preference_show_drawable">显示/隐藏图标</string>
+    <string name="preference_show_text">显示文本</string>
+    <string name="preference_notification_icon_size">通知图标大小</string>
+    <string name="preference_time_format">时间格式</string>
+    <string name="preference_heads_up_layout">浮动通知样式</string>
+    <string name="preference_default_color_icon">默认图标颜色</string>
+    <string name="preference_hide_on_volume">调节音量时隐藏状态</string>
+    <string name="preference_hide_on_volume_desc">这个选项能控制状态栏对音量弹框的响应。如果没有与状态栏重叠，则不需要开启。可能无法在一些设备上工作。</string>
+    <string name="preference_debug">调试信息</string>
+    <string name="preference_debug_desc">显示关于窗口变更的混淆调试信息。</string>
+    <string name="preference_status_color">主色调</string>
+    <string name="preference_fullscreen">隐藏状态</string>
+    <string name="preference_notifications">通知</string>
+    <string name="preference_side_padding">侧边填充</string>
+    <string name="preference_side_padding_desc">在防止图标显示于圆角屏幕的手机边缘被截边时很有用。</string>
+    <string name="preference_persistent_notification">显示常驻通知</string>
+    <string name="preference_persistent_notification_desc">这样能保持 Status 服务在前台运行，并防止 Status 因节省内存或者电池寿命而自动关闭。停用这个设置可以提升性能，但是也会在一些设备上导致各种稳定性问题。</string>
+    <string name="preference_backups">备份/还原设置</string>
+    <string name="preference_backups_desc">允许你备份或还原 Status 的所有设置为文本文件。</string>
+    <string name="preference_burnin_protection">烧屏保护</string>
+    <string name="preference_burnin_protection_desc">通过每两秒移动图标以防止 Status 在一些屏幕上发生"烧屏"情况。</string>
+    <string name="preference_text_color">文本颜色</string>
+    <string name="preference_height">状态栏高度</string>
+    <string name="preference_height_desc">这个设置会变更状态栏的高度，但不是内容下面的高度！将这个设置为 0 将导致 Status 使用系统定义的默认高度。</string>
+    <string name="preference_bump_mode">碰撞模式</string>
+    <string name="preference_bump_mode_desc">在状态栏中间对齐的项目周围创建一个假的(并且相当丑的)\"相机碰撞\"。千万不要启用这个选项。</string>
+    <string name="preference_text_effect">文本样式</string>
+
+    <string name="icon_notifications">通知</string>
+    <string name="icon_clock">时钟</string>
+
+    <string name="icon_battery">电池图标</string>
+    <string name="icon_battery_alert">提醒</string>
+    <string name="icon_battery_full">已充满</string>
+    <string name="icon_battery_charging_0_15">正在充电 0% - 15%</string>
+    <string name="icon_battery_charging_15_30">正在充电 15% - 30%</string>
+    <string name="icon_battery_charging_30_45">正在充电 30% - 45%</string>
+    <string name="icon_battery_charging_45_60">正在充电 45% - 60%</string>
+    <string name="icon_battery_charging_60_75">正在充电 60% - 75%</string>
+    <string name="icon_battery_charging_75_90">正在充电 75% - 90%</string>
+    <string name="icon_battery_charging_full">已充满 (充电器)</string>
+
+    <string name="icon_network">网络图标</string>
+    <string name="icon_network_no_connection">无连接</string>
+    <string name="icon_network_1_bar">1栏</string>
+    <string name="icon_network_2_bars">2栏</string>
+    <string name="icon_network_3_bars">3栏</string>
+    <string name="icon_network_4_bars">4栏</string>
+
+    <string name="icon_data">数据指示器</string>
+
+    <string name="icon_wifi">WiFi 图标</string>
+    <string name="icon_wifi_no_signal">无信号</string>
+    <string name="icon_wifi_1_bar">1栏</string>
+    <string name="icon_wifi_2_bars">2栏</string>
+    <string name="icon_wifi_3_bars">3栏</string>
+    <string name="icon_wifi_4_bars">4栏</string>
+
+    <string name="icon_bluetooth">蓝牙图标</string>
+    <string name="icon_bluetooth_scanning">正在扫描</string>
+    <string name="icon_bluetooth_connected">已连接</string>
+
+    <string name="icon_gps">GPS 图标</string>
+    <string name="icon_gps_searching">正在搜索</string>
+    <string name="icon_gps_fixed">已定位</string>
+
+    <string name="icon_airplane">飞行模式图标</string>
+    <string name="icon_alarm">闹钟图标</string>
+
+    <string name="icon_ringer">铃声音量图标</string>
+    <string name="icon_ringer_muted">静音</string>
+    <string name="icon_ringer_vibrate">振动</string>
+
+    <string name="icon_nfc">NFC 图标</string>
+
+    <string name="icon_headphone">耳机图标</string>
+    <string name="icon_headphone_headphones">耳机</string>
+    <string name="icon_headphone_headset">耳麦</string>
+
+    <string name="icon_carrier">运营商名称</string>
+
+    <string name="icon_orientation">方向图标</string>
+    <string name="icon_orientation_auto">自动</string>
+    <string name="icon_orientation_portrait">锁定纵向</string>
+    <string name="icon_orientation_landscape">锁定横向</string>
+
+    <string name="heads_up_plain">简单式</string>
+    <string name="heads_up_card">卡片式</string>
+    <string name="heads_up_condensed">紧缩式</string>
+    <string name="heads_up_transparent">透明式</string>
+
+    <string name="gravity_center">居中</string>
+    <string name="gravity_left">居左</string>
+    <string name="gravity_right">居右</string>
+
+    <string name="notification_color">设定屏幕指定颜色</string>
+    <string name="notification_color_desc">Status 无法在这个应用程序中找到所使用的颜色，因此恢复为默认颜色，你可以通过点击这条通知以指定要使用的颜色。</string>
+
+    <string name="unit_seconds">" 秒"</string>
+
+    <string name="icon_style_android">Android</string>
+    <string name="icon_style_default">默认</string>
+    <string name="icon_style_stock">原生</string>
+    <string name="icon_style_circle">圆形</string>
+    <string name="icon_style_circle_outline">圆形轮廓</string>
+    <string name="icon_style_classic">经典</string>
+    <string name="icon_style_clear">简洁</string>
+    <string name="icon_style_clip">夹子</string>
+    <string name="icon_style_curved">弯曲</string>
+    <string name="icon_style_outline">轮廓</string>
+    <string name="icon_style_dish">碟状</string>
+    <string name="icon_style_triangle">三角形</string>
+    <string name="icon_style_square">方形</string>
+    <string name="icon_style_retro">复古</string>
+    <string name="icon_style_pixel">像素化</string>
+    <string name="icon_style_balloon">热气球</string>
+    <string name="icon_style_radial">射线</string>
+    <string name="icon_style_tap">水龙头</string>
+    <string name="icon_style_school">学校</string>
+    <string name="icon_style_system">系统</string>
+    <string name="icon_style_round">椭圆</string>
+    <string name="icon_style_dish2">碟状 2</string>
+    <string name="icon_style_satellite">卫星</string>
+    <string name="icon_style_satellite_outline">卫星轮廓</string>
+    <string name="icon_style_front">前线</string>
+    <string name="icon_style_propeller">螺旋桨</string>
+    <string name="icon_style_pilot_hat">飞行员帽子</string>
+    <string name="icon_style_boxy">盒状</string>
+    <string name="icon_style_sideways">侧面</string>
+    <string name="icon_style_bell">钟</string>
+
+    <string name="tutorial_enable">启用状态栏</string>
+    <string name="tutorial_enable_desc">位于屏幕顶部的开关允许你启用/停用自定义状态栏。快打开试一下吧！</string>
+    <string name="tutorial_search">找不到要找的设置?</string>
+    <string name="tutorial_search_desc">通过使用 Status 的搜索栏可准确找到你要更改的设置。</string>
+    <string name="tutorial_help">需要帮助?</string>
+    <string name="tutorial_help_desc">不定时更新帮助部分，其中几乎包含所有其他使用这个应用的用户遇到的问题。</string>
+    <string name="tutorial_image_picker">选择图片颜色</string>
+    <string name="tutorial_image_picker_desc">无法获取正确的颜色？试一下从图片中拾取颜色！</string>
+    <string name="tutorial_icon_switch">不喜欢某个图标?</string>
+    <string name="tutorial_icon_switch_desc">通过点击名称旁边的勾选框以启用或停用图标。</string>
+    <string name="tutorial_icon_order">重新排序图标</string>
+    <string name="tutorial_icon_order_desc">通过点击图标名称旁边的上/下按钮以更改图标顺序。</string>
+    <string name="tutorial_activities">不想修改整个应用?</string>
+    <string name="tutorial_activities_desc">通过点击应用名称旁边的\'展开\'按钮以更改单个屏幕。</string>
+    <string name="tutorial_donate">你喜欢 Status 吗?</string>
+    <string name="tutorial_donate_desc">Status 是一款开源、免费的应用，没有任何广告或者收费功能。为了支持 Status 及其他类似的应用，请考虑捐助。</string>
+
+    <string name="red">红</string>
+    <string name="green">绿</string>
+    <string name="blue">蓝</string>
+
+    <string name="text_effect_none">无</string>
+    <string name="text_effect_bold">粗体</string>
+    <string name="text_effect_italic">斜体</string>
+    <string name="text_effect_bold_italic">粗体 &amp; 斜体</string>
+
+    <string name="font_default">默认</string>
+
+    <string name="hint_format">
+        \n
+        h - 小时\n
+        HH - 小时 (24小时)\n
+        kk - 小时 (24小时)\n
+        mm - 分钟\n
+        a - 上午/下午\n
+        Z - 时区\n
+        \n
+        dd - 天\n
+        EEE - 星期\n
+        MM - 月 (数字)\n
+        MMM - 月\n
+        yyyy - 年
+    </string>
+
+    <string name="empty">什么都没有…</string>
+    <string name="reset_apps_confirm">你确定要重置所有应用指定的首选项? 此操作不可逆。</string>
+
+    <string name="james_name">James Fenn</string>
+    <string name="james_desc">Android developer and professional cabbage eater.</string>
+
+    <string name="anas_name">Anas Khan</string>
+    <string name="anas_desc">Better known as the Oreo lord, this guy can add more butter to buttery interfaces.</string>
+
+    <string name="vuk_name">Vukašin Anđelković</string>
+    <string name="vuk_desc">The great lord of Material Design, yeah he makes icons and stuff.</string>
+
+    <string name="ghost_name">Ghost Ninja</string>
+    <string name="ghost_desc">A graphic designer, web designer, and the owner of technologx.com.</string>
+
+    <string name="about_translators">Translators</string>
+
+    <string name="ryo_name">Eugenio \"Ryo567\" Martínez Seguín</string>
+    <string name="ryo_desc">Created the spanish translations for the app.</string>
+
+    <string name="about_icons">Icon Sources</string>
+    <string name="about_icons_desc">Obviously, it would be hard to make over 100 icons used in this app by myself, so (as well as the ones by the people above) the app uses icons from a few different sources.</string>
+
+    <string name="google_icons">Google Design</string>
+    <string name="google_icons_desc">Accounting for most of the icons in the app, Google Design has a large database of icons to choose from.</string>
+
+    <string name="md_icons">Material Design Icons</string>
+    <string name="md_icons_desc">Made by many various contributors, this collection of icons contains useful resources unavailable from Google\'s site.</string>
+
+    <string name="icons8_icons_desc">57,700 free flat icons in any format, size and color in 20 seconds.</string>
+
+    <string-array name="libraries">
+        <item>
+            <a href="https://github.com/bumptech/glide">Glide</a>
+            <i> - BSD, part MIT and Apache 2.0</i>
+            <p>\nGlide is a fast and efficient open source media management and image loading framework for Android that wraps media decoding, memory and disk caching, and resource pooling into a simple and easy to use interface.</p>
+        </item>
+        <item>
+            <a href="https://github.com/drozdzynski/Steppers">Steppers</a>
+            <i> - Apache 2.0</i>
+            <p>\nSteppers is a view library for Android based on Material Design guidelines.</p>
+        </item>
+        <item>
+            <a href="https://github.com/afollestad/async">Async</a>
+            <i> - Apache 2.0</i>
+            <p>\nA library designed to make the organized execution of async processes in Android easy.</p>
+        </item>
+        <item>
+            <a href="https://github.com/google/gson">Gson</a>
+            <i> - Apache 2.0</i>
+            <p>\nGson is a Java library that can be used to convert Java Objects into their JSON representation.</p>
+        </item>
+    </string-array>
+</resources>
