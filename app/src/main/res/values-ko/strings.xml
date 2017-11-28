@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Status</string>
-    <string name="app_desc">대체 가능한 머티리얼 디자인의 상태바입니다. 루팅은 필요하지 않습니다.</string>
+    <string name="app_desc">대체 가능한 머티리얼 디자인의 상태 표시줄입니다. 루팅은 필요하지 않습니다.</string>
 
     <string name="action_settings">설정</string>
     <string name="action_setup">설정</string>
@@ -20,7 +20,7 @@
     <string name="action_tutorial">튜토리얼 초기화</string>
     <string name="action_pick_image_color">이미지에서 색상 선택</string>
     <string name="action_community">포럼 도움말</string>
-    <string name="action_dismiss">해산하다</string>
+    <string name="action_dismiss">닫기</string>
     <string name="action_add_style">스타일 추가</string>
     <string name="action_delete">삭제</string>
     <string name="action_edit_style">아이콘 스타일 추가</string>
@@ -50,29 +50,31 @@
     <string name="error_missing_icons">필요한 아이콘을 찾을 수 없습니다.</string>
     <string name="err_battery_already_ignored">배터리 최적화가 이미 거부되었습니다! 다음 단계로 넘어갈 수 있습니다.</string>
     <string name="msg_notification_switch_enable">\"Status Service\"를 활성화 해주세요.</string>
-    <string name="msg_battery_optimizations_switch_enable">\"Status\"를 활성화 해주세요. 아래로 스크롤해야 할 수 있습니다... 아주 많이.</string>
+    <string name="msg_battery_optimizations_switch_enable">\"Status\"를 활성화 해주세요. 아래로 스크롤해야 할 수 있습니다… 아주 많이.</string>
     <string name="msg_accessibility_switch_enable">\"Status Service\"란 이름의 서비스를 활성화 해주세요. 아래로 스크롤해야 보일 수 있습니다.</string>
 
     <string name="service_name">Status Service</string>
     <string name="service_name_general">접근성 서비스</string>
-    <string name="service_desc">창의 상태을 감지하여 상태바를 바꾸기 위해 \'Status Service\'를 활성화 해야합니다. 일부 휴대폰에서 보이기전에 화면 하단을 스크롤해야 할 수 있습니다.</string>
+    <string name="service_desc">창의 상태을 감지하여 상태 표시줄을 바꾸기 위해 \'Status Service\'를 활성화 해야합니다. 일부 휴대폰에서 보이기전에 화면 하단을 스크롤해야 할 수 있습니다.</string>
+    <string name="service_desc_short">Status는 화면이 바뀌는 것과 오래된 기기의 알림을 감지하기 위해 이 접근성 서비스를 사용합니다.</string>
+    <string name="service_desc_long"><![CDATA[Status는 사용자가 더 나은 가독성, 심미성 또는 기능성을 사용하여 기기를 보다 쉽고 빠르게 사용할 수 있도록 상태 표시줄을 커스터마이즈할 수 있습니다.\n\nStatus는 화면에 표시되는 현재 앱을 감지하여 색상 구성표 및 레이아웃에 맞게 조정하기 위해 이 접근성 서비스를 필요로 합니다. 또한 이 서비스를 사용해 NotificationListenerService API가 없는 오래된 기기에서 알림을 수신합니다.]]></string>
 
     <string name="notifications_compat">호환성 모드</string>
     <string name="notifications_compat_desc">일부 안드로이드 버전에서 알림 아이콘을 보여주기 위한 표준 notification listener API을 사용할 수 없습니다. 접근성 서비스를 사용하지 않고 탐지할 수 있는 방법을 찾았지만, 이는 알림이 해제됬을 때는 탐지하지 못합니다. 그러므로 알림 패널이 열릴때마다 모든 알림이 삭제됩니다. 이것을 하고싶지 않으시면, 펌웨어 업데이트를 확인하시거나 설정메뉴에서 알림을 비활성화 할 수 있습니다. 참고: 이 설정은 일부 기기에서 알림이 깨질수 있습니다. 안드로이드 버전이 롤리팝보다 최신버전에서는 활성화 하는것은 추천드리지 않습니다.</string>
 
-    <string name="service_start_stop">상태바 서비스</string>
+    <string name="service_start_stop">상태 표시줄 서비스</string>
 
     <string name="notification_name">알림 접근</string>
-    <string name="notification_desc">상태바에 알림 아이콘을 보여주기 위해 알림을 읽어야 합니다.</string>
+    <string name="notification_desc">상태 표시줄에 알림 아이콘을 보여주기 위해 알림을 읽어야 합니다.</string>
 
     <string name="permissions_name">추가 권한</string>
-    <string name="permissions_desc">상태바와 관련된 전화의 부분적인 접근을 위해 몇개의 추가 권한이 필요합니다. 이들이 왜 필요한지에 대한 설명은 Status의 Play Store페이지에서 제공하고 있습니다.</string>
+    <string name="permissions_desc">상태 표시줄과 관련된 전화의 부분적인 접근을 위해 몇개의 추가 권한이 필요합니다. 이들이 왜 필요한지에 대한 설명은 Status의 Play Store페이지에서 제공하고 있습니다.</string>
 
     <string name="optimizations_name">배터리 최적화 거부 (선택사항)</string>
     <string name="optimizations_desc">시스템이 배터리 수명을 늘리기위해 Status를 가끔 종료하는 배터리 최적화는 Status가 중단되는 원인입니다. 목록에서 Status를 착을려면 꽤 많은 스크롤을 해야할 수도 있습니다.</string>
 
     <string name="overlay_name">오버레이 그리기</string>
-    <string name="overlay_desc">앱이 화면 상단에 오버레이를 그릴 수 있어야 합니다. 그래야만 상태바를 보여줄수 있습니다.</string>
+    <string name="overlay_desc">앱이 화면 상단에 오버레이를 그릴 수 있어야 합니다. 그래야만 상태표시를 보여줄수 있습니다.</string>
 
     <string name="tab_settings">설정</string>
     <string name="tab_icons">아이콘</string>
@@ -81,29 +83,29 @@
 
     <string name="preference_show_clock">시계 보이기</string>
     <string name="preference_24h">24시간 형식 사용</string>
-    <string name="preference_24h_desc">이것을 켜게되면 시계가 24시간 형식으로 보이게 됩니다.</string>
-    <string name="preference_ampm">시계에 오전/오후 보이기</string>
+    <string name="preference_24h_desc">이것을 활성화하면 시계가 24시간 형식으로 보이게 됩니다.</string>
+    <string name="preference_ampm">오전/오후 보이기</string>
     <string name="preference_ampm_desc">시계에 오전/오후를 보여주는지 선택합니다.</string>
     <string name="preference_date">현재 날짜 보이기</string>
-    <string name="preference_date_desc">시계의 시간옆에 날짜를 보여줍니다.</string>
+    <string name="preference_date_desc">시간옆에 날짜를 보여줍니다.</string>
     <string name="preference_show_notifications">알림 보이기</string>
     <string name="preference_heads_up">헤드업 보이기</string>
     <string name="preference_heads_up_desc">중요한 알림을 받으면 알림이 화면 상단에 \'살짝\' 보입니다.</string>
     <string name="preference_heads_up_duration">헤드업 지속시간 (초)</string>
     <string name="preference_heads_up_duration_desc">헤드업 알림이 보이는 시간을 설정합니다.</string>
     <string name="preference_battery_percent">배터리 퍼센트 보이기</string>
-    <string name="preference_battery_percent_desc">상태바 아이콘 옆에 배터리 퍼센트를 보여줍니다.</string>
+    <string name="preference_battery_percent_desc">상태 표시줄 아이콘 옆에 배터리 퍼센트를 보여줍니다.</string>
     <string name="preference_bar_color_auto">리소스 기반 색상</string>
-    <string name="preference_bar_color_auto_desc">상태바 색상을 현재 어플리케이션에서 가져옵니다. 기기의 따라 중대한 성능 저하를 초래할 수 있습니다.</string>
-    <string name="preference_bar_color_chooser">기본 상태바 색상</string>
+    <string name="preference_bar_color_auto_desc">상태 표시줄 색상을 현재 어플리케이션에서 가져옵니다. 기기의 따라 중대한 성능 저하를 초래할 수 있습니다.</string>
+    <string name="preference_bar_color_chooser">기본 상태 표시줄 색상</string>
     <string name="preference_app_colors">특정 화면 색상</string>
-    <string name="preference_app_colors_desc">특정화면을 사용할때 상태바의 색상을 설정합니다. \'자동 상태바 색상\' 옵션이 켜져 어떠한 색상이어도 덮어씌워집니다.</string>
+    <string name="preference_app_colors_desc">특정화면을 사용할때 상태 표시줄의 색상을 설정합니다. \'자동 상태 표시줄 색상\' 옵션이 활성화 되어 어떤색상이라도 덮어씌워집니다.</string>
     <string name="preference_transparent_home">홈 화면에서 투명화</string>
-    <string name="preference_transparent_home_desc">이 옵션은 홈 화면이 보일때 상태바의 배경이 현재 배경화면이 되도록 설정합니다. 이 옵션은 라이브 배경화면을 사용하거나 홈화면의 스크롤되는 배경화면 옵션이 켜지면 작동이 안될것입니다.</string>
+    <string name="preference_transparent_home_desc">이 옵션은 홈 화면이 보일때 상태 표시줄의 배경이 현재 배경화면이 되도록 설정합니다. 이 옵션은 라이브 배경화면을 사용하거나 홈화면의 스크롤되는 배경화면 옵션이 켜지면 작동이 안될것입니다.</string>
     <string name="preference_dark_icons">대비된 아이콘 색상</string>
     <string name="preference_dark_icons_desc">밝은 배경에서 아이콘이 보기 어렵거나 안보이는것을 피하기위해 아이콘 색상을 조정합니다.</string>
     <string name="preference_tinted_icons">아이콘 착색</string>
-    <string name="preference_tinted_icons_desc">기본 색상으로 설정된 상태바 배경을 대신해 아이콘의 색상을 변경합니다.</string>
+    <string name="preference_tinted_icons_desc">기본 색상으로 설정된 상태 표시줄 배경을 대신해 아이콘의 색상을 변경합니다.</string>
     <string name="preference_show_battery_icon">배터리 아이콘 보이기</string>
     <string name="preference_icon_style">아이콘 스타일</string>
     <string name="preference_show_network_icon">네트워크 아이콘 보이기</string>
@@ -131,9 +133,9 @@
     <string name="preference_color_notification_desc">앱의 색상을 찾을 수 없으면 앱을 위한 색상이 적용된 바로가기 알림을 보여줍니다.</string>
     <string name="preference_gravity">정렬</string>
     <string name="preference_background_animations">배경 색상 애니메이션</string>
-    <string name="preference_background_animations_desc">이 옵션은 상태바의 배경 색상이 움직이는걸 활성화하거나 비활성화 할 수 있습니다. 느린 기기에서는 성능에 영향을 줄 수 있습니다.</string>
+    <string name="preference_background_animations_desc">이 옵션은 상태 표시줄의 배경 색상이 움직이는걸 활성화하거나 비활성화 할 수 있습니다. 느린 기기에서 성능에 영향을 줄 수 있습니다.</string>
     <string name="preference_icon_animations">아이콘 애니메이션</string>
-    <string name="preference_icon_animations_desc">이 옵션은 아이콘이 움직이는걸 전환할 수 있습니다. 한번에 많은 아이콘이 보여지면 느린 기기에서는 성능에 큰 영향을 끼칠 수 있습니다.</string>
+    <string name="preference_icon_animations_desc">이 옵션은 아이콘이 움직이는걸 전환할 수 있습니다. 한번에 많은 아이콘이 보여지면 느린 기기에서 성능에 큰 영향을 끼칠 수 있습니다.</string>
     <string name="preference_show_drawable">아이콘 보이기/숨기기</string>
     <string name="preference_show_text">글자 보이기</string>
     <string name="preference_notification_icon_size">알림 아이콘 크기</string>
@@ -141,7 +143,7 @@
     <string name="preference_heads_up_layout">헤드업 알림 스타일</string>
     <string name="preference_default_color_icon">기본 아이콘 색상</string>
     <string name="preference_hide_on_volume">볼륨 조절중 Status 숨기기</string>
-    <string name="preference_hide_on_volume_desc">이 옵션은 어떻게 상태바가 볼륨 팝업에 반응하는지 정할 수 있습니다. 상태바에 덮어지지 않는다면, 체크할 필요가 없습니다. 일부 기기에서는 작동되지 않을 수 있습니다.</string>
+    <string name="preference_hide_on_volume_desc">이 옵션은 상태 표시줄이 어떻게 볼륨 팝업창에 반응하는지 정할 수 있습니다. 상태 표시줄에 덮어지지 않는다면, 체크할 필요가 없습니다. 일부 기기에서 작동되지 않을 수 있습니다.</string>
     <string name="preference_debug">디버그 메시지</string>
     <string name="preference_debug_desc">창 변화에 대한 디버그 정보를 보여줍니다.</string>
     <string name="preference_status_color">주요 색상</string>
@@ -149,18 +151,22 @@
     <string name="preference_notifications">알림</string>
     <string name="preference_side_padding">옆쪽 여백</string>
     <string name="preference_side_padding_desc">모서리가 둥근 화면의 휴대폰에서 양옆의 아이콘이 잘릴때 유용합니다.</string>
-    <string name="preference_persistent_notification">지속되는 알림 보이기</string>
-    <string name="preference_persistent_notification_desc">전면에서 Status 서비스가 지속되고 메모리나 배터리 수명을 절약하는 동안 자동으로 꺼지는 것을 방지합니다. 비활성화하면 성능을 개선 할 수 있지만, 일부 기기에서 많은 안정성 문제가 발생할 수 있습니다.</string>
+    <string name="preference_persistent_notification">지속되는 알림 표시</string>
+    <string name="preference_persistent_notification_desc">높은 우선도로 Status 서비스를 유지하고 메모리나 배터리 수명을 절약하는 동안 자동으로 중단되지 않도록 방지합니다. 이 설정을 비활성화하면 성능을 개선 할 수 있지만 일부 기기에서 많은 안정성 문제가 발생할 수 있습니다.</string>
     <string name="preference_backups">설정 백업/복원</string>
     <string name="preference_backups_desc">Status의 모든 설정을 텍스트 파일로 백업이나 복원을 할 수 있도록 해줍니다.</string>
     <string name="preference_burnin_protection">번인 방지</string>
     <string name="preference_burnin_protection_desc">인해 일부 화면에 번인이 발생는 Status의 아이콘을 2초마다 움직입니다.</string>
     <string name="preference_text_color">글자 색상</string>
-    <string name="preference_height">상태바 높이</string>
-    <string name="preference_height_desc">상태바의 높이를 바꿉니다. 하지만 내용보다 아래로 늘릴 수 없습니다! 0으로 설정이 되면 Status가 시스템에 정의된 기본높이를 사용합니다.</string>
+    <string name="preference_height">상태 표시줄 높이</string>
+    <string name="preference_height_desc">상태 표시줄의 높이를 바꿉니다. 하지만 내용보다 아래로 늘릴 수 없습니다! 0으로 설정이 되면 Status가 시스템에 정의된 기본높이를 사용합니다.</string>
     <string name="preference_bump_mode">범프 모드</string>
-    <string name="preference_bump_mode_desc">상태바의 가운데로 정렬된 항목에 가짜(그리고 정말 추한) \"카메라 범프\"를 만듭니다. 이 옵션을 절대로 활성화하지 말아주세요.</string>
+    <string name="preference_bump_mode_desc">상태 표시줄의 가운데로 정렬된 항목에 가짜(그리고 정말 추한) \"카메라 범프\"를 만듭니다. 이 옵션을 절대로 활성화하지 말아주세요.</string>
     <string name="preference_text_effect">글자 스타일</string>
+    <string name="preference_transparent_mode">투명 모드</string>
+    <string name="preference_transparent_mode_desc">상태 표시줄의 배경을 항상 투명으로 만듭니다. 기존의 상태 표시줄이 뒤로 보인다는 것을 명심하세요. 안드로이드 누가 이상에서 SystemUI 튜너를 이용해 상태 표시줄의 모든 아이콘을 해제하면 이 옵션은 매우 유용합니다.</string>
+    <string name="preference_prevent_icon_overlap">아이콘 겹침 방지</string>
+    <string name="preference_prevent_icon_overlap_desc">아이콘 \"영역\"이 한번에 너무 많은 아이콘이 동시에 표시될 때 서로 겹치지 않도록 방지합니다. 이 설정은 너무 많은 업데이트(음악 플레이어 알림이 특히 매초마다 업데이트 할경우 부담스러울 수 있습니다.)를 통해 배터리 방전을 초래할 수 있습니다. 그러니 사용할때 조심하세요.</string>
 
     <string name="icon_notifications">알림</string>
     <string name="icon_clock">시계</string>
@@ -230,43 +236,36 @@
     <string name="gravity_right">오른쪽</string>
 
     <string name="notification_color">특정한 화면 색상 설정</string>
-    <string name="notification_color_desc">Status는 이 어플리캐이션이 사용하는 색상을 찾을 수 없어서, 기본 색상으로 돌려놓습니다. 이 알림을 눌러 사용할 색상을 지정할 수 있습니다.</string>
+    <string name="notification_color_desc">Status는 이 어플리캐이션이 사용하는 색상을 찾을 수 없어 기본 색상으로 돌려놓습니다. 이 알림을 눌러 사용할 색상을 지정할 수 있습니다.</string>
 
     <string name="unit_seconds">" 초"</string>
 
     <string name="icon_style_android">안드로이드</string>
-    <string name="icon_style_default">기본값</string>
-    <string name="icon_style_stock">순정</string>
+    <string name="icon_style_default">기본</string>
+    <string name="icon_style_stock">원본</string>
     <string name="icon_style_circle">원</string>
     <string name="icon_style_circle_outline">원형 테두리</string>
     <string name="icon_style_classic">고전</string>
-    <string name="icon_style_clear">Clear</string>
+    <string name="icon_style_clear">깔끔</string>
     <string name="icon_style_clip">클립</string>
-    <string name="icon_style_curved">Curved</string>
     <string name="icon_style_outline">테두리</string>
     <string name="icon_style_dish">그릇</string>
     <string name="icon_style_triangle">삼각형</string>
     <string name="icon_style_square">사각형</string>
     <string name="icon_style_retro">복고</string>
-    <string name="icon_style_pixel">Pixelated</string>
     <string name="icon_style_balloon">열기구</string>
     <string name="icon_style_radial">반원</string>
-    <string name="icon_style_tap">Tap</string>
     <string name="icon_style_school">학교</string>
     <string name="icon_style_system">시스템</string>
-    <string name="icon_style_round">둥원</string>
+    <string name="icon_style_round">원</string>
     <string name="icon_style_dish2">그릇 2</string>
     <string name="icon_style_satellite">위성</string>
     <string name="icon_style_satellite_outline">위성 테두리</string>
-    <string name="icon_style_front">Front</string>
-    <string name="icon_style_propeller">Propeller</string>
-    <string name="icon_style_pilot_hat">Pilot Hat</string>
     <string name="icon_style_boxy">상자</string>
-    <string name="icon_style_sideways">Sideways</string>
     <string name="icon_style_bell">벨</string>
 
-    <string name="tutorial_enable">상태바 활성화</string>
-    <string name="tutorial_enable_desc">화면 상단의 스위치로 맞춤화된 상태바를 활성화나 비활성화 할 수 있습니다. 활성화해서 사용해보세요!</string>
+    <string name="tutorial_enable">상태 표시줄 활성화</string>
+    <string name="tutorial_enable_desc">화면 상단의 스위치로 맞춤화된 상태 표시줄을 활성화나 비활성화 할 수 있습니다. 활성화해서 사용해보세요!</string>
     <string name="tutorial_search">뭔가 찾고 있습니까?</string>
     <string name="tutorial_search_desc">Status의 검색바를 이용해 원하는 설정을 찾을 수 있습니다.</string>
     <string name="tutorial_help">도움이 필요합니까?</string>
@@ -277,14 +276,16 @@
     <string name="tutorial_icon_switch_desc">아이콘 항목 이름 옆에 있는 체크박스를 클릭해서 아이콘을 활성화하거나 비활성화를 할 수 있습니다.</string>
     <string name="tutorial_icon_order">아이콘 재정렬</string>
     <string name="tutorial_icon_order_desc">아이콘 항목 이름 옆에있는 위 아래 버튼을 통해 아이콘 순서를 바꿀 수 있습니다.</string>
-    <string name="tutorial_activities">모든 앱을 수 정하고 싶지 않습니까?Don\'t want to modify an entire app?</string>
+    <string name="tutorial_activities">모든 앱을 수 정하고 싶지 않습니까?</string>
     <string name="tutorial_activities_desc">앱 이름 옆에있는 \'확장\' 버튼을 눌러 개별적인 화면을 바꿀 수 있습니다.</string>
     <string name="tutorial_donate">Status가 마음에 듭니까?</string>
     <string name="tutorial_donate_desc">Status는 오픈소스고 광고나 돈을 지불하지 않아도 무료로 사용할 수 있습니다. Status를 지원하거나 다른 앱을 좋아하시면, 기부를 고려해주세요.</string>
+    <string name="tutorial_too_many_icons">공간을 넘어갑니까?</string>
+    <string name="tutorial_too_many_icons_desc">상태 표시줄에 아이콘이 너무 많아 모두 표시할 공간이 없습니다. 이를 방지하려면 잘라내거나 설정에 \"아이콘 겹침 방지\"옵션을 활성화하거나 여백과 아이콘 크기를 조절해 공간을 늘려보세요.</string>
 
-    <string name="red">빨강색</string>
+    <string name="red">빨간색</string>
     <string name="green">초록색</string>
-    <string name="blue">파랑색</string>
+    <string name="blue">파란색</string>
 
     <string name="text_effect_none">없음</string>
     <string name="text_effect_bold">굵게</string>
@@ -312,10 +313,6 @@
     <string name="empty">아무것도 없습니다…</string>
     <string name="reset_apps_confirm">앱 설정을 초기화 하시겠습니까? 되돌릴 수 없습니다.</string>
 
-    <string name="james_desc">Android developer and professional cabbage eater.</string>
-
-    <string name="anas_desc">Better known as the Oreo lord, this guy can add more butter to buttery interfaces.</string>
-
     <string name="vuk_desc">머티리얼 디자인의 거물, 아이콘을 만들고 채워 넣었습니다.</string>
 
     <string name="ghost_desc">그래픽 디자이너, 웹 디자이너 그리고 technologx.com 소유자.</string>
@@ -323,7 +320,9 @@
     <string name="opnay_name">김인섭</string>
     <string name="opnay_desc">안드로이드개발자입니다. 번역도가끔씩합니다.</string>
 
-    <string name="about_translators">역자</string>
+    <string name="majida_desc">이 앱을 위해 중국어 번역을 만들었습니다.</string>
+
+    <string name="about_translators">번역자</string>
 
     <string name="ryo_desc">앱 스페인어 번역</string>
 
@@ -337,8 +336,30 @@
     <string name="md_icons_desc">많은 기여자들이 만들었으며, Google에서는 만날 수 없는 유용한 아이콘 모음입니다.</string>
 
     <string name="icons8_icons_desc">20초만에 어떠한 형식, 크기 그리고 색상으로 만들 수 있는 57,700개의 무료 플랫 아이콘.</string>
-    <string name="preference_transparent_mode">투명 모드</string>
-    <string name="preference_transparent_mode_desc">항상 상태바의 배경을 투명으로 만듭니다. 기존의 상태바가 뒤로 보인다는 것을 명심하세요. 안드로이드 누가 이상에서 SystemUI 튜너를 이용해 상태바의 모든 아이콘을 해제하면 이 옵션은 매우 유용합니다.</string>
+
+    <!-- License -->
+    <string-array name="libraries">
+        <item>
+            <a href="https://github.com/bumptech/glide">Glide</a>
+            <i> - BSD, part MIT and Apache 2.0</i>
+            <p>\nGlide는 미디어 디코딩, 메모리, 디스크캐싱, 메모리풀링 및 리소스 풀링을 간편하게 사용할 수 있는 빠르고 효율적인 안드로이드용 오픈소스 미디어 관리 및 이미지 로딩 프레임워크입니다.</p>
+        </item>
+        <item>
+            <a href="https://github.com/drozdzynski/Steppers">Steppers</a>
+            <i> - Apache 2.0</i>
+            <p>\nSteppers는 머티리얼 디자인 가이드 라인에 기반한 안드로이드 View 라이브러리 입니다.</p>
+        </item>
+        <item>
+            <a href="https://github.com/afollestad/async">Async</a>
+            <i> - Apache 2.0</i>
+            <p>\n안드로이드에서 비동기 프로세스를 간편하게 실행할 수 있도록 고안된 라이브러리입니다.</p>
+        </item>
+        <item>
+            <a href="https://github.com/google/gson">Gson</a>
+            <i> - Apache 2.0</i>
+            <p>\nGson은 자바 객체를 JSON으로 변환 할수 있도록 해주는 자바 라이브러리입니다.</p>
+        </item>
+    </string-array>
 
     <!-- Steppers Library -->
     <string name="step_continue">계속</string>
@@ -347,34 +368,15 @@
     <string name="step_skip">넘어가기</string>
 
     <!-- untranslated strings -->
-    <string name="service_desc_short">Status uses this accessibility service to detect screen updates and notifications on older devices.</string>
-    <string name="service_desc_long"><![CDATA[Status allows users to customize their status bar for better readability, aesthetic, or functionality, allowing them easier and faster use of their devices. \n\nStatus requires this accessibility service to detect the current app that is displaying on the screen in order to adapt to its color scheme and layout. It also uses this service to listen for notifications on older devices that do not have the NotificationListenerService API.]]></string>
-    <string name="majida_desc">Created Chinese translations for this app.</string>
-    <string name="preference_prevent_icon_overlap">Prevent Icon Overlap</string>
-    <string name="preference_prevent_icon_overlap_desc">Prevents icon \"sections\" from overlapping each other when there are too many icons displaying at once. This setting will cause battery drain with too many updates (music player notifications can be particularly taxing, especially if they update once every second), so be careful with it.</string>
-    <string name="tutorial_too_many_icons">Running Out Of Space?</string>
-    <string name="tutorial_too_many_icons_desc">It appears that there are too many icons in the status bar and it doesn\'t have room to display them all. To prevent them from being cut off, you could enable the \"Prevent Overlap\" option in the settings or increase available space by reducing padding and icon scale.</string>
-    <string-array name="libraries">
-        <item>
-            <a href="https://github.com/bumptech/glide">Glide</a>
-            <i> - BSD, part MIT and Apache 2.0</i>
-            <p>\nGlide is a fast and efficient open source media management and image loading framework for Android that wraps media decoding, memory and disk caching, and resource pooling into a simple and easy to use interface.</p>
-        </item>
-        <item>
-            <a href="https://github.com/drozdzynski/Steppers">Steppers</a>
-            <i> - Apache 2.0</i>
-            <p>\nSteppers is a view library for Android based on Material Design guidelines.</p>
-        </item>
-        <item>
-            <a href="https://github.com/afollestad/async">Async</a>
-            <i> - Apache 2.0</i>
-            <p>\nA library designed to make the organized execution of async processes in Android easy.</p>
-        </item>
-        <item>
-            <a href="https://github.com/google/gson">Gson</a>
-            <i> - Apache 2.0</i>
-            <p>\nGson is a Java library that can be used to convert Java Objects into their JSON representation.</p>
-        </item>
-    </string-array>
+    <string name="icon_style_curved">Curved</string>
+    <string name="icon_style_pixel">Pixelated</string>
+    <string name="icon_style_tap">Tap</string>
+    <string name="icon_style_front">Front</string>
+    <string name="icon_style_propeller">Propeller</string>
+    <string name="icon_style_pilot_hat">Pilot Hat</string>
+    <string name="icon_style_sideways">Sideways</string>
+
+    <string name="james_desc">Android developer and professional cabbage eater.</string>
+    <string name="anas_desc">Better known as the Oreo lord, this guy can add more butter to buttery interfaces.</string>
 
 </resources>
