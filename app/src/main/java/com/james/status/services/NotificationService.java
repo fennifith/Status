@@ -130,7 +130,10 @@ public class NotificationService extends NotificationListenerService {
     private ArrayList<StatusBarNotification> getNotifications() {
         ArrayList<StatusBarNotification> activeNotifications = new ArrayList<>();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            activeNotifications.addAll(Arrays.asList(getActiveNotifications()));
+            try {
+                activeNotifications.addAll(Arrays.asList(getActiveNotifications()));
+            } catch (NullPointerException ignored) {
+            }
         }
         return activeNotifications;
     }

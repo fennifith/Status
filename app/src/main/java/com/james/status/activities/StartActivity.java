@@ -24,10 +24,10 @@ import com.james.status.utils.StaticUtils;
 
 import java.util.ArrayList;
 
-import me.drozdzynski.library.steppers.OnCancelAction;
-import me.drozdzynski.library.steppers.OnFinishAction;
 import me.drozdzynski.library.steppers.SteppersItem;
 import me.drozdzynski.library.steppers.SteppersView;
+import me.drozdzynski.library.steppers.interfaces.OnCancelAction;
+import me.drozdzynski.library.steppers.interfaces.OnFinishAction;
 
 public class StartActivity extends AppCompatActivity {
 
@@ -76,6 +76,7 @@ public class StartActivity extends AppCompatActivity {
             permissionsStep.setSubLabel(getString(R.string.permissions_desc));
             permissionsStep.setFragment(new PermissionsStepFragment());
             permissionsStep.setPositiveButtonEnable(StaticUtils.isPermissionsGranted(this));
+            permissionsStep.setSkippable(true);
 
             steps.add(permissionsStep);
 
