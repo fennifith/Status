@@ -160,6 +160,8 @@
     <string name="preference_persistent_notification_desc">This keeps the Status service in the foreground and prevents it from being automatically shut down due to conserve memory or battery life. Disabling this setting could improve performance, but it could also cause various stability issues on some devices.</string>
     <string name="preference_backups">Backup/Restore Settings</string>
     <string name="preference_backups_desc">Allows you to backup or restore all the settings in Status as a text file.</string>
+    <string name="preference_ignore_permission_checking">Ignore Permission Checking</string>
+    <string name="preference_ignore_permission_checking_desc">Only enable this if you are sure that all permissions have been granted and you know what you are doing! This can cause significant problems if used incorrectly.</string>
     <string name="preference_burnin_protection">Burn-In Protection</string>
     <string name="preference_burnin_protection_desc">Prevents Status from causing a burn-in on some screens by moving the icons around every two seconds.</string>
     <string name="preference_prevent_icon_overlap">Prevent Icon Overlap</string>

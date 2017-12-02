@@ -99,12 +99,17 @@ public class StaticUtils {
         else return Settings.canDrawOverlays(context);
     }
 
+    public static boolean isIgnoringPermissions(Context context) {
+        Boolean isIgnoring = PreferenceUtils.getBooleanPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_IGNORE_PERMISSION_CHECKING);
+        return isIgnoring != null && isIgnoring;
+    }
+
     public static boolean isPermissionsGranted(Context context, String[] permissions) {
         for (String permission : permissions) {
             if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
                 if (BuildConfig.DEBUG)
                     Log.wtf("Permission", "missing " + permission);
-                return false;
+                return isIgnoringPermissions(context);
             }
         }
 
@@ -117,7 +122,7 @@ public class StaticUtils {
                 if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
                     if (BuildConfig.DEBUG)
                         Log.wtf("Permission", "missing " + permission);
-                    return false;
+                    return isIgnoringPermissions(context);
                 }
             }
         }

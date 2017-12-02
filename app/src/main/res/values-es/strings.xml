@@ -362,5 +362,7 @@
     <string name="msg_missing_storage_permission">Please grant access to external storage in order to use this functionality.</string>
     <string name="tutorial_missing_permissions">Missing Permissions</string>
     <string name="tutorial_missing_permissions_desc">It appears that some of the permissions required by Status have not been granted. Without these permissions, some functionality may work incorrectly or be disabled. If you have already granted all the permissions and think that there may be an error, you can disable permission checking in the \'other\' section of the settings menu.</string>
+    <string name="preference_ignore_permission_checking">Ignore Permission Checking</string>
+    <string name="preference_ignore_permission_checking_desc">Only enable this if you are sure that all permissions have been granted and you know what you are doing! This can cause significant problems if used incorrectly.</string>
 
 </resources>

@@ -216,7 +216,25 @@ public class GeneralPreferenceFragment extends SimpleFragment implements Prefere
                         ),
                         true,
                         this
-                ),
+                )));
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            preferences.add(
+                    new BooleanPreferenceData(
+                            getContext(),
+                            new PreferenceData.Identifier(
+                                    PreferenceUtils.PreferenceIdentifier.STATUS_IGNORE_PERMISSION_CHECKING,
+                                    getString(R.string.preference_ignore_permission_checking),
+                                    getString(R.string.preference_ignore_permission_checking_desc),
+                                    PreferenceData.Identifier.SectionIdentifier.OTHER
+                            ),
+                            false,
+                            this
+                    )
+            );
+        }
+
+        preferences.addAll(Arrays.asList(
                 new IntegerPreferenceData(
                         getContext(),
                         new PreferenceData.Identifier(
