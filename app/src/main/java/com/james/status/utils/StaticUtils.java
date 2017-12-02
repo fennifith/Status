@@ -1,6 +1,5 @@
 package com.james.status.utils;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.bluetooth.BluetoothAdapter;
@@ -8,7 +7,6 @@ import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.Build;
@@ -99,56 +97,31 @@ public class StaticUtils {
         else return Settings.canDrawOverlays(context);
     }
 
-    public static boolean isPermissionsGranted(Context context) {
-        PackageInfo info;
-        try {
-            info = context.getPackageManager().getPackageInfo(context.getPackageName(), PackageManager.GET_PERMISSIONS);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-            return false;
-        }
-
-        if (info.requestedPermissions != null) {
-            for (String permission : info.requestedPermissions) {
-                if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
-                    if (!permission.matches(Manifest.permission.SYSTEM_ALERT_WINDOW) && (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M || !permission.matches("android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS")) && !permission.matches("android.permission.GET_TASKS")) {
-                        Log.wtf("Permission", permission);
-                        return false;
-                    }
-                }
+    public static boolean isPermissionsGranted(Context context, String[] permissions) {
+        for (String permission : permissions) {
+            if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                Log.wtf("Permission", "missing " + permission);
+                return false;
             }
         }
 
         return true;
     }
 
-    public static void requestPermissions(Activity activity) {
-        PackageInfo info;
-        try {
-            info = activity.getPackageManager().getPackageInfo(activity.getPackageName(), PackageManager.GET_PERMISSIONS);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-            return;
+    public static void requestPermissions(Activity activity, String[] permissions) {
+        List<String> unrequestedPermissions = new ArrayList<>();
+        for (String permission : permissions) {
+            if (ContextCompat.checkSelfPermission(activity, permission) != PackageManager.PERMISSION_GRANTED)
+                unrequestedPermissions.add(permission);
         }
 
-        if (info.requestedPermissions != null) {
-            List<String> unrequestedPermissions = new ArrayList<>();
-            for (String permission : info.requestedPermissions) {
-                if (ContextCompat.checkSelfPermission(activity, permission) != PackageManager.PERMISSION_GRANTED) {
-                    Log.wtf("Permission", permission);
-                    if (permission.length() > 0 && !permission.matches(Manifest.permission.SYSTEM_ALERT_WINDOW) && !permission.matches("android.permission.GET_TASKS"))
-                        unrequestedPermissions.add(permission);
-                }
-            }
-
-            if (unrequestedPermissions.size() > 0)
-                ActivityCompat.requestPermissions(activity, unrequestedPermissions.toArray(new String[unrequestedPermissions.size()]), StartActivity.REQUEST_PERMISSIONS);
-        }
+        if (unrequestedPermissions.size() > 0)
+            ActivityCompat.requestPermissions(activity, unrequestedPermissions.toArray(new String[unrequestedPermissions.size()]), StartActivity.REQUEST_PERMISSIONS);
     }
 
     public static boolean isStatusServiceRunning(Context context) {
         Boolean isEnabled = PreferenceUtils.getBooleanPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED);
-        if (isEnabled != null && isEnabled) {
+        if (isEnabled != null && isEnabled && isReady(context)) {
             ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
             for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
                 if (StatusService.class.getName().equals(service.service.getClassName())) {
@@ -186,5 +159,9 @@ public class StaticUtils {
     public static boolean shouldUseCompatNotifications(Context context) {
         Boolean enabled = PreferenceUtils.getBooleanPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_NOTIFICATIONS_COMPAT);
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2 || (enabled != null && enabled);
+    }
+
+    public static boolean isReady(Context context) {
+        return StaticUtils.isAccessibilityGranted(context) && StaticUtils.isNotificationGranted(context) && StaticUtils.canDrawOverlays(context);
     }
 }

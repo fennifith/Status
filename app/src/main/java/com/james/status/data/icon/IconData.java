@@ -176,7 +176,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
 
     public boolean isVisible() {
         Boolean isVisible = getBooleanPreference(PreferenceIdentifier.VISIBILITY);
-        return isVisible == null || isVisible;
+        return (isVisible == null || isVisible) && StaticUtils.isPermissionsGranted(getContext(), getPermissions());
     }
 
     public boolean canHazDrawable() {
@@ -197,6 +197,10 @@ public abstract class IconData<T extends IconUpdateReceiver> {
     public boolean hasText() {
         Boolean hasText = getBooleanPreference(PreferenceIdentifier.TEXT_VISIBILITY);
         return canHazText() && (hasText != null && hasText);
+    }
+
+    public String[] getPermissions() {
+        return new String[]{};
     }
 
     public T getReceiver() {

@@ -1,5 +1,6 @@
 package com.james.status.data.icon;
 
+import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
@@ -43,6 +44,11 @@ public class BluetoothIconData extends IconData<BluetoothIconData.BluetoothRecei
     @Override
     public String getTitle() {
         return getContext().getString(R.string.icon_bluetooth);
+    }
+
+    @Override
+    public String[] getPermissions() {
+        return new String[]{Manifest.permission.BLUETOOTH};
     }
 
     @Override

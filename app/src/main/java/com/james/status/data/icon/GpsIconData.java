@@ -50,6 +50,11 @@ public class GpsIconData extends IconData<GpsIconData.GpsReceiver> {
     }
 
     @Override
+    public String[] getPermissions() {
+        return new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION};
+    }
+
+    @Override
     public int getIconStyleSize() {
         return 2;
     }

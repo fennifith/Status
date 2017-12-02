@@ -1,5 +1,6 @@
 package com.james.status.data.icon;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -31,6 +32,11 @@ public class AirplaneModeIconData extends IconData<AirplaneModeIconData.Airplane
     @Override
     public String getTitle() {
         return getContext().getString(R.string.icon_airplane);
+    }
+
+    @Override
+    public String[] getPermissions() {
+        return new String[]{Manifest.permission.READ_PHONE_STATE};
     }
 
     @Override

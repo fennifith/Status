@@ -1,5 +1,6 @@
 package com.james.status.dialogs;
 
+import android.Manifest;
 import android.animation.Animator;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
@@ -25,6 +26,7 @@ import com.james.status.R;
 import com.james.status.Status;
 import com.james.status.activities.ImagePickerActivity;
 import com.james.status.utils.ColorUtils;
+import com.james.status.utils.StaticUtils;
 import com.james.status.views.ColorImageView;
 import com.james.status.views.CustomImageView;
 
@@ -188,7 +190,11 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> implements Stat
         findViewById(R.id.image).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getContext().startActivity(new Intent(getContext(), ImagePickerActivity.class));
+                String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+                if (!StaticUtils.isPermissionsGranted(getContext(), permissions) && getOwnerActivity() != null)
+                    StaticUtils.requestPermissions(getOwnerActivity(), permissions);
+                else
+                    getContext().startActivity(new Intent(getContext(), ImagePickerActivity.class));
             }
         });
 

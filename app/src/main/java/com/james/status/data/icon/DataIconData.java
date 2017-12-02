@@ -1,5 +1,6 @@
 package com.james.status.data.icon;
 
+import android.Manifest;
 import android.content.Context;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
@@ -21,6 +22,11 @@ public class DataIconData extends IconData {
 
         telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         dataListener = new DataListener(this);
+    }
+
+    @Override
+    public String[] getPermissions() {
+        return new String[]{Manifest.permission.READ_PHONE_STATE};
     }
 
     @Override

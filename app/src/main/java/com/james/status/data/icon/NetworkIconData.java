@@ -1,5 +1,6 @@
 package com.james.status.data.icon;
 
+import android.Manifest;
 import android.content.Context;
 import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
@@ -42,6 +43,11 @@ public class NetworkIconData extends IconData {
     @Override
     public String getTitle() {
         return getContext().getString(R.string.icon_network);
+    }
+
+    @Override
+    public String[] getPermissions() {
+        return new String[]{Manifest.permission.READ_PHONE_STATE};
     }
 
     @Override

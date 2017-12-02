@@ -56,10 +56,18 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
                 IconData icon = getIcon(holder.getAdapterPosition());
                 if (icon == null) return;
 
-                icon.putPreference(IconData.PreferenceIdentifier.VISIBILITY, isChecked);
-                StaticUtils.updateStatusService(activity);
+                if (isChecked && !StaticUtils.isPermissionsGranted(activity, icon.getPermissions())) {
+                    //TODO: show explanation dialog (with option to skip)
+                    StaticUtils.requestPermissions(activity, icon.getPermissions());
+                    holder.checkBox.setOnCheckedChangeListener(null);
+                    holder.checkBox.setChecked(false);
+                    holder.checkBox.setOnCheckedChangeListener(this);
+                } else {
+                    icon.putPreference(IconData.PreferenceIdentifier.VISIBILITY, isChecked);
+                    StaticUtils.updateStatusService(activity);
 
-                notifyItemChanged(holder.getAdapterPosition());
+                    notifyItemChanged(holder.getAdapterPosition());
+                }
             }
         });
 

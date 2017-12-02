@@ -142,8 +142,8 @@ public class StatusService extends Service {
         };
 
         Boolean enabled = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED);
-        if (enabled != null && enabled/* && StaticUtils.isPermissionsGranted(this)*/)
-            setUp(); //TODO: AAAAAAAAAAAAAAAA PERMISSIONS LOGIC AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        if (enabled != null && enabled)
+            setUp();
 
         Integer duration = PreferenceUtils.getIntegerPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_HEADS_UP_DURATION);
         if (duration != null) headsUpDuration = duration * 1000;
@@ -158,7 +158,7 @@ public class StatusService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Boolean enabled = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED);
-        if (enabled == null || !enabled/* || !StaticUtils.isPermissionsGranted(this)*/) { //TODO: AAAAAAAAAAAAAAAA PERMISSIONS LOGIC AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        if (enabled == null || !enabled) {
             if (statusView != null) {
                 if (statusView.getParent() != null) windowManager.removeView(statusView);
                 statusView.unregister();

@@ -1,5 +1,6 @@
 package com.james.status.data.icon;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -23,6 +24,11 @@ public class WifiIconData extends IconData<WifiIconData.WifiReceiver> {
         super(context);
         wifiManager = (WifiManager) getContext().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+    }
+
+    @Override
+    public String[] getPermissions() {
+        return new String[]{Manifest.permission.ACCESS_NETWORK_STATE};
     }
 
     @Override

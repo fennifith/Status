@@ -1,5 +1,7 @@
 package com.james.status.data;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
@@ -9,6 +11,8 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.content.ContextCompat;
+
+import com.james.status.utils.StaticUtils;
 
 import java.util.Arrays;
 
@@ -55,11 +59,19 @@ public class IconStyleData implements Parcelable {
             case TYPE_IMAGE:
                 return ContextCompat.getDrawable(context, resource[value]);
             case TYPE_FILE:
-                try {
-                    return Drawable.createFromPath(path[value]);
-                } catch (OutOfMemoryError e) {
-                    e.printStackTrace();
+                String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+                if (!StaticUtils.isPermissionsGranted(context, permissions)) {
+                    if (context instanceof Activity)
+                        StaticUtils.requestPermissions((Activity) context, permissions);
+
                     return null;
+                } else {
+                    try {
+                        return Drawable.createFromPath(path[value]);
+                    } catch (OutOfMemoryError e) {
+                        e.printStackTrace();
+                        return null;
+                    }
                 }
             default:
                 return null;

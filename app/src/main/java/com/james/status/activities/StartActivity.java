@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -33,7 +32,7 @@ public class StartActivity extends AppCompatActivity {
 
     public static final int REQUEST_ACCESSIBILITY = 7369, REQUEST_NOTIFICATION = 2285, REQUEST_PERMISSIONS = 9374, REQUEST_OPTIMIZATION = 6264, REQUEST_OVERLAY = 7451;
 
-    SteppersItem accessibilityStep, notificationStep, permissionsStep, optimizationStep, overlayStep;
+    SteppersItem accessibilityStep, notificationStep, optimizationStep, overlayStep;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +51,7 @@ public class StartActivity extends AppCompatActivity {
         steppersViewConfig.setOnCancelAction(new OnCancelAction() {
             @Override
             public void onCancel() {
-                System.exit(0);
+                finish();
             }
         });
 
@@ -70,15 +69,6 @@ public class StartActivity extends AppCompatActivity {
 
                 steps.add(optimizationStep);
             }
-
-            permissionsStep = new SteppersItem();
-            permissionsStep.setLabel(getString(R.string.permissions_name));
-            permissionsStep.setSubLabel(getString(R.string.permissions_desc));
-            permissionsStep.setFragment(new PermissionsStepFragment());
-            permissionsStep.setPositiveButtonEnable(StaticUtils.isPermissionsGranted(this));
-            permissionsStep.setSkippable(true);
-
-            steps.add(permissionsStep);
 
             overlayStep = new SteppersItem();
             overlayStep.setLabel(getString(R.string.overlay_name));
@@ -131,17 +121,8 @@ public class StartActivity extends AppCompatActivity {
             accessibilityStep.setPositiveButtonEnable(StaticUtils.isAccessibilityGranted(this));
         if (notificationStep != null)
             notificationStep.setPositiveButtonEnable(StaticUtils.isNotificationGranted(this));
-        if (permissionsStep != null)
-            permissionsStep.setPositiveButtonEnable(StaticUtils.isPermissionsGranted(this));
         if (overlayStep != null)
             overlayStep.setPositiveButtonEnable(StaticUtils.canDrawOverlays(this));
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (!StaticUtils.isAccessibilityGranted(this) || !StaticUtils.isNotificationGranted(this) || !StaticUtils.isPermissionsGranted(this) || !StaticUtils.canDrawOverlays(this))
-            System.exit(0);
-        else super.onBackPressed();
     }
 
     @Override
@@ -162,12 +143,6 @@ public class StartActivity extends AppCompatActivity {
                     overlayStep.setPositiveButtonEnable(StaticUtils.canDrawOverlays(this));
                 break;
         }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (permissionsStep != null)
-            permissionsStep.setPositiveButtonEnable(StaticUtils.isPermissionsGranted(this));
     }
 
     public static class AccessibilityStepFragment extends Fragment {
@@ -220,23 +195,6 @@ public class StartActivity extends AppCompatActivity {
             linearLayout.addView(button);
 
             return linearLayout;
-        }
-    }
-
-    public static class PermissionsStepFragment extends Fragment {
-        @Nullable
-        @Override
-        public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            AppCompatButton button = new AppCompatButton(inflater.getContext());
-            button.setText(R.string.action_access_grant);
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    StaticUtils.requestPermissions(getActivity());
-                }
-            });
-
-            return button;
         }
     }
 

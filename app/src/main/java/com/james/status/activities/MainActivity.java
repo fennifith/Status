@@ -73,9 +73,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
         status = (Status) getApplicationContext();
 
-        if (!StaticUtils.isAccessibilityGranted(this) || !StaticUtils.isNotificationGranted(this) || !StaticUtils.isPermissionsGranted(this) || !StaticUtils.canDrawOverlays(this))
-            startActivity(new Intent(this, StartActivity.class));
-
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
         appbar = (AppBarLayout) findViewById(R.id.appbar);
@@ -145,7 +142,13 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         service.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) {
+                if (!StaticUtils.isReady(MainActivity.this)) {
+                    startActivity(new Intent(MainActivity.this, StartActivity.class));
+
+                    service.setOnCheckedChangeListener(null);
+                    service.setChecked(false);
+                    service.setOnCheckedChangeListener(this);
+                } else if (b) {
                     PreferenceUtils.putPreference(MainActivity.this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED, true);
 
                     Intent intent = new Intent(StatusService.ACTION_START);
@@ -205,7 +208,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         super.onResume();
 
         if (behavior.getState() == BottomSheetBehavior.STATE_HIDDEN) {
-            if (StaticUtils.isAccessibilityGranted(this) && StaticUtils.isNotificationGranted(this) && StaticUtils.isPermissionsGranted(this) && !StaticUtils.isStatusServiceRunning(this) && StaticUtils.shouldShowTutorial(this, "enable")) {
+            if (!StaticUtils.isStatusServiceRunning(this) && StaticUtils.shouldShowTutorial(this, "enable")) {
                 setTutorial(R.string.tutorial_enable, R.string.tutorial_enable_desc, new OnTutorialClickListener() {
                     @Override
                     public void onClick() {

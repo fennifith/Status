@@ -1,5 +1,7 @@
 package com.james.status.dialogs;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -9,12 +11,14 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Toast;
 
 import com.james.status.R;
 import com.james.status.adapters.IconStyleAdapter;
 import com.james.status.data.IconStyleData;
 import com.james.status.data.icon.IconData;
 import com.james.status.utils.ImageUtils;
+import com.james.status.utils.StaticUtils;
 
 import java.util.List;
 
@@ -62,18 +66,28 @@ public class IconDialog extends PreferenceDialog<IconStyleData> implements IconS
         findViewById(R.id.add).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new IconCreatorDialog(getContext(), styles.get(0).getSize(), icon.getStringArrayPreference(IconData.PreferenceIdentifier.ICON_STYLE_NAMES), icon.getIconNames()).setListener(new IconCreatorDialog.OnIconStyleListener() {
-                    @Override
-                    public void onIconStyle(IconStyleData style) {
-                        icon.addIconStyle(style);
-                        styles = icon.getIconStyles();
+                String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+                if (!StaticUtils.isPermissionsGranted(getContext(), permissions)) {
+                    if (getOwnerActivity() != null)
+                        StaticUtils.requestPermissions(getOwnerActivity(), permissions);
+                    else if (getContext() instanceof Activity)
+                        StaticUtils.requestPermissions((Activity) getContext(), permissions);
+                    else
+                        Toast.makeText(getContext(), R.string.msg_missing_storage_permission, Toast.LENGTH_SHORT).show();
+                } else {
+                    new IconCreatorDialog(getContext(), styles.get(0).getSize(), icon.getStringArrayPreference(IconData.PreferenceIdentifier.ICON_STYLE_NAMES), icon.getIconNames()).setListener(new IconCreatorDialog.OnIconStyleListener() {
+                        @Override
+                        public void onIconStyle(IconStyleData style) {
+                            icon.addIconStyle(style);
+                            styles = icon.getIconStyles();
 
-                        adapter = new IconStyleAdapter(getContext(), icon, styles, IconDialog.this);
-                        adapter.setIconStyle(style);
-                        setPreference(style);
-                        recycler.setAdapter(adapter);
-                    }
-                }).show();
+                            adapter = new IconStyleAdapter(getContext(), icon, styles, IconDialog.this);
+                            adapter.setIconStyle(style);
+                            setPreference(style);
+                            recycler.setAdapter(adapter);
+                        }
+                    }).show();
+                }
             }
         });
 

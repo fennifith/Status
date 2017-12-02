@@ -1,5 +1,6 @@
 package com.james.status.data.icon;
 
+import android.Manifest;
 import android.content.Context;
 import android.os.Build;
 import android.telephony.PhoneStateListener;
@@ -24,6 +25,11 @@ public class DualNetworkIconData extends NetworkIconData {
         telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1)
             subscriptionManager = (SubscriptionManager) context.getSystemService(Context.TELEPHONY_SUBSCRIPTION_SERVICE);
+    }
+
+    @Override
+    public String[] getPermissions() {
+        return new String[]{Manifest.permission.READ_PHONE_STATE};
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.james.status.fragments;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
@@ -276,7 +277,10 @@ public class GeneralPreferenceFragment extends SimpleFragment implements Prefere
                 ) {
                     @Override
                     public void onClick(View v) {
-                        new BackupDialog((Activity) getContext()).show();
+                        String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+                        if (StaticUtils.isPermissionsGranted(getContext(), permissions))
+                            new BackupDialog((Activity) getContext()).show();
+                        else StaticUtils.requestPermissions((Activity) getContext(), permissions);
                     }
                 },
                 new BooleanPreferenceData(
