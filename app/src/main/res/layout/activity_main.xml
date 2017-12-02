@@ -82,6 +82,7 @@
                 android:orientation="horizontal">
 
                 <com.james.status.views.SquareImageView
+                    android:id="@+id/tutorialIcon"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_marginLeft="8dp"

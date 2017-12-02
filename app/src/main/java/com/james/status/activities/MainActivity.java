@@ -35,6 +35,7 @@ import android.widget.TextView;
 import com.james.status.R;
 import com.james.status.Status;
 import com.james.status.adapters.SimplePagerAdapter;
+import com.james.status.data.icon.IconData;
 import com.james.status.fragments.AppPreferenceFragment;
 import com.james.status.fragments.GeneralPreferenceFragment;
 import com.james.status.fragments.HelpFragment;
@@ -42,6 +43,10 @@ import com.james.status.fragments.IconPreferenceFragment;
 import com.james.status.services.StatusService;
 import com.james.status.utils.PreferenceUtils;
 import com.james.status.utils.StaticUtils;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
 
@@ -60,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     private View bottomSheet;
     ImageView expand;
     private TextView title, content;
+    private ImageView icon;
 
     private BottomSheetBehavior behavior;
     private MenuItem resetItem, notificationItem;
@@ -83,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         expand = (ImageView) findViewById(R.id.expand);
         title = (TextView) findViewById(R.id.title);
         content = (TextView) findViewById(R.id.content);
+        icon = (ImageView) findViewById(R.id.tutorialIcon);
 
         ViewCompat.setElevation(bottomSheet, StaticUtils.getPixelsFromDp(10));
 
@@ -189,17 +196,19 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         bottomSheet.setTag(listener);
 
         if (forceRead) {
-            bottomSheet.setBackgroundColor(ContextCompat.getColor(this, R.color.colorDarkPrimary));
+            bottomSheet.setBackgroundColor(ContextCompat.getColor(this, R.color.red));
             int textColorPrimary = ContextCompat.getColor(this, R.color.textColorPrimaryInverse);
             title.setTextColor(textColorPrimary);
             expand.setColorFilter(textColorPrimary);
             content.setTextColor(ContextCompat.getColor(this, R.color.textColorSecondaryInverse));
+            icon.setColorFilter(textColorPrimary);
         } else {
             bottomSheet.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
             int textColorPrimary = ContextCompat.getColor(this, R.color.textColorPrimary);
             title.setTextColor(textColorPrimary);
             expand.setColorFilter(textColorPrimary);
             content.setTextColor(ContextCompat.getColor(this, R.color.textColorSecondary));
+            icon.setColorFilter(ContextCompat.getColor(this, R.color.colorAccent));
         }
     }
 
@@ -215,6 +224,18 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                         if (service != null) service.setChecked(true);
                     }
                 }, false);
+            } else if (!StaticUtils.isAllPermissionsGranted(this)) {
+                setTutorial(R.string.tutorial_missing_permissions, R.string.tutorial_missing_permissions_desc, new OnTutorialClickListener() {
+                    @Override
+                    public void onClick() {
+                        List<String> permissions = new ArrayList<>();
+                        for (IconData icon : StatusService.getIcons(MainActivity.this)) {
+                            permissions.addAll(Arrays.asList(icon.getPermissions()));
+                        }
+
+                        StaticUtils.requestPermissions(MainActivity.this, permissions.toArray(new String[permissions.size()]));
+                    }
+                }, true);
             } else if (searchView != null && StaticUtils.shouldShowTutorial(MainActivity.this, "search", 1)) {
                 setTutorial(R.string.tutorial_search, R.string.tutorial_search_desc, new OnTutorialClickListener() {
                     @Override
@@ -318,6 +339,16 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (StaticUtils.isAllPermissionsGranted(this) && !behavior.isHideable()) {
+            behavior.setHideable(true);
+            behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        }
     }
 
     @Override

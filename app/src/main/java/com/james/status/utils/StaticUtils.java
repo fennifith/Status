@@ -18,8 +18,10 @@ import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
+import com.james.status.BuildConfig;
 import com.james.status.Status;
 import com.james.status.activities.StartActivity;
+import com.james.status.data.icon.IconData;
 import com.james.status.services.AccessibilityService;
 import com.james.status.services.StatusService;
 
@@ -100,8 +102,23 @@ public class StaticUtils {
     public static boolean isPermissionsGranted(Context context, String[] permissions) {
         for (String permission : permissions) {
             if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
-                Log.wtf("Permission", "missing " + permission);
+                if (BuildConfig.DEBUG)
+                    Log.wtf("Permission", "missing " + permission);
                 return false;
+            }
+        }
+
+        return true;
+    }
+
+    public static boolean isAllPermissionsGranted(Context context) {
+        for (IconData icon : StatusService.getIcons(context)) {
+            for (String permission : icon.getPermissions()) {
+                if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    if (BuildConfig.DEBUG)
+                        Log.wtf("Permission", "missing " + permission);
+                    return false;
+                }
             }
         }
 

@@ -25,9 +25,8 @@ public class OrientationIconData extends IconData<OrientationIconData.Orientatio
     }
 
     @Override
-    public boolean isVisible() {
-        Boolean isVisible = getBooleanPreference(PreferenceIdentifier.VISIBILITY);
-        return isVisible != null && isVisible;
+    boolean isDefaultVisible() {
+        return false;
     }
 
     @Override

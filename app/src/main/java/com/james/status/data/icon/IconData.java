@@ -174,9 +174,13 @@ public abstract class IconData<T extends IconUpdateReceiver> {
         }
     }
 
-    public boolean isVisible() {
+    public final boolean isVisible() {
         Boolean isVisible = getBooleanPreference(PreferenceIdentifier.VISIBILITY);
-        return (isVisible == null || isVisible) && StaticUtils.isPermissionsGranted(getContext(), getPermissions());
+        return (isDefaultVisible() ? (isVisible == null || isVisible) : (isVisible != null && isVisible)) && StaticUtils.isPermissionsGranted(getContext(), getPermissions());
+    }
+
+    boolean isDefaultVisible() {
+        return true;
     }
 
     public boolean canHazDrawable() {

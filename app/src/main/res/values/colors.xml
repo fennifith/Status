@@ -6,6 +6,8 @@
     <color name="colorPrimaryLight">#FAFAFA</color>
     <color name="colorAccent">#448AFF</color>
 
+    <color name="red">#D32F2F</color>
+
     <color name="textColorPrimary">#DE000000</color>
     <color name="textColorSecondary">#8A000000</color>
     <color name="textColorTertiary">#61000000</color>

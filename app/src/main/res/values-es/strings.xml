@@ -360,5 +360,7 @@
     <string name="tutorial_too_many_icons">Running Out Of Space?</string>
     <string name="tutorial_too_many_icons_desc">It appears that there are too many icons in the status bar and it doesn\'t have room to display them all. To prevent them from being cut off, you could enable the \"Prevent Overlap\" option in the settings or increase available space by reducing padding and icon scale.</string>
     <string name="msg_missing_storage_permission">Please grant access to external storage in order to use this functionality.</string>
+    <string name="tutorial_missing_permissions">Missing Permissions</string>
+    <string name="tutorial_missing_permissions_desc">It appears that some of the permissions required by Status have not been granted. Without these permissions, some functionality may work incorrectly or be disabled. If you have already granted all the permissions and think that there may be an error, you can disable permission checking in the \'other\' section of the settings menu.</string>
 
 </resources>
