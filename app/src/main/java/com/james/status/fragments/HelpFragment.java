@@ -30,7 +30,7 @@ import java.util.List;
 public class HelpFragment extends SimpleFragment {
 
     private static final String
-            FAQ_URL = "https://theandroidmaster.github.io/apps/status/faq.json",
+            FAQ_URL = "https://jfenn.me/apps/status/faq.json",
             COMMUNITY_URL = "https://plus.google.com/communities/100021389226995148571";
 
     private RecyclerView recycler;
