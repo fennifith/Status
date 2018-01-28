@@ -49,7 +49,8 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
         AppData.ActivityData activity = getActivity(position);
         if (activity == null) return;
 
-        holder.v.findViewById(R.id.launchIcon).setVisibility(View.GONE);
+        holder.launch.setVisibility(View.GONE);
+        holder.notifications.setVisibility(View.GONE);
 
         holder.name.setText(activity.label);
         holder.packageName.setText(activity.name);
@@ -222,8 +223,6 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
             }
         });
 
-        holder.notificationSwitch.setVisibility(View.GONE);
-
         holder.v.setAlpha(0);
         holder.v.animate().alpha(1).setDuration(500).setStartDelay(100 + (10 * position)).start();
     }
@@ -243,7 +242,8 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
 
         View v, titleBar;
         TextView name, packageName;
-        CustomImageView icon, launchIcon, colorView;
+        CustomImageView icon, colorView;
+        View launch;
         View color;
         View notifications;
         SwitchCompat fullscreenSwitch, notificationSwitch;
@@ -255,7 +255,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
             name = (TextView) v.findViewById(R.id.appName);
             packageName = (TextView) v.findViewById(R.id.appPackage);
             icon = (CustomImageView) v.findViewById(R.id.icon);
-            launchIcon = (CustomImageView) v.findViewById(R.id.launchIcon);
+            launch = v.findViewById(R.id.launch);
             color = v.findViewById(R.id.color);
             colorView = (CustomImageView) v.findViewById(R.id.colorView);
             notifications = v.findViewById(R.id.notifications);

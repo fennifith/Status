@@ -57,6 +57,7 @@
     <string name="msg_battery_optimizations_switch_enable">Turn on the switch next to \"Status\". You may need to scroll down… a lot.</string>
     <string name="msg_accessibility_switch_enable">Please turn on the service titled \"Status Service\". You may need to scroll down for it to become visible.</string>
     <string name="msg_missing_storage_permission">Please grant access to external storage in order to use this functionality.</string>
+    <string name="msg_show_individual_screens">Show %1$d individual screens…</string>
 
     <string name="service_name">Status Service</string>
     <string name="service_name_general">Accessibility Service</string>
@@ -152,7 +153,7 @@
     <string name="preference_debug">Debug Messages</string>
     <string name="preference_debug_desc">Shows confusing debug info about window changes.</string>
     <string name="preference_status_color">Primary Color</string>
-    <string name="preference_fullscreen">Hide Status</string>
+    <string name="preference_fullscreen">Fullscreen Mode</string>
     <string name="preference_notifications">Notifications</string>
     <string name="preference_side_padding">Side Padding</string>
     <string name="preference_side_padding_desc">Useful to prevent icons being cut off at the sides of the screen on phones with rounded screen edges.</string>
@@ -302,7 +303,7 @@
     <string name="tutorial_icon_order">Re-order Icons</string>
     <string name="tutorial_icon_order_desc">Change the order of the icons by pressing the up and down buttons next to an icon\'s name.</string>
     <string name="tutorial_activities">Don\'t want to modify an entire app?</string>
-    <string name="tutorial_activities_desc">Change individual screens by clicking the \'expand\' button next to the app\'s name.</string>
+    <string name="tutorial_activities_desc">Change individual screens by clicking the \'expand\' button below an app.</string>
     <string name="tutorial_donate">Do you like Status?</string>
     <string name="tutorial_donate_desc">Status is open source and free to use without any advertisements or paid features. In order to support Status and other apps like it, please consider making a donation.</string>
 

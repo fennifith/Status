@@ -1,9 +1,6 @@
 package com.james.status.activities;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -32,8 +29,6 @@ public class AboutActivity extends AppCompatActivity {
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        Drawable errorDrawable = new ColorDrawable(Color.DKGRAY);
 
         jamesImage = (ImageView) findViewById(R.id.jamesImage);
         Glide.with(this).load("https://jfenn.me/images/headers/rocks.jpg").into(jamesImage);

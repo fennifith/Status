@@ -29,7 +29,6 @@ import com.james.status.data.AppData;
 import com.james.status.dialogs.ColorPickerDialog;
 import com.james.status.dialogs.PreferenceDialog;
 import com.james.status.utils.ColorUtils;
-import com.james.status.utils.ImageUtils;
 import com.james.status.utils.StaticUtils;
 import com.james.status.utils.StringUtils;
 import com.james.status.views.CustomImageView;
@@ -60,12 +59,6 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_app_card, parent, false));
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        if (position == 0) return 0;
-        else return 1;
     }
 
     @Override
@@ -223,7 +216,6 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
                     holder.titleBar.setBackgroundColor(result);
                     holder.name.setTextColor(ContextCompat.getColor(context, ColorUtils.isColorDark(result) ? R.color.textColorPrimaryInverse : R.color.textColorPrimary));
                     holder.packageName.setTextColor(ContextCompat.getColor(context, ColorUtils.isColorDark(result) ? R.color.textColorSecondaryInverse : R.color.textColorSecondary));
-                    holder.launchIcon.setImageDrawable(ImageUtils.getVectorDrawable(context, R.drawable.ic_launch), ColorUtils.isColorDark(result) ? Color.WHITE : Color.BLACK);
                 }
             }
         }.execute();
@@ -242,7 +234,6 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
 
                 app.putPreference(context, AppData.PreferenceIdentifier.FULLSCREEN, isChecked);
                 holder.color.setVisibility(isChecked ? View.GONE : View.VISIBLE);
-                notifyItemChanged(0);
             }
         });
 
@@ -258,13 +249,14 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
                 if (app == null) return;
 
                 app.putSpecificPreference(context, AppData.PreferenceIdentifier.NOTIFICATIONS, isChecked);
-                notifyItemChanged(0);
 
                 StaticUtils.updateStatusService(context);
             }
         });
 
-        holder.v.setOnClickListener(new View.OnClickListener() {
+        holder.launch.setVisibility(app.activities.size() > 1 ? View.VISIBLE : View.GONE);
+        holder.launchText.setText(String.format(context.getString(R.string.msg_show_individual_screens), app.activities.size()));
+        holder.launch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, AppSettingActivity.class);
@@ -321,6 +313,8 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
         View v, titleBar;
         TextView name, packageName;
         CustomImageView icon, launchIcon, colorView;
+        View launch;
+        TextView launchText;
         View color;
         View notifications;
         SwitchCompat fullscreenSwitch, notificationSwitch;
@@ -332,7 +326,9 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
             name = (TextView) v.findViewById(R.id.appName);
             packageName = (TextView) v.findViewById(R.id.appPackage);
             icon = (CustomImageView) v.findViewById(R.id.icon);
+            launch = v.findViewById(R.id.launch);
             launchIcon = (CustomImageView) v.findViewById(R.id.launchIcon);
+            launchText = (TextView) v.findViewById(R.id.launchText);
             color = v.findViewById(R.id.color);
             colorView = (CustomImageView) v.findViewById(R.id.colorView);
             notifications = v.findViewById(R.id.notifications);

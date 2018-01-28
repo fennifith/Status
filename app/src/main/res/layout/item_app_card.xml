@@ -77,6 +77,120 @@
 
                 </LinearLayout>
 
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="true"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/color"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top"
+                    android:layout_weight="1"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:gravity="top|center_horizontal"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <com.james.status.views.CircleImageView
+                        android:id="@+id/colorView"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@android:color/black" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="4dp"
+                        android:gravity="center_horizontal"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp"
+                        android:text="@string/preference_status_color"
+                        android:textAlignment="center"
+                        android:textColor="?android:textColorSecondary"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top"
+                    android:layout_weight="1"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:gravity="top|center_horizontal"
+                    android:orientation="vertical"
+                    android:paddingBottom="12dp"
+                    android:paddingTop="12dp">
+
+                    <android.support.v7.widget.SwitchCompat
+                        android:id="@+id/fullscreenSwitch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="28dp"
+                        android:layout_gravity="center_horizontal" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="4dp"
+                        android:gravity="center_horizontal"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp"
+                        android:text="@string/preference_fullscreen"
+                        android:textAlignment="center"
+                        android:textColor="?android:textColorSecondary"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/notifications"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top"
+                    android:layout_weight="1"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:gravity="top|center_horizontal"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <android.support.v7.widget.SwitchCompat
+                        android:id="@+id/notificationSwitch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="28dp"
+                        android:layout_gravity="center_horizontal" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="4dp"
+                        android:gravity="center_horizontal"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp"
+                        android:text="@string/preference_notifications"
+                        android:textAlignment="center"
+                        android:textColor="?android:textColorSecondary"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/launch"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:background="?attr/selectableItemBackground"
+                android:orientation="horizontal">
+
                 <com.james.status.views.CustomImageView
                     android:id="@+id/launchIcon"
                     android:layout_width="24dp"
@@ -86,70 +200,16 @@
                     android:layout_marginRight="16dp"
                     app:srcCompat="@drawable/ic_launch" />
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/color"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:background="?attr/selectableItemBackground"
-                android:orientation="horizontal">
-
                 <TextView
-                    android:layout_width="0dp"
+                    android:id="@+id/launchText"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:ellipsize="end"
-                    android:lines="1"
-                    android:maxLines="1"
-                    android:paddingLeft="12dp"
-                    android:paddingRight="12dp"
-                    android:singleLine="true"
-                    android:text="@string/preference_status_color"
-                    android:textColor="?android:textColorPrimary"
+                    android:text="@string/msg_show_individual_screens"
+                    android:textColor="?android:textColorSecondary"
                     android:textSize="16sp" />
 
-                <com.james.status.views.CircleImageView
-                    android:id="@+id/colorView"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginRight="12dp"
-                    android:src="@android:color/black" />
-
             </LinearLayout>
-
-            <android.support.v7.widget.SwitchCompat
-                android:id="@+id/fullscreenSwitch"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:ellipsize="end"
-                android:gravity="center_vertical|start"
-                android:lines="1"
-                android:maxLines="1"
-                android:paddingLeft="12dp"
-                android:paddingRight="12dp"
-                android:singleLine="true"
-                android:text="@string/preference_fullscreen"
-                android:textColor="?android:textColorPrimary"
-                android:textSize="16sp" />
-
-            <android.support.v7.widget.SwitchCompat
-                android:id="@+id/notificationSwitch"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:ellipsize="end"
-                android:gravity="center_vertical|start"
-                android:lines="1"
-                android:maxLines="1"
-                android:paddingLeft="12dp"
-                android:paddingRight="12dp"
-                android:singleLine="true"
-                android:text="@string/preference_notifications"
-                android:textColor="?android:textColorPrimary"
-                android:textSize="16sp" />
 
         </LinearLayout>
 
