@@ -58,7 +58,7 @@ public class ArrayAdapter extends RecyclerView.Adapter<ArrayAdapter.ViewHolder> 
             items.addAll(originalItems);
         } else {
             for (CharSequence item : originalItems) {
-                String string = (String) item;
+                String string = item.toString();
                 if (string.toLowerCase().contains(filter) || filter.contains(string.toLowerCase()))
                     items.add(item);
             }
