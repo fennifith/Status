@@ -1,6 +1,8 @@
 package com.james.status.adapters;
 
 import android.content.Context;
+import android.support.annotation.ArrayRes;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
@@ -14,16 +16,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class LicenseAdapter extends RecyclerView.Adapter<LicenseAdapter.ViewHolder> {
+public class ArrayAdapter extends RecyclerView.Adapter<ArrayAdapter.ViewHolder> {
 
     private Context context;
-    private List<CharSequence> licenses;
+    private List<CharSequence> originalItems;
+    private List<CharSequence> items;
 
-    public LicenseAdapter(Context context) {
+    public ArrayAdapter(Context context, @ArrayRes int stringArray) {
         this.context = context;
 
-        licenses = new ArrayList<>();
-        licenses.addAll(Arrays.asList(context.getResources().getTextArray(R.array.libraries)));
+        originalItems = new ArrayList<>();
+        originalItems.addAll(Arrays.asList(context.getResources().getTextArray(stringArray)));
+        items = new ArrayList<>(originalItems);
     }
 
     @Override
@@ -35,7 +39,7 @@ public class LicenseAdapter extends RecyclerView.Adapter<LicenseAdapter.ViewHold
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.title.setVisibility(View.GONE);
 
-        holder.subtitle.setText(licenses.get(position));
+        holder.subtitle.setText(items.get(position));
         holder.subtitle.setMovementMethod(new LinkMovementMethod());
 
         holder.v.setAlpha(0);
@@ -44,7 +48,23 @@ public class LicenseAdapter extends RecyclerView.Adapter<LicenseAdapter.ViewHold
 
     @Override
     public int getItemCount() {
-        return licenses.size();
+        return items.size();
+    }
+
+    public void filter(@Nullable String filter) {
+        items.clear();
+
+        if (filter == null || filter.length() < 1) {
+            items.addAll(originalItems);
+        } else {
+            for (CharSequence item : originalItems) {
+                String string = (String) item;
+                if (string.toLowerCase().contains(filter) || filter.contains(string.toLowerCase()))
+                    items.add(item);
+            }
+        }
+
+        notifyDataSetChanged();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

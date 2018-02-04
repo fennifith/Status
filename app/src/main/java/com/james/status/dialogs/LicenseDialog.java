@@ -8,7 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.james.status.R;
-import com.james.status.adapters.LicenseAdapter;
+import com.james.status.adapters.ArrayAdapter;
 
 public class LicenseDialog extends AppCompatDialog {
 
@@ -24,7 +24,7 @@ public class LicenseDialog extends AppCompatDialog {
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
-        recyclerView.setAdapter(new LicenseAdapter(getContext()));
+        recyclerView.setAdapter(new ArrayAdapter(getContext(), R.array.libraries));
 
         findViewById(R.id.dismiss).setOnClickListener(new View.OnClickListener() {
             @Override
