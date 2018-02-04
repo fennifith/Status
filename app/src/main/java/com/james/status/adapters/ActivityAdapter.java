@@ -25,6 +25,7 @@ import com.james.status.data.AppData;
 import com.james.status.dialogs.ColorPickerDialog;
 import com.james.status.dialogs.PreferenceDialog;
 import com.james.status.utils.ColorUtils;
+import com.james.status.views.ColorImageView;
 import com.james.status.views.CustomImageView;
 
 import java.util.List;
@@ -197,7 +198,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
             @Override
             protected void done(@Nullable Integer result) {
                 if (result != null) {
-                    holder.colorView.setImageDrawable(new ColorDrawable(result));
+                    holder.colorView.setColor(result);
 
                     holder.titleBar.setBackgroundColor(result);
                     holder.name.setTextColor(ContextCompat.getColor(context, ColorUtils.isColorDark(result) ? R.color.textColorPrimaryInverse : R.color.textColorPrimary));
@@ -242,7 +243,8 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
 
         View v, titleBar;
         TextView name, packageName;
-        CustomImageView icon, colorView;
+        CustomImageView icon;
+        ColorImageView colorView;
         View launch;
         View color;
         View notifications;
@@ -257,7 +259,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
             icon = (CustomImageView) v.findViewById(R.id.icon);
             launch = v.findViewById(R.id.launch);
             color = v.findViewById(R.id.color);
-            colorView = (CustomImageView) v.findViewById(R.id.colorView);
+            colorView = (ColorImageView) v.findViewById(R.id.colorView);
             notifications = v.findViewById(R.id.notifications);
             notificationSwitch = (SwitchCompat) v.findViewById(R.id.notificationSwitch);
             fullscreenSwitch = (SwitchCompat) v.findViewById(R.id.fullscreenSwitch);

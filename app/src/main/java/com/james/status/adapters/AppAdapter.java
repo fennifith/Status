@@ -31,6 +31,7 @@ import com.james.status.dialogs.PreferenceDialog;
 import com.james.status.utils.ColorUtils;
 import com.james.status.utils.StaticUtils;
 import com.james.status.utils.StringUtils;
+import com.james.status.views.ColorImageView;
 import com.james.status.views.CustomImageView;
 
 import java.util.Collections;
@@ -211,7 +212,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
             @Override
             protected void done(@Nullable Integer result) {
                 if (result != null) {
-                    holder.colorView.setImageDrawable(new ColorDrawable(result));
+                    holder.colorView.setColor(result);
 
                     holder.titleBar.setBackgroundColor(result);
                     holder.name.setTextColor(ContextCompat.getColor(context, ColorUtils.isColorDark(result) ? R.color.textColorPrimaryInverse : R.color.textColorPrimary));
@@ -312,7 +313,8 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
 
         View v, titleBar;
         TextView name, packageName;
-        CustomImageView icon, launchIcon, colorView;
+        CustomImageView icon, launchIcon;
+        ColorImageView colorView;
         View launch;
         TextView launchText;
         View color;
@@ -330,7 +332,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
             launchIcon = (CustomImageView) v.findViewById(R.id.launchIcon);
             launchText = (TextView) v.findViewById(R.id.launchText);
             color = v.findViewById(R.id.color);
-            colorView = (CustomImageView) v.findViewById(R.id.colorView);
+            colorView = (ColorImageView) v.findViewById(R.id.colorView);
             notifications = v.findViewById(R.id.notifications);
             notificationSwitch = (SwitchCompat) v.findViewById(R.id.notificationSwitch);
             fullscreenSwitch = (SwitchCompat) v.findViewById(R.id.fullscreenSwitch);

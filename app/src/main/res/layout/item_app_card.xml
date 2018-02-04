@@ -96,7 +96,7 @@
                     android:orientation="vertical"
                     android:padding="12dp">
 
-                    <com.james.status.views.CircleImageView
+                    <com.james.status.views.ColorImageView
                         android:id="@+id/colorView"
                         android:layout_width="28dp"
                         android:layout_height="28dp"
