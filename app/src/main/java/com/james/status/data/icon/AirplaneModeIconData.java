@@ -11,6 +11,7 @@ import com.james.status.data.IconStyleData;
 import com.james.status.receivers.IconUpdateReceiver;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class AirplaneModeIconData extends IconData<AirplaneModeIconData.AirplaneModeReceiver> {
@@ -55,20 +56,23 @@ public class AirplaneModeIconData extends IconData<AirplaneModeIconData.Airplane
                                 IconStyleData.TYPE_VECTOR,
                                 R.drawable.ic_airplane
                         ),
-                        new IconStyleData(
+                        IconStyleData.fromResource(
                                 getContext().getString(R.string.icon_style_front),
                                 IconStyleData.TYPE_VECTOR,
-                                R.drawable.ic_airplane_front
+                                getContext(),
+                                "ic_airplane_front"
                         ),
-                        new IconStyleData(
+                        IconStyleData.fromResource(
                                 getContext().getString(R.string.icon_style_propeller),
                                 IconStyleData.TYPE_VECTOR,
-                                R.drawable.ic_airplane_propeller
+                                getContext(),
+                                "ic_airplane_propeller"
                         ),
-                        new IconStyleData(
+                        IconStyleData.fromResource(
                                 getContext().getString(R.string.icon_style_pilot_hat),
                                 IconStyleData.TYPE_VECTOR,
-                                R.drawable.ic_airplane_pilot_hat
+                                getContext(),
+                                "ic_airplane_pilot_hat"
                         ),
                         new IconStyleData(
                                 getContext().getString(R.string.icon_style_balloon),
@@ -78,6 +82,7 @@ public class AirplaneModeIconData extends IconData<AirplaneModeIconData.Airplane
                 )
         );
 
+        styles.removeAll(Collections.singleton(null));
         return styles;
     }
 

@@ -17,6 +17,7 @@ import com.james.status.data.IconStyleData;
 import com.james.status.receivers.IconUpdateReceiver;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class GpsIconData extends IconData<GpsIconData.GpsReceiver> {
@@ -83,27 +84,31 @@ public class GpsIconData extends IconData<GpsIconData.GpsReceiver> {
                                 R.drawable.ic_gps_dish_searching,
                                 R.drawable.ic_gps_dish_fixed
                         ),
-                        new IconStyleData(
+                        IconStyleData.fromResource(
                                 getContext().getString(R.string.icon_style_dish2),
                                 IconStyleData.TYPE_VECTOR,
-                                R.drawable.ic_gps_dish2_searching,
-                                R.drawable.ic_gps_dish2_fixed
+                                getContext(),
+                                "ic_gps_dish2_searching",
+                                "ic_gps_dish2_fixed"
                         ),
-                        new IconStyleData(
+                        IconStyleData.fromResource(
                                 getContext().getString(R.string.icon_style_satellite),
                                 IconStyleData.TYPE_VECTOR,
-                                R.drawable.ic_gps_satellite_searching,
-                                R.drawable.ic_gps_satellite_fixed
+                                getContext(),
+                                "ic_gps_satellite_searching",
+                                "ic_gps_satellite_fixed"
                         ),
-                        new IconStyleData(
+                        IconStyleData.fromResource(
                                 getContext().getString(R.string.icon_style_satellite_outline),
                                 IconStyleData.TYPE_VECTOR,
-                                R.drawable.ic_gps_satellite_outline_searching,
-                                R.drawable.ic_gps_satellite_outline_fixed
+                                getContext(),
+                                "ic_gps_satellite_outline_searching",
+                                "ic_gps_satellite_outline_fixed"
                         )
                 )
         );
 
+        styles.removeAll(Collections.singleton(null));
         return styles;
     }
 

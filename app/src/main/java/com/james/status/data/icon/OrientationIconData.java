@@ -14,6 +14,7 @@ import com.james.status.receivers.IconUpdateReceiver;
 
 import java.lang.ref.SoftReference;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class OrientationIconData extends IconData<OrientationIconData.OrientationReceiver> {
@@ -84,12 +85,13 @@ public class OrientationIconData extends IconData<OrientationIconData.Orientatio
         List<IconStyleData> styles = super.getIconStyles();
 
         styles.addAll(Arrays.asList(
-                new IconStyleData(
+                IconStyleData.fromResource(
                         getContext().getString(R.string.icon_style_default),
                         IconStyleData.TYPE_VECTOR,
-                        R.drawable.ic_orientation_auto,
-                        R.drawable.ic_orientation_portrait,
-                        R.drawable.ic_orientation_landscape
+                        getContext(),
+                        "ic_orientation_auto",
+                        "ic_orientation_portrait",
+                        "ic_orientation_landscape"
                 ),
                 new IconStyleData(
                         getContext().getString(R.string.icon_style_system),
@@ -100,6 +102,7 @@ public class OrientationIconData extends IconData<OrientationIconData.Orientatio
                 )
         ));
 
+        styles.removeAll(Collections.singleton(null));
         return styles;
     }
 

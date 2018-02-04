@@ -12,6 +12,7 @@ import com.james.status.data.IconStyleData;
 import com.james.status.receivers.IconUpdateReceiver;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @TargetApi(18)
@@ -64,24 +65,28 @@ public class NfcIconData extends IconData<NfcIconData.NfcReceiver> {
                                 IconStyleData.TYPE_VECTOR,
                                 R.drawable.ic_nfc
                         ),
-                        new IconStyleData(
+                        IconStyleData.fromResource(
                                 getContext().getString(R.string.icon_style_radial),
                                 IconStyleData.TYPE_VECTOR,
-                                R.drawable.ic_nfc_radial
+                                getContext(),
+                                "ic_nfc_radial"
                         ),
-                        new IconStyleData(
+                        IconStyleData.fromResource(
                                 getContext().getString(R.string.icon_style_square),
                                 IconStyleData.TYPE_VECTOR,
-                                R.drawable.ic_nfc_square
+                                getContext(),
+                                "ic_nfc_square"
                         ),
-                        new IconStyleData(
+                        IconStyleData.fromResource(
                                 getContext().getString(R.string.icon_style_tap),
                                 IconStyleData.TYPE_VECTOR,
-                                R.drawable.ic_nfc_tap
+                                getContext(),
+                                "ic_nfc_tap"
                         )
                 )
         );
 
+        styles.removeAll(Collections.singleton(null));
         return styles;
     }
 

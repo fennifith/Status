@@ -12,6 +12,7 @@ import com.james.status.data.IconStyleData;
 import com.james.status.receivers.IconUpdateReceiver;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class AlarmIconData extends IconData<AlarmIconData.AlarmReceiver> {
@@ -81,10 +82,11 @@ public class AlarmIconData extends IconData<AlarmIconData.AlarmReceiver> {
                                 IconStyleData.TYPE_VECTOR,
                                 R.drawable.ic_alarm_clear
                         ),
-                        new IconStyleData(
+                        IconStyleData.fromResource(
                                 getContext().getString(R.string.icon_style_bell),
                                 IconStyleData.TYPE_VECTOR,
-                                R.drawable.ic_alarm_bell
+                                getContext(),
+                                "ic_alarm_bell"
                         ),
                         new IconStyleData(
                                 getContext().getString(R.string.icon_style_school),
@@ -94,6 +96,7 @@ public class AlarmIconData extends IconData<AlarmIconData.AlarmReceiver> {
                 )
         );
 
+        styles.removeAll(Collections.singleton(null));
         return styles;
     }
 

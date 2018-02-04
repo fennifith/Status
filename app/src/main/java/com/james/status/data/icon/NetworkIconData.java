@@ -11,6 +11,7 @@ import com.james.status.data.IconStyleData;
 
 import java.lang.ref.SoftReference;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import james.signalstrengthslib.SignalStrengths;
@@ -70,14 +71,15 @@ public class NetworkIconData extends IconData {
                                 R.drawable.ic_signal_3,
                                 R.drawable.ic_signal_4
                         ),
-                        new IconStyleData(
+                        IconStyleData.fromResource(
                                 getContext().getString(R.string.icon_style_boxy),
                                 IconStyleData.TYPE_VECTOR,
-                                R.drawable.ic_signal_box_0,
-                                R.drawable.ic_signal_box_1,
-                                R.drawable.ic_signal_box_2,
-                                R.drawable.ic_signal_box_2,
-                                R.drawable.ic_signal_box_3
+                                getContext(),
+                                "ic_signal_box_0",
+                                "ic_signal_box_1",
+                                "ic_signal_box_2",
+                                "ic_signal_box_2",
+                                "ic_signal_box_3"
                         ),
                         new IconStyleData(
                                 getContext().getString(R.string.icon_style_square),
@@ -127,6 +129,7 @@ public class NetworkIconData extends IconData {
                 )
         );
 
+        styles.removeAll(Collections.singleton(null));
         return styles;
     }
 

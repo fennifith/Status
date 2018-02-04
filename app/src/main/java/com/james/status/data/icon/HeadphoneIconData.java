@@ -11,6 +11,7 @@ import com.james.status.data.IconStyleData;
 import com.james.status.receivers.IconUpdateReceiver;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class HeadphoneIconData extends IconData<HeadphoneIconData.HeadphoneReceiver> {
@@ -58,14 +59,16 @@ public class HeadphoneIconData extends IconData<HeadphoneIconData.HeadphoneRecei
                                 IconStyleData.TYPE_IMAGE,
                                 android.R.drawable.stat_sys_headset
                         ),
-                        new IconStyleData(
+                        IconStyleData.fromResource(
                                 "Earbuds",
                                 IconStyleData.TYPE_VECTOR,
-                                R.drawable.ic_headset_earbuds
+                                getContext(),
+                                "ic_headset_earbuds"
                         )
                 )
         );
 
+        styles.removeAll(Collections.singleton(null));
         return styles;
     }
 

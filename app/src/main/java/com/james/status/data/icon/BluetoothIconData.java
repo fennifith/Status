@@ -12,6 +12,7 @@ import com.james.status.receivers.IconUpdateReceiver;
 import com.james.status.utils.StaticUtils;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class BluetoothIconData extends IconData<BluetoothIconData.BluetoothReceiver> {
@@ -68,19 +69,22 @@ public class BluetoothIconData extends IconData<BluetoothIconData.BluetoothRecei
                                 R.drawable.ic_bluetooth,
                                 R.drawable.ic_bluetooth_connected
                         ),
-                        new IconStyleData(
+                        IconStyleData.fromResource(
                                 getContext().getString(R.string.icon_style_round),
                                 IconStyleData.TYPE_VECTOR,
-                                R.drawable.ic_bluetooth_round
+                                getContext(),
+                                "ic_bluetooth_round"
                         ),
-                        new IconStyleData(
+                        IconStyleData.fromResource(
                                 getContext().getString(R.string.icon_style_outline),
                                 IconStyleData.TYPE_VECTOR,
-                                R.drawable.ic_bluetooth_outline
+                                getContext(),
+                                "ic_bluetooth_outline"
                         )
                 )
         );
 
+        styles.removeAll(Collections.singleton(null));
         return styles;
     }
 

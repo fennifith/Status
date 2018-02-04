@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -125,5 +126,20 @@ public class IconStyleData implements Parcelable {
 
     public boolean equals(IconStyleData data) {
         return super.equals(data) || (data != null && ((Arrays.equals(data.resource, resource) && resource.length > 0) || (Arrays.equals(data.path, path) && path.length > 0) || data.name.matches(name)));
+    }
+
+    @Nullable
+    public static IconStyleData fromResource(String name, int type, Context context, String... resourceNames) {
+        int[] resourceInts = new int[resourceNames.length];
+        Resources resources = context.getResources();
+        String packageName = context.getPackageName();
+        for (int i = 0; i < resourceNames.length; i++) {
+            int resource = resources.getIdentifier(resourceNames[i], "drawable", packageName);
+            if (resource != 0)
+                resourceInts[i] = resource;
+            else return null;
+        }
+
+        return new IconStyleData(name, type, resourceInts);
     }
 }

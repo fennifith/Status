@@ -13,6 +13,7 @@ import com.james.status.data.IconStyleData;
 import com.james.status.receivers.IconUpdateReceiver;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class WifiIconData extends IconData<WifiIconData.WifiReceiver> {
@@ -75,14 +76,15 @@ public class WifiIconData extends IconData<WifiIconData.WifiReceiver> {
                                 R.drawable.ic_wifi_3,
                                 R.drawable.ic_wifi_4
                         ),
-                        new IconStyleData(
+                        IconStyleData.fromResource(
                                 getContext().getString(R.string.icon_style_radial),
                                 IconStyleData.TYPE_VECTOR,
-                                R.drawable.ic_wifi_radial_0,
-                                R.drawable.ic_wifi_radial_1,
-                                R.drawable.ic_wifi_radial_2,
-                                R.drawable.ic_wifi_radial_3,
-                                R.drawable.ic_wifi_radial_4
+                                getContext(),
+                                "ic_wifi_radial_0",
+                                "ic_wifi_radial_1",
+                                "ic_wifi_radial_2",
+                                "ic_wifi_radial_3",
+                                "ic_wifi_radial_4"
                         ),
                         new IconStyleData(
                                 getContext().getString(R.string.icon_style_triangle),
@@ -123,6 +125,7 @@ public class WifiIconData extends IconData<WifiIconData.WifiReceiver> {
                 )
         );
 
+        styles.removeAll(Collections.singleton(null));
         return styles;
     }
 
