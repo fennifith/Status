@@ -12,7 +12,7 @@ android {
         versionCode 34
         versionName "3.6"
         vectorDrawables.useSupportLibrary = true
-        resConfigs "en", "es", "ko", "zh"
+        resConfigs "ar", "en", "es", "ko", "zh"
     }
     buildTypes {
         release {

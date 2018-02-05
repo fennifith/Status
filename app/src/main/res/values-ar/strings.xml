@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string name="action_settings">الإعدادات</string>
+    <string name="action_setup">التثبيت</string>
+    <string name="action_access_grant">منح الوصول</string>
+    <string name="action_cancel">إلغاء الأمر</string>
+    <string name="action_ok">موافق</string>
+    <string name="action_more">المزيد</string>
+    <string name="action_add_apps">إضافة تطبيقات</string>
+    <string name="action_search">البحث</string>
+    <string name="action_about">حول</string>
+    <string name="action_gplus">قوقل بلس+</string>
+    <string name="action_play">قوقل بلاي</string>
+    <string name="action_twitter">تويتر</string>
+    <string name="action_website">الموقع الويب</string>
+    <string name="action_libraries">رخصة المصدر المفتوح</string>
+    <string name="action_enable">تفعيل</string>
+    <string name="action_disable">تعطيل</string>
+    <string name="action_reset">إعادة</string>
+    <string name="action_tutorial">إعادة تعيين البرنامج التعليمي</string>
+    <string name="action_pick_image_color">اختيار اللون من الصورة</string>
+    <string name="action_community">منتدى المساعدة</string>
+    <string name="action_dismiss">رفض</string>
+    <string name="action_add_style">إضافة نمط</string>
+    <string name="action_delete">حذف</string>
+    <string name="action_edit_style">تحرير أيقونة النمط</string>
+    <string name="action_policy">سياسة الخصوصية</string>
+    <string name="action_new_backup">النسخ الاحتياطي الجديد</string>
+    <string name="action_save">حفظ</string>
+    <string name="action_delete_backup">حذف هذا النسخ الاحتياطي</string>
+    <string name="action_restore_backup">استعادة من هذه النسخة الاحتياطية</string>
+    <string name="action_save_backup">الكتابة فوق النسخ الاحتياطي</string>
+    <string name="action_create_backup">انشئ نسخة احتياطية</string>
+    <string name="action_set_color">تعيين اللون</string>
+    <string name="action_show_status">إظهار الحالة</string>
+    <string name="action_hide_status">إخفاء الحالة</string>
+    <string name="action_app_settings">إعدادات التطبيقات</string>
+    <string name="action_edit">تحرير</string>
+    <string name="action_create_style">إنشئ أيقونة النمط</string>
+
+    <string name="reset_all">إعادة ضبط الجميع</string>
+    <string name="notifications_disable">تعطيل كل الإشعارات</string>
+    <string name="notifications_enable">تفعيل كل الإشعارات</string>
+
+    <string name="prompt_name">أكتب الإسم هنا…</string>
+    <string name="prompt_backup_name">اسم النسخ الاحتياطي</string>
+
+    <string name="error_no_text_name">يرجى كتابة اسم…</string>
+    <string name="error_name_exists">عنصر مع هذا الاسم موجود مسبقا.</string>
+    <string name="error_missing_icons">يفتقد أيقونة واحدة أوكثر من أيقونة</string>
+    <string name="err_battery_already_ignored">تم تجاهل تحسينات البطارية بالفعل! يمكنك المتابعة إلى الخطوة التالية.</string>
+    <string name="msg_notification_switch_enable">الرجاء تمكين التبديل بجوار \ "حالة الخدمة"\</string>
+    <string name="msg_battery_optimizations_switch_enable">قم بتشغيل التبديل إلى جانب \"حالة \". قد تحتاج إلى قم بالتمرير لأسفل … الكثير..</string>
+    <string name="msg_accessibility_switch_enable">يرجى تشغيل الخدمة بعنوان \"حالة الخدمة \". قد تحتاج إلى التمرير لأسفل حتى تصبح مرئية.</string>
+    <string name="msg_missing_storage_permission">يرجى منح إذن الوصول إلى وحدة التخزين الخارجية لاستخدام هذه الوظيفة.</string>
+
+    <string name="service_name">حالة الخدمة</string>
+    <string name="service_name_general">خدمة الوصول</string>
+    <string name="service_desc">\'حالة الخدمة \' تحتاج إلى تمكين من أجل الكشف عن التغييرات نافذة لتحديث شريط الحالة. في بعض الهواتف قد تحتاج إلى التمرير إلى الجزء السفلي من الشاشة قبل أن تصبح مرئية.</string>
+    <string name="service_desc_short">يستخدم الوضع خدمة الوصول هذه للكشف عن تحديثات الشاشة والإشعارات على الأجهزة القديمة.</string>
+    <string name="service_desc_long"><![CDATA[الحالة تسمح للمستخدمين تخصيص شريط الحالة الخاصة بهم لقراءة أفضل، الكاملة، أو وظيفة، مما يتيح لهم أسهل وأسرع استخدام أجهزتهم. \n\nحالة يتطلب هذا إمكانية الوصول خدمة للكشف عن الحالية التطبيق الذي يتم عرض على الشاشة من أجل التكيف مع لونه مخطط والتخطيط. كما يستخدم هذه الخدمة للاستماع إلى الإخطارات لضعف النظر لدى كبار السن و الأجهزة التي لا تملك NotificationListenerService API.]]></string>
+
+    <string name="notifications_compat">وضع التوافق</string>
+    <string name="notifications_compat_desc">على بعض إصدارات الأندرويد التطبيق لا يمكن استخدام واجهة برمجة التطبيقات الإشعار التلقائي القياسية لعرض الرموز الإشعارات. لقد وجدت وسيلة للكشف عنها من خلال خدمة الوصول، ومع ذلك فإنه لا يمكن الكشف عن عندما تم رفض الإشعار. وهكذا، فإنه يزيل جميع الإشعارات كلما يتم فتح لوحة الإشعار. إذا كنت لا تحب هذا، يمكنك إما التحقق من وجود تحديث البرامج الثابتة أو تعطيل الإخطارات في قائمة الإعدادات. يرجى ملاحظة: سيؤدي هذا الإعداد إلى قفل رموز الإشعارات على بعض الأجهزة. فمن المستحسن عدم تمكين هذه الميزة على إصدارات الأندرويد التي تمتلك أحدث نظام من  الأندرويد لوليبوب المصاصة.</string>
+
+    <string name="service_start_stop">حالة خدمة الشريط</string>
+
+    <string name="notification_name">الوصول إلى الإشعاراا</string>
+    <string name="notification_desc">يحتاج التطبيق لقراءة الإشعارات الواردة من أجل عرض أيقونة الإشعار على شريط الحالة.</string>
+
+    <string name="permissions_name">الصلاحيات الإضافية</string>
+    <string name="permissions_desc">هذا التطبيق يحتاج إلى أذونات إضافية قليلة من أجل الوصول إلى أجزاء من الهاتف ذات الصلة إلى شريط الحالة. يتم تقديم تفسير لماذا هناك حاجة إلى ذلك في صفحة المتجر قوقل بلاي \'s.</string>
+
+    <string name="optimizations_name">تجاهل تحسينات البطارية (اختياري)</string>
+    <string name="optimizations_desc">ستؤدي عمليات تحسين البطارية إلى توقف الحالة عن العمل حيث سيغلق النظام أحيانا الحالة لحفظ عمر البطارية. قد تضطر إلى التمرير قليلا قبل العثور على الحالة في القائمة.</string>
+
+    <string name="overlay_name">تصاميم التراكبات</string>
+    <string name="overlay_desc">التطبيق يحتاج إلى أن تكون قادرة على تصميم التركيب على أعلى الشاشة بحيث يمكن أن تظهر شريط الحالة.</string>
+
+    <string name="tab_settings">الإعدادات</string>
+    <string name="tab_icons">الأيقونات</string>
+    <string name="tab_apps">التطبيقات</string>
+    <string name="tab_help">المساعدة</string>
+
+    <string name="preference_show_clock">اظهر الساعة</string>
+    <string name="preference_24h">استخدام 24 ساعة تنسيق الوقت</string>
+    <string name="preference_24h_desc">سوف تظهر على مدار الساعة في تنسيق الوقت 24 ساعة إذا كان هذا قيد التشغيل.</string>
+    <string name="preference_ampm">عرض ص/م في ساعة</string>
+    <string name="preference_ampm_desc">اختيار ما إذا كان عرض ص/م المؤشر في الساعة.</string>
+    <string name="preference_date">عرض التاريخ الحالي</string>
+    <string name="preference_date_desc">يظهر التاريخ بجانب الوقت مع الساعة.</string>
+    <string name="preference_show_notifications">مشاهدة الإشعارات</string>
+    <string name="preference_heads_up">مشاهدة التنبيه التراكبات</string>
+    <string name="preference_heads_up_desc">تنبيهات سوف يظهر ك \'نظرة خاطفة \' من الجزء العلوي من الشاشة كلما أتى الإشعار الواردة.</string>
+    <string name="preference_heads_up_duration">تنبيه تراكب المدة (ثواني)</string>
+    <string name="preference_heads_up_duration_desc">مجموعة كبيرة من وقت التطبيق لإظهار تنبيه الإشعار عنه.</string>
+    <string name="preference_battery_percent">عرض البطارية في المئة</string>
+    <string name="preference_battery_percent_desc">يظهر البطارية نسبية إلى جانب رمز شريط الحالة.</string>
+    <string name="preference_bar_color_auto">القائمة على الموارد الألوان</string>
+    <string name="preference_bar_color_auto_desc">اختيارات في شريط اللون من الحالية التطبيق. قد يتسبب هذا في انخفاض كبير في الأداء اعتمادا على الجهاز.</string>
+    <string name="preference_bar_color_chooser">افتراضي لحالة الشريط الألوان</string>
+    <string name="preference_app_colors">الشاشة محددة الألوان</string>
+    <string name="preference_app_colors_desc">تعيين لون شريط الحالة لاستخدام على معين الشاشة. سيؤدي ذلك إلى تجاوز أي خيارات الألوان وفرت \ 'التلقائي شريط تلوين \' تمكين خيار.</string>
+    <string name="preference_transparent_home">الشفافية على الشاشة الرئيسية</string>
+    <string name="preference_transparent_home_desc">هذا الخيار مجموعات شريط الحالة \'s الخلفية كما الحالية خلفية عندما الشاشة الرئيسية يتم عرضها. هذا الإعداد سوف لا تعمل بشكل صحيح على العيش خلفيات أو إذا كان لديك الشاشة الرئيسية \'s التمرير خلفية تمكين خيار.</string>
+    <string name="preference_dark_icons">أيقونة الألوان المتناقضة</string>
+    <string name="preference_dark_icons_desc">ضبط اللون من الأيقونات لتجنب غير مرئية أو من الصعب أن نرى الأيقونة على ضوء الخلفيات.</string>
+    <string name="preference_tinted_icons">أيقونات الملونة</string>
+    <string name="preference_tinted_icons_desc">تغيير اللون من أيقونة بدلا من شريط المعلومات الخلفية، والتي سوف يتم تعيين إلى اللون الافتراضي.</string>
+    <string name="preference_show_battery_icon">عرض أيقونة البطارية</string>
+    <string name="preference_icon_style">نمط الأيقونة</string>
+    <string name="preference_show_network_icon">عرض أيقونة الشبكة</string>
+    <string name="preference_network_icon">نمط أيقونة الشبكة</string>
+    <string name="preference_dual_sim">بطاقة خط الهاتف الثنائية</string>
+    <string name="preference_dual_sim_desc">إذا كان لديك هاتف يدعم اكثر من بطاقة خط الهاتف، في هذا الخيار سيتم عرض اثنين إشارة شبكة بدلا من واحد.</string>
+    <string name="preference_data">عرض بيانات الاتصال</string>
+    <string name="preference_data_desc">يعرض ما إذا كانت البيانات اتصال is 2G, 3G, 4G, أو غير معروف / لا شيء (لا يظهر أي شيء).</string>
+    <string name="preference_show_wifi_icon">عرض أيقونة شبكة WiFi</string>
+    <string name="preference_wifi_icon">WiFi نمط أيقونة</string>
+    <string name="preference_show_gps_icon">عرض أيقونة GPS</string>
+    <string name="preference_gps_icon">GPS نمط أيقونة</string>
+    <string name="preference_show_bluetooth_icon">عرض أيقونة بلوثوث Bluetooth</string>
+    <string name="preference_bluetooth_icon">Bluetooth نمط أيقونة</string>
+    <string name="preference_show_airplane_mode_icon">عرض أيقونة وضع الطيران</string>
+    <string name="preference_airplane_mode_icon">نمط أيقونة وضع الطيران</string>
+    <string name="preference_show_alarm_icon">عرض أيقونة المنبه</string>
+    <string name="preference_alarm_icon">نمط أيقونة المنبه</string>
+    <string name="preference_show_ringer_icon">مشاهدة أيقونة الإتصال</string>
+    <string name="preference_ringer_icon">نمط أيقونة الإتصال</string>
+    <string name="preference_icon_padding">أفقي تنجيد (dp)</string>
+    <string name="preference_icon_scale">مقياس الأيقونة (dp)</string>
+    <string name="preference_text_size">ح0م الخط (sp)</string>
+    <string name="preference_color_notification">ألوان الإشعارلت الشاشة المحددة</string>
+    <string name="preference_color_notification_desc">التطبيق سوف يظهى إشعار كما اختصار إلى تعيين لون تطبيق ما إذا كان لون لم يتم العثور عليها.</string>
+    <string name="preference_gravity">محاذاة</string>
+    <string name="preference_background_animations">لون خلفية صور متحركة</string>
+    <string name="preference_background_animations_desc">يتيح لك هذا الخيار تمكين أو تعطيل موحية من شريط الحالة لون الخلفية، وهذا قد أثر الأداء على أبطأ الأجهزة.</string>
+    <string name="preference_icon_animations">أيقونة صور متحركة</string>
+    <string name="preference_icon_animations_desc">يتيح لك هذا الخيار تبديل رمز الرسوم المتحركة، والتي يمكن أن بشكل كبير تؤثر على الأداء على أبطأ الأجهزة إذا كان هناك الكثير من الرموز التي تظهر في آن واحد. </string>
+    <string name="preference_show_drawable">إظهار / إخفاء أيقونة</string>
+    <string name="preference_show_text">تعطيل النص</string>
+    <string name="preference_notification_icon_size">حجم أيقونة الإشعار</string>
+    <string name="preference_time_format">صيغة الوقت</string>
+    <string name="preference_heads_up_layout">يرأس نمط الإشعار</string>
+    <string name="preference_default_color_icon">افتراضي أيقونة اللون</string>
+    <string name="preference_hide_on_volume">إخفاء حالة على حجم تغيير</string>
+    <string name="preference_hide_on_volume_desc">هذا الخيار مقابض كيف شريط الحالة يستجيب إلى حجم الإطار المنبثق. إذا كان لا تتداخل شريط الحالة، فإن هذا لا تحتاج إلى التحقق، وهذا قد لا تعمل على بعض الأجهزة.</string>
+    <string name="preference_debug">تصحيح رسائل</string>
+    <string name="preference_debug_desc">يظهر إعداد التصحيح من المعلومات حول نافذة التغييرات.</string>
+    <string name="preference_status_color">ألوان الرئيسية</string>
+    <string name="preference_fullscreen">إخفاء حالة</string>
+    <string name="preference_notifications">الإشعارات</string>
+    <string name="preference_side_padding">الجانب الهاتف</string>
+    <string name="preference_side_padding_desc">من المفيد منع أيقوهة التي أنشئت في الجانبين من الشاشة على الهواتف مع تقريب الشاشة الحواف.</string>
+    <string name="preference_persistent_notification">عرض الإشعارات بإستمرار</string>
+    <string name="preference_persistent_notification_desc">هذا يبقي حالة الخدمة في المقدمة ويمنع عليه من كونها تلقائيا إيقاف بسبب الحفاظ على الذاكرة أو عمر البطارية. تعطيل هذا الإعداد يمكن أن تحسن الأداء، إلا أنه يمكن أن تسبب أيضا مختلف قضايا الاستقرار على بعض الأجهزة.</string>
+    <string name="preference_backups">إعدادات النسخ الإحتياطي/إستعادة</string>
+    <string name="preference_backups_desc">يسمح لك النسخ الاحتياطي أو استعادة كافة الإعدادات في حالة كملف نصي.</string>
+    <string name="preference_ignore_permission_checking">تجاهل إذن فحص</string>
+    <string name="preference_ignore_permission_checking_desc">فقط تمكين هذا إذا كنت على يقين من أن كافة الأذونات منحوا وأنت تعرف ما تقومون به! هذا يمكن أن يسبب مشاكل كبيرة إذا استخدمت بشكل غير صحيح.</string>
+    <string name="preference_burnin_protection">تشغيل في الحماية</string>
+    <string name="preference_burnin_protection_desc">يمنع حالة من التسبب في حرق الإضافية على بعض الشاشات التي تتحرك الرموز حول كل اثنين ثواني.</string>
+    <string name="preference_prevent_icon_overlap">منع أيقونة التداخل</string>
+    <string name="preference_prevent_icon_overlap_desc">يمنع أيقونة \ "أقسام \" من تداخل بعضها البعض عندما هناك عدد كبير جدا من أيقونات التي تظهر في آن واحد. هذا الإعداد سيؤدي استنزاف البطارية مع عدد كبير جدا من تحديثات (مشغل الموسيقى الإخطارات يمكن ولا سيما فرض ضرائب، لا سيما إذا كانت تحديث مرة واحدة كل ثانية)، لذا كن حذرا مع ذلك.</string>
+    <string name="preference_text_color">ألوان النص</string>
+    <string name="preference_height">حالة شريط الطول</string>
+    <string name="preference_height_desc">هذا الإعداد سيغير ارتفاع شريط الحالة، ولكن ليس المحتوى تحت ذلك! إعداد هذا 0سيسبب حالة استخدام الافتراضي الارتفاع حددها النظام.</string>
+    <string name="preference_bump_mode">Bump Mode</string>
+    <string name="preference_bump_mode_desc">ينشأ وهمية (وحقا مثير) \ "كاميرا الأنماط \" في جميع أنحاء مركز الانحياز عن طريق العناصر الموجودة في شريط الحالة. من فضلك لا أي وقت مضى تمكين هذا الخيار.</string>
+    <string name="preference_text_effect">نمط النص</string>
+    <string name="preference_transparent_mode">وضع الشفاف</string>
+    <string name="preference_transparent_mode_desc">يجعل خلفية شريط الحالة شفافة في جميع الأوقات. نضع في اعتبارنا أن الأصلي شريط ستظل مرئية وراء هذا واحد؛ فقط أوقات هذا الخيار قد يكون من المفيد هو إذا كنت تعطيل كافة شريط الرموز باستخدام systemui دعم على أندرويد النوغة مارشميلو أو أعلى.</string>
+
+    <string name="icon_notifications">الإشعارات</string>
+    <string name="icon_clock">الوقت</string>
+
+    <string name="icon_battery">أيقونة البطارية</string>
+    <string name="icon_battery_alert">تنبيه</string>
+    <string name="icon_battery_full">مكتمل</string>
+    <string name="icon_battery_charging_0_15">شحن 0% - 15%</string>
+    <string name="icon_battery_charging_15_30">شحن 15% - 30%</string>
+    <string name="icon_battery_charging_30_45">شحن 30% - 45%</string>
+    <string name="icon_battery_charging_45_60">شحن 45% - 60%</string>
+    <string name="icon_battery_charging_60_75">شحن 60% - 75%</string>
+    <string name="icon_battery_charging_75_90">شحن 75% - 90%</string>
+    <string name="icon_battery_charging_full">مكتمل (الشحن)</string>
+
+    <string name="icon_network">أيقونة الشبكة</string>
+    <string name="icon_network_no_connection">لا يوجد اتصال</string>
+    <string name="icon_network_1_bar">1 شريط</string>
+    <string name="icon_network_2_bars">2 أشرطة</string>
+    <string name="icon_network_3_bars">3 أشرطة</string>
+    <string name="icon_network_4_bars">4 أشرطة</string>
+
+    <string name="icon_data">مؤشر البيانات</string>
+
+    <string name="icon_wifi">WiFi أيقونة</string>
+    <string name="icon_wifi_no_signal">لا توجد تغطية</string>
+    <string name="icon_wifi_1_bar">1 شريط</string>
+    <string name="icon_wifi_2_bars">2 أشرطة</string>
+    <string name="icon_wifi_3_bars">3 أشرطة</string>
+    <string name="icon_wifi_4_bars">4 أشرطة</string>
+
+    <string name="icon_bluetooth">Bluetooth أيقونة</string>
+    <string name="icon_bluetooth_scanning">المسح الضوئي</string>
+    <string name="icon_bluetooth_connected">متصل</string>
+
+    <string name="icon_gps">Gps أيقونة</string>
+    <string name="icon_gps_searching">جار البحث</string>
+    <string name="icon_gps_fixed">إصلاح</string>
+
+    <string name="icon_airplane">أيقونة وضع الطيران</string>
+    <string name="icon_alarm">أيقونة التنبيه</string>
+
+    <string name="icon_ringer">أيقونة جرس الإتصال</string>
+    <string name="icon_ringer_muted">تم تجاهل</string>
+    <string name="icon_ringer_vibrate">الإهتزاز</string>
+
+    <string name="icon_nfc">NFC أيقونة</string>
+
+    <string name="icon_headphone">أيقونة سماعات الرأس</string>
+    <string name="icon_headphone_headphones">سماعات الرأس</string>
+    <string name="icon_headphone_headset">إختر السماعة</string>
+
+    <string name="icon_carrier">اسم الناقل</string>
+
+    <string name="icon_orientation">أيقونة البوصلة</string>
+    <string name="icon_orientation_auto">تلقائي</string>
+    <string name="icon_orientation_portrait">حماية الصور</string>
+    <string name="icon_orientation_landscape">حماية المناظر الطبيعية</string>
+
+    <string name="heads_up_plain">عادي</string>
+    <string name="heads_up_card">بطاقات</string>
+    <string name="heads_up_condensed">مكثف</string>
+    <string name="heads_up_transparent">شفاف</string>
+
+    <string name="gravity_center">متوسط</string>
+    <string name="gravity_left">يسار</string>
+    <string name="gravity_right">يمين</string>
+
+    <string name="notification_color">ضبط محدد ألوان الشاشة</string>
+    <string name="notification_color_desc">تتعذر الحالة على العثور عن الألوان المستخدمة في هذا التطبيق، لقد تم الرجوع إلى اللون الافتراضي. يمكنك تحديد اللون بإستخدام النقر على هذا الإشعار.</string>
+
+    <string name="unit_seconds">" ثواني"</string>
+
+    <string name="icon_style_android">أندرويد</string>
+    <string name="icon_style_default">إفتراضي</string>
+    <string name="icon_style_stock">مطور</string>
+    <string name="icon_style_circle">دائرة</string>
+    <string name="icon_style_circle_outline">دائرة الخطوط العريضة</string>
+    <string name="icon_style_classic">كلاسيك</string>
+    <string name="icon_style_clear">صافي</string>
+    <string name="icon_style_clip">كليب</string>
+    <string name="icon_style_curved">منحني</string>
+    <string name="icon_style_outline">مخطط</string>
+    <string name="icon_style_dish">طبق</string>
+    <string name="icon_style_triangle">مثلث</string>
+    <string name="icon_style_square">مربع</string>
+    <string name="icon_style_retro">الرجعية</string>
+    <string name="icon_style_pixel">منقطة</string>
+    <string name="icon_style_balloon">منطاد الطائر الساخن</string>
+    <string name="icon_style_radial">شعاعي</string>
+    <string name="icon_style_tap">انقر</string>
+    <string name="icon_style_school">المدرسة</string>
+    <string name="icon_style_system">نظام</string>
+    <string name="icon_style_round">جولة</string>
+    <string name="icon_style_dish2">طبق 2</string>
+    <string name="icon_style_satellite">القمر الصناعي</string>
+    <string name="icon_style_satellite_outline">مخطط القمر الصناعي</string>
+    <string name="icon_style_front">الخط</string>
+    <string name="icon_style_propeller">المروحة</string>
+    <string name="icon_style_pilot_hat">قبعة الطيران</string>
+    <string name="icon_style_boxy">الصندوق</string>
+    <string name="icon_style_sideways">من جانب واحد</string>
+    <string name="icon_style_bell">بيل</string>
+
+    <string name="tutorial_enable">تمكين شريط الحالة</string>
+    <string name="tutorial_enable_desc">التبديل في الجزء العلوي من الشاشة يسمح لك تمكين وتعطيل تخصيص شريط الحالة. تشغيله في محاولة ذلك!</string>
+    <string name="tutorial_search">تبحث عن شيء؟</string>
+    <string name="tutorial_search_desc">العثور على وجه الدقة الإعداد كنت ترغب في تغيير باستخدام الوضع \ البحث عن الشريط.</string>
+    <string name="tutorial_help">تحتاج المساعدة?</string>
+    <string name="tutorial_help_desc">قسم المساعدة دائما يتم تحديثها ويحتوي على ما يقرب من جميع المشاكل التي تم مواجهتها من مستخدمين آخرين باستخدام هذا التطبيق.</string>
+    <string name="tutorial_image_picker">منقي ألوان الصورة</string>
+    <string name="tutorial_image_picker_desc">لا يمكن الحصول على اللون المناسب؟ محاولة اختيار اللون من صورة بدلا من ذلك!</string>
+    <string name="tutorial_icon_switch">لاتعجبني أيقونة؟</string>
+    <string name="tutorial_icon_switch_desc">تمكين أو تعطيل أيقونة بالنقر فوق خانة الاختيار بجانب اسمها.</string>
+    <string name="tutorial_icon_order">إعادة ترتيب أيقونات</string>
+    <string name="tutorial_icon_order_desc">تغيير ترتيب الرموز عن طريق الضغط على صعودا وهبوطا أزرار بجوار أيقونة اسم.</string>
+    <string name="tutorial_activities">لا تريد تعديل بأكمله التطبيق؟</string>
+    <string name="tutorial_activities_desc">تغيير الفردية شاشات بالنقر على \'توسيع \' زر التالي إلى التطبيق \ اسم.</string>
+    <string name="tutorial_donate">هل أعجبك تطبيق الحالة</string>
+    <string name="tutorial_donate_desc">حالة مفتوح المصدر وحرية لاستخدام دون أي إعلانات أو المدفوعة الميزات. من أجل دعم وضع والتطبيقات الأخرى مثل ذلك، يرجى النظر في اتخاذ التبرع.</string>
+
+    <string name="tutorial_missing_permissions">مهمات الأذونات</string>
+    <string name="tutorial_missing_permissions_desc">يبدو أن بعض من الأذونات المطلوبة من قبل وضع لم يتم منح. بدون هذه الأذونات، بعض وظائف قد العمل بشكل غير صحيح أو يتم تعطيل. إذا كنت قد منح جميع الأذونات والتفكير التي قد تكون هناك خطأ، يمكنك تعطيل إذن فحص في \ 'أخرى \' قسم إعدادات القائمة.</string>
+    <string name="tutorial_too_many_icons">Running Out Of Space?</string>
+    <string name="tutorial_too_many_icons_desc">ويبدو أن هناك الكثير من أيقونة في شريط الحالة وأنه لا يملك فرض لعرض كل منهم. لمنعهم من كونها قطع، هل يمكن أن تمكين \ "منع التداخل \" الخيار في إعدادات أو زيادة المساحة المتوفرة عن طريق الحد من تداخل و أيقونة النطاق.</string>
+
+    <string name="red">أحمر</string>
+    <string name="green">أخضر</string>
+    <string name="blue">أزرق</string>
+
+    <string name="text_effect_none">لا شيء</string>
+    <string name="text_effect_bold">عريض</string>
+    <string name="text_effect_italic">مائل</string>
+    <string name="text_effect_bold_italic">عريض &amp; مائل</string>
+
+    <string name="font_default">إفتراضي</string>
+
+    <string name="hint_format">
+        \n
+        h - الساعات\n
+        HH - الساعات (24h)\n
+        kk - الساعات (24h)\n
+        mm - دقائق\n
+        a - ص/م\n
+        Z - المنطقة الزمنية\n
+        \n
+        dd - اليوم\n
+        EEE - يوم من أيام الأسبوع\n
+        MM - الشهر (رقمية)\n
+        MMM - الشهر\n
+        yyyy - السنة
+    </string>
+
+    <string name="empty">لا شيء هنا …</string>
+    <string name="reset_apps_confirm">هل أنت متأكد أنك تريد إعادة تعيين كافة التطبيقات الخاصة الإعدادات؟ تذكر بأنه لا يمكنك التراجع عن هذا.</string>
+
+    <string name="james_desc">أندرويد المطور والمهنية الملفوف في تطويرات.</string>
+    <string name="anas_desc">المعروف باسم oreo، فإن هذا الرجل يمكن إضافة المزيد من التصميمات إلى تصميم واجهات.</string>
+    <string name="vuk_desc">هوا من قام بتصميم الماتريال، وقام بإستخدتم التصميم الأيقونات والاشياء.</string>
+    <string name="ghost_desc">وهو مصمم جرافيك، مصمم ويب، وصاحب موقع technologx.com.</string>
+
+    <string name="about_translators">المترجمين</string>
+
+    <string name="ryo_desc">قام بإنشاء الترجمة الإسبانية لهذا التطبيق.</string>
+    <string name="opnay_desc">مطور الأندرويد، ترجمة التطبيق إلى الكورية :D</string>
+    <string name="majida_desc">قام بإنشاء الترجمة الصينية لهذا التطبيق.</string>
+
+    <string name="about_icons">مصادر أيقونة</string>
+    <string name="about_icons_desc">من الواضح، سيكون من الصعب تقديم أكثر من 100 أن الأيقونات المستخدمة في هذا التطبيق بنفسي، لذلك (فضلا عن تلك التي كتبها الناس أعلاه) التطبيق يستخدم أيقونات من عدد قليل من مصادر مختلفة.</string>
+
+    <string name="google_icons">تصميم قوقل</string>
+    <string name="google_icons_desc">ما يمثل أكثر من الأيقونات في التطبيق، تصميم قوقل لديها قاعدة بيانات واسعة من الأيقونات للاختيار من بينها.</string>
+
+    <string name="md_icons">أيقونات التصميم ماتريال</string>
+    <string name="md_icons_desc">الذي أدلى به العديد من مختلف المساهمين، هذه المجموعة من الأيقونات يحتوي على موارد مفيدة غير متوفر من جوجل \ 's الموقع</string>
+
+    <string name="icons8_icons_desc">57,700 المجانية شقة الرموز في أي شكل، حجم ولون في 20ثواني.</string>
+
+    <string-array name="المكتبات">
+        <item>
+            <a href="https://github.com/bumptech/glide">Glide</a>
+            <i> - BSD, part MIT and Apache 2.0</i>
+            <p>\nGlide هو سريع وفعال المصدر المفتوح وسائل الإعلام وإدارة الصورة تحميل إطار أندرويد الذي يلف وسائل الإعلام فك التشفير، ذاكرة القرص التخزين المؤقت، والموارد تجمع إلى بسيطة وسهلة الاستخدام.</p>
+        </item>
+        <item>
+            <a href="https://github.com/drozdzynski/Steppers">Steppers</a>
+            <i> - Apache 2.0</i>
+            <p>\nالسائر هو عرض مكتبة أندرويد استنادا إلى المادة تصميم المبادئ التوجيهية.</p>
+        </item>
+        <item>
+            <a href="https://github.com/afollestad/async">Async</a>
+            <i> - Apache 2.0</i>
+            <p>\nA مكتبة مصممة لجعل المنظمة تنفيذ المتزامن العمليات في الروبوت سهلة.</p>
+        </item>
+        <item>
+            <a href="https://github.com/google/gson">Gson</a>
+            <i> - Apache 2.0</i>
+            <p>\nGson هي مكتبة جافا التي يمكن استخدامها لتحويل جافا الكائنات إلى هم جسون التمثيل.</p>
+        </item>
+    </string-array>
+
+    <string name="step_continue">إستمر</string>
+    <string name="step_finish">إنتهاء</string>
+    <string name="step_cancel">إلغاء الأمر</string>
+    <string name="step_skip">تخطي</string>
+
+    <!-- Untranslatable Strings -->
+    <string name="opnay_name">Kim Inseop</string>
+
+    <!-- Untranslated Strings -->
+    <string name="app_name">Status</string>
+    <string name="app_desc">A material design status bar replacement. No root needed.</string>
+    <string name="action_dribbble">Dribbble</string>
+    <string name="action_github">GitHub</string>
+    <string name="icons8_icons">Icons8</string>
+    <string name="msg_show_individual_screens">Show %1$d individual screens…</string>
+    <string name="alsidi_name">Marwan ALsidi</string>
+    <string name="alsidi_desc">Translated the app into Arabic.</string>
+
+</resources>

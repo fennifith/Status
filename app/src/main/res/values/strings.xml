@@ -11,12 +11,12 @@
     <string name="action_add_apps">Add Apps</string>
     <string name="action_search">Search</string>
     <string name="action_about">About</string>
-    <string name="action_gplus" translatable="false">Google+</string>
+    <string name="action_gplus">Google+</string>
     <string name="action_play">Play Store</string>
-    <string name="action_dribbble" translatable="false">Dribbble</string>
-    <string name="action_twitter" translatable="false">Twitter</string>
+    <string name="action_dribbble">Dribbble</string>
+    <string name="action_twitter">Twitter</string>
     <string name="action_website">Website</string>
-    <string name="action_github" translatable="false">GitHub</string>
+    <string name="action_github">GitHub</string>
     <string name="action_libraries">Open Source Licenses</string>
     <string name="action_enable">Enable</string>
     <string name="action_disable">Disable</string>
@@ -365,6 +365,9 @@
     <string name="majida_name" translatable="false">Majida Whale</string>
     <string name="majida_desc">Created Chinese translations for this app.</string>
 
+    <string name="alsidi_name">Marwan ALsidi</string>
+    <string name="alsidi_desc">Translated the app into Arabic.</string>
+
     <string name="about_icons">Icon Sources</string>
     <string name="about_icons_desc">Obviously, it would be hard to make over 100 icons used in this app by myself, so (as well as the ones by the people above) the app uses icons from a few different sources.</string>
 
@@ -374,7 +377,7 @@
     <string name="md_icons">Material Design Icons</string>
     <string name="md_icons_desc">Made by many various contributors, this collection of icons contains useful resources unavailable from Google\'s site.</string>
 
-    <string name="icons8_icons" translatable="false">Icons8</string>
+    <string name="icons8_icons">Icons8</string>
     <string name="icons8_icons_desc">57,700 free flat icons in any format, size and color in 20 seconds.</string>
 
     <string-array name="libraries">

@@ -367,6 +367,9 @@
     <string name="step_cancel">취소</string>
     <string name="step_skip">넘어가기</string>
 
+    <!-- untranslatable strings -->
+    <string name="alsidi_name">Marwan ALsidi</string>
+
     <!-- untranslated strings -->
     <string name="icon_style_curved">Curved</string>
     <string name="icon_style_pixel">Pixelated</string>
@@ -377,6 +380,7 @@
     <string name="icon_style_sideways">Sideways</string>
 
     <string name="james_desc">Android developer and professional cabbage eater.</string>
+    <string name="alsidi_desc">Translated the app into Arabic.</string>
     <string name="anas_desc">Better known as the Oreo lord, this guy can add more butter to buttery interfaces.</string>
 
     <string name="msg_missing_storage_permission">Please grant access to external storage in order to use this functionality.</string>
@@ -385,6 +389,11 @@
     <string name="preference_ignore_permission_checking">Ignore Permission Checking</string>
     <string name="preference_ignore_permission_checking_desc">Only enable this if you are sure that all permissions have been granted and you know what you are doing! This can cause significant problems if used incorrectly.</string>
     <string name="msg_show_individual_screens">Show %1$d individual screens…</string>
+    <string name="action_gplus">Google+</string>
+    <string name="action_dribbble">Dribbble</string>
+    <string name="action_twitter">Twitter</string>
+    <string name="action_github">GitHub</string>
+    <string name="icons8_icons">Icons8</string>
     <string-array name="faq">
         <item>
             <b>Why can\'t the status bar be transparent?</b>

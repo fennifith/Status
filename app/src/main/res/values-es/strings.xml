@@ -342,7 +342,10 @@
     <string name="text_effect_bold_italic">Negrita cursiva</string>
     <string name="font_default">Por defecto</string>
     <string name="icons8_icons_desc">57.700 iconos planos gratis en cualquier formato, tamaño y color en 20 segundos.</string>
+
+    <!-- Untranslatable Strings -->
     <string name="opnay_name">Kim Inseop</string>
+    <string name="alsidi_name">Marwan ALsidi</string>
 
     <!-- untranslated strings -->
     <string name="opnay_desc">Android developer, translated the app into Korean :D</string>
@@ -365,6 +368,12 @@
     <string name="preference_ignore_permission_checking">Ignore Permission Checking</string>
     <string name="preference_ignore_permission_checking_desc">Only enable this if you are sure that all permissions have been granted and you know what you are doing! This can cause significant problems if used incorrectly.</string>
     <string name="msg_show_individual_screens">Show %1$d individual screens…</string>
+    <string name="action_gplus">Google+</string>
+    <string name="action_dribbble">Dribbble</string>
+    <string name="action_twitter">Twitter</string>
+    <string name="action_github">GitHub</string>
+    <string name="icons8_icons">Icons8</string>
+    <string name="alsidi_desc">Translated the app into Arabic.</string>
     <string-array name="faq">
         <item>
             <b>Why can\'t the status bar be transparent?</b>

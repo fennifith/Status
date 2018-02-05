@@ -73,6 +73,8 @@ public class AboutActivity extends AppCompatActivity {
 
         findViewById(R.id.opnay).setOnClickListener(new UrlClickListener("https://github.com/opnay"));
 
+        findViewById(R.id.alsidi).setOnClickListener(new UrlClickListener("https://github.com/Alsidi-Group"));
+
         findViewById(R.id.google).setOnClickListener(new UrlClickListener("https://material.io/icons/"));
 
         findViewById(R.id.md).setOnClickListener(new UrlClickListener("https://github.com/Templarian/MaterialDesign"));
