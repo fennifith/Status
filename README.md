@@ -1,5 +1,14 @@
 Status is a status bar replacement that draws an overlay on top of the system-generated status bar. This means that the actual status bar is only hidden under the replacement; touch gestures are not overridden, and the standard notification panel is still shown. It needs a lot of permissions in order to obtain the information needed to display in the status bar. These are listed below.
 
+Special thanks to the contributors that have helped to design the app, fix issues, and translate it to different languages:
+- [Anas Khan](https://twitter.com/MAKTHG): designed the app icon & helped with UI
+- [Vukašin Anđelković](https://dribbble.com/zavukodlak): made a couple status bar icons
+- [Ghost Ninja](https://technologx.com/): also made some status bar icons
+- [Eugenio Martinez Seguin](https://github.com/Ryo567): Spanish translations
+- [Kim Inseop](https://github.com/opnay): Korean translations
+- Majida Whale: Chinese translations
+- [Marwan ALsidi](https://github.com/Alsidi-Group): Arabic translations
+
 ## Permissions
 - Accessibility Service: used to attempt to get the status bar color of the current app if the 'status bar coloring' preference is enabled.
 - Notification Access: used to get the icons of the current notifications.
@@ -20,58 +29,7 @@ Okay, there aren't really any guidelines over issue formatting provided that you
 I usually don't have any organization over how I handle issues and what I commit at any given time. If I'm interrupted in the middle of a session, I might commit a half-finished class that causes an error before the project even compiles. To prevent good work going to waste or having to be copied and pasted a lot to prevent merge conflicts, please contact me before you start working on any changes. This way we can decide who will work on the project when, and exactly what changes they will be making.
 
 ### Icons
-Icon styles can be added to the app quickly and easily provided they meet the specifications below.
-
-#### Battery
-- 15 icons total, as follows
-- alert icon
-- 20%
-- 30%
-- 50%
-- 60%
-- 80%
-- 90%
-- full
-- charging 20%
-- charging 30%
-- charging 50%
-- charging 60%
-- charging 80%
-- charging 90%
-- charging full
-
-#### Network
-- 5 icons, signal strength 0-4
-
-#### Wifi
-- 5 icons, signal strength 0-4
-
-#### Bluetooth
-- 2 icons
-- on (not paired)
-- on (paired)
-
-#### GPS
-- 2 icons
-- on (not locked)
-- on (locked)
-
-#### Airplane Mode
-- one icon only
-
-#### NFC
-- one icon only
-
-#### Ringer Volume
-- 3 icons
-- mute
-- vibrate
-- on
-
-#### Headphones
-- 2 icons
-- normal headphones
-- headset (with mic)
+There used to be a list of all the possible icon formats here to use as a reference, but I stopped updating it and it's pretty useless now. If you want to make status bar icons to add to this app, either [contact me](mailto:contact@jfenn.me) or look in the repository for the existing icon files.
 
 ## License
 
