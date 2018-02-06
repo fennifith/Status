@@ -351,7 +351,7 @@
 
     <string name="icons8_icons_desc">57,700 المجانية شقة الرموز في أي شكل، حجم ولون في 20ثواني.</string>
 
-    <string-array name="المكتبات">
+    <string-array name="libraries">
         <item>
             <a href="https://github.com/bumptech/glide">Glide</a>
             <i> - BSD, part MIT and Apache 2.0</i>
@@ -388,5 +388,107 @@
     <string name="icons8_icons">Icons8</string>
     <string name="app_desc">A material design status bar replacement. No root needed.</string>
     <string name="msg_show_individual_screens">Show %1$d individual screens…</string>
+
+    <string-array name="faq">
+        <item>
+            <b>Why can\'t the status bar be transparent?</b>
+            <p>
+                \nThis app works by making an overlay on top of the existing status bar, similar to how chat bubbles or a
+                screen dimming app would work. This means that if it is made transparent, the system icons would be visible
+                underneath it.
+            </p>
+        </item>
+        <item>
+            <b>How can I prevent lag?</b>
+            <p>
+                \nLag can be prevented mostly by minimizing the amount of times the status bar has to update. This can be done
+                by disabling animations, resourced-based colors, and removing any icons that aren\'t completely necessary for
+                the status bar to function.
+            </p>
+        </item>
+        <item>
+            <b>The status bar uses the wrong color for my app.</b>
+            <p>
+                \nStatus cannot detect color changes that happen after a screen is opened, only preset colors. This can make the
+                colors of some apps slightly inaccurate, so it is recommended to set a neutral color for screens that can have
+                multiple primary colors. For developers: Status mainly uses the \'R.attr.colorPrimaryDark\' or
+                \'R.color.colorPrimaryDark\' resources to get the colors.
+            </p>
+        </item>
+        <item>
+            <b>The status bar isn\'t showing notification icons.</b>
+            <p>
+                \nFirst, check that you have the \'show notifications\' option in the \'settings\' tab enabled. Then open the setup
+                screen (three dots -> setup). If you are running android 4.3 or higher, click on \'compatibility mode\' and turn
+                on the switch at the bottom. If compatibility mode is already enabled, turning it off sometimes fixes the issue
+                as well. Another useful thing to note is that sometimes clearing the app data can help fix issues similar to
+                this one.
+            </p>
+        </item>
+        <item>
+            <b>The status bar doesn\'t remove notifications until the notification panel is opened.</b>
+            <p>
+                \nIf you are running android 4.3 or higher, open the setup screen (three dots -> setup),
+                click on \'compatibility mode\', and make sure it is not enabled. If you\'re below android
+                4.3, this issue is due to a limitation of android and this is (unfortunately) the best I can do to support
+                your device at the moment.
+            </p>
+        </item>
+        <item>
+            <b>Why isn\'t the top part of my wallpaper aligned on the home screen?</b>
+            <p>
+                \nIf the \'transparency on home screen\' option is enabled, the app will get a static image of the wallpaper
+                and set it as the status bar\'s background whenever you are on your home screen. This can create a few issues with
+                scrolling wallpapers, as it isn\'t possible to detect the current page of the home screen. If you are using a custom
+                launcher, it\'s usually pretty easy to prevent the wallpaper from scrolling in the launcher\'s settings menu, but
+                otherwise the only option you really have is to disable the transparency setting. It can also be affected by shadows
+                at the top and bottom of the screen and devices that don\'t natively support the ability to have a transparent status bar.
+            </p>
+        </item>
+        <item>
+            <b>Why is the status bar showing the wrong wallpaper on my home screen?</b>
+            <p>
+                \nThe \'transparency on home screen\' option does not currently have support for live wallpapers - it will simply get the most
+                recent image wallpaper instead.
+            </p>
+        </item>
+        <item>
+            <b>My phone is dual sim, but it doesn\'t show the second signal strength icon.</b>
+            <p>
+                \nStatus does not currently support dual sim as it works differently on almost every device and is difficult to implement. This
+                is being worked on, however, and the app will be updated as soon as it is stable.
+            </p>
+        </item>
+        <item>
+            <b>Why isn\'t the status bar visible on the lockscreen?</b>
+            <p>
+                \nOn some devices, it is not possible to show the status bar over the system lock screen because of a potential security issue. A
+                possible solution could be downloading a third party lock screen from the play store or just disabling the system lock screen.
+            </p>
+        </item>
+        <item>
+            <b>How do you change the time format?</b>
+            <p>
+                \nThe clock format can be changed through the \'time format\' option for the clock icon. The clock will replace certain
+                characters inputted into the dialog with the associated variables, for example to show the time in a 24 hour format you
+                would input \"HH:MM\", or to show the AM/PM indicator \"h:mm a\".
+            </p>
+        </item>
+        <item>
+            <b>Why isn\'t the notification panel themed?</b>
+            <p>
+                \nThe notification panel would take a lot of time to complete, and I feel it would be a better use of time to improve the speed
+                and stability of the status bar before adding any more significant features, but that\'s not to say that it won\'t be added in
+                the future.
+            </p>
+        </item>
+        <item>
+            <b>Status isn\'t affected by my screen dimming app.</b>
+            <p>
+                \nIn order to be shown over the status bar, Status needs to be drawn \'on top of\' everything else as well. This includes system
+                overlays from other apps, including screen dimmers or chat bubbles.
+            </p>
+        </item>
+    </string-array>
 
 </resources>

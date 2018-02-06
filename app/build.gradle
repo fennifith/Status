@@ -2,15 +2,15 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    buildToolsVersion "26.0.2"
 
     defaultConfig {
         applicationId "com.james.status"
         minSdkVersion 16
         targetSdkVersion 25
         maxSdkVersion 25
-        versionCode 34
-        versionName "3.6"
+        versionCode 35
+        versionName "3.7"
         vectorDrawables.useSupportLibrary = true
         resConfigs "ar", "en", "es", "ko", "zh"
     }
