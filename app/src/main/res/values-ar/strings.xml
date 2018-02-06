@@ -11,6 +11,8 @@
     <string name="action_about">حول</string>
     <string name="action_gplus">قوقل بلس+</string>
     <string name="action_play">قوقل بلاي</string>
+    <string name="action_dribbble">دريبلي</string>
+    <string name="action_github">جيت هوب</string>
     <string name="action_twitter">تويتر</string>
     <string name="action_website">الموقع الويب</string>
     <string name="action_libraries">رخصة المصدر المفتوح</string>
@@ -336,6 +338,7 @@
     <string name="ryo_desc">قام بإنشاء الترجمة الإسبانية لهذا التطبيق.</string>
     <string name="opnay_desc">مطور الأندرويد، ترجمة التطبيق إلى الكورية :D</string>
     <string name="majida_desc">قام بإنشاء الترجمة الصينية لهذا التطبيق.</string>
+    <string name="alsidi_desc">ترجمة التطبيق إلى اللغة العربية</string>
 
     <string name="about_icons">مصادر أيقونة</string>
     <string name="about_icons_desc">من الواضح، سيكون من الصعب تقديم أكثر من 100 أن الأيقونات المستخدمة في هذا التطبيق بنفسي، لذلك (فضلا عن تلك التي كتبها الناس أعلاه) التطبيق يستخدم أيقونات من عدد قليل من مصادر مختلفة.</string>
@@ -378,15 +381,12 @@
 
     <!-- Untranslatable Strings -->
     <string name="opnay_name">Kim Inseop</string>
+    <string name="alsidi_name">Marwan ALsidi</string>
 
     <!-- Untranslated Strings -->
     <string name="app_name">Status</string>
-    <string name="app_desc">A material design status bar replacement. No root needed.</string>
-    <string name="action_dribbble">Dribbble</string>
-    <string name="action_github">GitHub</string>
     <string name="icons8_icons">Icons8</string>
+    <string name="app_desc">A material design status bar replacement. No root needed.</string>
     <string name="msg_show_individual_screens">Show %1$d individual screens…</string>
-    <string name="alsidi_name">Marwan ALsidi</string>
-    <string name="alsidi_desc">Translated the app into Arabic.</string>
 
 </resources>
