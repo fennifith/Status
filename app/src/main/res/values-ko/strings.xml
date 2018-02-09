@@ -394,6 +394,11 @@
     <string name="action_twitter">Twitter</string>
     <string name="action_github">GitHub</string>
     <string name="icons8_icons">Icons8</string>
+    <string name="section_colors">Colors</string>
+    <string name="section_icons">Icons</string>
+    <string name="section_animations">Animations</string>
+    <string name="section_notifications">Notifications</string>
+    <string name="section_other">Other</string>
     <string-array name="faq">
         <item>
             <b>Why can\'t the status bar be transparent?</b>

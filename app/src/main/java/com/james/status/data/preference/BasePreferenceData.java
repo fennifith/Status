@@ -3,6 +3,7 @@ package com.james.status.data.preference;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.james.status.R;
+import com.james.status.data.PreferenceData;
 
 public class BasePreferenceData<T> implements View.OnClickListener {
 
@@ -85,41 +87,22 @@ public class BasePreferenceData<T> implements View.OnClickListener {
 
         @Nullable
         private String title, subtitle;
-        private com.james.status.data.PreferenceData identifier;
+        private PreferenceData identifier;
         private SectionIdentifier sectionIdentifier;
 
         public Identifier(@Nullable String title) {
             this.title = title;
         }
 
-        public Identifier(@Nullable String title, @Nullable String subtitle) {
-            this.title = title;
-            this.subtitle = subtitle;
-        }
-
-        public Identifier(@Nullable String title, SectionIdentifier sectionIdentifier) {
-            this.title = title;
-            this.sectionIdentifier = sectionIdentifier;
-        }
-
         public Identifier(@Nullable String title, @Nullable String subtitle, SectionIdentifier sectionIdentifier) {
-            this.title = title;
-            this.subtitle = subtitle;
-            this.sectionIdentifier = sectionIdentifier;
+            this(null, title, subtitle, sectionIdentifier);
         }
 
-        public Identifier(com.james.status.data.PreferenceData identifier, @Nullable String title, @Nullable String subtitle) {
-            this.title = title;
-            this.subtitle = subtitle;
+        public Identifier(PreferenceData identifier, @Nullable String title, SectionIdentifier sectionIdentifier) {
+            this(identifier, title, null, sectionIdentifier);
         }
 
-        public Identifier(com.james.status.data.PreferenceData identifier, @Nullable String title, SectionIdentifier sectionIdentifier) {
-            this.identifier = identifier;
-            this.title = title;
-            this.sectionIdentifier = sectionIdentifier;
-        }
-
-        public Identifier(com.james.status.data.PreferenceData identifier, @Nullable String title, @Nullable String subtitle, SectionIdentifier sectionIdentifier) {
+        public Identifier(PreferenceData identifier, @Nullable String title, @Nullable String subtitle, SectionIdentifier sectionIdentifier) {
             this.identifier = identifier;
             this.title = title;
             this.subtitle = subtitle;
@@ -139,7 +122,7 @@ public class BasePreferenceData<T> implements View.OnClickListener {
         }
 
         @Nullable
-        public com.james.status.data.PreferenceData getPreference() {
+        public PreferenceData getPreference() {
             return identifier;
         }
 
@@ -149,11 +132,22 @@ public class BasePreferenceData<T> implements View.OnClickListener {
         }
 
         public enum SectionIdentifier {
-            COLORS,
-            ICONS,
-            ANIMATIONS,
-            NOTIFICATIONS,
-            OTHER
+            COLORS(R.string.section_colors),
+            ICONS(R.string.section_icons),
+            ANIMATIONS(R.string.section_animations),
+            NOTIFICATIONS(R.string.section_notifications),
+            OTHER(R.string.section_other);
+
+            @StringRes
+            private int nameRes;
+
+            SectionIdentifier(@StringRes int nameRes) {
+                this.nameRes = nameRes;
+            }
+
+            public String getName(Context context) {
+                return context.getString(nameRes);
+            }
         }
     }
 }

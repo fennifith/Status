@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
+    <string name="app_name">Status</string>
+    <string name="app_desc">تم التصميم حالة الشريط بتصميم الماتريال. لاحاجة لإستخدام أذن الروت.</string>
+
     <string name="action_settings">الإعدادات</string>
     <string name="action_setup">التثبيت</string>
     <string name="action_access_grant">منح الوصول</string>
@@ -55,6 +58,7 @@
     <string name="msg_battery_optimizations_switch_enable">قم بتشغيل التبديل إلى جانب \"حالة \". قد تحتاج إلى قم بالتمرير لأسفل … الكثير..</string>
     <string name="msg_accessibility_switch_enable">يرجى تشغيل الخدمة بعنوان \"حالة الخدمة \". قد تحتاج إلى التمرير لأسفل حتى تصبح مرئية.</string>
     <string name="msg_missing_storage_permission">يرجى منح إذن الوصول إلى وحدة التخزين الخارجية لاستخدام هذه الوظيفة.</string>
+    <string name="msg_show_individual_screens">عرض %1$d الشاشات الفردية…</string>
 
     <string name="service_name">حالة الخدمة</string>
     <string name="service_name_general">خدمة الوصول</string>
@@ -338,6 +342,8 @@
     <string name="ryo_desc">قام بإنشاء الترجمة الإسبانية لهذا التطبيق.</string>
     <string name="opnay_desc">مطور الأندرويد، ترجمة التطبيق إلى الكورية :D</string>
     <string name="majida_desc">قام بإنشاء الترجمة الصينية لهذا التطبيق.</string>
+
+    <string name="alsidi_name">مروان ال-سيدي</string>
     <string name="alsidi_desc">ترجمة التطبيق إلى اللغة العربية</string>
 
     <string name="about_icons">مصادر أيقونة</string>
@@ -381,13 +387,14 @@
 
     <!-- Untranslatable Strings -->
     <string name="opnay_name">Kim Inseop</string>
-    <string name="alsidi_name">Marwan ALsidi</string>
 
     <!-- Untranslated Strings -->
-    <string name="app_name">Status</string>
     <string name="icons8_icons">Icons8</string>
-    <string name="app_desc">A material design status bar replacement. No root needed.</string>
-    <string name="msg_show_individual_screens">Show %1$d individual screens…</string>
+    <string name="section_colors">Colors</string>
+    <string name="section_icons">Icons</string>
+    <string name="section_animations">Animations</string>
+    <string name="section_notifications">Notifications</string>
+    <string name="section_other">Other</string>
 
     <string-array name="faq">
         <item>

@@ -97,16 +97,34 @@ public enum PreferenceData {
         else return TYPE_UNKNOWN;
     }
 
+    public boolean getDefaultBoolean() {
+        if (getType() == TYPE_BOOLEAN)
+            return defaultBooleanValue;
+        else throw new TypeMismatchException(this, TYPE_BOOLEAN);
+    }
+
+    public int getDefaultInt() {
+        if (getType() == TYPE_INT)
+            return defaultIntValue;
+        else throw new TypeMismatchException(this, TYPE_INT);
+    }
+
+    public String getDefaultString() {
+        if (getType() == TYPE_STRING)
+            return defaultStringValue;
+        else throw new TypeMismatchException(this, TYPE_STRING);
+    }
+
     public boolean getBooleanValue(Context context) {
-        return getBooleanValue(context, defaultBooleanValue);
+        return getBooleanValue(context, getDefaultBoolean());
     }
 
     public int getIntValue(Context context) {
-        return getIntValue(context, defaultIntValue);
+        return getIntValue(context, getDefaultInt());
     }
 
     public String getStringValue(Context context) {
-        return getStringValue(context, defaultStringValue);
+        return getStringValue(context, getDefaultString());
     }
 
     public boolean getBooleanValue(Context context, boolean defaultValue) {
@@ -149,15 +167,21 @@ public enum PreferenceData {
     }
 
     public void setValue(Context context, boolean value) {
-        PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(name, value).apply();
+        if (getType() == TYPE_BOOLEAN)
+            PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(name, value).apply();
+        else throw new TypeMismatchException(this, TYPE_BOOLEAN);
     }
 
     public void setValue(Context context, int value) {
-        PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(name, value).apply();
+        if (getType() == TYPE_INT)
+            PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(name, value).apply();
+        else throw new TypeMismatchException(this, TYPE_INT);
     }
 
     public void setValue(Context context, String value) {
-        PreferenceManager.getDefaultSharedPreferences(context).edit().putString(name, value).apply();
+        if (getType() == TYPE_STRING)
+            PreferenceManager.getDefaultSharedPreferences(context).edit().putString(name, value).apply();
+        else throw new TypeMismatchException(this, TYPE_STRING);
     }
 
     public static boolean toFile(Context context, File file) {
@@ -231,5 +255,26 @@ public enum PreferenceData {
 
     public static String getBackupsDir() {
         return Environment.getExternalStorageDirectory() + "/status/backups";
+    }
+
+    public static class TypeMismatchException extends RuntimeException {
+
+        public TypeMismatchException(PreferenceData data, int expectedType) {
+            super("Wrong type used for \"" + data.name() + "\": expected " + getTypeString(data.getType()) + ", got " + getTypeString(expectedType));
+        }
+
+        private static String getTypeString(int type) {
+            switch (type) {
+                case TYPE_BOOLEAN:
+                    return "boolean";
+                case TYPE_INT:
+                    return "int";
+                case TYPE_STRING:
+                    return "string";
+                default:
+                    return "unknown";
+            }
+        }
+
     }
 }

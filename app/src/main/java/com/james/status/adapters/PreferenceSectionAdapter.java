@@ -45,7 +45,7 @@ public class PreferenceSectionAdapter extends RecyclerView.Adapter<PreferenceSec
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.title.setText(sections.get(position).name().replace('_', ' '));
+        holder.title.setText(sections.get(position).getName(context));
 
         ArrayList<BasePreferenceData> items = getItems(sections.get(position));
 

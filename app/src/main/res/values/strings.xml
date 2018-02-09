@@ -87,6 +87,12 @@
     <string name="tab_apps">Apps</string>
     <string name="tab_help">Help</string>
 
+    <string name="section_colors">Colors</string>
+    <string name="section_icons">Icons</string>
+    <string name="section_animations">Animations</string>
+    <string name="section_notifications">Notifications</string>
+    <string name="section_other">Other</string>
+
     <string name="preference_show_clock">Show Clock</string>
     <string name="preference_24h">Use 24 Hour Time Format</string>
     <string name="preference_24h_desc">The clock will show in a 24 hour time format if this is turned on.</string>
