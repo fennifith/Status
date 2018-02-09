@@ -8,12 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.james.status.R;
+import com.james.status.data.PreferenceData;
 import com.james.status.dialogs.ColorPickerDialog;
 import com.james.status.dialogs.PreferenceDialog;
-import com.james.status.utils.PreferenceUtils;
 import com.james.status.views.ColorImageView;
 
-public class ColorPreferenceData extends PreferenceData<Integer> {
+public class ColorPreferenceData extends BasePreferenceData<Integer> {
 
     private int defaultValue, value;
 
@@ -22,9 +22,8 @@ public class ColorPreferenceData extends PreferenceData<Integer> {
 
         this.defaultValue = defaultValue;
 
-        Integer value = PreferenceUtils.getIntegerPreference(getContext(), identifier.getPreference());
-        if (value == null) value = defaultValue;
-        this.value = value;
+        com.james.status.data.PreferenceData preference = identifier.getPreference();
+        value = preference != null ? preference.getIntValue(context, defaultValue) : defaultValue;
     }
 
     @Override
@@ -46,9 +45,10 @@ public class ColorPreferenceData extends PreferenceData<Integer> {
                 value = color;
                 ((ColorImageView) v.findViewById(R.id.color)).setColor(color);
 
-                PreferenceUtils.PreferenceIdentifier identifier = getIdentifier().getPreference();
-                if (identifier != null)
-                    PreferenceUtils.putPreference(getContext(), getIdentifier().getPreference(), color);
+                PreferenceData preference = getIdentifier().getPreference();
+                if (preference != null)
+                    preference.setValue(getContext(), color);
+
                 onPreferenceChange(color);
             }
 

@@ -15,8 +15,8 @@ import android.os.Handler;
 import android.os.Parcelable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.Toast;
 
@@ -24,9 +24,9 @@ import com.james.status.R;
 import com.james.status.Status;
 import com.james.status.data.AppData;
 import com.james.status.data.NotificationData;
+import com.james.status.data.PreferenceData;
 import com.james.status.data.icon.NotificationsIconData;
 import com.james.status.utils.ColorUtils;
-import com.james.status.utils.PreferenceUtils;
 import com.james.status.utils.StaticUtils;
 
 import java.lang.ref.SoftReference;
@@ -35,12 +35,9 @@ import java.util.List;
 
 public class AccessibilityService extends android.accessibilityservice.AccessibilityService {
 
-    public static final String
-            ACTION_GET_COLOR = "com.james.status.ACTION_GET_COLOR",
-            EXTRA_COMPONENT = "com.james.status.EXTRA_COMPONENT";
+    public static final String ACTION_GET_COLOR = "com.james.status.ACTION_GET_COLOR";
 
     private PackageManager packageManager;
-    private NotificationManagerCompat notificationManager;
     private List<NotificationData> notifications;
 
     private AppData.ActivityData activityData;
@@ -49,7 +46,15 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
     private int color = Color.BLACK;
 
     @Override
+    public void onCreate() {
+        super.onCreate();
+        Log.d("SOMETHING", "created");
+    }
+
+    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.d("SOMETHING", "started");
+
         if (intent != null) {
             String action = intent.getAction();
 
@@ -72,8 +77,9 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
     protected void onServiceConnected() {
         super.onServiceConnected();
 
+        Log.d("SOMETHING", "connected");
+
         packageManager = getPackageManager();
-        notificationManager = NotificationManagerCompat.from(this);
 
         volumeReceiver = new VolumeReceiver(this);
         registerReceiver(volumeReceiver, new IntentFilter("android.media.VOLUME_CHANGED_ACTION"));
@@ -91,8 +97,8 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
 
     @Override
     public void onAccessibilityEvent(final AccessibilityEvent event) {
-        Boolean enabled = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED);
-        if (enabled != null && enabled) {
+        Log.d("SOMETHING", "Accessibility Event");
+        if (PreferenceData.STATUS_ENABLED.getBooleanValue(this)) {
             switch (event.getEventType()) {
                 case AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED:
                     if (StaticUtils.shouldUseCompatNotifications(this) && !event.getPackageName().toString().matches("com.james.status")) {
@@ -142,7 +148,6 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                         }
 
                         Boolean isFullscreen = activityData.getBooleanPreference(this, AppData.PreferenceIdentifier.FULLSCREEN);
-                        Boolean isTransparentEnabled = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_HOME_TRANSPARENT);
                         boolean isHome = false;
 
                         if (packageManager != null) {
@@ -154,7 +159,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                         }
 
                         Integer color = activityData.getIntegerPreference(this, AppData.PreferenceIdentifier.COLOR);
-                        if (color != null && (!isHome || (isTransparentEnabled != null && !isTransparentEnabled))) {
+                        if (color != null && (!isHome || !PreferenceData.STATUS_HOME_TRANSPARENT.getBooleanValue(this))) {
                             setStatusBar(color, null, isFullscreen, false, packageName.toString(), activityData);
                             return;
                         } else if (isHome) {
@@ -162,15 +167,14 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                             return;
                         }
 
-                        Boolean isColorAuto = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_AUTO);
-                        if (isColorAuto != null && !isColorAuto) {
-                            setStatusBar(getDefaultColor(), null, isFullscreen, false, packageName.toString(), activityData);
+                        if (!PreferenceData.STATUS_COLOR_AUTO.getBooleanValue(this)) {
+                            setStatusBar(PreferenceData.STATUS_COLOR.getIntValue(this), null, isFullscreen, false, packageName.toString(), activityData);
                             return;
                         }
 
                         if (packageName.toString().equals("com.android.systemui")) {
                             //prevents the creation of some pretty nasty looking color schemes below Lollipop
-                            setStatusBar(getDefaultColor(), null, false, false, packageName.toString(), activityData);
+                            setStatusBar(PreferenceData.STATUS_COLOR.getIntValue(this), null, false, false, packageName.toString(), activityData);
                             return;
                         }
 
@@ -194,17 +198,10 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                             }
                         }
 
-                        setStatusBar(color != null ? color : getDefaultColor(), null, isFullscreen, false, packageName.toString(), activityData);
+                        setStatusBar(color != null ? color : PreferenceData.STATUS_COLOR.getIntValue(this), null, isFullscreen, false, packageName.toString(), activityData);
                     }
             }
         }
-    }
-
-    @ColorInt
-    private int getDefaultColor() {
-        Integer color = PreferenceUtils.getIntegerPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR);
-        if (color == null) color = Color.BLACK;
-        return color;
     }
 
     private void setStatusBar(@Nullable @ColorInt Integer color, @Nullable Boolean isTransparent, @Nullable Boolean isFullscreen, @Nullable Boolean isSystemFullscreen, @Nullable String packageName, @Nullable AppData.ActivityData activityData) {
@@ -238,6 +235,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
 
     @Override
     public void onDestroy() {
+        Log.d("SOMETHING", "destroyed");
         if (volumeReceiver != null) unregisterReceiver(volumeReceiver);
         super.onDestroy();
     }
@@ -265,13 +263,14 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            Status.showDebug(context, intent.getExtras().toString(), Toast.LENGTH_SHORT);
+            if (intent.getExtras() != null)
+                Status.showDebug(context, intent.getExtras().toString(), Toast.LENGTH_SHORT);
             onVolumeChanged();
         }
 
         private void onVolumeChanged() {
             AccessibilityService service = reference.get();
-            if (service != null && shouldHideOnVolume(service)) {
+            if (service != null && PreferenceData.STATUS_HIDE_ON_VOLUME.getBooleanValue(service)) {
                 Status.showDebug(service, "Volume callback added", Toast.LENGTH_SHORT);
                 service.setStatusBar(null, false, null, true, null, null);
                 handler.removeCallbacks(runnable);
@@ -290,10 +289,5 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
         private static boolean canReceive() {
             return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && Build.VERSION.SDK_INT < Build.VERSION_CODES.M;
         }
-    }
-
-    public static boolean shouldHideOnVolume(Context context) {
-        Boolean isVolumeHidden = PreferenceUtils.getBooleanPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_HIDE_ON_VOLUME);
-        return (isVolumeHidden == null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) || (isVolumeHidden != null && isVolumeHidden);
     }
 }

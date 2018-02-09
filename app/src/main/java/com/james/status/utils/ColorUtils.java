@@ -51,13 +51,6 @@ public class ColorUtils {
         }
     }
 
-    @ColorInt
-    public static int getDefaultColor(Context context) {
-        Integer color = PreferenceUtils.getIntegerPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR);
-        if (color != null) return color;
-        else return Color.BLACK;
-    }
-
     @Nullable
     public static Integer getPrimaryColor(Context context, ComponentName componentName) {
         PackageManager packageManager = context.getPackageManager();

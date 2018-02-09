@@ -19,16 +19,15 @@ import android.widget.TextView;
 
 import com.james.status.R;
 import com.james.status.data.IconStyleData;
+import com.james.status.data.PreferenceData;
+import com.james.status.data.preference.BasePreferenceData;
 import com.james.status.data.preference.BooleanPreferenceData;
 import com.james.status.data.preference.ColorPreferenceData;
 import com.james.status.data.preference.FontPreferenceData;
 import com.james.status.data.preference.IconPreferenceData;
 import com.james.status.data.preference.IntegerPreferenceData;
 import com.james.status.data.preference.ListPreferenceData;
-import com.james.status.data.preference.PreferenceData;
 import com.james.status.receivers.IconUpdateReceiver;
-import com.james.status.utils.ColorUtils;
-import com.james.status.utils.PreferenceUtils;
 import com.james.status.utils.StaticUtils;
 import com.james.status.views.CustomImageView;
 
@@ -56,7 +55,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
     public IconData(Context context) {
         this.context = context;
 
-        color = ColorUtils.getDefaultColor(context);
+        color = PreferenceData.STATUS_COLOR.getIntValue(context);
 
         String name = getStringPreference(PreferenceIdentifier.ICON_STYLE);
         List<IconStyleData> styles = getIconStyles();
@@ -153,9 +152,8 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                     textView.setVisibility(View.VISIBLE);
 
                     Integer color = getTextColor();
-                    Boolean isContrast = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_DARK_ICONS);
 
-                    if (color != null && !((isContrast == null || isContrast) && (color == Color.WHITE || color == Color.BLACK))) {
+                    if (color != null && !(PreferenceData.STATUS_DARK_ICONS.getBooleanValue(getContext()) && (color == Color.WHITE || color == Color.BLACK))) {
                         textView.setTextColor(color);
                         textView.setTag(color);
                     } else textView.setTag(null);
@@ -332,17 +330,17 @@ public abstract class IconData<T extends IconUpdateReceiver> {
         return v;
     }
 
-    public List<PreferenceData> getPreferences() {
-        List<PreferenceData> preferences = new ArrayList<>();
+    public List<BasePreferenceData> getPreferences() {
+        List<BasePreferenceData> preferences = new ArrayList<>();
 
         if (canHazDrawable() && (hasText() || !hasDrawable())) {
             preferences.add(new BooleanPreferenceData(
                     getContext(),
-                    new PreferenceData.Identifier(
+                    new BasePreferenceData.Identifier(
                             getContext().getString(R.string.preference_show_drawable)
                     ),
                     hasDrawable(),
-                    new PreferenceData.OnPreferenceChangeListener<Boolean>() {
+                    new BasePreferenceData.OnPreferenceChangeListener<Boolean>() {
                         @Override
                         public void onPreferenceChange(Boolean preference) {
                             putPreference(PreferenceIdentifier.ICON_VISIBILITY, preference);
@@ -355,11 +353,11 @@ public abstract class IconData<T extends IconUpdateReceiver> {
         if (canHazText() && (hasDrawable() || !hasText())) {
             preferences.add(new BooleanPreferenceData(
                     getContext(),
-                    new PreferenceData.Identifier(
+                    new BasePreferenceData.Identifier(
                             getContext().getString(R.string.preference_show_text)
                     ),
                     hasText(),
-                    new PreferenceData.OnPreferenceChangeListener<Boolean>() {
+                    new BasePreferenceData.OnPreferenceChangeListener<Boolean>() {
                         @Override
                         public void onPreferenceChange(Boolean preference) {
                             putPreference(PreferenceIdentifier.TEXT_VISIBILITY, preference);
@@ -372,10 +370,10 @@ public abstract class IconData<T extends IconUpdateReceiver> {
         preferences.addAll(Arrays.asList(
                 new ListPreferenceData(
                         getContext(),
-                        new PreferenceData.Identifier(
+                        new BasePreferenceData.Identifier(
                                 getContext().getString(R.string.preference_gravity)
                         ),
-                        new PreferenceData.OnPreferenceChangeListener<Integer>() {
+                        new BasePreferenceData.OnPreferenceChangeListener<Integer>() {
                             @Override
                             public void onPreferenceChange(Integer preference) {
                                 putPreference(PreferenceIdentifier.GRAVITY, preference);
@@ -398,14 +396,14 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                 ),
                 new IntegerPreferenceData(
                         getContext(),
-                        new PreferenceData.Identifier(
+                        new BasePreferenceData.Identifier(
                                 getContext().getString(R.string.preference_icon_padding)
                         ),
                         getIconPadding(),
                         getContext().getString(R.string.unit_dp),
                         null,
                         null,
-                        new PreferenceData.OnPreferenceChangeListener<Integer>() {
+                        new BasePreferenceData.OnPreferenceChangeListener<Integer>() {
                             @Override
                             public void onPreferenceChange(Integer preference) {
                                 putPreference(PreferenceIdentifier.ICON_PADDING, preference);
@@ -418,14 +416,14 @@ public abstract class IconData<T extends IconUpdateReceiver> {
         if (hasDrawable()) {
             preferences.add(new IntegerPreferenceData(
                     getContext(),
-                    new PreferenceData.Identifier(
+                    new BasePreferenceData.Identifier(
                             getContext().getString(R.string.preference_icon_scale)
                     ),
                     getIconScale(),
                     getContext().getString(R.string.unit_dp),
                     0,
                     null,
-                    new PreferenceData.OnPreferenceChangeListener<Integer>() {
+                    new BasePreferenceData.OnPreferenceChangeListener<Integer>() {
                         @Override
                         public void onPreferenceChange(Integer preference) {
                             putPreference(PreferenceIdentifier.ICON_SCALE, preference);
@@ -438,14 +436,14 @@ public abstract class IconData<T extends IconUpdateReceiver> {
         if (hasText()) {
             preferences.add(new IntegerPreferenceData(
                     getContext(),
-                    new PreferenceData.Identifier(
+                    new BasePreferenceData.Identifier(
                             getContext().getString(R.string.preference_text_size)
                     ),
                     (int) getTextSize(),
                     getContext().getString(R.string.unit_sp),
                     0,
                     null,
-                    new PreferenceData.OnPreferenceChangeListener<Integer>() {
+                    new BasePreferenceData.OnPreferenceChangeListener<Integer>() {
                         @Override
                         public void onPreferenceChange(Integer preference) {
                             putPreference(PreferenceIdentifier.TEXT_SIZE, preference);
@@ -457,11 +455,11 @@ public abstract class IconData<T extends IconUpdateReceiver> {
             Integer color = getTextColor();
             preferences.add(new ColorPreferenceData(
                     getContext(),
-                    new PreferenceData.Identifier(
+                    new BasePreferenceData.Identifier(
                             getContext().getString(R.string.preference_text_color)
                     ),
                     color != null ? color : Color.WHITE,
-                    new PreferenceData.OnPreferenceChangeListener<Integer>() {
+                    new BasePreferenceData.OnPreferenceChangeListener<Integer>() {
                         @Override
                         public void onPreferenceChange(Integer preference) {
                             putPreference(PreferenceIdentifier.TEXT_COLOR, preference);
@@ -472,8 +470,8 @@ public abstract class IconData<T extends IconUpdateReceiver> {
 
             preferences.add(new FontPreferenceData(
                     getContext(),
-                    new PreferenceData.Identifier("Text Font"),
-                    new PreferenceData.OnPreferenceChangeListener<String>() {
+                    new BasePreferenceData.Identifier("Text Font"),
+                    new BasePreferenceData.OnPreferenceChangeListener<String>() {
                         @Override
                         public void onPreferenceChange(String preference) {
                             putPreference(PreferenceIdentifier.TEXT_TYPEFACE, preference);
@@ -501,8 +499,8 @@ public abstract class IconData<T extends IconUpdateReceiver> {
 
             preferences.add(new ListPreferenceData(
                     getContext(),
-                    new PreferenceData.Identifier(getContext().getString(R.string.preference_text_effect)),
-                    new PreferenceData.OnPreferenceChangeListener<Integer>() {
+                    new BasePreferenceData.Identifier(getContext().getString(R.string.preference_text_effect)),
+                    new BasePreferenceData.OnPreferenceChangeListener<Integer>() {
                         @Override
                         public void onPreferenceChange(Integer preference) {
                             putPreference(PreferenceIdentifier.TEXT_EFFECT, preference);
@@ -521,12 +519,12 @@ public abstract class IconData<T extends IconUpdateReceiver> {
         if (hasDrawable()) {
             preferences.add(new IconPreferenceData(
                     getContext(),
-                    new PreferenceData.Identifier(
+                    new BasePreferenceData.Identifier(
                             getContext().getString(R.string.preference_icon_style)
                     ),
                     style,
                     this,
-                    new PreferenceData.OnPreferenceChangeListener<IconStyleData>() {
+                    new BasePreferenceData.OnPreferenceChangeListener<IconStyleData>() {
                         @Override
                         public void onPreferenceChange(IconStyleData preference) {
                             style = preference;

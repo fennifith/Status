@@ -8,13 +8,13 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 
-import com.james.status.utils.PreferenceUtils;
+import com.james.status.data.PreferenceData;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ListPreferenceData extends PreferenceData<Integer> {
+public class ListPreferenceData extends BasePreferenceData<Integer> {
 
     private int preference;
     private List<ListPreference> items;
@@ -27,14 +27,8 @@ public class ListPreferenceData extends PreferenceData<Integer> {
         this.items = new ArrayList<>();
         this.items.addAll(Arrays.asList(items));
 
-        PreferenceUtils.PreferenceIdentifier preferenceIdentifier = identifier.getPreference();
-        Integer integer = null;
-
-        if (preferenceIdentifier != null)
-            integer = PreferenceUtils.getIntegerPreference(context, preferenceIdentifier);
-
-        if (integer != null) preference = integer;
-        else preference = defaultItem;
+        PreferenceData preference = identifier.getPreference();
+        this.preference = preference != null ? preference.getIntValue(context, defaultItem) : defaultItem;
     }
 
     @Override
@@ -66,9 +60,9 @@ public class ListPreferenceData extends PreferenceData<Integer> {
                         if (selectedPreference != null) {
                             ListPreferenceData.this.preference = selectedPreference.id;
 
-                            PreferenceUtils.PreferenceIdentifier identifier = getIdentifier().getPreference();
-                            if (identifier != null)
-                                PreferenceUtils.putPreference(getContext(), identifier, selectedPreference.id);
+                            PreferenceData preference = getIdentifier().getPreference();
+                            if (preference != null)
+                                preference.setValue(getContext(), selectedPreference.id);
 
                             onPreferenceChange(selectedPreference.id);
                             selectedPreference = null;

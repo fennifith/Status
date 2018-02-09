@@ -16,7 +16,6 @@ import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
-import android.support.v7.graphics.Palette;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,16 +25,52 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.james.status.R;
+import com.james.status.data.PreferenceData;
 import com.james.status.data.icon.IconData;
 import com.james.status.utils.ColorUtils;
 import com.james.status.utils.ImageUtils;
-import com.james.status.utils.PreferenceUtils;
 import com.james.status.utils.StaticUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class StatusView extends FrameLayout {
+
+    public static final int OPTION_SYSTEM_SHOWING = 0;
+    public static final int OPTION_FULLSCREEN = 1;
+    public static final int OPTION_ANIMATIONS = 2;
+    public static final int OPTION_ICON_ANIMATIONS = 3;
+    public static final int OPTION_TINTED_ICONS = 4;
+    public static final int OPTION_CONTRAST_ICONS = 5;
+    public static final int OPTION_BUMP_MODE = 6;
+    public static final int OPTION_TRANSPARENT_MODE = 7;
+    public static final int OPTION_BURN_IN_PROTECTION = 8;
+    public static final int OPTION_ICON_OVERLAP_PREVENTION = 9;
+    public static final int OPTION_COLOR = 10;
+    public static final int OPTION_ICON_COLOR = 11;
+    public static final int OPTION_AUTO_COLOR = 12;
+    public static final int OPTION_SIDE_PADDING = 13;
+    public static final int OPTION_TRANSPARENT_HOME = 14;
+    public static final PreferenceData[] OPTIONS = new PreferenceData[]{
+            null,
+            null,
+            PreferenceData.STATUS_BACKGROUND_ANIMATIONS,
+            PreferenceData.STATUS_ICON_ANIMATIONS,
+            PreferenceData.STATUS_TINTED_ICONS,
+            PreferenceData.STATUS_DARK_ICONS,
+            PreferenceData.STATUS_BUMP_MODE,
+            PreferenceData.STATUS_TRANSPARENT_MODE,
+            PreferenceData.STATUS_BURNIN_PROTECTION,
+            PreferenceData.STATUS_PREVENT_ICON_OVERLAP,
+            PreferenceData.STATUS_COLOR,
+            PreferenceData.STATUS_ICON_COLOR,
+            PreferenceData.STATUS_COLOR_AUTO,
+            PreferenceData.STATUS_SIDE_PADDING,
+            PreferenceData.STATUS_HOME_TRANSPARENT
+    };
+
+    private boolean[] booleanOptions = new boolean[OPTIONS.length];
+    private int[] intOptions = new int[OPTIONS.length];
 
     private LinearLayout status;
     private OverflowLinearLayout leftLayout;
@@ -48,17 +83,9 @@ public class StatusView extends FrameLayout {
 
     @ColorInt
     private Integer color, iconColor = Color.WHITE;
-    private boolean isSystemShowing;
-    private boolean isFullscreen;
-    private boolean isAnimations;
-    private boolean isIconAnimations;
-    private boolean isTintedIcons;
-    private boolean isContrastIcons;
+
     private boolean isRegistered;
-    private boolean isBumpMode;
-    private boolean isTransparentMode;
-    private boolean isBurnInProtection, isBurnInProtectionStarted;
-    private boolean isIconOverlapPrevention;
+    private boolean isBurnInProtectionStarted;
 
     private List<IconData> icons;
     private WallpaperManager wallpaperManager;
@@ -67,7 +94,7 @@ public class StatusView extends FrameLayout {
     private Runnable burnInRunnable = new Runnable() {
         @Override
         public void run() {
-            if (isBurnInProtection)
+            if (booleanOptions[OPTION_BURN_IN_PROTECTION])
                 handler.postDelayed(this, 2000);
             else isBurnInProtectionStarted = false;
 
@@ -163,13 +190,9 @@ public class StatusView extends FrameLayout {
         rightLayout = (OverflowLinearLayout) v.findViewById(R.id.rightLayout);
         centerLayout = (LinearLayout) v.findViewById(R.id.centerLayout);
 
-        Boolean isAnimations = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_BACKGROUND_ANIMATIONS);
-        this.isAnimations = isAnimations != null ? isAnimations : true;
+        getOptions();
 
-        Boolean isIconAnimations = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_ICON_ANIMATIONS);
-        this.isIconAnimations = isIconAnimations != null ? isIconAnimations : true;
-
-        if (this.isIconAnimations) {
+        if (booleanOptions[OPTION_ICON_ANIMATIONS]) {
             leftLayout.setLayoutTransition(new LayoutTransition());
             rightLayout.setLayoutTransition(new LayoutTransition());
             centerLayout.setLayoutTransition(new LayoutTransition());
@@ -179,21 +202,7 @@ public class StatusView extends FrameLayout {
             centerLayout.setLayoutTransition(null);
         }
 
-        Boolean isTintedIcons = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_TINTED_ICONS);
-        this.isTintedIcons = isTintedIcons != null ? isTintedIcons : false;
-
-        Boolean isContrastIcons = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_DARK_ICONS);
-        this.isContrastIcons = isContrastIcons != null ? isContrastIcons : true;
-
-        Boolean isTransparentMode = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_TRANSPARENT_MODE);
-        this.isTransparentMode = isTransparentMode != null ? isTransparentMode : false;
-
-        Boolean isIconOverlapPrevention = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_PREVENT_ICON_OVERLAP);
-        this.isIconOverlapPrevention = isIconOverlapPrevention != null && isIconOverlapPrevention;
-
         addView(v);
-        Boolean isBurnInProtection = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_BURNIN_PROTECTION);
-        this.isBurnInProtection = isBurnInProtection != null && isBurnInProtection;
         status.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -204,7 +213,7 @@ public class StatusView extends FrameLayout {
                 centerX = centerLayout.getX();
                 centerY = centerLayout.getY();
 
-                if (StatusView.this.isBurnInProtection && !isBurnInProtectionStarted) {
+                if (booleanOptions[OPTION_BURN_IN_PROTECTION] && !isBurnInProtectionStarted) {
                     handler.post(burnInRunnable);
                     isBurnInProtectionStarted = false;
                 }
@@ -213,25 +222,16 @@ public class StatusView extends FrameLayout {
             }
         });
 
-        Boolean isStatusColorAuto = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_AUTO);
-        if (isStatusColorAuto != null && !isStatusColorAuto) {
-            Integer statusBarColor = PreferenceUtils.getIntegerPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_COLOR);
-            if (statusBarColor != null) setColor(statusBarColor);
-        } else if (color != null) setColor(color);
+        if (booleanOptions[OPTION_AUTO_COLOR])
+            setColor(intOptions[OPTION_COLOR]);
+        else if (color != null) setColor(color);
         else setColor(Color.BLACK);
 
-        Integer defaultIconColor = PreferenceUtils.getIntegerPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_ICON_COLOR);
-        if (defaultIconColor != null) iconColor = defaultIconColor;
+        iconColor = intOptions[OPTION_ICON_COLOR];
 
-        Integer sidePadding = PreferenceUtils.getIntegerPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_SIDE_PADDING);
-        if (sidePadding != null) {
-            sidePadding = (int) StaticUtils.getPixelsFromDp(sidePadding);
-            status.setPadding(sidePadding, 0, sidePadding, 0);
-        }
+        status.setPadding(intOptions[OPTION_SIDE_PADDING], 0, intOptions[OPTION_SIDE_PADDING], 0);
 
-        Boolean bumpMode = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_BUMP_MODE);
-        isBumpMode = bumpMode != null && bumpMode;
-        if (isBumpMode) {
+        if (booleanOptions[OPTION_BUMP_MODE]) {
             int padding = (int) StaticUtils.getPixelsFromDp(16);
             centerLayout.setPadding(padding, 0, padding, 0);
             centerLayout.setBackgroundResource(R.drawable.bump_inner);
@@ -242,6 +242,22 @@ public class StatusView extends FrameLayout {
         }
 
         if (wallpaperManager == null) wallpaperManager = WallpaperManager.getInstance(getContext());
+    }
+
+    private void getOptions() {
+        for (int i = 0; i < OPTIONS.length; i++) {
+            PreferenceData data = OPTIONS[i];
+            if (data != null) {
+                switch (data.getType()) {
+                    case PreferenceData.TYPE_BOOLEAN:
+                        booleanOptions[i] = data.getBooleanValue(getContext());
+                        break;
+                    case PreferenceData.TYPE_INT:
+                        intOptions[i] = data.getIntValue(getContext());
+                        break;
+                }
+            }
+        }
     }
 
     public void setIcons(List<IconData> icons) {
@@ -286,7 +302,7 @@ public class StatusView extends FrameLayout {
                 @Override
                 public void onUpdate(@Nullable Drawable drawable) {
                     CustomImageView iconView = (CustomImageView) item.findViewById(R.id.icon);
-                    int color = iconData.getGravity() == IconData.CENTER_GRAVITY && isBumpMode ? Color.WHITE : iconColor;
+                    int color = iconData.getGravity() == IconData.CENTER_GRAVITY && booleanOptions[OPTION_BUMP_MODE] ? Color.WHITE : iconColor;
 
                     if (drawable != null && iconView != null)
                         iconView.setImageDrawable(drawable, color);
@@ -308,7 +324,7 @@ public class StatusView extends FrameLayout {
             }
         }
 
-        if (isIconOverlapPrevention) {
+        if (booleanOptions[OPTION_ICON_OVERLAP_PREVENTION]) {
             leftLayout.onViewsChanged();
             rightLayout.onViewsChanged();
         }
@@ -342,29 +358,29 @@ public class StatusView extends FrameLayout {
     }
 
     public void setSystemShowing(boolean isSystemShowing) {
-        if ((this.isFullscreen != isSystemShowing || this.isSystemShowing != isSystemShowing) && isSystemShowing)
+        if ((booleanOptions[OPTION_FULLSCREEN] != isSystemShowing || booleanOptions[OPTION_SYSTEM_SHOWING] != isSystemShowing) && isSystemShowing)
             setStatusBarVisibility(false);
-        this.isSystemShowing = isSystemShowing;
+        booleanOptions[OPTION_SYSTEM_SHOWING] = isSystemShowing;
     }
 
     public boolean isSystemShowing() {
-        return isSystemShowing;
+        return booleanOptions[OPTION_SYSTEM_SHOWING];
     }
 
     public void setFullscreen(boolean isFullscreen) {
-        if (((getVisibility() == View.GONE) != isFullscreen) && !isSystemShowing) {
+        if (((getVisibility() == View.GONE) != isFullscreen) && !booleanOptions[OPTION_SYSTEM_SHOWING]) {
             setStatusBarVisibility(!isFullscreen);
         }
 
-        this.isFullscreen = isFullscreen;
+        booleanOptions[OPTION_FULLSCREEN] = isFullscreen;
     }
 
     public boolean isFullscreen() {
-        return isFullscreen;
+        return booleanOptions[OPTION_FULLSCREEN];
     }
 
     private void setStatusBarVisibility(final boolean visible) {
-        if (isAnimations) {
+        if (booleanOptions[OPTION_ANIMATIONS]) {
             ValueAnimator animator = ValueAnimator.ofFloat(getY(), visible ? 0 : -StaticUtils.getStatusBarHeight(getContext()));
             animator.setDuration(150);
             animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -404,8 +420,8 @@ public class StatusView extends FrameLayout {
         if (this.color == null) this.color = Color.BLACK;
         color = Color.argb(255, Color.red(color), Color.green(color), Color.blue(color));
 
-        if (!isTintedIcons) {
-            if (isAnimations) {
+        if (!booleanOptions[OPTION_TINTED_ICONS]) {
+            if (booleanOptions[OPTION_ANIMATIONS]) {
                 ValueAnimator animator = ValueAnimator.ofObject(new ArgbEvaluator(), this.color, color);
                 animator.setDuration(150);
                 animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -430,10 +446,10 @@ public class StatusView extends FrameLayout {
 
             setStatusBackgroundColor(backgroundColor);
 
-            if (isContrastIcons)
+            if (booleanOptions[OPTION_CONTRAST_ICONS])
                 color = ColorUtils.isColorDark(backgroundColor) ? ColorUtils.lightColor(color) : ColorUtils.darkColor(color);
 
-            if (isIconAnimations) {
+            if (booleanOptions[OPTION_ICON_ANIMATIONS]) {
                 ValueAnimator animator = ValueAnimator.ofObject(new ArgbEvaluator(), this.color, color);
                 animator.setDuration(150);
                 animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -461,20 +477,16 @@ public class StatusView extends FrameLayout {
 
     @ColorInt
     private int getDefaultColor() {
-        Integer color = PreferenceUtils.getIntegerPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_COLOR);
-        if (color == null) color = Color.BLACK;
-        return color;
+        return PreferenceData.STATUS_COLOR.getIntValue(getContext());
     }
 
     @ColorInt
     private int getDefaultIconColor() {
-        Integer color = PreferenceUtils.getIntegerPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_ICON_COLOR);
-        if (color == null) color = Color.WHITE;
-        return color;
+        return PreferenceData.STATUS_ICON_COLOR.getIntValue(getContext());
     }
 
     private void setStatusBackgroundColor(@ColorInt int color) {
-        status.setBackgroundColor(isTransparentMode ? Color.TRANSPARENT : Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
+        status.setBackgroundColor(booleanOptions[OPTION_TRANSPARENT_MODE] ? Color.TRANSPARENT : Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
     }
 
     public void setTransparent() {
@@ -497,8 +509,7 @@ public class StatusView extends FrameLayout {
             if (background != null) {
                 int color = ColorUtils.getAverageColor(background);
 
-                Boolean transparent = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_HOME_TRANSPARENT);
-                if (transparent == null || transparent) {
+                if (booleanOptions[OPTION_TRANSPARENT_HOME]) {
                     status.setBackground(new BitmapDrawable(getResources(), background));
                     setDarkMode(!ColorUtils.isColorDark(color));
                     StatusView.this.color = color;
@@ -508,10 +519,10 @@ public class StatusView extends FrameLayout {
     }
 
     public void setDarkMode(boolean isDarkMode) {
-        if (isContrastIcons) {
+        if (booleanOptions[OPTION_CONTRAST_ICONS]) {
             int color = isDarkMode ? Color.BLACK : getDefaultIconColor();
 
-            if (isIconAnimations) {
+            if (booleanOptions[OPTION_ICON_ANIMATIONS]) {
                 ValueAnimator animator = ValueAnimator.ofObject(new ArgbEvaluator(), iconColor, color);
                 animator.setDuration(150);
                 animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -541,7 +552,7 @@ public class StatusView extends FrameLayout {
     private void setIconTint(View view, @ColorInt int color) {
         if (view instanceof LinearLayout) {
             for (int i = 0; i < ((LinearLayout) view).getChildCount(); i++) {
-                setIconTint(((LinearLayout) view).getChildAt(i), view.equals(centerLayout) && isBumpMode ? Color.WHITE : color);
+                setIconTint(((LinearLayout) view).getChildAt(i), view.equals(centerLayout) && booleanOptions[OPTION_BUMP_MODE] ? Color.WHITE : color);
             }
         } else if (view instanceof TextView) {
             if (view.getTag() == null)
@@ -550,21 +561,6 @@ public class StatusView extends FrameLayout {
             CustomImageView imageView = (CustomImageView) view;
             if (imageView.getDrawable() != null)
                 imageView.setColorFilter(color);
-        }
-    }
-
-    public void setLockscreen(boolean lockscreen) {
-        Boolean expand = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_LOCKSCREEN_EXPAND);
-        if (expand != null && expand)
-            status.getLayoutParams().height = StaticUtils.getStatusBarHeight(getContext()) * (lockscreen ? 3 : 1);
-
-        if (lockscreen) {
-            Palette.from(ImageUtils.drawableToBitmap(WallpaperManager.getInstance(getContext()).getFastDrawable())).generate(new Palette.PaletteAsyncListener() {
-                @Override
-                public void onGenerated(Palette palette) {
-                    setColor(palette.getDarkVibrantColor(ColorUtils.darkColor(palette.getVibrantColor(Color.BLACK))));
-                }
-            });
         }
     }
 }

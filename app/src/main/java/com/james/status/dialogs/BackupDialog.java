@@ -10,7 +10,7 @@ import android.view.View;
 
 import com.james.status.R;
 import com.james.status.adapters.BackupAdapter;
-import com.james.status.utils.PreferenceUtils;
+import com.james.status.data.PreferenceData;
 import com.james.status.utils.StaticUtils;
 
 import java.io.File;
@@ -64,7 +64,7 @@ public class BackupDialog extends AppCompatDialog implements BackupCreatorDialog
         if (files != null) files.clear();
         else files = new ArrayList<>();
 
-        File dir = new File(PreferenceUtils.getBackupsDir());
+        File dir = new File(PreferenceData.getBackupsDir());
         if (!dir.exists())
             dir.mkdirs();
 

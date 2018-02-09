@@ -15,11 +15,11 @@ import android.widget.LinearLayout;
 
 import com.james.status.R;
 import com.james.status.data.NotificationData;
+import com.james.status.data.PreferenceData;
+import com.james.status.data.preference.BasePreferenceData;
 import com.james.status.data.preference.IntegerPreferenceData;
-import com.james.status.data.preference.PreferenceData;
 import com.james.status.receivers.IconUpdateReceiver;
 import com.james.status.services.NotificationService;
-import com.james.status.utils.PreferenceUtils;
 import com.james.status.utils.StaticUtils;
 import com.james.status.views.CustomImageView;
 import com.james.status.views.OverflowLinearLayout;
@@ -82,19 +82,19 @@ public class NotificationsIconData extends IconData<NotificationsIconData.Notifi
     }
 
     @Override
-    public List<PreferenceData> getPreferences() {
-        List<PreferenceData> preferences = super.getPreferences();
+    public List<BasePreferenceData> getPreferences() {
+        List<BasePreferenceData> preferences = super.getPreferences();
 
         preferences.add(new IntegerPreferenceData(
                 getContext(),
-                new PreferenceData.Identifier(
+                new BasePreferenceData.Identifier(
                         getContext().getString(R.string.preference_icon_scale)
                 ),
                 getIconScale(),
                 getContext().getString(R.string.unit_dp),
                 0,
                 null,
-                new PreferenceData.OnPreferenceChangeListener<Integer>() {
+                new BasePreferenceData.OnPreferenceChangeListener<Integer>() {
                     @Override
                     public void onPreferenceChange(Integer preference) {
                         putPreference(PreferenceIdentifier.ICON_SCALE, preference);
@@ -115,10 +115,7 @@ public class NotificationsIconData extends IconData<NotificationsIconData.Notifi
         notificationLayout.removeAllViewsInLayout();
         notifications.clear();
 
-        Boolean isIconAnimations = PreferenceUtils.getBooleanPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_ICON_ANIMATIONS);
-        isIconAnimations = isIconAnimations != null ? isIconAnimations : true;
-
-        notificationLayout.setLayoutTransition(isIconAnimations ? new LayoutTransition() : null);
+        notificationLayout.setLayoutTransition(PreferenceData.STATUS_ICON_ANIMATIONS.getBooleanValue(getContext()) ? new LayoutTransition() : null);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             Intent intent = new Intent(NotificationService.ACTION_GET_NOTIFICATIONS);
@@ -208,9 +205,7 @@ public class NotificationsIconData extends IconData<NotificationsIconData.Notifi
 
         private NotificationReceiver(NotificationsIconData iconData) {
             super(iconData);
-
-            Boolean isIconOverlapPrevention = PreferenceUtils.getBooleanPreference(iconData.getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_PREVENT_ICON_OVERLAP);
-            this.isIconOverlapPrevention = isIconOverlapPrevention != null && isIconOverlapPrevention;
+            this.isIconOverlapPrevention = PreferenceData.STATUS_PREVENT_ICON_OVERLAP.getBooleanValue(iconData.getContext());
         }
 
         @Override

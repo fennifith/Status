@@ -14,8 +14,8 @@ import android.support.v7.app.NotificationCompat;
 import com.james.status.R;
 import com.james.status.data.AppData;
 import com.james.status.data.NotificationData;
+import com.james.status.data.PreferenceData;
 import com.james.status.data.icon.NotificationsIconData;
-import com.james.status.utils.PreferenceUtils;
 import com.james.status.utils.StaticUtils;
 
 import java.util.ArrayList;
@@ -81,8 +81,6 @@ public class NotificationService extends NotificationListenerService {
 
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
-        Boolean enabled = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED);
-
         AppData app = null;
         try {
             app = new AppData(packageManager, packageManager.getApplicationInfo(sbn.getPackageName(), PackageManager.GET_META_DATA), packageManager.getPackageInfo(sbn.getPackageName(), PackageManager.GET_ACTIVITIES));
@@ -94,7 +92,7 @@ public class NotificationService extends NotificationListenerService {
             isEnabled = app.getSpecificBooleanPreference(this, AppData.PreferenceIdentifier.NOTIFICATIONS);
         if (isEnabled == null) isEnabled = true;
 
-        if (enabled != null && enabled && isEnabled && !StaticUtils.shouldUseCompatNotifications(this) && !sbn.getPackageName().matches("com.james.status")) {
+        if (PreferenceData.STATUS_ENABLED.getBooleanValue(this) && isEnabled && !StaticUtils.shouldUseCompatNotifications(this) && !sbn.getPackageName().matches("com.james.status")) {
             NotificationData notification = new NotificationData(sbn, getKey(sbn));
 
             if (notification.shouldShowHeadsUp(this)) {
@@ -119,8 +117,7 @@ public class NotificationService extends NotificationListenerService {
 
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn) {
-        Boolean enabled = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED);
-        if (enabled != null && enabled && !StaticUtils.shouldUseCompatNotifications(this)) {
+        if (PreferenceData.STATUS_ENABLED.getBooleanValue(this) && !StaticUtils.shouldUseCompatNotifications(this)) {
             Intent intent = new Intent(NotificationsIconData.ACTION_NOTIFICATION_REMOVED);
             intent.putExtra(NotificationsIconData.EXTRA_NOTIFICATION, new NotificationData(sbn, getKey(sbn)));
             sendBroadcast(intent);
@@ -139,8 +136,7 @@ public class NotificationService extends NotificationListenerService {
     }
 
     private void sendNotifications() {
-        Boolean enabled = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED);
-        if (enabled != null && enabled && !StaticUtils.shouldUseCompatNotifications(this)) {
+        if (PreferenceData.STATUS_ENABLED.getBooleanValue(this) && !StaticUtils.shouldUseCompatNotifications(this)) {
             List<StatusBarNotification> notifications = getNotifications();
             Collections.reverse(notifications);
 

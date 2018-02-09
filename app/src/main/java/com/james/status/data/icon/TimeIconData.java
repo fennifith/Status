@@ -6,8 +6,8 @@ import android.content.IntentFilter;
 import android.text.format.DateFormat;
 
 import com.james.status.R;
+import com.james.status.data.preference.BasePreferenceData;
 import com.james.status.data.preference.FormatPreferenceData;
-import com.james.status.data.preference.PreferenceData;
 import com.james.status.receivers.IconUpdateReceiver;
 import com.james.status.utils.StaticUtils;
 
@@ -80,16 +80,16 @@ public class TimeIconData extends IconData<TimeIconData.TimeReceiver> {
     }
 
     @Override
-    public List<PreferenceData> getPreferences() {
-        List<PreferenceData> preferences = super.getPreferences();
+    public List<BasePreferenceData> getPreferences() {
+        List<BasePreferenceData> preferences = super.getPreferences();
 
         preferences.add(new FormatPreferenceData(
                 getContext(),
-                new PreferenceData.Identifier(
+                new BasePreferenceData.Identifier(
                         getContext().getString(R.string.preference_time_format)
                 ),
                 format,
-                new PreferenceData.OnPreferenceChangeListener<String>() {
+                new BasePreferenceData.OnPreferenceChangeListener<String>() {
                     @Override
                     public void onPreferenceChange(String preference) {
                         format = preference;

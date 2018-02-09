@@ -10,8 +10,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.james.status.R;
-import com.james.status.data.preference.PreferenceData;
-import com.james.status.utils.PreferenceUtils;
+import com.james.status.data.PreferenceData;
+import com.james.status.data.preference.BasePreferenceData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,10 +19,10 @@ import java.util.List;
 public class PreferenceSectionAdapter extends RecyclerView.Adapter<PreferenceSectionAdapter.ViewHolder> {
 
     private Context context;
-    private List<PreferenceData.Identifier.SectionIdentifier> sections;
-    private List<PreferenceData> originalDatas, datas;
+    private List<BasePreferenceData.Identifier.SectionIdentifier> sections;
+    private List<BasePreferenceData> originalDatas, datas;
 
-    public PreferenceSectionAdapter(Context context, List<PreferenceData> datas) {
+    public PreferenceSectionAdapter(Context context, List<BasePreferenceData> datas) {
         this.context = context;
 
         originalDatas = new ArrayList<>();
@@ -32,8 +32,8 @@ public class PreferenceSectionAdapter extends RecyclerView.Adapter<PreferenceSec
         this.datas.addAll(originalDatas);
 
         sections = new ArrayList<>();
-        for (PreferenceData data : datas) {
-            PreferenceData.Identifier.SectionIdentifier section = data.getIdentifier().getSection();
+        for (BasePreferenceData data : datas) {
+            BasePreferenceData.Identifier.SectionIdentifier section = data.getIdentifier().getSection();
             if (!sections.contains(section)) sections.add(section);
         }
     }
@@ -47,7 +47,7 @@ public class PreferenceSectionAdapter extends RecyclerView.Adapter<PreferenceSec
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.title.setText(sections.get(position).name().replace('_', ' '));
 
-        ArrayList<PreferenceData> items = getItems(sections.get(position));
+        ArrayList<BasePreferenceData> items = getItems(sections.get(position));
 
         holder.recycler.setNestedScrollingEnabled(false);
         holder.recycler.setLayoutManager(new GridLayoutManager(context, 1));
@@ -65,9 +65,9 @@ public class PreferenceSectionAdapter extends RecyclerView.Adapter<PreferenceSec
         return sections.size();
     }
 
-    private ArrayList<PreferenceData> getItems(PreferenceData.Identifier.SectionIdentifier section) {
-        ArrayList<PreferenceData> datas = new ArrayList<>();
-        for (PreferenceData data : this.datas) {
+    private ArrayList<BasePreferenceData> getItems(BasePreferenceData.Identifier.SectionIdentifier section) {
+        ArrayList<BasePreferenceData> datas = new ArrayList<>();
+        for (BasePreferenceData data : this.datas) {
             if (data.getIdentifier().getSection() == section) datas.add(data);
         }
         return datas;
@@ -89,9 +89,9 @@ public class PreferenceSectionAdapter extends RecyclerView.Adapter<PreferenceSec
 
     public void filter(@Nullable String string) {
         if (string != null && string.length() > 0) {
-            ArrayList<PreferenceData> newDatas = new ArrayList<>();
-            for (PreferenceData data : originalDatas) {
-                PreferenceData.Identifier identifier = data.getIdentifier();
+            ArrayList<BasePreferenceData> newDatas = new ArrayList<>();
+            for (BasePreferenceData data : originalDatas) {
+                BasePreferenceData.Identifier identifier = data.getIdentifier();
 
                 String title = identifier.getTitle();
                 if (title != null && title.toLowerCase().contains(string.toLowerCase())) {
@@ -105,13 +105,13 @@ public class PreferenceSectionAdapter extends RecyclerView.Adapter<PreferenceSec
                     continue;
                 }
 
-                PreferenceUtils.PreferenceIdentifier preference = identifier.getPreference();
-                if (preference != null && preference.toString().toLowerCase().contains(string)) {
+                PreferenceData preference = identifier.getPreference();
+                if (preference != null && preference.name().toLowerCase().contains(string)) {
                     newDatas.add(data);
                     continue;
                 }
 
-                PreferenceData.Identifier.SectionIdentifier section = identifier.getSection();
+                BasePreferenceData.Identifier.SectionIdentifier section = identifier.getSection();
                 if (section != null && string.contains(section.toString().toLowerCase())) {
                     newDatas.add(data);
                 }

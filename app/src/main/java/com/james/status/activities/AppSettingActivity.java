@@ -19,6 +19,7 @@ import com.afollestad.async.Action;
 import com.james.status.R;
 import com.james.status.adapters.ActivityAdapter;
 import com.james.status.data.AppData;
+import com.james.status.data.PreferenceData;
 import com.james.status.dialogs.ColorPickerDialog;
 import com.james.status.dialogs.PreferenceDialog;
 import com.james.status.utils.ColorUtils;
@@ -73,7 +74,7 @@ public class AppSettingActivity extends AppCompatActivity {
                     protected void done(@Nullable Integer result) {
                         ColorPickerDialog dialog = new ColorPickerDialog(AppSettingActivity.this);
                         dialog.setPreference(app.getIntegerPreference(AppSettingActivity.this, AppData.PreferenceIdentifier.COLOR));
-                        dialog.setDefaultPreference(result != null ? result : ColorUtils.getDefaultColor(AppSettingActivity.this));
+                        dialog.setDefaultPreference(result != null ? result : PreferenceData.STATUS_COLOR.getIntValue(AppSettingActivity.this));
                         dialog.setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
                             @Override
                             public void onPreference(PreferenceDialog dialog, Integer preference) {
@@ -111,7 +112,7 @@ public class AppSettingActivity extends AppCompatActivity {
 
                 @Override
                 protected void done(@Nullable Integer result) {
-                    colorView.setImageDrawable(new ColorDrawable(result != null ? result : ColorUtils.getDefaultColor(AppSettingActivity.this)));
+                    colorView.setImageDrawable(new ColorDrawable(result != null ? result : PreferenceData.STATUS_COLOR.getIntValue(AppSettingActivity.this)));
                 }
             }.execute();
         }
@@ -165,7 +166,7 @@ public class AppSettingActivity extends AppCompatActivity {
 
                     ColorPickerDialog dialog = new ColorPickerDialog(AppSettingActivity.this);
                     dialog.setPreference(activity.getIntegerPreference(AppSettingActivity.this, AppData.PreferenceIdentifier.COLOR));
-                    dialog.setDefaultPreference(result != null ? result : ColorUtils.getDefaultColor(AppSettingActivity.this));
+                    dialog.setDefaultPreference(result != null ? result : PreferenceData.STATUS_COLOR.getIntValue(AppSettingActivity.this));
                     dialog.setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
                         @Override
                         public void onPreference(PreferenceDialog dialog, Integer preference) {

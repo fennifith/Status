@@ -10,21 +10,20 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.james.status.R;
-import com.james.status.utils.PreferenceUtils;
 
-public class PreferenceData<T> implements View.OnClickListener {
+public class BasePreferenceData<T> implements View.OnClickListener {
 
     private final Context context;
     private final Identifier identifier;
     private final OnPreferenceChangeListener<T> listener;
 
-    public PreferenceData(Context context, Identifier identifier) {
+    public BasePreferenceData(Context context, Identifier identifier) {
         this.context = context;
         this.identifier = identifier;
         listener = null;
     }
 
-    public PreferenceData(Context context, Identifier identifier, OnPreferenceChangeListener<T> listener) {
+    public BasePreferenceData(Context context, Identifier identifier, OnPreferenceChangeListener<T> listener) {
         this.context = context;
         this.identifier = identifier;
         this.listener = listener;
@@ -86,7 +85,7 @@ public class PreferenceData<T> implements View.OnClickListener {
 
         @Nullable
         private String title, subtitle;
-        private PreferenceUtils.PreferenceIdentifier identifier;
+        private com.james.status.data.PreferenceData identifier;
         private SectionIdentifier sectionIdentifier;
 
         public Identifier(@Nullable String title) {
@@ -109,18 +108,18 @@ public class PreferenceData<T> implements View.OnClickListener {
             this.sectionIdentifier = sectionIdentifier;
         }
 
-        public Identifier(PreferenceUtils.PreferenceIdentifier identifier, @Nullable String title, @Nullable String subtitle) {
+        public Identifier(com.james.status.data.PreferenceData identifier, @Nullable String title, @Nullable String subtitle) {
             this.title = title;
             this.subtitle = subtitle;
         }
 
-        public Identifier(PreferenceUtils.PreferenceIdentifier identifier, @Nullable String title, SectionIdentifier sectionIdentifier) {
+        public Identifier(com.james.status.data.PreferenceData identifier, @Nullable String title, SectionIdentifier sectionIdentifier) {
             this.identifier = identifier;
             this.title = title;
             this.sectionIdentifier = sectionIdentifier;
         }
 
-        public Identifier(PreferenceUtils.PreferenceIdentifier identifier, @Nullable String title, @Nullable String subtitle, SectionIdentifier sectionIdentifier) {
+        public Identifier(com.james.status.data.PreferenceData identifier, @Nullable String title, @Nullable String subtitle, SectionIdentifier sectionIdentifier) {
             this.identifier = identifier;
             this.title = title;
             this.subtitle = subtitle;
@@ -140,7 +139,7 @@ public class PreferenceData<T> implements View.OnClickListener {
         }
 
         @Nullable
-        public PreferenceUtils.PreferenceIdentifier getPreference() {
+        public com.james.status.data.PreferenceData getPreference() {
             return identifier;
         }
 

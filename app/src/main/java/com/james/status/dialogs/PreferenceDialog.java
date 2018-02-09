@@ -44,7 +44,7 @@ public class PreferenceDialog<T> extends AppCompatDialog {
         if (isShowing()) dismiss();
     }
 
-    public PreferenceDialog setPreference(T preference) {
+    public PreferenceDialog<T> setPreference(T preference) {
         this.preference = preference;
         return this;
     }
@@ -53,7 +53,7 @@ public class PreferenceDialog<T> extends AppCompatDialog {
         return preference != null ? preference : getDefaultPreference();
     }
 
-    public PreferenceDialog setDefaultPreference(T preference) {
+    public PreferenceDialog<T> setDefaultPreference(T preference) {
         defaultPreference = preference;
         return this;
     }
@@ -62,7 +62,7 @@ public class PreferenceDialog<T> extends AppCompatDialog {
         return defaultPreference;
     }
 
-    public PreferenceDialog setTag(Object tag) {
+    public PreferenceDialog<T> setTag(Object tag) {
         this.tag = tag;
         return this;
     }
@@ -71,7 +71,7 @@ public class PreferenceDialog<T> extends AppCompatDialog {
         return tag;
     }
 
-    public PreferenceDialog setListener(OnPreferenceListener<T> listener) {
+    public PreferenceDialog<T> setListener(OnPreferenceListener<T> listener) {
         this.listener = listener;
         return this;
     }
@@ -85,8 +85,8 @@ public class PreferenceDialog<T> extends AppCompatDialog {
     }
 
     public interface OnPreferenceListener<T> {
-        void onPreference(PreferenceDialog dialog, T preference);
+        void onPreference(PreferenceDialog<T> dialog, T preference);
 
-        void onCancel(PreferenceDialog dialog);
+        void onCancel(PreferenceDialog<T> dialog);
     }
 }

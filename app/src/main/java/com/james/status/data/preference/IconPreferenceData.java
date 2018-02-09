@@ -13,7 +13,7 @@ import com.james.status.dialogs.IconDialog;
 import com.james.status.dialogs.PreferenceDialog;
 import com.james.status.views.IconStyleImageView;
 
-public class IconPreferenceData extends PreferenceData<IconStyleData> {
+public class IconPreferenceData extends BasePreferenceData<IconStyleData> {
 
     private IconStyleData iconStyle;
     private IconData iconData;

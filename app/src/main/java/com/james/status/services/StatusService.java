@@ -2,7 +2,6 @@ package com.james.status.services;
 
 import android.animation.ValueAnimator;
 import android.app.AlarmManager;
-import android.app.KeyguardManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -44,6 +43,7 @@ import com.james.status.activities.MainActivity;
 import com.james.status.data.ActionData;
 import com.james.status.data.AppData;
 import com.james.status.data.NotificationData;
+import com.james.status.data.PreferenceData;
 import com.james.status.data.icon.AirplaneModeIconData;
 import com.james.status.data.icon.AlarmIconData;
 import com.james.status.data.icon.BatteryIconData;
@@ -61,7 +61,6 @@ import com.james.status.data.icon.RingerIconData;
 import com.james.status.data.icon.TimeIconData;
 import com.james.status.data.icon.WifiIconData;
 import com.james.status.receivers.ActivityVisibilitySettingReceiver;
-import com.james.status.utils.PreferenceUtils;
 import com.james.status.utils.StaticUtils;
 import com.james.status.views.CustomImageView;
 import com.james.status.views.StatusView;
@@ -94,7 +93,6 @@ public class StatusService extends Service {
     private View fullscreenView;
     private View headsUpView;
 
-    private KeyguardManager keyguardManager;
     private WindowManager windowManager;
     private PackageManager packageManager;
 
@@ -117,7 +115,6 @@ public class StatusService extends Service {
         super.onCreate();
 
         windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-        keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
         packageManager = getPackageManager();
 
         notificationReceiver = new NotificationReceiver();
@@ -141,12 +138,10 @@ public class StatusService extends Service {
             }
         };
 
-        Boolean enabled = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED);
-        if (enabled != null && enabled)
+        if (PreferenceData.STATUS_ENABLED.getBooleanValue(this))
             setUp();
 
-        Integer duration = PreferenceUtils.getIntegerPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_HEADS_UP_DURATION);
-        if (duration != null) headsUpDuration = duration * 1000;
+        headsUpDuration = PreferenceData.STATUS_HEADS_UP_DURATION.getIntValue(this) * 1000;
     }
 
     @Nullable
@@ -157,8 +152,7 @@ public class StatusService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Boolean enabled = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED);
-        if (enabled == null || !enabled) {
+        if (!PreferenceData.STATUS_ENABLED.getBooleanValue(this)) {
             if (statusView != null) {
                 if (statusView.getParent() != null) windowManager.removeView(statusView);
                 statusView.unregister();
@@ -182,8 +176,6 @@ public class StatusService extends Service {
                 break;
             case ACTION_UPDATE:
                 if (statusView != null) {
-                    statusView.setLockscreen(keyguardManager.isKeyguardLocked());
-
                     if (intent.hasExtra(EXTRA_IS_TRANSPARENT) && intent.getBooleanExtra(EXTRA_IS_TRANSPARENT, false))
                         statusView.setTransparent();
                     else if (intent.hasExtra(EXTRA_COLOR) && headsUpView == null)
@@ -193,8 +185,7 @@ public class StatusService extends Service {
                     statusView.setFullscreen(intent.getBooleanExtra(EXTRA_IS_FULLSCREEN, isFullscreen()));
 
                     if (intent.hasExtra(EXTRA_PACKAGE) && intent.hasExtra(EXTRA_ACTIVITY)) {
-                        Boolean isForeground = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_PERSISTENT_NOTIFICATION);
-                        if (isForeground == null || isForeground) {
+                        if (PreferenceData.STATUS_PERSISTENT_NOTIFICATION.getBooleanValue(this)) {
                             packageName = intent.getStringExtra(EXTRA_PACKAGE);
                             activityData = intent.getParcelableExtra(EXTRA_ACTIVITY);
 
@@ -205,8 +196,7 @@ public class StatusService extends Service {
                 return START_STICKY;
         }
 
-        Boolean isForeground = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_PERSISTENT_NOTIFICATION);
-        if (isForeground == null || isForeground) {
+        if (PreferenceData.STATUS_PERSISTENT_NOTIFICATION.getBooleanValue(this)) {
             if (packageName != null && activityData != null)
                 startForeground(packageName, activityData);
             else {
@@ -255,8 +245,7 @@ public class StatusService extends Service {
                 .setSubText(packageName)
                 .setContentIntent(contentStackBuilder.getPendingIntent(0, PendingIntent.FLAG_CANCEL_CURRENT));
 
-        Boolean isColorAuto = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_COLOR_AUTO);
-        if (isColorAuto == null || isColorAuto) {
+        if (PreferenceData.STATUS_COLOR_AUTO.getBooleanValue(this)) {
             Intent colorIntent = new Intent(this, AppSettingActivity.class);
             colorIntent.putExtra(AppSettingActivity.EXTRA_APP, appData);
             colorIntent.putExtra(AppSettingActivity.EXTRA_ACTIVITY, activityData);
@@ -398,10 +387,9 @@ public class StatusService extends Service {
     }
 
     public void showHeadsUp(NotificationData notification) {
-        Integer headsUpLayout = PreferenceUtils.getIntegerPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_HEADS_UP_LAYOUT);
-        if (headsUpLayout == null) headsUpLayout = HEADSUP_LAYOUT_PLAIN;
+        int headsUpLayout;
 
-        switch (headsUpLayout) {
+        switch (PreferenceData.STATUS_HEADS_UP_LAYOUT.getIntValue(this)) {
             case HEADSUP_LAYOUT_CARD:
                 headsUpLayout = R.layout.layout_notification_card;
                 break;
@@ -469,9 +457,7 @@ public class StatusService extends Service {
             }
         });
 
-        Integer duration = PreferenceUtils.getIntegerPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_HEADS_UP_DURATION);
-        if (duration != null) headsUpDuration = duration * 1000;
-
+        headsUpDuration = PreferenceData.STATUS_HEADS_UP_DURATION.getIntValue(this) * 1000;
         headsUpHandler.postDelayed(headsUpRunnable, headsUpDuration);
 
         CustomImageView icon = (CustomImageView) headsUpView.findViewById(R.id.icon);
@@ -681,9 +667,7 @@ public class StatusService extends Service {
                         statusView.setSystemShowing(true);
                         headsUpNotification = notification;
 
-                        Integer duration = PreferenceUtils.getIntegerPreference(StatusService.this, PreferenceUtils.PreferenceIdentifier.STATUS_HEADS_UP_DURATION);
-                        if (duration != null) headsUpDuration = duration * 1000;
-
+                        headsUpDuration = PreferenceData.STATUS_HEADS_UP_DURATION.getIntValue(StatusService.this) * 1000;
                         headsUpHandler.postDelayed(headsUpDisabledRunnable, headsUpDuration);
                     }
 

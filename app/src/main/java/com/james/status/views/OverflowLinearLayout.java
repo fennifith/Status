@@ -10,7 +10,7 @@ import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 
 import com.james.status.activities.MainActivity;
-import com.james.status.utils.PreferenceUtils;
+import com.james.status.data.PreferenceData;
 
 public class OverflowLinearLayout extends LinearLayout {
 
@@ -43,8 +43,7 @@ public class OverflowLinearLayout extends LinearLayout {
     }
 
     private void setUpOverflow(int width) {
-        Boolean preventOverlap = PreferenceUtils.getBooleanPreference(OverflowLinearLayout.this.getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_PREVENT_ICON_OVERLAP);
-        if (preventOverlap != null && preventOverlap)
+        if (PreferenceData.STATUS_PREVENT_ICON_OVERLAP.getBooleanValue(OverflowLinearLayout.this.getContext()))
             onViewsChanged();
         else {
             Intent intent = new Intent(MainActivity.ACTION_TOO_MANY_ICONS);

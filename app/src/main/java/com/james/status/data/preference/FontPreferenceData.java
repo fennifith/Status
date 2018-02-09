@@ -12,14 +12,14 @@ import android.widget.RadioGroup;
 import android.widget.ScrollView;
 
 import com.james.status.R;
-import com.james.status.utils.PreferenceUtils;
+import com.james.status.data.PreferenceData;
 import com.james.status.utils.StaticUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class FontPreferenceData extends PreferenceData<String> {
+public class FontPreferenceData extends BasePreferenceData<String> {
 
     private String preference;
     private List<String> items;
@@ -91,9 +91,9 @@ public class FontPreferenceData extends PreferenceData<String> {
                     public void onClick(DialogInterface dialog, int which) {
                         FontPreferenceData.this.preference = selectedPreference;
 
-                        PreferenceUtils.PreferenceIdentifier identifier = getIdentifier().getPreference();
-                        if (identifier != null)
-                            PreferenceUtils.putPreference(getContext(), identifier, selectedPreference);
+                        PreferenceData preference = getIdentifier().getPreference();
+                        if (preference != null)
+                            preference.setValue(getContext(), selectedPreference);
 
                         onPreferenceChange(selectedPreference);
                         selectedPreference = null;

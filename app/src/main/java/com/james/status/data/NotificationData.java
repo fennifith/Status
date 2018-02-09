@@ -22,8 +22,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.NotificationCompat;
 
-import com.james.status.utils.PreferenceUtils;
-
 public class NotificationData implements Parcelable {
 
     public String category, title, subtitle, packageName, group, key, tag = "";
@@ -196,8 +194,7 @@ public class NotificationData implements Parcelable {
     }
 
     public boolean shouldShowHeadsUp(Context context) {
-        Boolean headsUp = PreferenceUtils.getBooleanPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_NOTIFICATIONS_HEADS_UP);
-        return (headsUp != null ? headsUp : Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) && (priority >= NotificationCompat.PRIORITY_HIGH || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) && isAlert;
+        return PreferenceData.STATUS_NOTIFICATIONS_HEADS_UP.getBooleanValue(context) && (priority >= NotificationCompat.PRIORITY_HIGH || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) && isAlert;
     }
 
     public boolean shouldHideStatusBar() {

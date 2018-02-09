@@ -21,6 +21,7 @@ import android.util.Log;
 import com.james.status.BuildConfig;
 import com.james.status.Status;
 import com.james.status.activities.StartActivity;
+import com.james.status.data.PreferenceData;
 import com.james.status.data.icon.IconData;
 import com.james.status.services.AccessibilityService;
 import com.james.status.services.StatusService;
@@ -31,8 +32,8 @@ import java.util.List;
 public class StaticUtils {
 
     public static int getStatusBarHeight(Context context) {
-        Integer height = PreferenceUtils.getIntegerPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_HEIGHT);
-        if (height != null && height > 0)
+        int height = PreferenceData.STATUS_HEIGHT.getIntValue(context);
+        if (height > 0)
             return height;
 
         int resId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
@@ -76,10 +77,6 @@ public class StaticUtils {
         }
     }
 
-    public static boolean isAccessibilityGranted(Context context) {
-        return isAccessibilityServiceRunning(context);
-    }
-
     public static boolean isNotificationGranted(Context context) {
         for (String packageName : NotificationManagerCompat.getEnabledListenerPackages(context)) {
             if (packageName.contains(context.getPackageName()) || packageName.equals(context.getPackageName()))
@@ -89,19 +86,17 @@ public class StaticUtils {
     }
 
     public static boolean isIgnoringOptimizations(Context context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-            return ((PowerManager) context.getSystemService(Context.POWER_SERVICE)).isIgnoringBatteryOptimizations(context.getPackageName());
-        else return true;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+            if (powerManager != null)
+                return powerManager.isIgnoringBatteryOptimizations(context.getPackageName());
+        }
+
+        return true;
     }
 
     public static boolean canDrawOverlays(Context context) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return true;
-        else return Settings.canDrawOverlays(context);
-    }
-
-    public static boolean isIgnoringPermissions(Context context) {
-        Boolean isIgnoring = PreferenceUtils.getBooleanPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_IGNORE_PERMISSION_CHECKING);
-        return isIgnoring != null && isIgnoring;
+        return Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(context);
     }
 
     public static boolean isPermissionsGranted(Context context, String[] permissions) {
@@ -109,7 +104,7 @@ public class StaticUtils {
             if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
                 if (BuildConfig.DEBUG)
                     Log.wtf("Permission", "missing " + permission);
-                return isIgnoringPermissions(context);
+                return PreferenceData.STATUS_IGNORE_PERMISSION_CHECKING.getBooleanValue(context);
             }
         }
 
@@ -122,7 +117,7 @@ public class StaticUtils {
                 if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
                     if (BuildConfig.DEBUG)
                         Log.wtf("Permission", "missing " + permission);
-                    return isIgnoringPermissions(context);
+                    return PreferenceData.STATUS_IGNORE_PERMISSION_CHECKING.getBooleanValue(context);
                 }
             }
         }
@@ -142,20 +137,23 @@ public class StaticUtils {
     }
 
     public static boolean isStatusServiceRunning(Context context) {
-        Boolean isEnabled = PreferenceUtils.getBooleanPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED);
-        if (isEnabled != null && isEnabled && isReady(context)) {
+        if (PreferenceData.STATUS_ENABLED.getBooleanValue(context) && isReady(context)) {
             ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-            for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-                if (StatusService.class.getName().equals(service.service.getClassName())) {
-                    return true;
+            if (manager != null) {
+                for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+                    if (StatusService.class.getName().equals(service.service.getClassName())) {
+                        return true;
+                    }
                 }
-            }
 
-            Intent intent = new Intent(StatusService.ACTION_START);
-            intent.setClass(context, StatusService.class);
-            context.startService(intent);
-            return true;
-        } else return false;
+                Intent intent = new Intent(StatusService.ACTION_START);
+                intent.setClass(context, StatusService.class);
+                context.startService(intent);
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public static void updateStatusService(Context context) {
@@ -170,20 +168,21 @@ public class StaticUtils {
 
     public static boolean isAccessibilityServiceRunning(Context context) {
         ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (AccessibilityService.class.getName().equals(service.service.getClassName())) {
-                return true;
+        if (manager != null) {
+            for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+                if (AccessibilityService.class.getName().equals(service.service.getClassName())) {
+                    return true;
+                }
             }
-        }
-        return false;
+            return false;
+        } else return true;
     }
 
     public static boolean shouldUseCompatNotifications(Context context) {
-        Boolean enabled = PreferenceUtils.getBooleanPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_NOTIFICATIONS_COMPAT);
-        return Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2 || (enabled != null && enabled);
+        return Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2 || PreferenceData.STATUS_NOTIFICATIONS_COMPAT.getBooleanValue(context);
     }
 
     public static boolean isReady(Context context) {
-        return StaticUtils.isAccessibilityGranted(context) && StaticUtils.isNotificationGranted(context) && StaticUtils.canDrawOverlays(context);
+        return StaticUtils.isAccessibilityServiceRunning(context) && StaticUtils.isNotificationGranted(context) && StaticUtils.canDrawOverlays(context);
     }
 }

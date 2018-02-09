@@ -24,7 +24,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,20 +34,20 @@ import android.widget.TextView;
 import com.james.status.R;
 import com.james.status.Status;
 import com.james.status.adapters.SimplePagerAdapter;
+import com.james.status.data.PreferenceData;
 import com.james.status.data.icon.IconData;
 import com.james.status.fragments.AppPreferenceFragment;
 import com.james.status.fragments.GeneralPreferenceFragment;
 import com.james.status.fragments.HelpFragment;
 import com.james.status.fragments.IconPreferenceFragment;
 import com.james.status.services.StatusService;
-import com.james.status.utils.PreferenceUtils;
 import com.james.status.utils.StaticUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
+public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, CompoundButton.OnCheckedChangeListener {
 
     public static final String ACTION_TOO_MANY_ICONS = "com.james.status.MainActivity.TOO_MANY_ICONS";
     public static final String EXTRA_MANY_ICONS = "com.james.status.MainActivity.EXTRA_MANY_ICONS";
@@ -144,32 +143,8 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             }
         });
 
-        Boolean enabled = PreferenceUtils.getBooleanPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED);
-        service.setChecked((enabled != null && enabled) || StaticUtils.isStatusServiceRunning(this));
-        service.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (!StaticUtils.isReady(MainActivity.this)) {
-                    startActivity(new Intent(MainActivity.this, StartActivity.class));
-
-                    service.setOnCheckedChangeListener(null);
-                    service.setChecked(false);
-                    service.setOnCheckedChangeListener(this);
-                } else if (b) {
-                    PreferenceUtils.putPreference(MainActivity.this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED, true);
-
-                    Intent intent = new Intent(StatusService.ACTION_START);
-                    intent.setClass(MainActivity.this, StatusService.class);
-                    startService(intent);
-                } else {
-                    PreferenceUtils.putPreference(MainActivity.this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED, false);
-
-                    Intent intent = new Intent(StatusService.ACTION_STOP);
-                    intent.setClass(MainActivity.this, StatusService.class);
-                    stopService(intent);
-                }
-            }
-        });
+        service.setChecked(PreferenceData.STATUS_ENABLED.getBooleanValue(this) && StaticUtils.isStatusServiceRunning(this));
+        service.setOnCheckedChangeListener(this);
 
         adapter = new SimplePagerAdapter(this, getSupportFragmentManager(), viewPager, new GeneralPreferenceFragment(), new IconPreferenceFragment(), new AppPreferenceFragment(), new HelpFragment());
         viewPager.setAdapter(adapter);
@@ -215,6 +190,10 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Override
     protected void onResume() {
         super.onResume();
+
+        service.setOnCheckedChangeListener(null);
+        service.setChecked(PreferenceData.STATUS_ENABLED.getBooleanValue(this) || StaticUtils.isStatusServiceRunning(this));
+        service.setOnCheckedChangeListener(this);
 
         if (behavior.getState() == BottomSheetBehavior.STATE_HIDDEN) {
             if (!StaticUtils.isStatusServiceRunning(this) && StaticUtils.shouldShowTutorial(this, "enable")) {
@@ -398,6 +377,25 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     }
 
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        if (b && !StaticUtils.isReady(this)) {
+            startActivity(new Intent(this, StartActivity.class));
+
+            service.setOnCheckedChangeListener(null);
+            service.setChecked(false);
+            service.setOnCheckedChangeListener(this);
+        } else {
+            PreferenceData.STATUS_ENABLED.setValue(this, b);
+
+            Intent intent = new Intent(b ? StatusService.ACTION_START : StatusService.ACTION_STOP);
+            intent.setClass(this, StatusService.class);
+            if (b)
+                startService(intent);
+            else stopService(intent);
+        }
+    }
+
     public interface OnTutorialClickListener {
         void onClick();
     }
@@ -412,7 +410,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d("Broadcast", "received");
             if (intent != null && intent.getAction() != null && intent.getAction().equals(ACTION_TOO_MANY_ICONS)) {
                 if (intent.getBooleanExtra(EXTRA_MANY_ICONS, true))
                     activity.setTutorial(R.string.tutorial_too_many_icons, R.string.tutorial_too_many_icons_desc, null, true);

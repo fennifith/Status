@@ -7,7 +7,7 @@ import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
 
 import com.james.status.R;
-import com.james.status.utils.PreferenceUtils;
+import com.james.status.data.PreferenceData;
 import com.james.status.utils.StaticUtils;
 
 @TargetApi(24)
@@ -39,7 +39,7 @@ public class QuickToggleService extends TileService {
         Tile tile = getQsTile();
         if (tile != null) {
             if (StaticUtils.isStatusServiceRunning(this)) {
-                PreferenceUtils.putPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED, false);
+                PreferenceData.STATUS_ENABLED.setValue(this, false);
 
                 Intent intent = new Intent(StatusService.ACTION_STOP);
                 intent.setClass(this, StatusService.class);
@@ -47,7 +47,7 @@ public class QuickToggleService extends TileService {
 
                 tile.setIcon(Icon.createWithResource(this, R.drawable.ic_check_box_disabled));
             } else if (StaticUtils.isReady(this)) {
-                PreferenceUtils.putPreference(this, PreferenceUtils.PreferenceIdentifier.STATUS_ENABLED, true);
+                PreferenceData.STATUS_ENABLED.setValue(this, true);
 
                 Intent intent = new Intent(StatusService.ACTION_START);
                 intent.setClass(this, StatusService.class);

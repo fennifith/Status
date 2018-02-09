@@ -10,7 +10,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.james.status.R;
-import com.james.status.utils.PreferenceUtils;
+import com.james.status.data.PreferenceData;
 
 import java.io.File;
 import java.util.List;
@@ -44,7 +44,7 @@ public class BackupCreatorDialog extends AppCompatDialog implements View.OnClick
                 name = "backup" + i;
             }
 
-            file = new File(PreferenceUtils.getBackupsDir(), name + ".txt");
+            file = new File(PreferenceData.getBackupsDir(), name + ".txt");
             editText.setText(name);
         }
 
@@ -69,7 +69,7 @@ public class BackupCreatorDialog extends AppCompatDialog implements View.OnClick
                     return;
                 }
 
-                file = new File(PreferenceUtils.getBackupsDir(), name + ".txt");
+                file = new File(PreferenceData.getBackupsDir(), name + ".txt");
             }
 
             @Override
@@ -95,14 +95,14 @@ public class BackupCreatorDialog extends AppCompatDialog implements View.OnClick
         switch (v.getId()) {
             case R.id.save:
                 if (file != null) {
-                    if (listener != null && PreferenceUtils.toFile(getContext(), file)) {
+                    if (listener != null && PreferenceData.toFile(getContext(), file)) {
                         listener.onFileChanged(false);
                         dismiss();
                     }
                 } else editText.setError(getContext().getString(R.string.error_name_exists));
                 break;
             case R.id.restore:
-                if (file != null && listener != null && file.exists() && PreferenceUtils.fromFile(getContext(), file)) {
+                if (file != null && listener != null && file.exists() && PreferenceData.fromFile(getContext(), file)) {
                     listener.onFileChanged(true);
                     dismiss();
                 }

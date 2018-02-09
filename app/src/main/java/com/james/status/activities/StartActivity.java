@@ -19,6 +19,8 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.james.status.R;
+import com.james.status.data.PreferenceData;
+import com.james.status.services.StatusService;
 import com.james.status.utils.StaticUtils;
 
 import java.util.ArrayList;
@@ -45,6 +47,12 @@ public class StartActivity extends AppCompatActivity {
         steppersViewConfig.setOnFinishAction(new OnFinishAction() {
             @Override
             public void onFinish() {
+                PreferenceData.STATUS_ENABLED.setValue(StartActivity.this, true);
+
+                Intent intent = new Intent(StatusService.ACTION_START);
+                intent.setClass(StartActivity.this, StatusService.class);
+                startService(intent);
+
                 finish();
             }
         });
@@ -105,7 +113,7 @@ public class StartActivity extends AppCompatActivity {
         accessibilityStep.setLabel(getString(R.string.service_name));
         accessibilityStep.setSubLabel(getString(R.string.service_desc));
         accessibilityStep.setFragment(new AccessibilityStepFragment());
-        accessibilityStep.setPositiveButtonEnable(StaticUtils.isAccessibilityGranted(this));
+        accessibilityStep.setPositiveButtonEnable(StaticUtils.isAccessibilityServiceRunning(this));
 
         steps.add(accessibilityStep);
 
@@ -118,7 +126,7 @@ public class StartActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if (accessibilityStep != null)
-            accessibilityStep.setPositiveButtonEnable(StaticUtils.isAccessibilityGranted(this));
+            accessibilityStep.setPositiveButtonEnable(StaticUtils.isAccessibilityServiceRunning(this));
         if (notificationStep != null)
             notificationStep.setPositiveButtonEnable(StaticUtils.isNotificationGranted(this));
         if (overlayStep != null)
@@ -132,7 +140,7 @@ public class StartActivity extends AppCompatActivity {
         switch (requestCode) {
             case REQUEST_ACCESSIBILITY:
                 if (accessibilityStep != null)
-                    accessibilityStep.setPositiveButtonEnable(StaticUtils.isAccessibilityGranted(this));
+                    accessibilityStep.setPositiveButtonEnable(StaticUtils.isAccessibilityServiceRunning(this));
                 break;
             case REQUEST_NOTIFICATION:
                 if (notificationStep != null)

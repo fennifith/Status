@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.CompoundButton;
 
 import com.james.status.R;
-import com.james.status.utils.PreferenceUtils;
+import com.james.status.data.PreferenceData;
 import com.james.status.utils.StaticUtils;
 
 public class CompatibilityNotificationDialog extends AppCompatDialog {
@@ -47,7 +47,7 @@ public class CompatibilityNotificationDialog extends AppCompatDialog {
         findViewById(R.id.confirm).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PreferenceUtils.putPreference(getContext(), PreferenceUtils.PreferenceIdentifier.STATUS_NOTIFICATIONS_COMPAT, isEnabled);
+                PreferenceData.STATUS_NOTIFICATIONS_COMPAT.setValue(getContext(), isEnabled);
                 dismiss();
             }
         });

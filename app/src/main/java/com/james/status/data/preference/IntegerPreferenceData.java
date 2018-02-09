@@ -5,11 +5,11 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.view.View;
 
+import com.james.status.data.PreferenceData;
 import com.james.status.dialogs.IntegerPickerDialog;
 import com.james.status.dialogs.PreferenceDialog;
-import com.james.status.utils.PreferenceUtils;
 
-public class IntegerPreferenceData extends PreferenceData<Integer> {
+public class IntegerPreferenceData extends BasePreferenceData<Integer> {
 
     private int preference;
     private String unit;
@@ -20,10 +20,9 @@ public class IntegerPreferenceData extends PreferenceData<Integer> {
     public IntegerPreferenceData(Context context, Identifier identifier, int defaultValue, String unit, @Nullable Integer min, @Nullable Integer max, OnPreferenceChangeListener<Integer> listener) {
         super(context, identifier, listener);
 
-        Integer preference = PreferenceUtils.getIntegerPreference(context, identifier.getPreference());
-        if (preference == null) preference = defaultValue;
+        PreferenceData preference = identifier.getPreference();
+        this.preference = preference != null ? preference.getIntValue(context, defaultValue) : defaultValue;
 
-        this.preference = preference;
         this.unit = unit;
         this.min = min;
         this.max = max;
@@ -33,13 +32,14 @@ public class IntegerPreferenceData extends PreferenceData<Integer> {
     public void onClick(View v) {
         Dialog dialog = new IntegerPickerDialog(getContext(), unit).setMinMax(min, max).setPreference(preference).setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
             @Override
-            public void onPreference(PreferenceDialog dialog, Integer preference) {
+            public void onPreference(PreferenceDialog dialog, Integer value) {
                 IntegerPreferenceData.this.preference = preference;
 
-                PreferenceUtils.PreferenceIdentifier identifier = getIdentifier().getPreference();
-                if (identifier != null)
-                    PreferenceUtils.putPreference(getContext(), getIdentifier().getPreference(), preference);
-                onPreferenceChange(preference);
+                PreferenceData preference = getIdentifier().getPreference();
+                if (preference != null)
+                    preference.setValue(getContext(), value);
+
+                onPreferenceChange(value);
             }
 
             @Override

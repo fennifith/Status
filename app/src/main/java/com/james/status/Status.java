@@ -7,7 +7,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.james.status.utils.PreferenceUtils;
+import com.james.status.data.PreferenceData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,13 +82,8 @@ public class Status extends Application {
     }
 
     public static void showDebug(Context context, String message, int length) {
-        if (isDebug(context))
+        if (PreferenceData.STATUS_DEBUG.getBooleanValue(context))
             Toast.makeText(context, message, length).show();
         else Log.d("Status", message);
-    }
-
-    public static boolean isDebug(Context context) {
-        Boolean isDebug = PreferenceUtils.getBooleanPreference(context, PreferenceUtils.PreferenceIdentifier.STATUS_DEBUG);
-        return (isDebug != null && isDebug) || (isDebug == null && BuildConfig.DEBUG);
     }
 }
