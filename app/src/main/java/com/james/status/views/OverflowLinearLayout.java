@@ -43,7 +43,7 @@ public class OverflowLinearLayout extends LinearLayout {
     }
 
     private void setUpOverflow(int width) {
-        if (PreferenceData.STATUS_PREVENT_ICON_OVERLAP.getBooleanValue(OverflowLinearLayout.this.getContext()))
+        if (PreferenceData.STATUS_PREVENT_ICON_OVERLAP.getValue(OverflowLinearLayout.this.getContext()))
             onViewsChanged();
         else {
             Intent intent = new Intent(MainActivity.ACTION_TOO_MANY_ICONS);

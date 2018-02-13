@@ -87,17 +87,17 @@ public class NotificationsIconData extends IconData<NotificationsIconData.Notifi
 
         preferences.add(new IntegerPreferenceData(
                 getContext(),
-                new BasePreferenceData.Identifier(
-                        getContext().getString(R.string.preference_icon_scale)
+                new BasePreferenceData.Identifier<Integer>(
+                        PreferenceData.ICON_ICON_SCALE,
+                        getContext().getString(R.string.preference_icon_scale),
+                        getIdentifierArgs()
                 ),
-                getIconScale(),
                 getContext().getString(R.string.unit_dp),
                 0,
                 null,
                 new BasePreferenceData.OnPreferenceChangeListener<Integer>() {
                     @Override
                     public void onPreferenceChange(Integer preference) {
-                        putPreference(PreferenceIdentifier.ICON_SCALE, preference);
                         StaticUtils.updateStatusService(getContext());
                     }
                 }
@@ -115,7 +115,7 @@ public class NotificationsIconData extends IconData<NotificationsIconData.Notifi
         notificationLayout.removeAllViewsInLayout();
         notifications.clear();
 
-        notificationLayout.setLayoutTransition(PreferenceData.STATUS_ICON_ANIMATIONS.getBooleanValue(getContext()) ? new LayoutTransition() : null);
+        notificationLayout.setLayoutTransition(PreferenceData.STATUS_ICON_ANIMATIONS.getValue(getContext()) ? new LayoutTransition() : null);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             Intent intent = new Intent(NotificationService.ACTION_GET_NOTIFICATIONS);
@@ -205,7 +205,7 @@ public class NotificationsIconData extends IconData<NotificationsIconData.Notifi
 
         private NotificationReceiver(NotificationsIconData iconData) {
             super(iconData);
-            this.isIconOverlapPrevention = PreferenceData.STATUS_PREVENT_ICON_OVERLAP.getBooleanValue(iconData.getContext());
+            this.isIconOverlapPrevention = PreferenceData.STATUS_PREVENT_ICON_OVERLAP.getValue(iconData.getContext());
         }
 
         @Override

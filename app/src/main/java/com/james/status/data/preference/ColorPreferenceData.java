@@ -2,28 +2,23 @@ package com.james.status.data.preference;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.support.annotation.ColorInt;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.james.status.R;
-import com.james.status.data.PreferenceData;
 import com.james.status.dialogs.ColorPickerDialog;
 import com.james.status.dialogs.PreferenceDialog;
 import com.james.status.views.ColorImageView;
 
 public class ColorPreferenceData extends BasePreferenceData<Integer> {
 
-    private int defaultValue, value;
+    private int value;
 
-    public ColorPreferenceData(Context context, Identifier identifier, @ColorInt int defaultValue, OnPreferenceChangeListener<Integer> listener) {
+    public ColorPreferenceData(Context context, Identifier<Integer> identifier, OnPreferenceChangeListener<Integer> listener) {
         super(context, identifier, listener);
 
-        this.defaultValue = defaultValue;
-
-        com.james.status.data.PreferenceData preference = identifier.getPreference();
-        value = preference != null ? preference.getIntValue(context, defaultValue) : defaultValue;
+        value = identifier.getPreferenceValue(context);
     }
 
     @Override
@@ -39,16 +34,13 @@ public class ColorPreferenceData extends BasePreferenceData<Integer> {
 
     @Override
     public void onClick(final View v) {
-        Dialog dialog = new ColorPickerDialog(getContext()).setPreference(value).setDefaultPreference(defaultValue).setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
+        Dialog dialog = new ColorPickerDialog(getContext()).setPreference(value).setDefaultPreference((int) getIdentifier().getPreference().getDefaultValue()).setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
             @Override
             public void onPreference(PreferenceDialog dialog, Integer color) {
                 value = color;
                 ((ColorImageView) v.findViewById(R.id.color)).setColor(color);
 
-                PreferenceData preference = getIdentifier().getPreference();
-                if (preference != null)
-                    preference.setValue(getContext(), color);
-
+                getIdentifier().setPreferenceValue(getContext(), color);
                 onPreferenceChange(color);
             }
 

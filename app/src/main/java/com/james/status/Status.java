@@ -82,7 +82,7 @@ public class Status extends Application {
     }
 
     public static void showDebug(Context context, String message, int length) {
-        if (PreferenceData.STATUS_DEBUG.getBooleanValue(context))
+        if (PreferenceData.STATUS_DEBUG.getValue(context))
             Toast.makeText(context, message, length).show();
         else Log.d("Status", message);
     }

@@ -3,7 +3,6 @@ package com.james.status.data.icon;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -55,11 +54,11 @@ public abstract class IconData<T extends IconUpdateReceiver> {
     public IconData(Context context) {
         this.context = context;
 
-        color = PreferenceData.STATUS_COLOR.getIntValue(context);
+        color = PreferenceData.STATUS_COLOR.getValue(context);
 
-        String name = getStringPreference(PreferenceIdentifier.ICON_STYLE);
         List<IconStyleData> styles = getIconStyles();
         if (styles.size() > 0) {
+            String name = PreferenceData.ICON_ICON_STYLE.getSpecificOverriddenValue(context, styles.get(0).name, getIdentifierArgs());
             if (name != null) {
                 for (IconStyleData style : styles) {
                     if (style.name.equals(name)) {
@@ -153,7 +152,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
 
                     Integer color = getTextColor();
 
-                    if (color != null && !(PreferenceData.STATUS_DARK_ICONS.getBooleanValue(getContext()) && (color == Color.WHITE || color == Color.BLACK))) {
+                    if (color != null && !((boolean) PreferenceData.STATUS_DARK_ICONS.getValue(getContext()) && (color == Color.WHITE || color == Color.BLACK))) {
                         textView.setTextColor(color);
                         textView.setTag(color);
                     } else textView.setTag(null);
@@ -173,8 +172,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
     }
 
     public final boolean isVisible() {
-        Boolean isVisible = getBooleanPreference(PreferenceIdentifier.VISIBILITY);
-        return (isDefaultVisible() ? (isVisible == null || isVisible) : (isVisible != null && isVisible)) && StaticUtils.isPermissionsGranted(getContext(), getPermissions());
+        return PreferenceData.ICON_VISIBILITY.getSpecificOverriddenValue(getContext(), isDefaultVisible(), getIdentifierArgs()) && StaticUtils.isPermissionsGranted(getContext(), getPermissions());
     }
 
     boolean isDefaultVisible() {
@@ -187,8 +185,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
     }
 
     public boolean hasDrawable() {
-        Boolean hasDrawable = getBooleanPreference(PreferenceIdentifier.ICON_VISIBILITY);
-        return canHazDrawable() && (hasDrawable == null || hasDrawable) && style != null;
+        return canHazDrawable() && PreferenceData.ICON_ICON_VISIBILITY.getSpecificOverriddenValue(getContext(), true, getIdentifierArgs()) && style != null;
     }
 
     public boolean canHazText() {
@@ -197,8 +194,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
     }
 
     public boolean hasText() {
-        Boolean hasText = getBooleanPreference(PreferenceIdentifier.TEXT_VISIBILITY);
-        return canHazText() && (hasText != null && hasText);
+        return canHazText() && PreferenceData.ICON_TEXT_VISIBILITY.getSpecificOverriddenValue(getContext(), !canHazDrawable(), getIdentifierArgs());
     }
 
     public String[] getPermissions() {
@@ -224,38 +220,29 @@ public abstract class IconData<T extends IconUpdateReceiver> {
     }
 
     public final int getIconPadding() {
-        Integer padding = getIntegerPreference(PreferenceIdentifier.ICON_PADDING);
-        if (padding == null) padding = 2;
-        return padding;
+        return PreferenceData.ICON_ICON_PADDING.getSpecificValue(getContext(), getIdentifierArgs());
     }
 
     public final int getIconScale() {
-        Integer scale = getIntegerPreference(PreferenceIdentifier.ICON_SCALE);
-        if (scale == null) scale = 24;
-        return scale;
+        return PreferenceData.ICON_ICON_SCALE.getSpecificValue(getContext(), getIdentifierArgs());
     }
 
     public final float getTextSize() {
-        Integer size = getIntegerPreference(PreferenceIdentifier.TEXT_SIZE);
-        if (size == null) size = 14;
-        return size;
+        return (float) (int) PreferenceData.ICON_TEXT_SIZE.getSpecificValue(getContext(), getIdentifierArgs());
     }
 
-    @Nullable
     @ColorInt
     public final Integer getTextColor() {
-        return getIntegerPreference(PreferenceIdentifier.TEXT_COLOR);
+        return PreferenceData.ICON_TEXT_COLOR.getSpecificValue(getContext(), getIdentifierArgs());
     }
 
     public final Integer getTextEffect() {
-        Integer textEffect = getIntegerPreference(PreferenceIdentifier.TEXT_EFFECT);
-        if (textEffect == null) textEffect = Typeface.BOLD;
-        return textEffect;
+        return PreferenceData.ICON_TEXT_EFFECT.getSpecificValue(getContext(), getIdentifierArgs());
     }
 
     @Nullable
     public String getTypefaceName() {
-        return getStringPreference(PreferenceIdentifier.TEXT_TYPEFACE);
+        return PreferenceData.ICON_TEXT_TYPEFACE.getSpecificOverriddenValue(getContext(), null, getIdentifierArgs());
     }
 
     @Nullable
@@ -274,9 +261,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
     }
 
     public final int getPosition() {
-        Integer position = getIntegerPreference(PreferenceIdentifier.POSITION);
-        if (position == null) position = 0;
-        return position;
+        return PreferenceData.ICON_POSITION.getSpecificValue(getContext(), getIdentifierArgs());
     }
 
     public int getDefaultGravity() {
@@ -284,9 +269,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
     }
 
     public final int getGravity() {
-        Integer gravity = getIntegerPreference(PreferenceIdentifier.GRAVITY);
-        if (gravity == null) gravity = getDefaultGravity();
-        return gravity;
+        return PreferenceData.ICON_GRAVITY.getSpecificOverriddenValue(getContext(), getDefaultGravity(), getIdentifierArgs());
     }
 
     @Nullable
@@ -336,14 +319,14 @@ public abstract class IconData<T extends IconUpdateReceiver> {
         if (canHazDrawable() && (hasText() || !hasDrawable())) {
             preferences.add(new BooleanPreferenceData(
                     getContext(),
-                    new BasePreferenceData.Identifier(
-                            getContext().getString(R.string.preference_show_drawable)
+                    new BasePreferenceData.Identifier<Boolean>(
+                            PreferenceData.ICON_ICON_VISIBILITY,
+                            getContext().getString(R.string.preference_show_drawable),
+                            getIdentifierArgs()
                     ),
-                    hasDrawable(),
                     new BasePreferenceData.OnPreferenceChangeListener<Boolean>() {
                         @Override
                         public void onPreferenceChange(Boolean preference) {
-                            putPreference(PreferenceIdentifier.ICON_VISIBILITY, preference);
                             StaticUtils.updateStatusService(getContext());
                         }
                     }
@@ -353,14 +336,14 @@ public abstract class IconData<T extends IconUpdateReceiver> {
         if (canHazText() && (hasDrawable() || !hasText())) {
             preferences.add(new BooleanPreferenceData(
                     getContext(),
-                    new BasePreferenceData.Identifier(
-                            getContext().getString(R.string.preference_show_text)
+                    new BasePreferenceData.Identifier<Boolean>(
+                            PreferenceData.ICON_TEXT_VISIBILITY,
+                            getContext().getString(R.string.preference_show_text),
+                            getIdentifierArgs()
                     ),
-                    hasText(),
                     new BasePreferenceData.OnPreferenceChangeListener<Boolean>() {
                         @Override
                         public void onPreferenceChange(Boolean preference) {
-                            putPreference(PreferenceIdentifier.TEXT_VISIBILITY, preference);
                             StaticUtils.updateStatusService(getContext());
                         }
                     }
@@ -370,17 +353,18 @@ public abstract class IconData<T extends IconUpdateReceiver> {
         preferences.addAll(Arrays.asList(
                 new ListPreferenceData(
                         getContext(),
-                        new BasePreferenceData.Identifier(
-                                getContext().getString(R.string.preference_gravity)
+                        new BasePreferenceData.Identifier<>(
+                                PreferenceData.ICON_GRAVITY,
+                                getContext().getString(R.string.preference_gravity),
+                                getDefaultGravity(),
+                                getIdentifierArgs()
                         ),
                         new BasePreferenceData.OnPreferenceChangeListener<Integer>() {
                             @Override
                             public void onPreferenceChange(Integer preference) {
-                                putPreference(PreferenceIdentifier.GRAVITY, preference);
                                 StaticUtils.updateStatusService(getContext());
                             }
                         },
-                        getGravity(),
                         new ListPreferenceData.ListPreference(
                                 getContext().getString(R.string.gravity_left),
                                 LEFT_GRAVITY
@@ -396,17 +380,17 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                 ),
                 new IntegerPreferenceData(
                         getContext(),
-                        new BasePreferenceData.Identifier(
-                                getContext().getString(R.string.preference_icon_padding)
+                        new BasePreferenceData.Identifier<Integer>(
+                                PreferenceData.ICON_ICON_PADDING,
+                                getContext().getString(R.string.preference_icon_padding),
+                                getIdentifierArgs()
                         ),
-                        getIconPadding(),
                         getContext().getString(R.string.unit_dp),
                         null,
                         null,
                         new BasePreferenceData.OnPreferenceChangeListener<Integer>() {
                             @Override
                             public void onPreferenceChange(Integer preference) {
-                                putPreference(PreferenceIdentifier.ICON_PADDING, preference);
                                 StaticUtils.updateStatusService(getContext());
                             }
                         }
@@ -416,17 +400,16 @@ public abstract class IconData<T extends IconUpdateReceiver> {
         if (hasDrawable()) {
             preferences.add(new IntegerPreferenceData(
                     getContext(),
-                    new BasePreferenceData.Identifier(
+                    new BasePreferenceData.Identifier<Integer>(
+                            PreferenceData.ICON_ICON_SCALE,
                             getContext().getString(R.string.preference_icon_scale)
                     ),
-                    getIconScale(),
                     getContext().getString(R.string.unit_dp),
                     0,
                     null,
                     new BasePreferenceData.OnPreferenceChangeListener<Integer>() {
                         @Override
                         public void onPreferenceChange(Integer preference) {
-                            putPreference(PreferenceIdentifier.ICON_SCALE, preference);
                             StaticUtils.updateStatusService(getContext());
                         }
                     }
@@ -436,33 +419,31 @@ public abstract class IconData<T extends IconUpdateReceiver> {
         if (hasText()) {
             preferences.add(new IntegerPreferenceData(
                     getContext(),
-                    new BasePreferenceData.Identifier(
+                    new BasePreferenceData.Identifier<Integer>(
+                            PreferenceData.ICON_TEXT_SIZE,
                             getContext().getString(R.string.preference_text_size)
                     ),
-                    (int) getTextSize(),
                     getContext().getString(R.string.unit_sp),
                     0,
                     null,
                     new BasePreferenceData.OnPreferenceChangeListener<Integer>() {
                         @Override
                         public void onPreferenceChange(Integer preference) {
-                            putPreference(PreferenceIdentifier.TEXT_SIZE, preference);
                             StaticUtils.updateStatusService(getContext());
                         }
                     }
             ));
 
-            Integer color = getTextColor();
             preferences.add(new ColorPreferenceData(
                     getContext(),
-                    new BasePreferenceData.Identifier(
-                            getContext().getString(R.string.preference_text_color)
+                    new BasePreferenceData.Identifier<Integer>(
+                            PreferenceData.ICON_TEXT_COLOR,
+                            getContext().getString(R.string.preference_text_color),
+                            getIdentifierArgs()
                     ),
-                    color != null ? color : Color.WHITE,
                     new BasePreferenceData.OnPreferenceChangeListener<Integer>() {
                         @Override
                         public void onPreferenceChange(Integer preference) {
-                            putPreference(PreferenceIdentifier.TEXT_COLOR, preference);
                             StaticUtils.updateStatusService(getContext());
                         }
                     }
@@ -470,15 +451,17 @@ public abstract class IconData<T extends IconUpdateReceiver> {
 
             preferences.add(new FontPreferenceData(
                     getContext(),
-                    new BasePreferenceData.Identifier("Text Font"),
+                    new BasePreferenceData.Identifier<String>(
+                            PreferenceData.ICON_TEXT_TYPEFACE,
+                            getContext().getString(R.string.preference_text_font),
+                            getIdentifierArgs()
+                    ),
                     new BasePreferenceData.OnPreferenceChangeListener<String>() {
                         @Override
                         public void onPreferenceChange(String preference) {
-                            putPreference(PreferenceIdentifier.TEXT_TYPEFACE, preference);
                             StaticUtils.updateStatusService(getContext());
                         }
                     },
-                    getTypefaceName(),
                     "Audiowide.ttf",
                     "BlackOpsOne.ttf",
                     "HennyPenny.ttf",
@@ -499,36 +482,37 @@ public abstract class IconData<T extends IconUpdateReceiver> {
 
             preferences.add(new ListPreferenceData(
                     getContext(),
-                    new BasePreferenceData.Identifier(getContext().getString(R.string.preference_text_effect)),
+                    new BasePreferenceData.Identifier<Integer>(
+                            PreferenceData.ICON_TEXT_EFFECT,
+                            getContext().getString(R.string.preference_text_effect),
+                            getIdentifierArgs()
+                    ),
                     new BasePreferenceData.OnPreferenceChangeListener<Integer>() {
                         @Override
                         public void onPreferenceChange(Integer preference) {
-                            putPreference(PreferenceIdentifier.TEXT_EFFECT, preference);
                             StaticUtils.updateStatusService(getContext());
                         }
                     },
-                    getTextEffect(),
                     new ListPreferenceData.ListPreference(getContext().getString(R.string.text_effect_none), Typeface.NORMAL),
                     new ListPreferenceData.ListPreference(getContext().getString(R.string.text_effect_bold), Typeface.BOLD),
                     new ListPreferenceData.ListPreference(getContext().getString(R.string.text_effect_italic), Typeface.ITALIC),
                     new ListPreferenceData.ListPreference(getContext().getString(R.string.text_effect_bold_italic), Typeface.BOLD_ITALIC)
-
             ));
         }
 
         if (hasDrawable()) {
             preferences.add(new IconPreferenceData(
                     getContext(),
-                    new BasePreferenceData.Identifier(
-                            getContext().getString(R.string.preference_icon_style)
+                    new BasePreferenceData.Identifier<String>(
+                            PreferenceData.ICON_ICON_STYLE,
+                            getContext().getString(R.string.preference_icon_style),
+                            getIdentifierArgs()
                     ),
-                    style,
                     this,
                     new BasePreferenceData.OnPreferenceChangeListener<IconStyleData>() {
                         @Override
                         public void onPreferenceChange(IconStyleData preference) {
                             style = preference;
-                            putPreference(PreferenceIdentifier.ICON_STYLE, preference.name);
                             StaticUtils.updateStatusService(getContext());
                         }
                     }
@@ -550,12 +534,10 @@ public abstract class IconData<T extends IconUpdateReceiver> {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         List<IconStyleData> styles = new ArrayList<>();
-        String[] names = getStringArrayPreference(PreferenceIdentifier.ICON_STYLE_NAMES);
-        if (names != null) {
-            for (String name : names) {
-                IconStyleData style = IconStyleData.fromSharedPreferences(prefs, getClass().getName(), name);
-                if (style != null) styles.add(style);
-            }
+        String[] names = PreferenceData.ICON_ICON_STYLE_NAMES.getSpecificValue(getContext(), getIdentifierArgs());
+        for (String name : names) {
+            IconStyleData style = IconStyleData.fromSharedPreferences(prefs, getClass().getName(), name);
+            if (style != null) styles.add(style);
         }
 
         return styles;
@@ -563,132 +545,26 @@ public abstract class IconData<T extends IconUpdateReceiver> {
 
     public final void addIconStyle(IconStyleData style) {
         if (style.getSize() == getIconStyleSize()) {
-            String[] names = getStringArrayPreference(PreferenceIdentifier.ICON_STYLE_NAMES);
-            List<String> list = new ArrayList<>();
-            if (names != null) list.addAll(Arrays.asList(names));
+            List<String> list = new ArrayList<>(Arrays.asList((String[]) PreferenceData.ICON_ICON_STYLE_NAMES.getSpecificValue(getContext(), getIdentifierArgs())));
 
             SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
             style.writeToSharedPreferences(editor, getClass().getName());
             editor.apply();
 
             list.add(style.name);
-            putPreference(PreferenceIdentifier.ICON_STYLE_NAMES, list.toArray(new String[list.size()]));
+            PreferenceData.ICON_ICON_STYLE_NAMES.setValue(context, list.toArray(new String[list.size()]), getIdentifierArgs());
         }
     }
 
     public final void removeIconStyle(IconStyleData style) {
-        String[] names = getStringArrayPreference(PreferenceIdentifier.ICON_STYLE_NAMES);
-        List<String> list = new ArrayList<>();
-        if (names != null) list.addAll(Arrays.asList(names));
+        List<String> list = new ArrayList<>(Arrays.asList((String[]) PreferenceData.ICON_ICON_STYLE_NAMES.getSpecificValue(getContext(), getIdentifierArgs())));
 
         list.remove(style.name);
-        putPreference(PreferenceIdentifier.ICON_STYLE_NAMES, list.toArray(new String[list.size()]));
+        PreferenceData.ICON_ICON_STYLE_NAMES.setValue(context, list.toArray(new String[list.size()]), getIdentifierArgs());
     }
 
-    @Nullable
-    public final Boolean getBooleanPreference(PreferenceIdentifier identifier) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        if (prefs.contains(getIdentifierString(identifier))) {
-            try {
-                return prefs.getBoolean(getIdentifierString(identifier), false);
-            } catch (ClassCastException e) {
-                return null;
-            }
-        } else
-            return null;
-    }
-
-    @Nullable
-    public final Integer getIntegerPreference(PreferenceIdentifier identifier) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        if (prefs.contains(getIdentifierString(identifier))) {
-            try {
-                return prefs.getInt(getIdentifierString(identifier), 0);
-            } catch (ClassCastException e) {
-                return null;
-            }
-        } else
-            return null;
-    }
-
-    @Nullable
-    public final String getStringPreference(PreferenceIdentifier identifier) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        if (prefs.contains(getIdentifierString(identifier))) {
-            try {
-                return prefs.getString(getIdentifierString(identifier), null);
-            } catch (ClassCastException e) {
-                return null;
-            }
-        } else
-            return null;
-    }
-
-    public final String[] getStringArrayPreference(PreferenceIdentifier identifier) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        if (prefs.contains(getIdentifierString(identifier) + "-length")) {
-            String[] array = new String[prefs.getInt(getIdentifierString(identifier) + "-length", 0)];
-            for (int i = 0; i < array.length; i++) {
-                array[i] = prefs.getString(getIdentifierString(identifier) + "-" + i, null);
-            }
-
-            return array;
-        } else return null;
-    }
-
-    public final void putPreference(PreferenceIdentifier identifier, boolean object) {
-        PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(getIdentifierString(identifier), object).apply();
-    }
-
-    public final void putPreference(PreferenceIdentifier identifier, int object) {
-        PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(getIdentifierString(identifier), object).apply();
-    }
-
-    public final void putPreference(PreferenceIdentifier identifier, String object) {
-        PreferenceManager.getDefaultSharedPreferences(context).edit().putString(getIdentifierString(identifier), object).apply();
-    }
-
-    public final void putPreference(PreferenceIdentifier identifier, int[] object) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        Resources resources = context.getResources();
-
-        prefs.edit().putInt(getIdentifierString(identifier) + "-length", object.length).apply();
-
-        for (int i = 0; i < object.length; i++) {
-            prefs.edit().putString(getIdentifierString(identifier) + "-" + i, resources.getResourceEntryName(object[i])).apply();
-        }
-    }
-
-    public final void putPreference(PreferenceIdentifier identifier, String[] object) {
-        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
-
-        editor.putInt(getIdentifierString(identifier) + "-length", object.length);
-        for (int i = 0; i < object.length; i++) {
-            editor.putString(getIdentifierString(identifier) + "-" + i, object[i]);
-        }
-
-        editor.apply();
-    }
-
-    private String getIdentifierString(PreferenceIdentifier identifier) {
-        return getClass().getName() + "/" + identifier.toString();
-    }
-
-    public enum PreferenceIdentifier {
-        VISIBILITY,
-        POSITION,
-        GRAVITY,
-        TEXT_VISIBILITY,
-        TEXT_FORMAT,
-        TEXT_SIZE,
-        TEXT_COLOR,
-        TEXT_TYPEFACE,
-        TEXT_EFFECT,
-        ICON_VISIBILITY,
-        ICON_STYLE,
-        ICON_STYLE_NAMES,
-        ICON_PADDING,
-        ICON_SCALE
+    public String[] getIdentifierArgs() {
+        return new String[]{getClass().getName()};
     }
 
     public interface DrawableListener {

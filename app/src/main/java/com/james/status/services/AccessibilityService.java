@@ -98,7 +98,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
     @Override
     public void onAccessibilityEvent(final AccessibilityEvent event) {
         Log.d("SOMETHING", "Accessibility Event");
-        if (PreferenceData.STATUS_ENABLED.getBooleanValue(this)) {
+        if (PreferenceData.STATUS_ENABLED.getValue(this)) {
             switch (event.getEventType()) {
                 case AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED:
                     if (StaticUtils.shouldUseCompatNotifications(this) && !event.getPackageName().toString().matches("com.james.status")) {
@@ -159,7 +159,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                         }
 
                         Integer color = activityData.getIntegerPreference(this, AppData.PreferenceIdentifier.COLOR);
-                        if (color != null && (!isHome || !PreferenceData.STATUS_HOME_TRANSPARENT.getBooleanValue(this))) {
+                        if (color != null && (!isHome || !(boolean) PreferenceData.STATUS_HOME_TRANSPARENT.getValue(this))) {
                             setStatusBar(color, null, isFullscreen, false, packageName.toString(), activityData);
                             return;
                         } else if (isHome) {
@@ -167,14 +167,14 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                             return;
                         }
 
-                        if (!PreferenceData.STATUS_COLOR_AUTO.getBooleanValue(this)) {
-                            setStatusBar(PreferenceData.STATUS_COLOR.getIntValue(this), null, isFullscreen, false, packageName.toString(), activityData);
+                        if (!(boolean) PreferenceData.STATUS_COLOR_AUTO.getValue(this)) {
+                            setStatusBar((int) PreferenceData.STATUS_COLOR.getValue(this), null, isFullscreen, false, packageName.toString(), activityData);
                             return;
                         }
 
                         if (packageName.toString().equals("com.android.systemui")) {
                             //prevents the creation of some pretty nasty looking color schemes below Lollipop
-                            setStatusBar(PreferenceData.STATUS_COLOR.getIntValue(this), null, false, false, packageName.toString(), activityData);
+                            setStatusBar((int) PreferenceData.STATUS_COLOR.getValue(this), null, false, false, packageName.toString(), activityData);
                             return;
                         }
 
@@ -198,7 +198,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                             }
                         }
 
-                        setStatusBar(color != null ? color : PreferenceData.STATUS_COLOR.getIntValue(this), null, isFullscreen, false, packageName.toString(), activityData);
+                        setStatusBar(color != null ? color : (int) PreferenceData.STATUS_COLOR.getValue(this), null, isFullscreen, false, packageName.toString(), activityData);
                     }
             }
         }
@@ -270,7 +270,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
 
         private void onVolumeChanged() {
             AccessibilityService service = reference.get();
-            if (service != null && PreferenceData.STATUS_HIDE_ON_VOLUME.getBooleanValue(service)) {
+            if (service != null && (boolean) PreferenceData.STATUS_HIDE_ON_VOLUME.getValue(service)) {
                 Status.showDebug(service, "Volume callback added", Toast.LENGTH_SHORT);
                 service.setStatusBar(null, false, null, true, null, null);
                 handler.removeCallbacks(runnable);

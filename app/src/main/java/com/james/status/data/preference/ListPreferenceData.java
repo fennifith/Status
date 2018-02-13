@@ -8,8 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 
-import com.james.status.data.PreferenceData;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -21,14 +19,13 @@ public class ListPreferenceData extends BasePreferenceData<Integer> {
 
     private ListPreference selectedPreference;
 
-    public ListPreferenceData(Context context, Identifier identifier, OnPreferenceChangeListener<Integer> listener, int defaultItem, ListPreference... items) {
+    public ListPreferenceData(Context context, Identifier<Integer> identifier, OnPreferenceChangeListener<Integer> listener, ListPreference... items) {
         super(context, identifier, listener);
 
         this.items = new ArrayList<>();
         this.items.addAll(Arrays.asList(items));
 
-        PreferenceData preference = identifier.getPreference();
-        this.preference = preference != null ? preference.getIntValue(context, defaultItem) : defaultItem;
+        preference = identifier.getPreferenceValue(context);
     }
 
     @Override
@@ -60,10 +57,7 @@ public class ListPreferenceData extends BasePreferenceData<Integer> {
                         if (selectedPreference != null) {
                             ListPreferenceData.this.preference = selectedPreference.id;
 
-                            PreferenceData preference = getIdentifier().getPreference();
-                            if (preference != null)
-                                preference.setValue(getContext(), selectedPreference.id);
-
+                            getIdentifier().setPreferenceValue(getContext(), selectedPreference.id);
                             onPreferenceChange(selectedPreference.id);
                             selectedPreference = null;
                         }

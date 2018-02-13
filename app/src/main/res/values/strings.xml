@@ -515,5 +515,6 @@
     <string name="step_finish">Finish</string>
     <string name="step_cancel">Cancel</string>
     <string name="step_skip">Skip</string>
+    <string name="preference_text_font">Text Font</string>
 
 </resources>

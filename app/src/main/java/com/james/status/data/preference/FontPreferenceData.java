@@ -12,7 +12,6 @@ import android.widget.RadioGroup;
 import android.widget.ScrollView;
 
 import com.james.status.R;
-import com.james.status.data.PreferenceData;
 import com.james.status.utils.StaticUtils;
 
 import java.util.ArrayList;
@@ -26,12 +25,11 @@ public class FontPreferenceData extends BasePreferenceData<String> {
 
     private String selectedPreference;
 
-    public FontPreferenceData(Context context, Identifier identifier, OnPreferenceChangeListener<String> listener, String defaultItem, String... items) {
+    public FontPreferenceData(Context context, Identifier<String> identifier, OnPreferenceChangeListener<String> listener, String... items) {
         super(context, identifier, listener);
 
-        this.items = new ArrayList<>();
-        this.items.addAll(Arrays.asList(items));
-        preference = defaultItem;
+        this.items = new ArrayList<>(Arrays.asList(items));
+        preference = getIdentifier().getPreferenceValue(context, "");
     }
 
     @Override
@@ -50,7 +48,7 @@ public class FontPreferenceData extends BasePreferenceData<String> {
         AppCompatRadioButton normalButton = (AppCompatRadioButton) LayoutInflater.from(getContext()).inflate(R.layout.item_dialog_radio_button, group, false);
         normalButton.setId(0);
         normalButton.setText(R.string.font_default);
-        normalButton.setChecked(preference == null);
+        normalButton.setChecked(preference.length() == 0);
         group.addView(normalButton);
 
         for (int i = 0; i < items.size(); i++) {
@@ -91,10 +89,7 @@ public class FontPreferenceData extends BasePreferenceData<String> {
                     public void onClick(DialogInterface dialog, int which) {
                         FontPreferenceData.this.preference = selectedPreference;
 
-                        PreferenceData preference = getIdentifier().getPreference();
-                        if (preference != null)
-                            preference.setValue(getContext(), selectedPreference);
-
+                        getIdentifier().setPreferenceValue(getContext(), selectedPreference);
                         onPreferenceChange(selectedPreference);
                         selectedPreference = null;
                     }

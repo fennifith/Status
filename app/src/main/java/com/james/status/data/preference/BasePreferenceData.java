@@ -1,7 +1,6 @@
 package com.james.status.data.preference;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v7.widget.RecyclerView;
@@ -16,16 +15,16 @@ import com.james.status.data.PreferenceData;
 public class BasePreferenceData<T> implements View.OnClickListener {
 
     private final Context context;
-    private final Identifier identifier;
+    private final Identifier<T> identifier;
     private final OnPreferenceChangeListener<T> listener;
 
-    public BasePreferenceData(Context context, Identifier identifier) {
+    public BasePreferenceData(Context context, Identifier<T> identifier) {
         this.context = context;
         this.identifier = identifier;
         listener = null;
     }
 
-    public BasePreferenceData(Context context, Identifier identifier, OnPreferenceChangeListener<T> listener) {
+    public BasePreferenceData(Context context, Identifier<T> identifier, OnPreferenceChangeListener<T> listener) {
         this.context = context;
         this.identifier = identifier;
         this.listener = listener;
@@ -35,7 +34,7 @@ public class BasePreferenceData<T> implements View.OnClickListener {
         return context;
     }
 
-    public Identifier getIdentifier() {
+    public Identifier<T> getIdentifier() {
         return identifier;
     }
 
@@ -83,47 +82,70 @@ public class BasePreferenceData<T> implements View.OnClickListener {
         }
     }
 
-    public static class Identifier {
+    public static class Identifier<T> {
 
         @Nullable
         private String title, subtitle;
-        private PreferenceData identifier;
+        private PreferenceData preference;
+        private String[] args;
         private SectionIdentifier sectionIdentifier;
+        private T defaultValue;
 
-        public Identifier(@Nullable String title) {
-            this.title = title;
+        public Identifier(PreferenceData preference, @Nullable String title) {
+            this(preference, title, null, null, null, (String[]) null);
         }
 
-        public Identifier(@Nullable String title, @Nullable String subtitle, SectionIdentifier sectionIdentifier) {
-            this(null, title, subtitle, sectionIdentifier);
+        public Identifier(PreferenceData preference, @Nullable String title, String... args) {
+            this(preference, title, null, null, null, args);
         }
 
-        public Identifier(PreferenceData identifier, @Nullable String title, SectionIdentifier sectionIdentifier) {
-            this(identifier, title, null, sectionIdentifier);
+        public Identifier(PreferenceData preference, @Nullable String title, T defaultValue, String... args) {
+            this(preference, title, null, null, defaultValue, args);
         }
 
-        public Identifier(PreferenceData identifier, @Nullable String title, @Nullable String subtitle, SectionIdentifier sectionIdentifier) {
-            this.identifier = identifier;
+        public Identifier(PreferenceData preference, @Nullable String title, SectionIdentifier sectionIdentifier) {
+            this(preference, title, null, sectionIdentifier, null, (String[]) null);
+        }
+
+        public Identifier(PreferenceData preference, @Nullable String title, @Nullable String subtitle, SectionIdentifier sectionIdentifier) {
+            this(preference, title, subtitle, sectionIdentifier, null, (String[]) null);
+        }
+
+        public Identifier(PreferenceData preference, @Nullable String title, @Nullable String subtitle, SectionIdentifier sectionIdentifier, T defaultValue, @Nullable String... args) {
+            this.preference = preference;
             this.title = title;
             this.subtitle = subtitle;
             this.sectionIdentifier = sectionIdentifier;
+            this.defaultValue = defaultValue;
+            this.args = args;
         }
 
-        @NonNull
         public String getTitle() {
             if (title != null) return title;
             else return "";
         }
 
-        @NonNull
         public String getSubtitle() {
             if (subtitle != null) return subtitle;
             else return "";
         }
 
-        @Nullable
         public PreferenceData getPreference() {
-            return identifier;
+            return preference;
+        }
+
+        public T getPreferenceValue(Context context) {
+            if (defaultValue != null) {
+                return getPreferenceValue(context, defaultValue);
+            } else return preference.getSpecificValue(context, args);
+        }
+
+        public T getPreferenceValue(Context context, T defaultValue) {
+            return preference.getSpecificOverriddenValue(context, defaultValue, args);
+        }
+
+        public void setPreferenceValue(Context context, T value) {
+            preference.setValue(context, value, args);
         }
 
         @Nullable

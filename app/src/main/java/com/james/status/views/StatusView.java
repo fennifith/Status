@@ -248,14 +248,11 @@ public class StatusView extends FrameLayout {
         for (int i = 0; i < OPTIONS.length; i++) {
             PreferenceData data = OPTIONS[i];
             if (data != null) {
-                switch (data.getType()) {
-                    case PreferenceData.TYPE_BOOLEAN:
-                        booleanOptions[i] = data.getBooleanValue(getContext());
-                        break;
-                    case PreferenceData.TYPE_INT:
-                        intOptions[i] = data.getIntValue(getContext());
-                        break;
-                }
+                Object defaultValue = data.getDefaultValue();
+                if (defaultValue instanceof Boolean)
+                    booleanOptions[i] = data.getValue(getContext());
+                else if (defaultValue instanceof Integer)
+                    intOptions[i] = data.getValue(getContext());
             }
         }
     }
@@ -477,12 +474,12 @@ public class StatusView extends FrameLayout {
 
     @ColorInt
     private int getDefaultColor() {
-        return PreferenceData.STATUS_COLOR.getIntValue(getContext());
+        return PreferenceData.STATUS_COLOR.getValue(getContext());
     }
 
     @ColorInt
     private int getDefaultIconColor() {
-        return PreferenceData.STATUS_ICON_COLOR.getIntValue(getContext());
+        return PreferenceData.STATUS_ICON_COLOR.getValue(getContext());
     }
 
     private void setStatusBackgroundColor(@ColorInt int color) {

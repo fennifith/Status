@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.james.status.R;
 import com.james.status.adapters.IconStyleAdapter;
 import com.james.status.data.IconStyleData;
+import com.james.status.data.PreferenceData;
 import com.james.status.data.icon.IconData;
 import com.james.status.utils.ImageUtils;
 import com.james.status.utils.StaticUtils;
@@ -75,7 +76,7 @@ public class IconDialog extends PreferenceDialog<IconStyleData> implements IconS
                     else
                         Toast.makeText(getContext(), R.string.msg_missing_storage_permission, Toast.LENGTH_SHORT).show();
                 } else {
-                    new IconCreatorDialog(getContext(), styles.get(0).getSize(), icon.getStringArrayPreference(IconData.PreferenceIdentifier.ICON_STYLE_NAMES), icon.getIconNames()).setListener(new IconCreatorDialog.OnIconStyleListener() {
+                    new IconCreatorDialog(getContext(), styles.get(0).getSize(), (String[]) PreferenceData.ICON_ICON_STYLE_NAMES.getSpecificValue(getContext(), icon.getIdentifierArgs()), icon.getIconNames()).setListener(new IconCreatorDialog.OnIconStyleListener() {
                         @Override
                         public void onIconStyle(IconStyleData style) {
                             icon.addIconStyle(style);

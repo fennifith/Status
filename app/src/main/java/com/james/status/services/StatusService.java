@@ -138,10 +138,10 @@ public class StatusService extends Service {
             }
         };
 
-        if (PreferenceData.STATUS_ENABLED.getBooleanValue(this))
+        if (PreferenceData.STATUS_ENABLED.getValue(this))
             setUp();
 
-        headsUpDuration = PreferenceData.STATUS_HEADS_UP_DURATION.getIntValue(this) * 1000;
+        headsUpDuration = (int) PreferenceData.STATUS_HEADS_UP_DURATION.getValue(this) * 1000;
     }
 
     @Nullable
@@ -152,7 +152,7 @@ public class StatusService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (!PreferenceData.STATUS_ENABLED.getBooleanValue(this)) {
+        if (!(boolean) PreferenceData.STATUS_ENABLED.getValue(this)) {
             if (statusView != null) {
                 if (statusView.getParent() != null) windowManager.removeView(statusView);
                 statusView.unregister();
@@ -185,7 +185,7 @@ public class StatusService extends Service {
                     statusView.setFullscreen(intent.getBooleanExtra(EXTRA_IS_FULLSCREEN, isFullscreen()));
 
                     if (intent.hasExtra(EXTRA_PACKAGE) && intent.hasExtra(EXTRA_ACTIVITY)) {
-                        if (PreferenceData.STATUS_PERSISTENT_NOTIFICATION.getBooleanValue(this)) {
+                        if (PreferenceData.STATUS_PERSISTENT_NOTIFICATION.getValue(this)) {
                             packageName = intent.getStringExtra(EXTRA_PACKAGE);
                             activityData = intent.getParcelableExtra(EXTRA_ACTIVITY);
 
@@ -196,7 +196,7 @@ public class StatusService extends Service {
                 return START_STICKY;
         }
 
-        if (PreferenceData.STATUS_PERSISTENT_NOTIFICATION.getBooleanValue(this)) {
+        if (PreferenceData.STATUS_PERSISTENT_NOTIFICATION.getValue(this)) {
             if (packageName != null && activityData != null)
                 startForeground(packageName, activityData);
             else {
@@ -245,7 +245,7 @@ public class StatusService extends Service {
                 .setSubText(packageName)
                 .setContentIntent(contentStackBuilder.getPendingIntent(0, PendingIntent.FLAG_CANCEL_CURRENT));
 
-        if (PreferenceData.STATUS_COLOR_AUTO.getBooleanValue(this)) {
+        if (PreferenceData.STATUS_COLOR_AUTO.getValue(this)) {
             Intent colorIntent = new Intent(this, AppSettingActivity.class);
             colorIntent.putExtra(AppSettingActivity.EXTRA_APP, appData);
             colorIntent.putExtra(AppSettingActivity.EXTRA_ACTIVITY, activityData);
@@ -389,7 +389,7 @@ public class StatusService extends Service {
     public void showHeadsUp(NotificationData notification) {
         int headsUpLayout;
 
-        switch (PreferenceData.STATUS_HEADS_UP_LAYOUT.getIntValue(this)) {
+        switch ((int) PreferenceData.STATUS_HEADS_UP_LAYOUT.getValue(this)) {
             case HEADSUP_LAYOUT_CARD:
                 headsUpLayout = R.layout.layout_notification_card;
                 break;
@@ -457,7 +457,7 @@ public class StatusService extends Service {
             }
         });
 
-        headsUpDuration = PreferenceData.STATUS_HEADS_UP_DURATION.getIntValue(this) * 1000;
+        headsUpDuration = (int) PreferenceData.STATUS_HEADS_UP_DURATION.getValue(this) * 1000;
         headsUpHandler.postDelayed(headsUpRunnable, headsUpDuration);
 
         CustomImageView icon = (CustomImageView) headsUpView.findViewById(R.id.icon);
@@ -636,8 +636,9 @@ public class StatusService extends Service {
         icons.add(new OrientationIconData(context));
 
         for (IconData icon : icons) {
-            if (icon.getIntegerPreference(IconData.PreferenceIdentifier.POSITION) == null)
-                icon.putPreference(IconData.PreferenceIdentifier.POSITION, icons.indexOf(icon));
+            int position = PreferenceData.ICON_POSITION.getSpecificOverriddenValue(context, -1, icon.getIdentifierArgs());
+            if (position < 0)
+                PreferenceData.ICON_POSITION.setValue(context, icons.indexOf(icon), icon.getIdentifierArgs());
         }
 
         Collections.sort(icons, new Comparator<IconData>() {
@@ -667,7 +668,7 @@ public class StatusService extends Service {
                         statusView.setSystemShowing(true);
                         headsUpNotification = notification;
 
-                        headsUpDuration = PreferenceData.STATUS_HEADS_UP_DURATION.getIntValue(StatusService.this) * 1000;
+                        headsUpDuration = (int) PreferenceData.STATUS_HEADS_UP_DURATION.getValue(StatusService.this) * 1000;
                         headsUpHandler.postDelayed(headsUpDisabledRunnable, headsUpDuration);
                     }
 

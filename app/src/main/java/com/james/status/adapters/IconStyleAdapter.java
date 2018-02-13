@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 
 import com.james.status.R;
 import com.james.status.data.IconStyleData;
+import com.james.status.data.PreferenceData;
 import com.james.status.data.icon.IconData;
 import com.james.status.dialogs.IconCreatorDialog;
 import com.james.status.views.CustomImageView;
@@ -77,7 +78,7 @@ public class IconStyleAdapter extends RecyclerView.Adapter<IconStyleAdapter.View
                     if (styles.size() > 0) setIconStyle(styles.get(0));
                     else notifyDataSetChanged();
 
-                    new IconCreatorDialog(context, style, icon.getStringArrayPreference(IconData.PreferenceIdentifier.ICON_STYLE_NAMES), icon.getIconNames()).setListener(new IconCreatorDialog.OnIconStyleListener() {
+                    new IconCreatorDialog(context, style, (String[]) PreferenceData.ICON_ICON_STYLE_NAMES.getSpecificValue(context, icon.getIdentifierArgs()), icon.getIconNames()).setListener(new IconCreatorDialog.OnIconStyleListener() {
                         @Override
                         public void onIconStyle(IconStyleData style) {
                             icon.addIconStyle(style);

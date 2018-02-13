@@ -13,17 +13,28 @@ import com.james.status.dialogs.IconDialog;
 import com.james.status.dialogs.PreferenceDialog;
 import com.james.status.views.IconStyleImageView;
 
-public class IconPreferenceData extends BasePreferenceData<IconStyleData> {
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class IconPreferenceData extends BasePreferenceData<String> {
 
     private IconStyleData iconStyle;
     private IconData iconData;
+    private Map<String, IconStyleData> styles;
+    private OnPreferenceChangeListener<IconStyleData> listener;
 
-    public IconPreferenceData(Context context, Identifier identifier, IconStyleData iconStyle, IconData iconData, OnPreferenceChangeListener<IconStyleData> listener) {
-        super(context, identifier, listener);
-
-        if (iconStyle == null) iconStyle = (IconStyleData) iconData.getIconStyles().get(0);
-        this.iconStyle = iconStyle;
+    public IconPreferenceData(Context context, Identifier<String> identifier, IconData iconData, OnPreferenceChangeListener<IconStyleData> listener) {
+        super(context, identifier);
         this.iconData = iconData;
+        styles = new HashMap<>();
+
+        List<IconStyleData> styleList = iconData.getIconStyles();
+        for (IconStyleData style : styleList) {
+            styles.put(style.name, style);
+        }
+
+        iconStyle = styles.get(identifier.getPreferenceValue(context, styleList.get(0).name));
     }
 
     @Override
@@ -46,7 +57,10 @@ public class IconPreferenceData extends BasePreferenceData<IconStyleData> {
                     ((IconStyleImageView) v.findViewById(R.id.icon)).setIconStyle(preference);
 
                     IconPreferenceData.this.iconStyle = preference;
-                    onPreferenceChange(preference);
+                    getIdentifier().setPreferenceValue(getContext(), preference.name);
+                    onPreferenceChange(preference.name);
+                    if (listener != null)
+                        listener.onPreferenceChange(preference);
                 }
             }
 

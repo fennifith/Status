@@ -7,17 +7,14 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 
 import com.james.status.R;
-import com.james.status.data.PreferenceData;
 
 public class BooleanPreferenceData extends BasePreferenceData<Boolean> {
 
     public boolean value;
 
-    public BooleanPreferenceData(Context context, Identifier identifier, boolean defaultValue, OnPreferenceChangeListener<Boolean> listener) {
+    public BooleanPreferenceData(Context context, Identifier<Boolean> identifier, OnPreferenceChangeListener<Boolean> listener) {
         super(context, identifier, listener);
-
-        com.james.status.data.PreferenceData preference = identifier.getPreference();
-        value = preference != null ? preference.getBooleanValue(context, defaultValue) : defaultValue;
+        value = identifier.getPreferenceValue(context);
     }
 
     @Override
@@ -38,10 +35,7 @@ public class BooleanPreferenceData extends BasePreferenceData<Boolean> {
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 value = b;
 
-                PreferenceData preference = getIdentifier().getPreference();
-                if (preference != null)
-                    preference.setValue(getContext(), b);
-
+                getIdentifier().setPreferenceValue(getContext(), b);
                 onPreferenceChange(b);
             }
         });

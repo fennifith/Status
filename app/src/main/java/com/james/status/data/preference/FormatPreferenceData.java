@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.view.View;
 
-import com.james.status.data.PreferenceData;
 import com.james.status.dialogs.FormatDialog;
 import com.james.status.dialogs.PreferenceDialog;
 
@@ -12,11 +11,9 @@ public class FormatPreferenceData extends BasePreferenceData<String> {
 
     private String value;
 
-    public FormatPreferenceData(Context context, Identifier identifier, String defaultValue, OnPreferenceChangeListener<String> listener) {
+    public FormatPreferenceData(Context context, Identifier<String> identifier, OnPreferenceChangeListener<String> listener) {
         super(context, identifier, listener);
-
-        com.james.status.data.PreferenceData preference = identifier.getPreference();
-        this.value = preference != null ? preference.getStringValue(context, defaultValue) : defaultValue;
+        value = identifier.getPreferenceValue(context);
     }
 
     @Override
@@ -26,10 +23,7 @@ public class FormatPreferenceData extends BasePreferenceData<String> {
             public void onPreference(PreferenceDialog dialog, String format) {
                 value = format;
 
-                PreferenceData preference = getIdentifier().getPreference();
-                if (preference != null)
-                    preference.setValue(getContext(), format);
-
+                getIdentifier().setPreferenceValue(getContext(), format);
                 onPreferenceChange(format);
             }
 

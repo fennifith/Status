@@ -395,6 +395,7 @@
     <string name="section_animations">Animations</string>
     <string name="section_notifications">Notifications</string>
     <string name="section_other">Other</string>
+    <string name="preference_text_font">Text Font</string>
 
     <string-array name="faq">
         <item>

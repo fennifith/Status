@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 
 import com.james.status.R;
+import com.james.status.data.PreferenceData;
 import com.james.status.data.icon.IconData;
 import com.james.status.services.StatusService;
 import com.james.status.utils.StaticUtils;
@@ -42,7 +43,7 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
 
         itemView = holder.v;
 
-        icon.putPreference(IconData.PreferenceIdentifier.POSITION, position);
+        PreferenceData.ICON_POSITION.setValue(activity, position, icon.getIdentifierArgs());
 
         holder.checkBox.setText(icon.getTitle());
         holder.checkBox.setOnCheckedChangeListener(null);
@@ -63,7 +64,7 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
                     holder.checkBox.setChecked(false);
                     holder.checkBox.setOnCheckedChangeListener(this);
                 } else {
-                    icon.putPreference(IconData.PreferenceIdentifier.VISIBILITY, isChecked);
+                    PreferenceData.ICON_VISIBILITY.setValue(activity, isChecked, icon.getIdentifierArgs());
                     StaticUtils.updateStatusService(activity);
 
                     notifyItemChanged(holder.getAdapterPosition());

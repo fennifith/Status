@@ -28,12 +28,6 @@ public class BatteryIconData extends IconData {
     }
 
     @Override
-    public boolean hasText() {
-        Boolean isBatteryPercent = getBooleanPreference(PreferenceIdentifier.TEXT_VISIBILITY);
-        return isBatteryPercent != null && isBatteryPercent;
-    }
-
-    @Override
     public IntentFilter getIntentFilter() {
         return new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
     }

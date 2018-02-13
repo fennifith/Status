@@ -194,7 +194,7 @@ public class NotificationData implements Parcelable {
     }
 
     public boolean shouldShowHeadsUp(Context context) {
-        return PreferenceData.STATUS_NOTIFICATIONS_HEADS_UP.getBooleanValue(context) && (priority >= NotificationCompat.PRIORITY_HIGH || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) && isAlert;
+        return (boolean) PreferenceData.STATUS_NOTIFICATIONS_HEADS_UP.getValue(context) && (priority >= NotificationCompat.PRIORITY_HIGH || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) && isAlert;
     }
 
     public boolean shouldHideStatusBar() {

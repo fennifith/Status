@@ -5,7 +5,6 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.view.View;
 
-import com.james.status.data.PreferenceData;
 import com.james.status.dialogs.IntegerPickerDialog;
 import com.james.status.dialogs.PreferenceDialog;
 
@@ -17,11 +16,9 @@ public class IntegerPreferenceData extends BasePreferenceData<Integer> {
     @Nullable
     private Integer min, max;
 
-    public IntegerPreferenceData(Context context, Identifier identifier, int defaultValue, String unit, @Nullable Integer min, @Nullable Integer max, OnPreferenceChangeListener<Integer> listener) {
+    public IntegerPreferenceData(Context context, Identifier<Integer> identifier, String unit, @Nullable Integer min, @Nullable Integer max, OnPreferenceChangeListener<Integer> listener) {
         super(context, identifier, listener);
-
-        PreferenceData preference = identifier.getPreference();
-        this.preference = preference != null ? preference.getIntValue(context, defaultValue) : defaultValue;
+        preference = identifier.getPreferenceValue(context);
 
         this.unit = unit;
         this.min = min;
@@ -35,10 +32,7 @@ public class IntegerPreferenceData extends BasePreferenceData<Integer> {
             public void onPreference(PreferenceDialog dialog, Integer value) {
                 IntegerPreferenceData.this.preference = preference;
 
-                PreferenceData preference = getIdentifier().getPreference();
-                if (preference != null)
-                    preference.setValue(getContext(), value);
-
+                getIdentifier().setPreferenceValue(getContext(), value);
                 onPreferenceChange(value);
             }
 

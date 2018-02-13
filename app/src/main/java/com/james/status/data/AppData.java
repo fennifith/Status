@@ -87,13 +87,13 @@ public class AppData implements Parcelable {
 
     @ColorInt
     public int getDefaultColor(Context context) {
-        if (PreferenceData.STATUS_COLOR_AUTO.getBooleanValue(context)) {
+        if (PreferenceData.STATUS_COLOR_AUTO.getValue(context)) {
             Integer color = ColorUtils.getPrimaryColor(context, getComponentName());
             if (color != null)
                 return color;
         }
 
-        return PreferenceData.STATUS_COLOR.getIntValue(context);
+        return PreferenceData.STATUS_COLOR.getValue(context);
     }
 
     public void setTag(String key, Object value) {
@@ -262,13 +262,13 @@ public class AppData implements Parcelable {
 
         @ColorInt
         public int getDefaultColor(Context context) {
-            if (PreferenceData.STATUS_COLOR_AUTO.getBooleanValue(context)) {
+            if (PreferenceData.STATUS_COLOR_AUTO.getValue(context)) {
                 Integer color = ColorUtils.getPrimaryColor(context, getComponentName());
                 if (color != null)
                     return color;
             }
 
-            return PreferenceData.STATUS_COLOR.getIntValue(context);
+            return PreferenceData.STATUS_COLOR.getValue(context);
         }
 
         @Nullable

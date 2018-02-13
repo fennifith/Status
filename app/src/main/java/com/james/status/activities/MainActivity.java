@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             }
         });
 
-        service.setChecked(PreferenceData.STATUS_ENABLED.getBooleanValue(this) && StaticUtils.isStatusServiceRunning(this));
+        service.setChecked((boolean) PreferenceData.STATUS_ENABLED.getValue(this) && StaticUtils.isStatusServiceRunning(this));
         service.setOnCheckedChangeListener(this);
 
         adapter = new SimplePagerAdapter(this, getSupportFragmentManager(), viewPager, new GeneralPreferenceFragment(), new IconPreferenceFragment(), new AppPreferenceFragment(), new HelpFragment());
@@ -192,7 +192,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         super.onResume();
 
         service.setOnCheckedChangeListener(null);
-        service.setChecked(PreferenceData.STATUS_ENABLED.getBooleanValue(this) || StaticUtils.isStatusServiceRunning(this));
+        service.setChecked((boolean) PreferenceData.STATUS_ENABLED.getValue(this) || StaticUtils.isStatusServiceRunning(this));
         service.setOnCheckedChangeListener(this);
 
         if (behavior.getState() == BottomSheetBehavior.STATE_HIDDEN) {

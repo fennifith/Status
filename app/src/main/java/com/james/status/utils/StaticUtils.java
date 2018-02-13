@@ -32,7 +32,7 @@ import java.util.List;
 public class StaticUtils {
 
     public static int getStatusBarHeight(Context context) {
-        int height = PreferenceData.STATUS_HEIGHT.getIntValue(context);
+        int height = PreferenceData.STATUS_HEIGHT.getValue(context);
         if (height > 0)
             return height;
 
@@ -104,7 +104,7 @@ public class StaticUtils {
             if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
                 if (BuildConfig.DEBUG)
                     Log.wtf("Permission", "missing " + permission);
-                return PreferenceData.STATUS_IGNORE_PERMISSION_CHECKING.getBooleanValue(context);
+                return PreferenceData.STATUS_IGNORE_PERMISSION_CHECKING.getValue(context);
             }
         }
 
@@ -117,7 +117,7 @@ public class StaticUtils {
                 if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
                     if (BuildConfig.DEBUG)
                         Log.wtf("Permission", "missing " + permission);
-                    return PreferenceData.STATUS_IGNORE_PERMISSION_CHECKING.getBooleanValue(context);
+                    return PreferenceData.STATUS_IGNORE_PERMISSION_CHECKING.getValue(context);
                 }
             }
         }
@@ -137,7 +137,7 @@ public class StaticUtils {
     }
 
     public static boolean isStatusServiceRunning(Context context) {
-        if (PreferenceData.STATUS_ENABLED.getBooleanValue(context) && isReady(context)) {
+        if ((boolean) PreferenceData.STATUS_ENABLED.getValue(context) && isReady(context)) {
             ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
             if (manager != null) {
                 for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
@@ -179,7 +179,7 @@ public class StaticUtils {
     }
 
     public static boolean shouldUseCompatNotifications(Context context) {
-        return Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2 || PreferenceData.STATUS_NOTIFICATIONS_COMPAT.getBooleanValue(context);
+        return Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2 || (boolean) PreferenceData.STATUS_NOTIFICATIONS_COMPAT.getValue(context);
     }
 
     public static boolean isReady(Context context) {

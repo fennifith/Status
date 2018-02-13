@@ -6,6 +6,7 @@ import android.content.IntentFilter;
 import android.text.format.DateFormat;
 
 import com.james.status.R;
+import com.james.status.data.PreferenceData;
 import com.james.status.data.preference.BasePreferenceData;
 import com.james.status.data.preference.FormatPreferenceData;
 import com.james.status.receivers.IconUpdateReceiver;
@@ -21,11 +22,8 @@ public class TimeIconData extends IconData<TimeIconData.TimeReceiver> {
 
     public TimeIconData(Context context) {
         super(context);
-
         calendar = Calendar.getInstance();
-
-        format = getStringPreference(PreferenceIdentifier.TEXT_FORMAT);
-        if (format == null) format = "h:mm a";
+        format = PreferenceData.ICON_TEXT_FORMAT.getValue(context, DateFormat.is24HourFormat(context) ? "HH:mm" : "h:mm a");
     }
 
     @Override
@@ -85,15 +83,15 @@ public class TimeIconData extends IconData<TimeIconData.TimeReceiver> {
 
         preferences.add(new FormatPreferenceData(
                 getContext(),
-                new BasePreferenceData.Identifier(
-                        getContext().getString(R.string.preference_time_format)
+                new BasePreferenceData.Identifier<String>(
+                        PreferenceData.ICON_TEXT_FORMAT,
+                        getContext().getString(R.string.preference_time_format),
+                        getIdentifierArgs()
                 ),
-                format,
                 new BasePreferenceData.OnPreferenceChangeListener<String>() {
                     @Override
                     public void onPreferenceChange(String preference) {
                         format = preference;
-                        putPreference(PreferenceIdentifier.TEXT_FORMAT, preference);
                         StaticUtils.updateStatusService(getContext());
                     }
                 }
