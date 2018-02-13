@@ -53,6 +53,9 @@
     <string name="msg_battery_optimizations_switch_enable">\"Status\"를 활성화 해주세요. 아래로 스크롤해야 할 수 있습니다… 아주 많이.</string>
     <string name="msg_accessibility_switch_enable">\"Status Service\"란 이름의 서비스를 활성화 해주세요. 아래로 스크롤해야 보일 수 있습니다.</string>
 
+    <string name="msg_missing_storage_permission">이 기능을 사용하기 위해선 외부 저장소 접근에 동의해주세요.</string>
+    <string name="msg_show_individual_screens">%1$d개의 다른 화면 보기…</string>
+
     <string name="service_name">Status Service</string>
     <string name="service_name_general">접근성 서비스</string>
     <string name="service_desc">창의 상태을 감지하여 상태 표시줄을 바꾸기 위해 \'Status Service\'를 활성화 해야합니다. 일부 휴대폰에서 보이기전에 화면 하단을 스크롤해야 할 수 있습니다.</string>
@@ -81,6 +84,12 @@
     <string name="tab_apps">앱</string>
     <string name="tab_help">도움말</string>
 
+    <string name="section_colors">색상</string>
+    <string name="section_icons">아이콘</string>
+    <string name="section_animations">애니메이션</string>
+    <string name="section_notifications">알림</string>
+    <string name="section_other">기타</string>
+
     <string name="preference_show_clock">시계 보이기</string>
     <string name="preference_24h">24시간 형식 사용</string>
     <string name="preference_24h_desc">이것을 활성화하면 시계가 24시간 형식으로 보이게 됩니다.</string>
@@ -101,7 +110,7 @@
     <string name="preference_app_colors">특정 화면 색상</string>
     <string name="preference_app_colors_desc">특정화면을 사용할때 상태 표시줄의 색상을 설정합니다. \'자동 상태 표시줄 색상\' 옵션이 활성화 되어 어떤색상이라도 덮어씌워집니다.</string>
     <string name="preference_transparent_home">홈 화면에서 투명화</string>
-    <string name="preference_transparent_home_desc">이 옵션은 홈 화면이 보일때 상태 표시줄의 배경이 현재 배경화면이 되도록 설정합니다. 이 옵션은 라이브 배경화면을 사용하거나 홈화면의 스크롤되는 배경화면 옵션이 켜지면 작동이 안될것입니다.</string>
+    <string name="preference_transparent_home_desc">이 옵션은 홈 화면이 보일때 상태 표시줄의 배경이 현재 배경화면이 되도록 설정합니다. 이 옵션은 라이브 배경화면을 사용하거나 홈 화면의 스크롤되는 배경화면 옵션이 켜지면 작동이 안될것입니다.</string>
     <string name="preference_dark_icons">대비된 아이콘 색상</string>
     <string name="preference_dark_icons_desc">밝은 배경에서 아이콘이 보기 어렵거나 안보이는것을 피하기위해 아이콘 색상을 조정합니다.</string>
     <string name="preference_tinted_icons">아이콘 착색</string>
@@ -139,7 +148,7 @@
     <string name="preference_show_drawable">아이콘 보이기/숨기기</string>
     <string name="preference_show_text">글자 보이기</string>
     <string name="preference_notification_icon_size">알림 아이콘 크기</string>
-    <string name="preference_time_format">시간 양식</string>
+    <string name="preference_time_format">시간 형식</string>
     <string name="preference_heads_up_layout">헤드업 알림 스타일</string>
     <string name="preference_default_color_icon">기본 아이콘 색상</string>
     <string name="preference_hide_on_volume">볼륨 조절중 Status 숨기기</string>
@@ -167,6 +176,8 @@
     <string name="preference_transparent_mode_desc">상태 표시줄의 배경을 항상 투명으로 만듭니다. 기존의 상태 표시줄이 뒤로 보인다는 것을 명심하세요. 안드로이드 누가 이상에서 SystemUI 튜너를 이용해 상태 표시줄의 모든 아이콘을 해제하면 이 옵션은 매우 유용합니다.</string>
     <string name="preference_prevent_icon_overlap">아이콘 겹침 방지</string>
     <string name="preference_prevent_icon_overlap_desc">아이콘 \"영역\"이 한번에 너무 많은 아이콘이 동시에 표시될 때 서로 겹치지 않도록 방지합니다. 이 설정은 너무 많은 업데이트(음악 플레이어 알림이 특히 매초마다 업데이트 할경우 부담스러울 수 있습니다.)를 통해 배터리 방전을 초래할 수 있습니다. 그러니 사용할때 조심하세요.</string>
+    <string name="preference_ignore_permission_checking">권환 확인 무시</string>
+    <string name="preference_ignore_permission_checking_desc">모든 권한이 허가되어 있고 당신이 뭘하는건지 알고 있다면 활성화하세요! 이를 틀리게 사용하고 있다면 중대한 문제가 발생될 수 있습니다.</string>
 
     <string name="icon_notifications">알림</string>
     <string name="icon_clock">시계</string>
@@ -249,7 +260,7 @@
     <string name="icon_style_clear">깔끔</string>
     <string name="icon_style_clip">클립</string>
     <string name="icon_style_outline">테두리</string>
-    <string name="icon_style_dish">그릇</string>
+    <string name="icon_style_dish">접시</string>
     <string name="icon_style_triangle">삼각형</string>
     <string name="icon_style_square">사각형</string>
     <string name="icon_style_retro">복고</string>
@@ -258,12 +269,21 @@
     <string name="icon_style_school">학교</string>
     <string name="icon_style_system">시스템</string>
     <string name="icon_style_round">원</string>
-    <string name="icon_style_dish2">그릇 2</string>
+    <string name="icon_style_dish2">접시 2</string>
     <string name="icon_style_satellite">위성</string>
     <string name="icon_style_satellite_outline">위성 테두리</string>
     <string name="icon_style_boxy">상자</string>
     <string name="icon_style_bell">벨</string>
+    <string name="icon_style_curved">곡선</string>
+    <string name="icon_style_pixel">픽셀</string>
+    <string name="icon_style_tap">탭</string>
+    <string name="icon_style_front">전면</string>
+    <string name="icon_style_propeller">프로펠러</string>
+    <string name="icon_style_pilot_hat">조종사 모자</string>
+    <string name="icon_style_sideways">가로</string>
 
+    <string name="tutorial_missing_permissions">권한 없음</string>
+    <string name="tutorial_missing_permissions_desc">Status에서 필요한 권한이 허가되지 않은 것 같습니다. 이 권한이 없으면, 일부 기능이 작동하지 않거나 비활성화 됩니다. 만약 이미 모든 권한이 허가되어있고 에러라고 생각된다면, 설정의 \'기타\' 항목에서 권한 확인을 비활성화하실 수 있습니다.</string>
     <string name="tutorial_enable">상태 표시줄 활성화</string>
     <string name="tutorial_enable_desc">화면 상단의 스위치로 맞춤화된 상태 표시줄을 활성화나 비활성화 할 수 있습니다. 활성화해서 사용해보세요!</string>
     <string name="tutorial_search">뭔가 찾고 있습니까?</string>
@@ -312,22 +332,19 @@
 
     <string name="empty">아무것도 없습니다…</string>
     <string name="reset_apps_confirm">앱 설정을 초기화 하시겠습니까? 되돌릴 수 없습니다.</string>
-
-    <string name="vuk_desc">머티리얼 디자인의 거물, 아이콘을 만들고 채워 넣었습니다.</string>
-
+    <string name="vuk_desc">머티리얼 디자인의 위대한 영주, 아이콘을 만들고 채워 넣었습니다.</string>
     <string name="ghost_desc">그래픽 디자이너, 웹 디자이너 그리고 technologx.com 소유자.</string>
-
-    <string name="opnay_name">김인섭</string>
-    <string name="opnay_desc">안드로이드개발자입니다. 번역도가끔씩합니다.</string>
-
-    <string name="majida_desc">이 앱을 위해 중국어 번역을 만들었습니다.</string>
 
     <string name="about_translators">번역자</string>
 
-    <string name="ryo_desc">앱 스페인어 번역</string>
+    <string name="opnay_name">김인섭</string>
+    <string name="opnay_desc">안드로이드 개발자입니다. 번역도 가끔씩합니다.</string>
+    <string name="majida_desc">이 앱을 위해 중국어 번역을 만들었습니다.</string>
+    <string name="ryo_desc">스페인어 번역</string>
+    <string name="alsidi_desc">아랍어 번역을 했습니다.</string>
 
     <string name="about_icons">아이콘 출처</string>
-    <string name="about_icons_desc">분명히 이 앱에 사용된 100개 이상의 아이콘을 만드는건 힘들어서, (위의 사람들뿐만 아니라) 몇몇 다른 곳의 아이콘을 사용합니다.</string>
+    <string name="about_icons_desc">분명히, 이 앱에 사용된 100개 이상의 아이콘을 혼자서 만드는건 힘들기에, (위의 사람들뿐만 아니라) 이 앱은 몇가지 다른 곳의 아이콘을 사용합니다.</string>
 
     <string name="google_icons">Google Design</string>
     <string name="google_icons_desc">앱에 있는 대부분의 아이콘은 Google Design의 큰 아이콘 데이터베이스에서 선택했습니다.</string>
@@ -336,6 +353,96 @@
     <string name="md_icons_desc">많은 기여자들이 만들었으며, Google에서는 만날 수 없는 유용한 아이콘 모음입니다.</string>
 
     <string name="icons8_icons_desc">20초만에 어떠한 형식, 크기 그리고 색상으로 만들 수 있는 57,700개의 무료 플랫 아이콘.</string>
+
+    <!-- Help -->
+    <string-array name="faq">
+        <item>
+            <b>왜 상태 표시줄이 투명화 되지않죠?</b>
+            <p>
+                \n이 앱은 챗 버블이나 블루라이트 앱의 작동과 유사하게 상태 표시줄의 위에 오버레이을 만들어 작동합니다.
+                그러니 투명화를하게 된다면, 시스템 아이콘이 아래에 보일 수 있습니다.
+            </p>
+        </item>
+        <item>
+            <b>렉을 예방하려면?</b>
+            <p>
+                \n렉은 상태 표시줄를 업데이트하는 횟수를 줄이는 것으로 대부분 예방할 수 있습니다.
+                애니메이션을 비활성화하고, 자원기반 색상을 사용하고, 상태 표시줄이 기능하는데 완전히 필요없는 아이콘을 제거하면 됩니다.
+            </p>
+        </item>
+        <item>
+            <b>제 앱에서 상태표시줄이 잘못된 색상을 사용합니다.</b>
+            <p>
+                \nStatus는 화면이 열렸을때 지정된 색상이 바뀌는걸 감지 할 수 없습니다.
+                이는 일부 앱에서 약간 부정확한 색상을 만드는데, 여러가지 primary 색상을 가진 화면을 위해 뚜렷하지 않은 색상을 설정하는 것을 권장합니다.
+                개발자에게: Status는 기본적으로 \'R.attr.colorPrimaryDark\' 또는 \'R.color.colorPrimaryDark\' 리소스 색상을 가져와 사용합니다.
+            </p>
+        </item>
+        <item>
+            <b>상태 표시줄에 알림 아이콘이 보이지 않습니다.</b>
+            <p>
+                \n먼저, \'설정\'에서 \'알림 보이기\'옵션이 활성화되어 있는지 확인하세요. 그뒤 설정(3개의 점 -> 설정)을 열어주세요.
+                만약 안드로이드 4.3 이상에서 실행중이라면, \'호환성 모드\'를 눌러 아래의 스위치를 켜주세요.
+                만약 호환성 모드가 이미 활성화되어 있다면, 꺼주시면 가끔 문제가 해결될 수 있습니다.
+                또 다른 유용한 방법은 이와 비슷한 문제를 해결하려면 가끔씩 앱 데이터를 지워보세요.
+            </p>
+        </item>
+        <item>
+            <b>알림 패널을 열어도 상태 표시줄이 사라지지 않습니다.</b>
+            <p>
+                \n만약 안드로이드 4.3 이상에서 실행중이라면, 설정 화면(3개의 점 -> 설정)을 열고, \'호환성 모드\'를 눌러 활성화 됬는지 확인해주세요.
+                만약 안드로이드 4.3 미만에서 실행중이라면, 이 문제는 안드로이드의 한계이고 (불행히도) 제가 당신의 기기를 지원할 수 있는만큼 최선을 다했습니다.
+            </p>
+        </item>
+        <item>
+            <b>왜 홈 화면에서 배경화면의 상단부분이 정렬되지 않나요?</b>
+            <p>
+                \n만약 \'홈 화면에서 투명화\' 옵션을 활성화 했다면, 앱은 배경화면의 이미지를 가져와 홈 화면일때 상태 표시줄의 배경화면으로 설정합니다.
+                이는 홈 화면의 현재 페이지를 감지할 수 없어 움직이는 배경화면에서 일부 문제를 만듭니다.
+                만약 사용자 런처를 사용중이라면, 런처의 설정 메뉴에서 배경화면이 움직이는걸 방지하는 아주쉬운 방법이지만, 그렇지 않으면 투명화 설정을 비활성화해야 합니다.
+                투명한 상태 표시줄을 기본적으로 지원하지 않으면 화면의 상, 하단의 그림자에 영향을 받을 수 있습니다.
+            </p>
+        </item>
+        <item>
+            <b>상태 표시줄이 홈 화면에서 잘못된 배경화면을 보여주나요?</b>
+            <p>
+                \n\'홈 화면에서 투명화\' 옵션은 라이브 배경화면을 지원하지 않습니다. - 이는 가장 최근의 이미지 배경화면으로 대체합니다.
+            </p>
+        </item>
+        <item>
+            <b>제 휴대폰은 듀얼심인데, 두번째 신호세기 아이콘이 보이지 않아요.</b>
+            <p>
+                \nStatus는 거의 모든 기기마다 다르고 어렵기 때문에 현재 듀얼심을 지원하지 않습니다. 현재 작업중이지만, 앱이 안정화되고나서 업데이트 할 예정입니다.
+            </p>
+        </item>
+        <item>
+            <b>왜 잠금화면에서 상태 표시줄이 보이지 않나요?</b>
+            <p>
+                \n일부 기기에서, 잠재적인 보안 문제 때문에 시스템 잠금화면에서 상태 표시줄을 보이게하는건 불가능합니다.
+                플레이 스토어에서 다른 잠금화면을 다운로드하거나 시스템 잠금화면을 비활성화하면 가능합니다.
+            </p>
+        </item>
+        <item>
+            <b>시간 형식을 어떻게 변경하나요?</b>
+            <p>
+                \n시간 형식은 시계 아이콘의 \'시간 형식\'옵션을 통해 변경이 가능합니다. 시계는 다이얼로그에서 관련 변수가 입력된 특정한 문자를 대체합니다.
+                예를들어 24시간 형식으로 보고싶다면 \"HH:MM\"을 입력하거나 오전/오후를 표시하고 싶으면 \"h:mm a\"을 입력하시면됩니다.
+            </p>
+        </item>
+        <item>
+            <b>왜 알림 패널은 테마가 되지 않나요?</b>
+            <p>
+                \n알림 패널은 많은 시간을 들여 완성을 했고,
+                저는 더 많은 중요한 기능을 추가하기 전에 상태 표시줄의 속도와 안정성을 개선하기 위해 시간을 사용하는 것이 더 낫다고 느끼고 있지만, 미래에 추가하지 않는다고 하진 않습니다.
+            </p>
+        </item>
+        <item>
+            <b>Status가 블루라이트 앱에 영향을 받지 않습니다.</b>
+            <p>
+                \n상태 표시줄위에 보여지이 위해, Status가 다른것들보다 \'위에\' 그려져야합니다. 이는 블루라이트나 챗 버블을 포함한 다른 앱의 시스템 오버레이를 포함합니다.
+            </p>
+        </item>
+    </string-array>
 
     <!-- License -->
     <string-array name="libraries">
@@ -370,136 +477,14 @@
     <!-- untranslatable strings -->
     <string name="alsidi_name">Marwan ALsidi</string>
 
-    <!-- untranslated strings -->
-    <string name="icon_style_curved">Curved</string>
-    <string name="icon_style_pixel">Pixelated</string>
-    <string name="icon_style_tap">Tap</string>
-    <string name="icon_style_front">Front</string>
-    <string name="icon_style_propeller">Propeller</string>
-    <string name="icon_style_pilot_hat">Pilot Hat</string>
-    <string name="icon_style_sideways">Sideways</string>
-
-    <string name="james_desc">Android developer and professional cabbage eater.</string>
-    <string name="alsidi_desc">Translated the app into Arabic.</string>
-    <string name="anas_desc">Better known as the Oreo lord, this guy can add more butter to buttery interfaces.</string>
-
-    <string name="msg_missing_storage_permission">Please grant access to external storage in order to use this functionality.</string>
-    <string name="tutorial_missing_permissions">Missing Permissions</string>
-    <string name="tutorial_missing_permissions_desc">It appears that some of the permissions required by Status have not been granted. Without these permissions, some functionality may work incorrectly or be disabled. If you have already granted all the permissions and think that there may be an error, you can disable permission checking in the \'other\' section of the settings menu.</string>
-    <string name="preference_ignore_permission_checking">Ignore Permission Checking</string>
-    <string name="preference_ignore_permission_checking_desc">Only enable this if you are sure that all permissions have been granted and you know what you are doing! This can cause significant problems if used incorrectly.</string>
-    <string name="msg_show_individual_screens">Show %1$d individual screens…</string>
     <string name="action_gplus">Google+</string>
     <string name="action_dribbble">Dribbble</string>
     <string name="action_twitter">Twitter</string>
     <string name="action_github">GitHub</string>
     <string name="icons8_icons">Icons8</string>
-    <string name="section_colors">Colors</string>
-    <string name="section_icons">Icons</string>
-    <string name="section_animations">Animations</string>
-    <string name="section_notifications">Notifications</string>
-    <string name="section_other">Other</string>
-    <string name="preference_text_font">Text Font</string>
-    <string-array name="faq">
-        <item>
-            <b>Why can\'t the status bar be transparent?</b>
-            <p>
-                \nThis app works by making an overlay on top of the existing status bar, similar to how chat bubbles or a
-                screen dimming app would work. This means that if it is made transparent, the system icons would be visible
-                underneath it.
-            </p>
-        </item>
-        <item>
-            <b>How can I prevent lag?</b>
-            <p>
-                \nLag can be prevented mostly by minimizing the amount of times the status bar has to update. This can be done
-                by disabling animations, resourced-based colors, and removing any icons that aren\'t completely necessary for
-                the status bar to function.
-            </p>
-        </item>
-        <item>
-            <b>The status bar uses the wrong color for my app.</b>
-            <p>
-                \nStatus cannot detect color changes that happen after a screen is opened, only preset colors. This can make the
-                colors of some apps slightly inaccurate, so it is recommended to set a neutral color for screens that can have
-                multiple primary colors. For developers: Status mainly uses the \'R.attr.colorPrimaryDark\' or
-                \'R.color.colorPrimaryDark\' resources to get the colors.
-            </p>
-        </item>
-        <item>
-            <b>The status bar isn\'t showing notification icons.</b>
-            <p>
-                \nFirst, check that you have the \'show notifications\' option in the \'settings\' tab enabled. Then open the setup
-                screen (three dots -> setup). If you are running android 4.3 or higher, click on \'compatibility mode\' and turn
-                on the switch at the bottom. If compatibility mode is already enabled, turning it off sometimes fixes the issue
-                as well. Another useful thing to note is that sometimes clearing the app data can help fix issues similar to
-                this one.
-            </p>
-        </item>
-        <item>
-            <b>The status bar doesn\'t remove notifications until the notification panel is opened.</b>
-            <p>
-                \nIf you are running android 4.3 or higher, open the setup screen (three dots -> setup),
-                click on \'compatibility mode\', and make sure it is not enabled. If you\'re below android
-                4.3, this issue is due to a limitation of android and this is (unfortunately) the best I can do to support
-                your device at the moment.
-            </p>
-        </item>
-        <item>
-            <b>Why isn\'t the top part of my wallpaper aligned on the home screen?</b>
-            <p>
-                \nIf the \'transparency on home screen\' option is enabled, the app will get a static image of the wallpaper
-                and set it as the status bar\'s background whenever you are on your home screen. This can create a few issues with
-                scrolling wallpapers, as it isn\'t possible to detect the current page of the home screen. If you are using a custom
-                launcher, it\'s usually pretty easy to prevent the wallpaper from scrolling in the launcher\'s settings menu, but
-                otherwise the only option you really have is to disable the transparency setting. It can also be affected by shadows
-                at the top and bottom of the screen and devices that don\'t natively support the ability to have a transparent status bar.
-            </p>
-        </item>
-        <item>
-            <b>Why is the status bar showing the wrong wallpaper on my home screen?</b>
-            <p>
-                \nThe \'transparency on home screen\' option does not currently have support for live wallpapers - it will simply get the most
-                recent image wallpaper instead.
-            </p>
-        </item>
-        <item>
-            <b>My phone is dual sim, but it doesn\'t show the second signal strength icon.</b>
-            <p>
-                \nStatus does not currently support dual sim as it works differently on almost every device and is difficult to implement. This
-                is being worked on, however, and the app will be updated as soon as it is stable.
-            </p>
-        </item>
-        <item>
-            <b>Why isn\'t the status bar visible on the lockscreen?</b>
-            <p>
-                \nOn some devices, it is not possible to show the status bar over the system lock screen because of a potential security issue. A
-                possible solution could be downloading a third party lock screen from the play store or just disabling the system lock screen.
-            </p>
-        </item>
-        <item>
-            <b>How do you change the time format?</b>
-            <p>
-                \nThe clock format can be changed through the \'time format\' option for the clock icon. The clock will replace certain
-                characters inputted into the dialog with the associated variables, for example to show the time in a 24 hour format you
-                would input \"HH:MM\", or to show the AM/PM indicator \"h:mm a\".
-            </p>
-        </item>
-        <item>
-            <b>Why isn\'t the notification panel themed?</b>
-            <p>
-                \nThe notification panel would take a lot of time to complete, and I feel it would be a better use of time to improve the speed
-                and stability of the status bar before adding any more significant features, but that\'s not to say that it won\'t be added in
-                the future.
-            </p>
-        </item>
-        <item>
-            <b>Status isn\'t affected by my screen dimming app.</b>
-            <p>
-                \nIn order to be shown over the status bar, Status needs to be drawn \'on top of\' everything else as well. This includes system
-                overlays from other apps, including screen dimmers or chat bubbles.
-            </p>
-        </item>
-    </string-array>
+
+    <!-- untranslated strings -->
+    <string name="james_desc">Android developer and professional cabbage eater.</string>
+    <string name="anas_desc">Better known as the Oreo lord, this guy can add more butter to buttery interfaces.</string>
 
 </resources>
