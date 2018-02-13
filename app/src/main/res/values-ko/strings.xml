@@ -486,5 +486,6 @@
     <!-- untranslated strings -->
     <string name="james_desc">Android developer and professional cabbage eater.</string>
     <string name="anas_desc">Better known as the Oreo lord, this guy can add more butter to buttery interfaces.</string>
+    <string name="preference_text_font">Text Font</string>
 
 </resources>
