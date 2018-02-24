@@ -48,7 +48,7 @@ public class AlarmIconData extends IconData<AlarmIconData.AlarmReceiver> {
             alarm = Settings.System.getString(getContext().getContentResolver(), android.provider.Settings.System.NEXT_ALARM_FORMATTED);
 
         if (alarm != null)
-            onDrawableUpdate(0);
+            onIconUpdate(0);
     }
 
     @Override
@@ -122,8 +122,8 @@ public class AlarmIconData extends IconData<AlarmIconData.AlarmReceiver> {
                 alarm = Settings.System.getString(icon.getContext().getContentResolver(), android.provider.Settings.System.NEXT_ALARM_FORMATTED);
 
             if (alarm != null)
-                icon.onDrawableUpdate(0);
-            else icon.onDrawableUpdate(-1);
+                icon.onIconUpdate(0);
+            else icon.onIconUpdate(-1);
         }
     }
 }

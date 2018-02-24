@@ -11,9 +11,11 @@ import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
@@ -300,13 +302,13 @@ public class StatusService extends Service {
 
             statusView = new StatusView(this);
 
-            WindowManager.LayoutParams params = new WindowManager.LayoutParams(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN, PixelFormat.TRANSLUCENT);
+            WindowManager.LayoutParams params = new WindowManager.LayoutParams(WindowManager.LayoutParams.MATCH_PARENT, StaticUtils.getStatusBarHeight(this), WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN, PixelFormat.TRANSLUCENT);
             params.gravity = Gravity.TOP;
 
             windowManager.addView(statusView, params);
         } else statusView.unregister();
 
-        statusView.setUp();
+        statusView.init();
 
         if (fullscreenView == null || fullscreenView.getParent() == null) {
             WindowManager.LayoutParams params = new WindowManager.LayoutParams(1, WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, PixelFormat.TRANSPARENT);
@@ -461,7 +463,8 @@ public class StatusService extends Service {
         headsUpHandler.postDelayed(headsUpRunnable, headsUpDuration);
 
         CustomImageView icon = (CustomImageView) headsUpView.findViewById(R.id.icon);
-        Drawable drawable = notification.getIcon(this);
+        Bitmap bitmap = notification.getIcon(this);
+        Drawable drawable = bitmap != null ? new BitmapDrawable(getResources(), bitmap) : null;
         if (drawable != null) icon.setImageDrawable(drawable, notification.color);
 
         CustomImageView largeIcon = (CustomImageView) headsUpView.findViewById(R.id.largeIcon);

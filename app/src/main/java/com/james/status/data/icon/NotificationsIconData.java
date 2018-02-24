@@ -1,17 +1,13 @@
 package com.james.status.data.icon;
 
-import android.animation.LayoutTransition;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.os.Build;
 import android.support.v4.util.ArrayMap;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import com.james.status.R;
 import com.james.status.data.NotificationData;
@@ -21,8 +17,6 @@ import com.james.status.data.preference.IntegerPreferenceData;
 import com.james.status.receivers.IconUpdateReceiver;
 import com.james.status.services.NotificationService;
 import com.james.status.utils.StaticUtils;
-import com.james.status.views.CustomImageView;
-import com.james.status.views.OverflowLinearLayout;
 
 import java.util.List;
 
@@ -32,15 +26,11 @@ public class NotificationsIconData extends IconData<NotificationsIconData.Notifi
     public static final String ACTION_NOTIFICATION_REMOVED = "com.james.status.ACTION_NOTIFICATION_REMOVED";
     public static final String EXTRA_NOTIFICATION = "com.james.status.EXTRA_NOTIFICATION";
 
-    private LayoutInflater inflater;
-
-    private LinearLayout notificationLayout;
     private ArrayMap<String, NotificationData> notifications;
 
     public NotificationsIconData(Context context) {
         super(context);
         notifications = new ArrayMap<>();
-        inflater = LayoutInflater.from(context);
     }
 
     @Override
@@ -62,7 +52,7 @@ public class NotificationsIconData extends IconData<NotificationsIconData.Notifi
     }
 
     @Override
-    public boolean canHazDrawable() {
+    public boolean canHazIcon() {
         return false;
     }
 
@@ -109,13 +99,8 @@ public class NotificationsIconData extends IconData<NotificationsIconData.Notifi
     @Override
     public void register() {
         super.register();
-        notificationLayout = (LinearLayout) getIconView();
-        notificationLayout.setPadding(getIconPadding(), 0, getIconPadding(), 0);
-
-        notificationLayout.removeAllViewsInLayout();
         notifications.clear();
-
-        notificationLayout.setLayoutTransition(PreferenceData.STATUS_ICON_ANIMATIONS.getValue(getContext()) ? new LayoutTransition() : null);
+        requestReDraw();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             Intent intent = new Intent(NotificationService.ACTION_GET_NOTIFICATIONS);
@@ -124,79 +109,56 @@ public class NotificationsIconData extends IconData<NotificationsIconData.Notifi
         }
     }
 
-    @Override
-    public void unregister() {
-        super.unregister();
-        notificationLayout = null;
-    }
-
     private void addNotification(NotificationData notification) {
-        if (notificationLayout != null) {
-            View v = null;
-
-            for (int i = 0; i < notificationLayout.getChildCount(); i++) {
-                View child = notificationLayout.getChildAt(i);
-                Object tag = child.getTag();
-
-                if (tag != null && tag instanceof String) {
-                    NotificationData notification2 = notifications.get(tag);
-                    if (notification2 != null && (notification.getKey().equals(notification2.getKey()) || notification.equals(notification2) || (notification.group != null && notification2.group != null && notification.group.equals(notification2.group)))) {
-                        if (v != null && v.getParent() != null) {
-                            notificationLayout.removeView(child);
-                            i--;
-
-                            Log.e("Notification", "removing view for " + notification2.getKey() + " in group " + notification2.group);
-                        } else
-                            Log.e("Notification", "removing notification " + notification2.getKey() + " in group " + notification2.group);
-                        v = child;
-                        notifications.remove(notification2);
-                    }
-                }
-            }
-
-            if (v == null) {
-                v = inflater.inflate(R.layout.item_icon, notificationLayout, false);
-                v.setTag(notification.getKey());
-            }
-
-            v.setPadding(getIconPadding(), 0, getIconPadding(), 0);
-            v.findViewById(R.id.text).setVisibility(View.GONE);
-
-            Drawable drawable = notification.getIcon(getContext());
-
-            if (drawable != null) {
-                CustomImageView iconView = (CustomImageView) v.findViewById(R.id.icon);
-                iconView.setImageDrawable(drawable, getColor());
-
-                ViewGroup.LayoutParams layoutParams = iconView.getLayoutParams();
-                if (layoutParams != null)
-                    layoutParams.height = (int) StaticUtils.getPixelsFromDp(getIconScale());
-                else
-                    layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, (int) StaticUtils.getPixelsFromDp(getIconScale()));
-
-                iconView.setLayoutParams(layoutParams);
-
-                if (v.getParent() == null) notificationLayout.addView(v, 0);
-                notifications.put(notification.getKey(), notification);
-
-                onDrawableUpdate(-1);
-                notificationLayout.setVisibility(View.VISIBLE);
+        for (int i = 0; i < notifications.size(); i++) {
+            NotificationData notification2 = notifications.valueAt(i);
+            if (notification2 != null && (notification.getKey().equals(notification2.getKey()) || notification.equals(notification2) || (notification.group != null && notification2.group != null && notification.group.equals(notification2.group)))) {
+                notifications.remove(notification2);
             }
         }
+
+        if (notification.getIcon(getContext()) != null) {
+            notifications.put(notification.getKey(), notification);
+            requestReDraw();
+        }
+    }
+
+    @Override
+    public void draw(Canvas canvas, int x, int width) {
+        updateAnimatedValues();
+        int itemsWidth = notifications.size() * (drawnIconSize + drawnPadding);
+        int items = itemsWidth <= width ? notifications.size() : (width / (drawnIconSize + drawnPadding)) - 1;
+
+        x += drawnPadding;
+
+        for (int i = 0; i < items; i++) {
+            Bitmap bitmap = notifications.valueAt(i).getIcon(getContext());
+            if (bitmap != null) {
+                Matrix matrix = new Matrix();
+                matrix.postScale(drawnIconSize / bitmap.getWidth(), drawnIconSize / bitmap.getWidth());
+                matrix.postTranslate(x, canvas.getHeight() - drawnIconSize);
+                canvas.drawBitmap(bitmap, matrix, iconPaint);
+
+                x += drawnIconSize + drawnPadding;
+            }
+        }
+
+        if (itemsWidth > width) {
+            //TODO: draw "more" icon at x
+        }
+    }
+
+    @Override
+    public int getWidth(int height, int available) {
+        if (available < 0)
+            return -1;
+        else
+            return Math.min(notifications.size(), available / (drawnIconSize + drawnPadding)) * (drawnIconSize + drawnPadding) + drawnPadding;
     }
 
     private void removeNotification(NotificationData notification) {
-        if (notificationLayout != null) {
-            for (int i = 0; i < notificationLayout.getChildCount(); i++) {
-                View child = notificationLayout.getChildAt(i);
-                if (((String) child.getTag()).matches(notification.getKey()) && notifications.containsKey(notification.getKey())) {
-                    notificationLayout.removeViewAt(i);
-                    notifications.remove(notification.getKey());
-                }
-            }
-        }
-
-        if (notifications.size() < 1) notificationLayout.setVisibility(View.GONE);
+        notifications.remove(notification.getKey());
+        requestReDraw();
     }
 
     static class NotificationReceiver extends IconUpdateReceiver<NotificationsIconData> {
@@ -227,9 +189,6 @@ public class NotificationsIconData extends IconData<NotificationsIconData.Notifi
                     icon.removeNotification(notification);
                     break;
             }
-
-            if (isIconOverlapPrevention && icon.getIconView().getParent() != null && icon.getIconView().getParent() instanceof OverflowLinearLayout)
-                ((OverflowLinearLayout) icon.getIconView().getParent()).onViewsChanged();
         }
     }
 }

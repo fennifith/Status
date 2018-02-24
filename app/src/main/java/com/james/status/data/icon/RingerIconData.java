@@ -37,13 +37,13 @@ public class RingerIconData extends IconData<RingerIconData.RingerReceiver> {
 
         switch (audioManager.getRingerMode()) {
             case AudioManager.RINGER_MODE_SILENT:
-                onDrawableUpdate(0);
+                onIconUpdate(0);
                 break;
             case AudioManager.RINGER_MODE_VIBRATE:
-                onDrawableUpdate(1);
+                onIconUpdate(1);
                 break;
             case AudioManager.RINGER_MODE_NORMAL:
-                onDrawableUpdate(-1);
+                onIconUpdate(-1);
                 break;
         }
     }
@@ -105,13 +105,13 @@ public class RingerIconData extends IconData<RingerIconData.RingerReceiver> {
         public void onReceive(RingerIconData icon, Intent intent) {
             switch (icon.audioManager.getRingerMode()) {
                 case AudioManager.RINGER_MODE_SILENT:
-                    icon.onDrawableUpdate(0);
+                    icon.onIconUpdate(0);
                     break;
                 case AudioManager.RINGER_MODE_VIBRATE:
-                    icon.onDrawableUpdate(1);
+                    icon.onIconUpdate(1);
                     break;
                 case AudioManager.RINGER_MODE_NORMAL:
-                    icon.onDrawableUpdate(-1);
+                    icon.onIconUpdate(-1);
                     break;
             }
         }

@@ -130,10 +130,10 @@ public class GpsIconData extends IconData<GpsIconData.GpsReceiver> {
         public void onReceive(GpsIconData icon, Intent intent) {
             if (icon.locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                 if (isLocationFixed(icon)) {
-                    icon.onDrawableUpdate(1);
+                    icon.onIconUpdate(1);
                 } else
-                    icon.onDrawableUpdate(0);
-            } else icon.onDrawableUpdate(-1);
+                    icon.onIconUpdate(0);
+            } else icon.onIconUpdate(-1);
         }
 
         private boolean isLocationFixed(GpsIconData icon) {

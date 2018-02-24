@@ -48,7 +48,7 @@ public class WifiIconData extends IconData<WifiIconData.WifiReceiver> {
 
         int level = WifiManager.calculateSignalLevel(wifiManager.getConnectionInfo().getRssi(), 5);
         if (level > 0)
-            onDrawableUpdate(level); //temporary fix, cannot determine if wifi is enabled without BroadcastReceiver for some reason
+            onIconUpdate(level); //temporary fix, cannot determine if wifi is enabled without BroadcastReceiver for some reason
     }
 
     @Override
@@ -152,8 +152,8 @@ public class WifiIconData extends IconData<WifiIconData.WifiReceiver> {
             if (networkInfo == null) networkInfo = icon.connectivityManager.getActiveNetworkInfo();
 
             if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI && networkInfo.isConnected())
-                icon.onDrawableUpdate(WifiManager.calculateSignalLevel(icon.wifiManager.getConnectionInfo().getRssi(), 5));
-            else icon.onDrawableUpdate(-1);
+                icon.onIconUpdate(WifiManager.calculateSignalLevel(icon.wifiManager.getConnectionInfo().getRssi(), 5));
+            else icon.onIconUpdate(-1);
         }
     }
 }

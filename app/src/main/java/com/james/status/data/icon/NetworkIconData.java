@@ -160,7 +160,7 @@ public class NetworkIconData extends IconData {
             if (reference != null) icon = reference.get();
 
             if (icon != null && icon.isRegistered)
-                icon.onDrawableUpdate((int) Math.round(SignalStrengths.getFirstValid(signalStrength)));
+                icon.onIconUpdate((int) Math.round(SignalStrengths.getFirstValid(signalStrength)));
         }
     }
 }

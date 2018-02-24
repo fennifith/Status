@@ -17,6 +17,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.util.TypedValue;
 
 import com.james.status.BuildConfig;
 import com.james.status.Status;
@@ -66,6 +67,10 @@ public class StaticUtils {
         return px / Resources.getSystem().getDisplayMetrics().density;
     }
 
+    public static int getPixelsFromSp(Context context, float sp) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, context.getResources().getDisplayMetrics());
+    }
+
     public static int getBluetoothState(Context context) {
         BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
         if (adapter != null) return adapter.getState();
@@ -97,6 +102,17 @@ public class StaticUtils {
 
     public static boolean canDrawOverlays(Context context) {
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(context);
+    }
+
+    public static int getAnimatedValue(int drawn, int target) {
+        int difference = target - drawn;
+        if (difference > 0)
+            return drawn + (target < drawn ? Math.min(difference / 8, -1) : Math.max(difference / 8, 1));
+        else return target;
+    }
+
+    public static int getMergedValue(int v1, int v2, float r) {
+        return (int) ((v1 * r) + (v2 * (1 - r)));
     }
 
     public static boolean isPermissionsGranted(Context context, String[] permissions) {

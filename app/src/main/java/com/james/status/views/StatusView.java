@@ -1,30 +1,23 @@
 package com.james.status.views;
 
 import android.animation.Animator;
-import android.animation.ArgbEvaluator;
-import android.animation.LayoutTransition;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.app.WallpaperInfo;
 import android.app.WallpaperManager;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewTreeObserver;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.james.status.R;
 import com.james.status.data.PreferenceData;
 import com.james.status.data.icon.IconData;
 import com.james.status.utils.ColorUtils;
@@ -34,129 +27,83 @@ import com.james.status.utils.StaticUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StatusView extends FrameLayout {
+public class StatusView extends View implements IconData.ReDrawListener {
 
-    public static final int OPTION_SYSTEM_SHOWING = 0;
-    public static final int OPTION_FULLSCREEN = 1;
-    public static final int OPTION_ANIMATIONS = 2;
-    public static final int OPTION_ICON_ANIMATIONS = 3;
-    public static final int OPTION_TINTED_ICONS = 4;
-    public static final int OPTION_CONTRAST_ICONS = 5;
-    public static final int OPTION_BUMP_MODE = 6;
-    public static final int OPTION_TRANSPARENT_MODE = 7;
-    public static final int OPTION_BURN_IN_PROTECTION = 8;
-    public static final int OPTION_ICON_OVERLAP_PREVENTION = 9;
-    public static final int OPTION_COLOR = 10;
-    public static final int OPTION_ICON_COLOR = 11;
-    public static final int OPTION_AUTO_COLOR = 12;
-    public static final int OPTION_SIDE_PADDING = 13;
-    public static final int OPTION_TRANSPARENT_HOME = 14;
-    public static final PreferenceData[] OPTIONS = new PreferenceData[]{
-            null,
-            null,
-            PreferenceData.STATUS_BACKGROUND_ANIMATIONS,
-            PreferenceData.STATUS_ICON_ANIMATIONS,
-            PreferenceData.STATUS_TINTED_ICONS,
-            PreferenceData.STATUS_DARK_ICONS,
-            PreferenceData.STATUS_BUMP_MODE,
-            PreferenceData.STATUS_TRANSPARENT_MODE,
-            PreferenceData.STATUS_BURNIN_PROTECTION,
-            PreferenceData.STATUS_PREVENT_ICON_OVERLAP,
-            PreferenceData.STATUS_COLOR,
-            PreferenceData.STATUS_ICON_COLOR,
-            PreferenceData.STATUS_COLOR_AUTO,
-            PreferenceData.STATUS_SIDE_PADDING,
-            PreferenceData.STATUS_HOME_TRANSPARENT
-    };
-
-    private boolean[] booleanOptions = new boolean[OPTIONS.length];
-    private int[] intOptions = new int[OPTIONS.length];
-
-    private LinearLayout status;
-    private OverflowLinearLayout leftLayout;
-    private float leftX, leftY;
-    private OverflowLinearLayout rightLayout;
-    private float rightX, rightY;
-    private LinearLayout centerLayout;
-    private float centerX, centerY;
     private int burnInOffsetX, burnInOffsetY;
 
-    @ColorInt
-    private Integer color, iconColor = Color.WHITE;
+    private int drawnBackgroundColor;
+    private int targetBackgroundColor;
+    private Paint paint;
 
+    @Nullable
+    private Bitmap backgroundImage;
+    private boolean needsBackgroundImageDraw;
+    private int defaultBackgroundColor;
+
+    /**
+     * True if ".register()" has been called on all of the icons
+     */
     private boolean isRegistered;
+
+    private boolean isBurnInProtection;
     private boolean isBurnInProtectionStarted;
 
-    private List<IconData> icons;
+    private boolean isFullscreen;
+    private boolean isSystemShowing;
+
+    private boolean isTransparentHome;
+    private int sidePadding;
+    private boolean isAnimations;
+
+    private List<IconData> icons, leftIcons, centerIcons, rightIcons;
     private WallpaperManager wallpaperManager;
 
     private Handler handler;
     private Runnable burnInRunnable = new Runnable() {
         @Override
         public void run() {
-            if (booleanOptions[OPTION_BURN_IN_PROTECTION])
+            if (isBurnInProtection)
                 handler.postDelayed(this, 2000);
             else isBurnInProtectionStarted = false;
 
-            if (status != null && status.getParent() != null) {
-                switch (burnInOffsetX) {
-                    case 0:
-                        setLayoutX(-1);
-                        burnInOffsetX++;
-                        break;
-                    case 2:
-                    case 3:
-                    case 4:
-                        setLayoutX(1);
-                        burnInOffsetX++;
-                        break;
-                    case 6:
-                        setLayoutX(-1);
-                        burnInOffsetX++;
-                        break;
-                    case 7:
-                        setLayoutX(-1);
-                        burnInOffsetX = 0;
-                        break;
-                    default:
-                        setLayoutX(0);
-                        burnInOffsetX++;
-                }
-
-                switch (burnInOffsetY) {
-                    case 0:
-                    case 1:
-                    case 2:
-                        setLayoutY(1);
-                        burnInOffsetY++;
-                        break;
-                    case 4:
-                    case 5:
-                    case 6:
-                        setLayoutY(-1);
-                        burnInOffsetY++;
-                        break;
-                    case 7:
-                        setLayoutY(0);
-                        burnInOffsetY = 0;
-                        break;
-                    default:
-                        setLayoutY(0);
-                        burnInOffsetY++;
-                }
+            switch (burnInOffsetX) {
+                case 0:
+                    burnInOffsetX++;
+                    break;
+                case 2:
+                case 3:
+                case 4:
+                    burnInOffsetX++;
+                    break;
+                case 6:
+                    burnInOffsetX++;
+                    break;
+                case 7:
+                    burnInOffsetX = 0;
+                    break;
+                default:
+                    burnInOffsetX++;
             }
-        }
 
-        private void setLayoutX(float x) {
-            leftLayout.setX(leftX + x);
-            rightLayout.setX(rightX + x);
-            centerLayout.setX(centerX + x);
-        }
+            switch (burnInOffsetY) {
+                case 0:
+                case 1:
+                case 2:
+                    burnInOffsetY++;
+                    break;
+                case 4:
+                case 5:
+                case 6:
+                    burnInOffsetY++;
+                    break;
+                case 7:
+                    burnInOffsetY = 0;
+                    break;
+                default:
+                    burnInOffsetY++;
+            }
 
-        private void setLayoutY(float y) {
-            leftLayout.setY(leftY + y);
-            rightLayout.setY(rightY + y);
-            centerLayout.setY(centerY + y);
+            postInvalidate();
         }
     };
 
@@ -169,162 +116,82 @@ public class StatusView extends FrameLayout {
     }
 
     public StatusView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        handler = new Handler();
+        this(context, attrs, defStyleAttr, 0);
     }
 
     @TargetApi(21)
     public StatusView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+        icons = new ArrayList<>();
+        leftIcons = new ArrayList<>();
+        centerIcons = new ArrayList<>();
+        rightIcons = new ArrayList<>();
+
         handler = new Handler();
+        wallpaperManager = WallpaperManager.getInstance(getContext());
+
+        paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setFilterBitmap(true);
+        paint.setDither(true);
+
+        defaultBackgroundColor = drawnBackgroundColor = targetBackgroundColor = PreferenceData.STATUS_COLOR.getValue(getContext());
+        init();
     }
 
-    public void setUp() {
-        removeAllViews();
+    public void init() {
+        isAnimations = PreferenceData.STATUS_ICON_ANIMATIONS.getValue(getContext());
+        defaultBackgroundColor = PreferenceData.STATUS_COLOR.getValue(getContext());
+        isTransparentHome = PreferenceData.STATUS_HOME_TRANSPARENT.getValue(getContext());
+        sidePadding = (int) StaticUtils.getPixelsFromDp((int) PreferenceData.STATUS_SIDE_PADDING.getValue(getContext()));
+        isBurnInProtection = PreferenceData.STATUS_BURNIN_PROTECTION.getValue(getContext());
 
-        View v = LayoutInflater.from(getContext()).inflate(R.layout.layout_status, this, false);
-        status = (LinearLayout) v.findViewById(R.id.status);
-        status.getLayoutParams().height = StaticUtils.getStatusBarHeight(getContext());
+        for (IconData icon : icons)
+            icon.init();
 
-        leftLayout = (OverflowLinearLayout) v.findViewById(R.id.leftLayout);
-        rightLayout = (OverflowLinearLayout) v.findViewById(R.id.rightLayout);
-        centerLayout = (LinearLayout) v.findViewById(R.id.centerLayout);
-
-        getOptions();
-
-        if (booleanOptions[OPTION_ICON_ANIMATIONS]) {
-            leftLayout.setLayoutTransition(new LayoutTransition());
-            rightLayout.setLayoutTransition(new LayoutTransition());
-            centerLayout.setLayoutTransition(new LayoutTransition());
-        } else {
-            leftLayout.setLayoutTransition(null);
-            rightLayout.setLayoutTransition(null);
-            centerLayout.setLayoutTransition(null);
+        if (isBurnInProtection && !isBurnInProtectionStarted) {
+            handler.post(burnInRunnable);
+            isBurnInProtectionStarted = true;
         }
 
-        addView(v);
-        status.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                leftX = leftLayout.getX();
-                leftY = leftLayout.getY();
-                rightX = rightLayout.getX();
-                rightY = rightLayout.getY();
-                centerX = centerLayout.getX();
-                centerY = centerLayout.getY();
-
-                if (booleanOptions[OPTION_BURN_IN_PROTECTION] && !isBurnInProtectionStarted) {
-                    handler.post(burnInRunnable);
-                    isBurnInProtectionStarted = false;
-                }
-
-                status.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-            }
-        });
-
-        if (booleanOptions[OPTION_AUTO_COLOR])
-            setColor(intOptions[OPTION_COLOR]);
-        else if (color != null) setColor(color);
-        else setColor(Color.BLACK);
-
-        iconColor = intOptions[OPTION_ICON_COLOR];
-
-        status.setPadding(intOptions[OPTION_SIDE_PADDING], 0, intOptions[OPTION_SIDE_PADDING], 0);
-
-        if (booleanOptions[OPTION_BUMP_MODE]) {
-            int padding = (int) StaticUtils.getPixelsFromDp(16);
-            centerLayout.setPadding(padding, 0, padding, 0);
-            centerLayout.setBackgroundResource(R.drawable.bump_inner);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                leftLayout.setBackgroundResource(R.drawable.bump_outer_left);
-                rightLayout.setBackgroundResource(R.drawable.bump_outer_right);
-            }
-        }
-
-        if (wallpaperManager == null) wallpaperManager = WallpaperManager.getInstance(getContext());
-    }
-
-    private void getOptions() {
-        for (int i = 0; i < OPTIONS.length; i++) {
-            PreferenceData data = OPTIONS[i];
-            if (data != null) {
-                Object defaultValue = data.getDefaultValue();
-                if (defaultValue instanceof Boolean)
-                    booleanOptions[i] = data.getValue(getContext());
-                else if (defaultValue instanceof Integer)
-                    intOptions[i] = data.getValue(getContext());
-            }
-        }
+        sortIcons();
     }
 
     public void setIcons(List<IconData> icons) {
-        for (int i = (leftLayout.getChildCount() - 1); i >= 0; i--) {
-            View child = leftLayout.getChildAt(i);
-            Object tag = child.getTag();
+        this.icons.clear();
+        this.icons.addAll(icons);
+        for (IconData icon : icons)
+            icon.setReDrawListener(this);
+        sortIcons();
+    }
 
-            if (tag != null && tag instanceof IconData) {
-                ((IconData) tag).unregister();
-                leftLayout.removeViewAt(i);
-            }
-        }
+    private void sortIcons() {
+        leftIcons.clear();
+        centerIcons.clear();
+        rightIcons.clear();
 
-        for (int i = (centerLayout.getChildCount() - 1); i >= 0; i--) {
-            View child = centerLayout.getChildAt(i);
-            Object tag = child.getTag();
+        for (IconData icon : icons) {
+            if (!icon.isVisible())
+                continue;
 
-            if (tag != null && tag instanceof IconData) {
-                ((IconData) tag).unregister();
-                centerLayout.removeViewAt(i);
-            }
-        }
-
-        for (int i = (rightLayout.getChildCount() - 1); i >= 0; i--) {
-            View child = rightLayout.getChildAt(i);
-            Object tag = child.getTag();
-
-            if (tag != null && tag instanceof IconData) {
-                ((IconData) tag).unregister();
-                rightLayout.removeViewAt(i);
-            }
-        }
-
-        this.icons = icons;
-
-        for (final IconData iconData : icons) {
-            if (!iconData.isVisible()) continue;
-
-            final View item = iconData.getIconView();
-
-            iconData.setDrawableListener(new IconData.DrawableListener() {
-                @Override
-                public void onUpdate(@Nullable Drawable drawable) {
-                    CustomImageView iconView = (CustomImageView) item.findViewById(R.id.icon);
-                    int color = iconData.getGravity() == IconData.CENTER_GRAVITY && booleanOptions[OPTION_BUMP_MODE] ? Color.WHITE : iconColor;
-
-                    if (drawable != null && iconView != null)
-                        iconView.setImageDrawable(drawable, color);
-                    else if (iconView == null || !iconView.getParent().equals(item))
-                        setIconTint(item, color);
-                }
-            });
-
-            switch (iconData.getGravity()) {
+            switch (icon.getGravity()) {
                 case IconData.LEFT_GRAVITY:
-                    leftLayout.addView(item, 0);
+                    Log.d("StatusView", "left " + icon.getClass().getName());
+                    leftIcons.add(icon);
                     break;
                 case IconData.CENTER_GRAVITY:
-                    centerLayout.addView(item, 0);
+                    Log.d("StatusView", "center " + icon.getClass().getName());
+                    centerIcons.add(icon);
                     break;
                 case IconData.RIGHT_GRAVITY:
-                    rightLayout.addView(item, 0);
+                    Log.d("StatusView", "right " + icon.getClass().getName());
+                    rightIcons.add(icon);
                     break;
             }
         }
 
-        if (booleanOptions[OPTION_ICON_OVERLAP_PREVENTION]) {
-            leftLayout.onViewsChanged();
-            rightLayout.onViewsChanged();
-        }
+        postInvalidate();
+        Log.d("StatusView", "sorted icons");
     }
 
     public List<IconData> getIcons() {
@@ -355,29 +222,29 @@ public class StatusView extends FrameLayout {
     }
 
     public void setSystemShowing(boolean isSystemShowing) {
-        if ((booleanOptions[OPTION_FULLSCREEN] != isSystemShowing || booleanOptions[OPTION_SYSTEM_SHOWING] != isSystemShowing) && isSystemShowing)
+        if ((isFullscreen != isSystemShowing || this.isSystemShowing != isSystemShowing) && isSystemShowing)
             setStatusBarVisibility(false);
-        booleanOptions[OPTION_SYSTEM_SHOWING] = isSystemShowing;
+        this.isSystemShowing = isSystemShowing;
     }
 
     public boolean isSystemShowing() {
-        return booleanOptions[OPTION_SYSTEM_SHOWING];
+        return isSystemShowing;
     }
 
     public void setFullscreen(boolean isFullscreen) {
-        if (((getVisibility() == View.GONE) != isFullscreen) && !booleanOptions[OPTION_SYSTEM_SHOWING]) {
+        if (((getVisibility() == View.GONE) != isFullscreen) && !isSystemShowing) {
             setStatusBarVisibility(!isFullscreen);
         }
 
-        booleanOptions[OPTION_FULLSCREEN] = isFullscreen;
+        this.isFullscreen = isFullscreen;
     }
 
     public boolean isFullscreen() {
-        return booleanOptions[OPTION_FULLSCREEN];
+        return isFullscreen;
     }
 
     private void setStatusBarVisibility(final boolean visible) {
-        if (booleanOptions[OPTION_ANIMATIONS]) {
+        if (isAnimations) {
             ValueAnimator animator = ValueAnimator.ofFloat(getY(), visible ? 0 : -StaticUtils.getStatusBarHeight(getContext()));
             animator.setDuration(150);
             animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -414,62 +281,18 @@ public class StatusView extends FrameLayout {
     }
 
     public void setColor(@ColorInt int color) {
-        if (this.color == null) this.color = Color.BLACK;
-        color = Color.argb(255, Color.red(color), Color.green(color), Color.blue(color));
+        targetBackgroundColor = Color.argb(255, Color.red(color), Color.green(color), Color.blue(color));
+        backgroundImage = null;
+        needsBackgroundImageDraw = false;
+        for (IconData icon : icons)
+            icon.setBackgroundColor(targetBackgroundColor);
 
-        if (!booleanOptions[OPTION_TINTED_ICONS]) {
-            if (booleanOptions[OPTION_ANIMATIONS]) {
-                ValueAnimator animator = ValueAnimator.ofObject(new ArgbEvaluator(), this.color, color);
-                animator.setDuration(150);
-                animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(ValueAnimator animation) {
-                        int color = (int) animation.getAnimatedValue();
-                        if (status != null)
-                            setStatusBackgroundColor(color);
-                    }
-                });
-                animator.start();
-            } else
-                setStatusBackgroundColor(color);
-
-            setDarkMode(!ColorUtils.isColorDark(color));
-        } else if (status != null) {
-            int backgroundColor = getDefaultColor();
-            if (color == backgroundColor) {
-                if (color == Color.BLACK) color = getDefaultIconColor();
-                else if (color == Color.WHITE) color = Color.BLACK;
-            }
-
-            setStatusBackgroundColor(backgroundColor);
-
-            if (booleanOptions[OPTION_CONTRAST_ICONS])
-                color = ColorUtils.isColorDark(backgroundColor) ? ColorUtils.lightColor(color) : ColorUtils.darkColor(color);
-
-            if (booleanOptions[OPTION_ICON_ANIMATIONS]) {
-                ValueAnimator animator = ValueAnimator.ofObject(new ArgbEvaluator(), this.color, color);
-                animator.setDuration(150);
-                animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(ValueAnimator animation) {
-                        int color = (int) animation.getAnimatedValue();
-                        if (status != null)
-                            setIconTint(Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
-                    }
-                });
-                animator.start();
-            } else
-                setIconTint(Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
-
-            iconColor = color;
-        }
-
-        this.color = color;
+        postInvalidate();
     }
 
     @ColorInt
     public int getColor() {
-        return color;
+        return drawnBackgroundColor;
     }
 
     @ColorInt
@@ -483,81 +306,140 @@ public class StatusView extends FrameLayout {
     }
 
     private void setStatusBackgroundColor(@ColorInt int color) {
-        status.setBackgroundColor(booleanOptions[OPTION_TRANSPARENT_MODE] ? Color.TRANSPARENT : Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
+        targetBackgroundColor = color;
+        postInvalidate();
     }
 
     public void setTransparent() {
-        if (status != null && wallpaperManager != null) {
-            Drawable backgroundDrawable;
-            WallpaperInfo wallpaperInfo = wallpaperManager.getWallpaperInfo();
-            if (wallpaperInfo != null)
-                backgroundDrawable = wallpaperInfo.loadThumbnail(getContext().getPackageManager());
-            else {
-                try {
-                    backgroundDrawable = wallpaperManager.getDrawable();
-                } catch (SecurityException e) {
-                    setColor(getDefaultColor());
-                    return;
-                }
+        Drawable backgroundDrawable;
+        WallpaperInfo wallpaperInfo = wallpaperManager.getWallpaperInfo();
+        if (wallpaperInfo != null)
+            backgroundDrawable = wallpaperInfo.loadThumbnail(getContext().getPackageManager());
+        else {
+            try {
+                backgroundDrawable = wallpaperManager.getDrawable();
+            } catch (SecurityException e) {
+                setColor(getDefaultColor());
+                return;
             }
-
-            Bitmap background = ImageUtils.cropBitmapToBar(getContext(), ImageUtils.drawableToBitmap(backgroundDrawable));
-
-            if (background != null) {
-                int color = ColorUtils.getAverageColor(background);
-
-                if (booleanOptions[OPTION_TRANSPARENT_HOME]) {
-                    status.setBackground(new BitmapDrawable(getResources(), background));
-                    setDarkMode(!ColorUtils.isColorDark(color));
-                    StatusView.this.color = color;
-                } else setColor(color);
-            } else setColor(getDefaultColor());
         }
+
+        Bitmap background = ImageUtils.cropBitmapToBar(getContext(), ImageUtils.drawableToBitmap(backgroundDrawable));
+
+        if (background != null) {
+            int color = ColorUtils.getAverageColor(background);
+
+            setColor(color);
+            if (isTransparentHome) {
+                backgroundImage = background;
+                needsBackgroundImageDraw = true;
+            }
+        } else setColor(defaultBackgroundColor);
+
+        postInvalidate();
     }
 
-    public void setDarkMode(boolean isDarkMode) {
-        if (booleanOptions[OPTION_CONTRAST_ICONS]) {
-            int color = isDarkMode ? Color.BLACK : getDefaultIconColor();
+    @Override
+    public void onRequestReDraw() {
+        postInvalidate();
+    }
 
-            if (booleanOptions[OPTION_ICON_ANIMATIONS]) {
-                ValueAnimator animator = ValueAnimator.ofObject(new ArgbEvaluator(), iconColor, color);
-                animator.setDuration(150);
-                animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(ValueAnimator animation) {
-                        int color = (int) animation.getAnimatedValue();
-                        if (status != null)
-                            setIconTint(Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
-                    }
-                });
-                animator.start();
+    private boolean needsDraw() {
+        for (IconData icon : icons) {
+            if (icon.isVisible() && icon.needsDraw())
+                return true;
+        }
+
+        return Color.red(drawnBackgroundColor) != Color.red(targetBackgroundColor) ||
+                Color.green(drawnBackgroundColor) != Color.green(targetBackgroundColor) ||
+                Color.blue(drawnBackgroundColor) != Color.blue(targetBackgroundColor) ||
+                needsBackgroundImageDraw;
+    }
+
+    private void updateAnimatedValues() {
+        if (isAnimations) {
+            drawnBackgroundColor = Color.rgb(
+                    StaticUtils.getAnimatedValue(Color.red(drawnBackgroundColor), Color.red(targetBackgroundColor)),
+                    StaticUtils.getAnimatedValue(Color.green(drawnBackgroundColor), Color.green(targetBackgroundColor)),
+                    StaticUtils.getAnimatedValue(Color.blue(drawnBackgroundColor), Color.blue(targetBackgroundColor))
+            );
+        } else drawnBackgroundColor = targetBackgroundColor;
+    }
+
+    @Override
+    public void draw(Canvas canvas) {
+        super.draw(canvas);
+        updateAnimatedValues();
+
+        if (needsBackgroundImageDraw)
+            needsBackgroundImageDraw = false;
+
+        if (backgroundImage != null)
+            canvas.drawBitmap(backgroundImage, 0, 0, paint);
+        else canvas.drawColor(drawnBackgroundColor);
+
+        int leftWidth = 0, centerWidth = 0, rightWidth = 0;
+
+        for (IconData icon : leftIcons) {
+            int width = icon.getWidth(canvas.getHeight(), -1);
+            leftWidth += width > 0 ? width : 0;
+        }
+
+        for (IconData icon : centerIcons) {
+            int width = icon.getWidth(canvas.getHeight(), -1);
+            centerWidth += width > 0 ? width : 0;
+        }
+
+        for (IconData icon : rightIcons) {
+            int width = icon.getWidth(canvas.getHeight(), -1);
+            rightWidth += width > 0 ? width : 0;
+        }
+
+        centerWidth = Math.min(centerWidth, canvas.getWidth() - (2 * sidePadding));
+        leftWidth = Math.min(leftWidth, (canvas.getWidth() / 2) - (centerWidth / 2) - sidePadding);
+        rightWidth = Math.min(rightWidth, (canvas.getWidth() / 2) - (centerWidth / 2) - sidePadding);
+
+        if (leftWidth < 0 || rightWidth < 0) {
+            leftWidth = 0;
+            rightWidth = 0;
+            centerWidth = canvas.getWidth() - (2 * sidePadding);
+        }
+
+        Log.d("StatusView", "widths " + leftWidth + " " + centerWidth + " " + rightWidth);
+
+        for (int i = 0, x = sidePadding; i < leftIcons.size(); i++) {
+            IconData icon = leftIcons.get(i);
+            int width = icon.getWidth(canvas.getHeight(), leftWidth - x);
+            if (width > 0) {
+                icon.draw(canvas, x, width);
+                x += width;
+            }
+        }
+
+        for (int i = 0, x = (canvas.getWidth() / 2) - (centerWidth / 2); i < centerIcons.size(); i++) {
+            IconData icon = centerIcons.get(i);
+            int width = icon.getWidth(canvas.getHeight(), centerWidth - x);
+            if (width > 0) {
+                icon.draw(canvas, x, width);
+                x += width;
+            }
+        }
+
+        for (int i = 0, x = canvas.getWidth() - sidePadding; i < rightIcons.size(); i++) {
+            IconData icon = rightIcons.get(i);
+            int width = icon.getWidth(canvas.getHeight(), rightWidth - x);
+            if (width > 0) {
+                icon.draw(canvas, x - width, width);
+                x -= width;
             } else
-                setIconTint(Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
-
-            iconColor = color;
-        }
-    }
-
-    private void setIconTint(@ColorInt int color) {
-        for (IconData icon : getIcons()) {
-            icon.setColor(color);
+                Log.d("StatusView", "not enough room by " + width + ", " + icon.getClass().getName());
         }
 
-        setIconTint(status, color);
+        if (isBurnInProtection)
+            canvas.translate(burnInOffsetX, burnInOffsetY);
+
+        if (needsDraw())
+            postInvalidate();
     }
 
-    private void setIconTint(View view, @ColorInt int color) {
-        if (view instanceof LinearLayout) {
-            for (int i = 0; i < ((LinearLayout) view).getChildCount(); i++) {
-                setIconTint(((LinearLayout) view).getChildAt(i), view.equals(centerLayout) && booleanOptions[OPTION_BUMP_MODE] ? Color.WHITE : color);
-            }
-        } else if (view instanceof TextView) {
-            if (view.getTag() == null)
-                ((TextView) view).setTextColor(color);
-        } else if (view instanceof CustomImageView) {
-            CustomImageView imageView = (CustomImageView) view;
-            if (imageView.getDrawable() != null)
-                imageView.setColorFilter(color);
-        }
-    }
 }

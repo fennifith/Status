@@ -3,18 +3,19 @@ package com.james.status.data.icon;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.Rect;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
 import android.support.annotation.ColorInt;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
-import android.util.TypedValue;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.james.status.R;
 import com.james.status.data.IconStyleData;
@@ -27,8 +28,8 @@ import com.james.status.data.preference.IconPreferenceData;
 import com.james.status.data.preference.IntegerPreferenceData;
 import com.james.status.data.preference.ListPreferenceData;
 import com.james.status.receivers.IconUpdateReceiver;
+import com.james.status.utils.ColorUtils;
 import com.james.status.utils.StaticUtils;
-import com.james.status.views.CustomImageView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,22 +40,83 @@ public abstract class IconData<T extends IconUpdateReceiver> {
     public static final int LEFT_GRAVITY = -1, CENTER_GRAVITY = 0, RIGHT_GRAVITY = 1;
 
     private Context context;
-    private DrawableListener drawableListener;
-    private TextListener textListener;
+    private ReDrawListener reDrawListener;
     private IconStyleData style;
     private Typeface typeface;
     private T receiver;
+    private int backgroundColor;
 
-    private Drawable drawable;
+    private Bitmap bitmap;
+    Paint iconPaint;
+    Paint textPaint;
     private String text;
-    private int color;
 
-    private View v;
+    int defaultTextColor;
+    int defaultTextDarkColor;
+    int defaultIconColor;
+    int defaultIconDarkColor;
+
+    int drawnTextColor;
+    int drawnTextSize;
+    int drawnTextAlpha;
+    int drawnIconColor;
+    int drawnIconSize;
+    int drawnIconAlpha;
+    int drawnPadding;
+
+    int targetTextColor;
+    int targetTextSize;
+    int targetTextAlpha;
+    int targetIconColor;
+    int targetIconSize;
+    int targetIconAlpha;
+    int targetPadding;
+
+    boolean isAnimations;
 
     public IconData(Context context) {
         this.context = context;
 
-        color = PreferenceData.STATUS_COLOR.getValue(context);
+        iconPaint = new Paint();
+        iconPaint.setAntiAlias(true);
+
+        textPaint = new Paint();
+        textPaint.setAntiAlias(true);
+
+        init();
+        drawnIconColor = defaultIconColor;
+        drawnTextColor = defaultTextColor;
+    }
+
+    public void init() {
+        defaultIconColor = targetIconColor = (int) PreferenceData.ICON_ICON_COLOR.getSpecificOverriddenValue(
+                getContext(), PreferenceData.STATUS_ICON_COLOR.getValue(getContext()), getIdentifierArgs());
+        defaultIconDarkColor = PreferenceData.STATUS_DARK_ICON_COLOR.getValue(getContext());
+        defaultTextColor = targetTextColor = (int) PreferenceData.ICON_TEXT_COLOR.getSpecificOverriddenValue(
+                getContext(), PreferenceData.STATUS_ICON_TEXT_COLOR.getValue(getContext()), getIdentifierArgs());
+        defaultTextDarkColor = PreferenceData.STATUS_DARK_ICON_TEXT_COLOR.getValue(getContext());
+        targetIconSize = (int) StaticUtils.getPixelsFromDp((int) PreferenceData.ICON_ICON_SCALE.getSpecificValue(getContext(), getIdentifierArgs()));
+        targetTextSize = StaticUtils.getPixelsFromSp(getContext(), (float) (int) PreferenceData.ICON_TEXT_SIZE.getSpecificValue(getContext(), getIdentifierArgs()));
+        targetPadding = (int) StaticUtils.getPixelsFromDp((int) PreferenceData.ICON_ICON_PADDING.getSpecificValue(getContext(), getIdentifierArgs()));
+        backgroundColor = PreferenceData.STATUS_COLOR.getValue(getContext());
+
+        Typeface typefaceFont = Typeface.DEFAULT;
+        String typefaceName = PreferenceData.ICON_TEXT_TYPEFACE.getSpecificOverriddenValue(getContext(), null, getIdentifierArgs());
+        if (typefaceName != null) {
+            try {
+                typefaceFont = Typeface.createFromAsset(getContext().getAssets(), typefaceName);
+            } catch (Exception ignored) {
+            }
+        }
+
+        typeface = Typeface.create(typefaceFont, (int) PreferenceData.ICON_TEXT_EFFECT.getSpecificValue(getContext(), getIdentifierArgs()));
+
+        drawnTextAlpha = 0;
+        targetTextAlpha = 255;
+        drawnIconAlpha = 0;
+        targetIconAlpha = 255;
+
+        isAnimations = PreferenceData.STATUS_ICON_ANIMATIONS.getValue(getContext());
 
         List<IconStyleData> styles = getIconStyles();
         if (styles.size() > 0) {
@@ -76,99 +138,29 @@ public abstract class IconData<T extends IconUpdateReceiver> {
         return context;
     }
 
-    public final void setColor(@ColorInt int color) {
-        this.color = color;
+    public final void setReDrawListener(ReDrawListener listener) {
+        reDrawListener = listener;
     }
 
-    @ColorInt
-    public final int getColor() {
-        return color;
-    }
-
-    public final boolean hasDrawableListener() {
-        return drawableListener != null;
-    }
-
-    public final DrawableListener getDrawableListener() {
-        return drawableListener;
-    }
-
-    public final void setDrawableListener(DrawableListener drawableListener) {
-        this.drawableListener = drawableListener;
-    }
-
-    public final boolean hasTextListener() {
-        return textListener != null;
-    }
-
-    public final TextListener getTextListener() {
-        return textListener;
-    }
-
-    public final void setTextListener(TextListener textListener) {
-        this.textListener = textListener;
-    }
-
-    public final void onDrawableUpdate(int level) {
-        if (hasDrawable()) {
-            drawable = style.getDrawable(context, level);
-
-            if (v != null) {
-                CustomImageView iconView = (CustomImageView) v.findViewById(R.id.icon);
-
-                if (iconView != null) {
-                    if (drawable != null) {
-                        v.setVisibility(View.VISIBLE);
-                        iconView.setVisibility(View.VISIBLE);
-
-                        ViewGroup.LayoutParams layoutParams = iconView.getLayoutParams();
-                        if (layoutParams != null)
-                            layoutParams.height = (int) StaticUtils.getPixelsFromDp(getIconScale());
-                        else
-                            layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, (int) StaticUtils.getPixelsFromDp(getIconScale()));
-
-                        iconView.setLayoutParams(layoutParams);
-                        iconView.setImageDrawable(drawable);
-                    } else {
-                        iconView.setVisibility(View.GONE);
-                        if (canHazText() && getText() == null)
-                            v.setVisibility(View.GONE);
-                    }
-                }
-            }
+    public final void onIconUpdate(int level) {
+        if (hasIcon()) {
+            bitmap = style.getBitmap(context, level);
+            if (reDrawListener != null)
+                reDrawListener.onRequestReDraw();
         }
-
-        if (hasDrawableListener()) getDrawableListener().onUpdate(drawable);
     }
 
     public final void onTextUpdate(@Nullable String text) {
         if (hasText()) {
-            if (v != null) {
-                TextView textView = (TextView) v.findViewById(R.id.text);
-
-                if (text != null) {
-                    v.setVisibility(View.VISIBLE);
-                    textView.setVisibility(View.VISIBLE);
-
-                    Integer color = getTextColor();
-
-                    if (color != null && !((boolean) PreferenceData.STATUS_DARK_ICONS.getValue(getContext()) && (color == Color.WHITE || color == Color.BLACK))) {
-                        textView.setTextColor(color);
-                        textView.setTag(color);
-                    } else textView.setTag(null);
-
-                    textView.setTypeface(getTypeface(), getTextEffect());
-                    textView.setText(text);
-                } else {
-                    textView.setVisibility(View.GONE);
-                    if (canHazDrawable() && getDrawable() == null)
-                        v.setVisibility(View.GONE);
-                }
-            }
-
-            if (hasTextListener()) getTextListener().onUpdate(text);
             this.text = text;
+            if (reDrawListener != null)
+                reDrawListener.onRequestReDraw();
         }
+    }
+
+    public final void requestReDraw() {
+        if (reDrawListener != null)
+            reDrawListener.onRequestReDraw();
     }
 
     public final boolean isVisible() {
@@ -179,13 +171,13 @@ public abstract class IconData<T extends IconUpdateReceiver> {
         return true;
     }
 
-    public boolean canHazDrawable() {
+    public boolean canHazIcon() {
         //i can haz drawable resource
         return true;
     }
 
-    public boolean hasDrawable() {
-        return canHazDrawable() && PreferenceData.ICON_ICON_VISIBILITY.getSpecificOverriddenValue(getContext(), true, getIdentifierArgs()) && style != null;
+    public boolean hasIcon() {
+        return canHazIcon() && PreferenceData.ICON_ICON_VISIBILITY.getSpecificOverriddenValue(getContext(), true, getIdentifierArgs()) && style != null;
     }
 
     public boolean canHazText() {
@@ -194,7 +186,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
     }
 
     public boolean hasText() {
-        return canHazText() && PreferenceData.ICON_TEXT_VISIBILITY.getSpecificOverriddenValue(getContext(), !canHazDrawable(), getIdentifierArgs());
+        return canHazText() && PreferenceData.ICON_TEXT_VISIBILITY.getSpecificOverriddenValue(getContext(), !canHazIcon(), getIdentifierArgs());
     }
 
     public String[] getPermissions() {
@@ -212,7 +204,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
     public void register() {
         if (receiver == null) receiver = getReceiver();
         if (receiver != null) getContext().registerReceiver(receiver, getIntentFilter());
-        onDrawableUpdate(-1);
+        onIconUpdate(-1);
     }
 
     public void unregister() {
@@ -236,30 +228,6 @@ public abstract class IconData<T extends IconUpdateReceiver> {
         return PreferenceData.ICON_TEXT_COLOR.getSpecificValue(getContext(), getIdentifierArgs());
     }
 
-    public final Integer getTextEffect() {
-        return PreferenceData.ICON_TEXT_EFFECT.getSpecificValue(getContext(), getIdentifierArgs());
-    }
-
-    @Nullable
-    public String getTypefaceName() {
-        return PreferenceData.ICON_TEXT_TYPEFACE.getSpecificOverriddenValue(getContext(), null, getIdentifierArgs());
-    }
-
-    @Nullable
-    public Typeface getTypeface() {
-        if (typeface == null) {
-            String name = getTypefaceName();
-            if (name != null) {
-                try {
-                    typeface = Typeface.createFromAsset(getContext().getAssets(), name);
-                } catch (Exception ignored) {
-                }
-            }
-        }
-
-        return typeface;
-    }
-
     public final int getPosition() {
         return PreferenceData.ICON_POSITION.getSpecificValue(getContext(), getIdentifierArgs());
     }
@@ -272,9 +240,33 @@ public abstract class IconData<T extends IconUpdateReceiver> {
         return PreferenceData.ICON_GRAVITY.getSpecificOverriddenValue(getContext(), getDefaultGravity(), getIdentifierArgs());
     }
 
+    /**
+     * Determines the color of the icon based on various settings,
+     * some of which are icon-specific.
+     *
+     * @param color the color to be drawn behind the icon
+     */
+    public void setBackgroundColor(@ColorInt int color) {
+        backgroundColor = color;
+        if (PreferenceData.STATUS_TINTED_ICONS.getValue(getContext())) {
+            targetIconColor = color;
+            targetTextColor = color;
+        } else {
+            if ((boolean) PreferenceData.STATUS_DARK_ICONS.getValue(getContext()) && ColorUtils.isColorDark(color)) {
+                targetIconColor = defaultIconColor;
+                targetTextColor = defaultTextColor;
+            } else {
+                targetIconColor = defaultIconDarkColor;
+                targetTextColor = defaultTextDarkColor;
+            }
+        }
+
+        requestReDraw();
+    }
+
     @Nullable
-    public Drawable getDrawable() {
-        if (hasDrawable()) return drawable;
+    public Bitmap getBitmap() {
+        if (hasIcon()) return bitmap;
         else return null;
     }
 
@@ -293,30 +285,124 @@ public abstract class IconData<T extends IconUpdateReceiver> {
         return R.layout.item_icon;
     }
 
-    public View getIconView() {
-        if (v == null) {
-            v = LayoutInflater.from(getContext()).inflate(getIconLayout(), null);
-            v.setTag(this);
+    public boolean needsDraw() {
+        return drawnIconSize != targetIconSize ||
+                Color.red(drawnIconColor) != Color.red(targetIconColor) ||
+                Color.green(drawnIconColor) != Color.green(targetIconColor) ||
+                Color.blue(drawnIconColor) != Color.blue(targetIconColor) ||
+                drawnTextSize != targetTextSize ||
+                Color.red(drawnTextColor) != Color.red(drawnTextColor) ||
+                Color.green(drawnTextColor) != Color.green(drawnTextColor) ||
+                Color.blue(drawnTextColor) != Color.blue(drawnTextColor) ||
+                drawnPadding != targetPadding ||
+                drawnTextAlpha != targetTextAlpha ||
+                drawnIconAlpha != targetIconAlpha;
+    }
 
-            float iconPaddingDp = StaticUtils.getPixelsFromDp(getIconPadding());
-            v.setPadding((int) iconPaddingDp, 0, (int) iconPaddingDp, 0);
+    public void updateAnimatedValues() {
+        if (isAnimations) {
+            drawnIconColor = Color.rgb(
+                    StaticUtils.getAnimatedValue(Color.red(drawnIconColor), Color.red(targetIconColor)),
+                    StaticUtils.getAnimatedValue(Color.green(drawnIconColor), Color.green(targetIconColor)),
+                    StaticUtils.getAnimatedValue(Color.blue(drawnIconColor), Color.blue(targetIconColor))
+            );
+            drawnIconSize = StaticUtils.getAnimatedValue(drawnIconSize, targetIconSize);
+            drawnTextColor = Color.rgb(
+                    StaticUtils.getAnimatedValue(Color.red(drawnTextColor), Color.red(targetTextColor)),
+                    StaticUtils.getAnimatedValue(Color.green(drawnTextColor), Color.green(targetTextColor)),
+                    StaticUtils.getAnimatedValue(Color.blue(drawnTextColor), Color.blue(targetTextColor))
+            );
+            drawnTextSize = StaticUtils.getAnimatedValue(drawnTextSize, targetTextSize);
+            drawnPadding = StaticUtils.getAnimatedValue(drawnPadding, targetPadding);
+            drawnTextAlpha = StaticUtils.getAnimatedValue(drawnTextAlpha, targetTextAlpha);
+            drawnIconAlpha = StaticUtils.getAnimatedValue(drawnIconAlpha, targetIconAlpha);
+        } else {
+            drawnIconColor = targetIconColor;
+            drawnIconSize = targetIconSize;
+            drawnTextColor = targetTextColor;
+            drawnTextSize = targetTextSize;
+            drawnPadding = targetPadding;
+            drawnTextAlpha = targetTextAlpha;
+            drawnIconAlpha = targetIconAlpha;
+        }
+    }
 
-            TextView textView = (TextView) v.findViewById(R.id.text);
-            if (textView != null) textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, getTextSize());
+    /**
+     * Draws the icon on a canvas.
+     *
+     * @param canvas the canvas to draw on
+     * @param x      the x position (LTR px) to start drawing the icon at
+     * @param width  the available width for the icon to be drawn within
+     */
+    public void draw(Canvas canvas, int x, int width) {
+        updateAnimatedValues();
 
-            View iconView = v.findViewById(R.id.icon);
-            if (iconView != null && !hasDrawable()) iconView.setVisibility(View.GONE);
-            if (textView != null && !hasText()) textView.setVisibility(View.GONE);
-            v.setVisibility(View.GONE);
+        int iconColor = Color.rgb(
+                StaticUtils.getMergedValue(Color.red(drawnIconColor), Color.red(backgroundColor), (float) drawnIconAlpha / 255),
+                StaticUtils.getMergedValue(Color.green(drawnIconColor), Color.green(backgroundColor), (float) drawnIconAlpha / 255),
+                StaticUtils.getMergedValue(Color.blue(drawnIconColor), Color.blue(backgroundColor), (float) drawnIconAlpha / 255)
+        );
+        iconPaint.setColor(iconColor);
+        iconPaint.setColorFilter(new PorterDuffColorFilter(iconColor, PorterDuff.Mode.SRC_IN));
+        textPaint.setColor(drawnTextColor);
+        textPaint.setAlpha(drawnTextAlpha);
+        textPaint.setTextSize(drawnTextSize);
+        textPaint.setTypeface(typeface);
+
+        x += drawnPadding;
+
+        if (hasIcon() && bitmap != null) {
+            Matrix matrix = new Matrix();
+            matrix.postScale(drawnIconSize / bitmap.getWidth(), drawnIconSize / bitmap.getWidth());
+            matrix.postTranslate(x, canvas.getHeight() - drawnIconSize);
+            canvas.drawBitmap(bitmap, matrix, iconPaint);
+
+            x += drawnIconSize + drawnPadding;
         }
 
-        return v;
+        if (hasText() && text != null) {
+            Paint.FontMetrics metrics = textPaint.getFontMetrics();
+            canvas.drawText(text, x, (canvas.getHeight() / 2) + metrics.descent, textPaint);
+        }
+    }
+
+    /**
+     * Returns the estimated width (px) of the icon, or -1
+     * if the icon needs to know the available space
+     * first.
+     *
+     * @param height    the height (px) to scale the icon to
+     * @param available the available width for the icon, or -1 if not yet calculated
+     * @return the estimated width (px) of the icon
+     */
+    public int getWidth(int height, int available) {
+        int width = 0;
+        if ((hasIcon() && bitmap != null) || (hasText() && text != null))
+            width += StaticUtils.getAnimatedValue(drawnPadding, targetPadding);
+
+        if (hasIcon() && bitmap != null) {
+            width += StaticUtils.getAnimatedValue(drawnIconSize, targetIconSize);
+            width += StaticUtils.getAnimatedValue(drawnPadding, targetPadding);
+        }
+
+        if (hasText() && text != null) {
+            Paint textPaint = new Paint();
+            textPaint.setTextSize(StaticUtils.getAnimatedValue(drawnTextSize, targetTextSize));
+            textPaint.setTypeface(typeface);
+
+            Rect bounds = new Rect();
+            textPaint.getTextBounds(text, 0, text.length(), bounds);
+            width += hasText() ? bounds.width() : 0;
+            width += StaticUtils.getAnimatedValue(drawnPadding, targetPadding);
+        }
+
+        return width;
     }
 
     public List<BasePreferenceData> getPreferences() {
         List<BasePreferenceData> preferences = new ArrayList<>();
 
-        if (canHazDrawable() && (hasText() || !hasDrawable())) {
+        if (canHazIcon() && (hasText() || !hasIcon())) {
             preferences.add(new BooleanPreferenceData(
                     getContext(),
                     new BasePreferenceData.Identifier<Boolean>(
@@ -333,7 +419,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
             ));
         }
 
-        if (canHazText() && (hasDrawable() || !hasText())) {
+        if (canHazText() && (hasIcon() || !hasText())) {
             preferences.add(new BooleanPreferenceData(
                     getContext(),
                     new BasePreferenceData.Identifier<Boolean>(
@@ -397,7 +483,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                 )
         ));
 
-        if (hasDrawable()) {
+        if (hasIcon()) {
             preferences.add(new IntegerPreferenceData(
                     getContext(),
                     new BasePreferenceData.Identifier<Integer>(
@@ -500,7 +586,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
             ));
         }
 
-        if (hasDrawable()) {
+        if (hasIcon()) {
             preferences.add(new IconPreferenceData(
                     getContext(),
                     new BasePreferenceData.Identifier<String>(
@@ -567,11 +653,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
         return new String[]{getClass().getName()};
     }
 
-    public interface DrawableListener {
-        void onUpdate(@Nullable Drawable drawable);
-    }
-
-    public interface TextListener {
-        void onUpdate(@Nullable String text);
+    public interface ReDrawListener {
+        void onRequestReDraw();
     }
 }

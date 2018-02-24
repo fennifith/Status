@@ -27,12 +27,12 @@ public class TimeIconData extends IconData<TimeIconData.TimeReceiver> {
     }
 
     @Override
-    public boolean canHazDrawable() {
+    public boolean canHazIcon() {
         return false;
     }
 
     @Override
-    public boolean hasDrawable() {
+    public boolean hasIcon() {
         return false;
     }
 

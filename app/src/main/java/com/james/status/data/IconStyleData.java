@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -13,9 +14,12 @@ import android.support.annotation.Nullable;
 import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.content.ContextCompat;
 
+import com.james.status.utils.ImageUtils;
 import com.james.status.utils.StaticUtils;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class IconStyleData implements Parcelable {
 
@@ -27,23 +31,27 @@ public class IconStyleData implements Parcelable {
     public int type;
     public int[] resource = new int[0];
     public String[] path = new String[0];
+    private Map<Integer, Bitmap> icons;
 
     public IconStyleData(String name, int type, @DrawableRes int... resource) {
         this.name = name;
         this.type = type;
         this.resource = resource;
+        icons = new HashMap<>();
     }
 
     public IconStyleData(String name, String... path) {
         this.name = name;
         type = TYPE_FILE;
         this.path = path;
+        icons = new HashMap<>();
     }
 
     protected IconStyleData(Parcel in) {
         name = in.readString();
         resource = in.createIntArray();
         path = in.createStringArray();
+        icons = new HashMap<>();
     }
 
     public int getSize() {
@@ -76,6 +84,20 @@ public class IconStyleData implements Parcelable {
                 }
             default:
                 return null;
+        }
+    }
+
+    @Nullable
+    public Bitmap getBitmap(Context context, int value) {
+        if (icons.containsKey(value))
+            return icons.get(value);
+        else {
+            Drawable drawable = getDrawable(context, value);
+            if (drawable != null) {
+                Bitmap bitmap = ImageUtils.drawableToBitmap(drawable);
+                icons.put(value, bitmap);
+                return bitmap;
+            } else return null;
         }
     }
 

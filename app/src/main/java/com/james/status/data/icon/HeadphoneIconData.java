@@ -89,8 +89,8 @@ public class HeadphoneIconData extends IconData<HeadphoneIconData.HeadphoneRecei
         @Override
         public void onReceive(HeadphoneIconData icon, Intent intent) {
             if (intent.getIntExtra("state", 0) == 1)
-                icon.onDrawableUpdate(intent.getIntExtra("microphone", 0));
-            else icon.onDrawableUpdate(-1);
+                icon.onIconUpdate(intent.getIntExtra("microphone", 0));
+            else icon.onIconUpdate(-1);
         }
     }
 }

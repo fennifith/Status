@@ -105,7 +105,7 @@ public class DualNetworkIconData extends NetworkIconData {
                     }
                 }
 
-                onDrawableUpdate(level);
+                onIconUpdate(level);
             }
         }
     }

@@ -22,11 +22,14 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.NotificationCompat;
 
+import com.james.status.utils.ImageUtils;
+
 public class NotificationData implements Parcelable {
 
     public String category, title, subtitle, packageName, group, key, tag = "";
     public int priority, id, iconRes, color = Color.BLACK;
     private boolean isAlert;
+    private Bitmap icon;
     private Bitmap largeIcon;
     private Icon unloadedIcon, unloadedLargeIcon;
 
@@ -158,13 +161,23 @@ public class NotificationData implements Parcelable {
     };
 
     @Nullable
-    public Drawable getIcon(Context context) {
-        Drawable drawable = null;
-        if (iconRes != 0) drawable = getDrawable(context, iconRes, packageName);
-        if (drawable == null && unloadedIcon != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-            drawable = unloadedIcon.loadDrawable(context);
+    public Bitmap getIcon(Context context) {
+        if (icon == null) {
+            Drawable drawable = null;
+            if (iconRes != 0) drawable = getDrawable(context, iconRes, packageName);
+            if (drawable == null && unloadedIcon != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                drawable = unloadedIcon.loadDrawable(context);
 
-        return drawable;
+            if (drawable != null) {
+                Bitmap bitmap = ImageUtils.drawableToBitmap(drawable);
+                if (bitmap != null) {
+                    icon = bitmap;
+                    return bitmap;
+                }
+            }
+        }
+
+        return null;
     }
 
     @Nullable

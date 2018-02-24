@@ -26,12 +26,12 @@ public class CarrierIconData extends IconData {
     }
 
     @Override
-    public boolean canHazDrawable() {
+    public boolean canHazIcon() {
         return false;
     }
 
     @Override
-    public boolean hasDrawable() {
+    public boolean hasIcon() {
         return false;
     }
 

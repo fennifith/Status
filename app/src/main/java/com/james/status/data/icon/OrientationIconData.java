@@ -58,18 +58,18 @@ public class OrientationIconData extends IconData<OrientationIconData.Orientatio
 
     private void onDrawableUpdate() {
         if (Settings.System.getInt(getContext().getContentResolver(), Settings.System.ACCELEROMETER_ROTATION, 0) == 1)
-            onDrawableUpdate(0);
+            onIconUpdate(0);
         else {
             int orientation = getContext().getResources().getConfiguration().orientation;
             switch (orientation) {
                 case Configuration.ORIENTATION_PORTRAIT:
-                    onDrawableUpdate(1);
+                    onIconUpdate(1);
                     break;
                 case Configuration.ORIENTATION_LANDSCAPE:
-                    onDrawableUpdate(2);
+                    onIconUpdate(2);
                     break;
                 default:
-                    onDrawableUpdate(-1);
+                    onIconUpdate(-1);
                     break;
             }
         }

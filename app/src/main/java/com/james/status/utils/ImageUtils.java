@@ -12,6 +12,7 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.VectorDrawable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.support.graphics.drawable.VectorDrawableCompat;
@@ -43,8 +44,14 @@ public class ImageUtils {
     public static Bitmap drawableToBitmap(Drawable drawable) {
         if (drawable == null) drawable = new ColorDrawable(Color.TRANSPARENT);
         if (drawable instanceof BitmapDrawable) return ((BitmapDrawable) drawable).getBitmap();
-        if (drawable instanceof VectorDrawableCompat)
-            return Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
+        if (drawable instanceof VectorDrawableCompat || drawable instanceof VectorDrawable) {
+            Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(bitmap);
+            drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+            drawable.draw(canvas);
+
+            return bitmap;
+        }
 
         int width = drawable.getIntrinsicWidth();
         width = width > 0 ? width : 1;

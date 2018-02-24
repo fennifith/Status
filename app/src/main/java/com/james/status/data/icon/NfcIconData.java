@@ -41,7 +41,7 @@ public class NfcIconData extends IconData<NfcIconData.NfcReceiver> {
 
         NfcAdapter adapter = manager.getDefaultAdapter();
         if (adapter != null && adapter.isEnabled())
-            onDrawableUpdate(0);
+            onIconUpdate(0);
     }
 
     @Override
@@ -108,11 +108,11 @@ public class NfcIconData extends IconData<NfcIconData.NfcReceiver> {
             switch (intent.getIntExtra(NfcAdapter.EXTRA_ADAPTER_STATE, NfcAdapter.STATE_OFF)) {
                 case NfcAdapter.STATE_OFF:
                 case NfcAdapter.STATE_TURNING_OFF:
-                    icon.onDrawableUpdate(-1);
+                    icon.onIconUpdate(-1);
                     break;
                 case NfcAdapter.STATE_ON:
                 case NfcAdapter.STATE_TURNING_ON:
-                    icon.onDrawableUpdate(0);
+                    icon.onIconUpdate(0);
                     break;
             }
         }

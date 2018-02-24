@@ -102,8 +102,8 @@ public class AirplaneModeIconData extends IconData<AirplaneModeIconData.Airplane
         @Override
         public void onReceive(AirplaneModeIconData icon, Intent intent) {
             if (intent.getBooleanExtra(TelephonyManager.EXTRA_STATE, false))
-                icon.onDrawableUpdate(0);
-            else icon.onDrawableUpdate(-1);
+                icon.onIconUpdate(0);
+            else icon.onIconUpdate(-1);
         }
     }
 }

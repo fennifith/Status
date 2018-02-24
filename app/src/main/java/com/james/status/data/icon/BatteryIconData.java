@@ -46,7 +46,7 @@ public class BatteryIconData extends IconData {
             if (status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL)
                 iconLevel += 7;
 
-            onDrawableUpdate(iconLevel);
+            onIconUpdate(iconLevel);
 
             if (hasText())
                 onTextUpdate(String.valueOf((int) (((double) level / scale) * 100)) + "%");
@@ -254,7 +254,7 @@ public class BatteryIconData extends IconData {
             if (status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL)
                 iconLevel += 7;
 
-            icon.onDrawableUpdate(iconLevel);
+            icon.onIconUpdate(iconLevel);
 
             if (icon.hasText())
                 icon.onTextUpdate(String.valueOf((int) (((double) level / scale) * 100)) + "%");
