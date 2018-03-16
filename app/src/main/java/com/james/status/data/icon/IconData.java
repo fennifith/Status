@@ -41,10 +41,13 @@ public abstract class IconData<T extends IconUpdateReceiver> {
 
     private Context context;
     private ReDrawListener reDrawListener;
-    private IconStyleData style;
     private Typeface typeface;
     private T receiver;
     private int backgroundColor;
+
+    private List<IconStyleData> styles;
+    private IconStyleData style;
+    private int level;
 
     private Bitmap bitmap;
     Paint iconPaint;
@@ -83,6 +86,8 @@ public abstract class IconData<T extends IconUpdateReceiver> {
         textPaint = new Paint();
         textPaint.setAntiAlias(true);
 
+        styles = getIconStyles();
+        level = 0;
         init();
         drawnIconColor = defaultIconColor;
         drawnTextColor = defaultTextColor;
@@ -118,7 +123,6 @@ public abstract class IconData<T extends IconUpdateReceiver> {
 
         isAnimations = PreferenceData.STATUS_ICON_ANIMATIONS.getValue(getContext());
 
-        List<IconStyleData> styles = getIconStyles();
         if (styles.size() > 0) {
             String name = PreferenceData.ICON_ICON_STYLE.getSpecificOverriddenValue(context, styles.get(0).name, getIdentifierArgs());
             if (name != null) {
@@ -143,6 +147,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
     }
 
     public final void onIconUpdate(int level) {
+        this.level = level;
         if (hasIcon()) {
             bitmap = style.getBitmap(context, level);
             if (reDrawListener != null)
@@ -488,7 +493,8 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                     getContext(),
                     new BasePreferenceData.Identifier<Integer>(
                             PreferenceData.ICON_ICON_SCALE,
-                            getContext().getString(R.string.preference_icon_scale)
+                            getContext().getString(R.string.preference_icon_scale),
+                            getIdentifierArgs()
                     ),
                     getContext().getString(R.string.unit_dp),
                     0,
