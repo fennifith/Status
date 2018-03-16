@@ -152,6 +152,8 @@ public class NotificationsIconData extends IconData<NotificationsIconData.Notifi
     public int getWidth(int height, int available) {
         if (available < 0)
             return -1;
+        else if (drawnIconSize == 0 && drawnPadding == 0)
+            return 0;
         else
             return Math.min(notifications.size(), available / (drawnIconSize + drawnPadding)) * (drawnIconSize + drawnPadding) + drawnPadding;
     }
