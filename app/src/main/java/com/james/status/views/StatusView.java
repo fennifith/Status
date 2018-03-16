@@ -405,8 +405,6 @@ public class StatusView extends View implements IconData.ReDrawListener {
             centerWidth = canvas.getWidth() - (2 * sidePadding);
         }
 
-        Log.d("StatusView", "widths " + leftWidth + " " + centerWidth + " " + rightWidth);
-
         for (int i = 0, x = sidePadding; i < leftIcons.size(); i++) {
             IconData icon = leftIcons.get(i);
             int width = icon.getWidth(canvas.getHeight(), leftWidth - x);
@@ -431,8 +429,7 @@ public class StatusView extends View implements IconData.ReDrawListener {
             if (width > 0) {
                 icon.draw(canvas, x - width, width);
                 x -= width;
-            } else
-                Log.d("StatusView", "not enough room by " + width + ", " + icon.getClass().getName());
+            }
         }
 
         if (isBurnInProtection)
