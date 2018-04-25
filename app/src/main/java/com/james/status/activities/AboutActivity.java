@@ -43,9 +43,9 @@ public class AboutActivity extends AppCompatActivity {
 
         findViewById(R.id.jamesWebsite).setOnClickListener(new UrlClickListener("https://jfenn.me/"));
 
-        findViewById(R.id.jamesGplus).setOnClickListener(new UrlClickListener("https://plus.google.com/114612442558529845038"));
+        findViewById(R.id.jamesGplus).setOnClickListener(new UrlClickListener("https://jfenn.me/redirects/?t=googleplus"));
 
-        findViewById(R.id.jamesTwitter).setOnClickListener(new UrlClickListener("https://twitter.com/IDontLikePHP"));
+        findViewById(R.id.jamesTwitter).setOnClickListener(new UrlClickListener("https://jfenn.me/redirects/?t=twitter"));
 
         Glide.with(this).load("https://jfenn.me/images/headers/highway.jpg").into((ImageView) findViewById(R.id.anasImage));
 
@@ -104,7 +104,7 @@ public class AboutActivity extends AppCompatActivity {
                 onBackPressed();
                 break;
             case R.id.action_github:
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/TheAndroidMaster/Status")));
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://jfenn.me/redirects/?t=github&d=Status")));
                 break;
         }
         return super.onOptionsItemSelected(item);
