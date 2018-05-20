@@ -60,7 +60,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
     int defaultIconDarkColor;
 
     int drawnTextColor;
-    int drawnTextSize;
+    float drawnTextSize;
     int drawnTextAlpha;
     int drawnIconColor;
     int drawnIconSize;
@@ -68,7 +68,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
     int drawnPadding;
 
     int targetTextColor;
-    int targetTextSize;
+    float targetTextSize;
     int targetTextAlpha;
     int targetIconColor;
     int targetIconSize;
@@ -533,7 +533,8 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                     getContext(),
                     new BasePreferenceData.Identifier<Integer>(
                             PreferenceData.ICON_TEXT_SIZE,
-                            getContext().getString(R.string.preference_text_size)
+                            getContext().getString(R.string.preference_text_size),
+                            getIdentifierArgs()
                     ),
                     getContext().getString(R.string.unit_sp),
                     0,
