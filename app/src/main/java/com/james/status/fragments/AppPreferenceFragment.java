@@ -102,7 +102,7 @@ public class AppPreferenceFragment extends SimpleFragment {
                     app.clearPreferences(getContext());
                 }
 
-                StaticUtils.updateStatusService(getContext());
+                StaticUtils.updateStatusService(getContext(), true);
                 adapter.notifyDataSetChanged();
                 dialogInterface.dismiss();
             }
@@ -135,7 +135,7 @@ public class AppPreferenceFragment extends SimpleFragment {
             app.putSpecificPreference(getContext(), AppData.PreferenceIdentifier.NOTIFICATIONS, isNotifications);
         }
 
-        StaticUtils.updateStatusService(getContext());
+        StaticUtils.updateStatusService(getContext(), true);
         adapter.notifyDataSetChanged();
     }
 

@@ -77,6 +77,7 @@ public class StatusService extends Service {
     public static final String ACTION_START = "com.james.status.ACTION_START";
     public static final String ACTION_STOP = "com.james.status.ACTION_STOP";
     public static final String ACTION_UPDATE = "com.james.status.ACTION_UPDATE";
+    public static final String EXTRA_KEEP_OLD = "com.james.status.EXTRA_KEEP_OLD";
     public static final String EXTRA_COLOR = "com.james.status.EXTRA_COLOR";
     public static final String EXTRA_IS_SYSTEM_FULLSCREEN = "com.james.status.EXTRA_IS_SYSTEM_FULLSCREEN";
     public static final String EXTRA_IS_FULLSCREEN = "com.james.status.EXTRA_IS_FULLSCREEN";
@@ -141,7 +142,7 @@ public class StatusService extends Service {
         };
 
         if (PreferenceData.STATUS_ENABLED.getValue(this))
-            setUp();
+            setUp(false);
 
         headsUpDuration = (int) PreferenceData.STATUS_HEADS_UP_DURATION.getValue(this) * 1000;
     }
@@ -169,7 +170,7 @@ public class StatusService extends Service {
         if (action == null) return START_STICKY;
         switch (action) {
             case ACTION_START:
-                setUp();
+                setUp(intent.getBooleanExtra(EXTRA_KEEP_OLD, false));
                 break;
             case ACTION_STOP:
                 windowManager.removeView(statusView);
@@ -293,7 +294,13 @@ public class StatusService extends Service {
         } else super.onTaskRemoved(rootIntent);
     }
 
-    public void setUp() {
+    /**
+     * Initializes the StatusView if it doesn't exist yet, sets listeners,
+     * applies any changes to preferences/icons
+     *
+     * @param shouldKeepOld whether to reuse the old IconData instances
+     */
+    public void setUp(boolean shouldKeepOld) {
         if (statusView == null || statusView.getParent() == null) {
             if (statusView != null) {
                 windowManager.removeView(statusView);
@@ -306,31 +313,34 @@ public class StatusService extends Service {
             params.gravity = Gravity.TOP;
 
             windowManager.addView(statusView, params);
-        } else statusView.unregister();
+        } else if (!shouldKeepOld)
+            statusView.unregister();
 
         statusView.init();
 
-        if (fullscreenView == null || fullscreenView.getParent() == null) {
-            WindowManager.LayoutParams params = new WindowManager.LayoutParams(1, WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, PixelFormat.TRANSPARENT);
-            params.gravity = Gravity.START | Gravity.TOP;
-            fullscreenView = new View(this);
+        if (!shouldKeepOld) {
+            if (fullscreenView == null || fullscreenView.getParent() == null) {
+                WindowManager.LayoutParams params = new WindowManager.LayoutParams(1, WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, PixelFormat.TRANSPARENT);
+                params.gravity = Gravity.START | Gravity.TOP;
+                fullscreenView = new View(this);
 
-            windowManager.addView(fullscreenView, params);
+                windowManager.addView(fullscreenView, params);
 
-            fullscreenView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                @Override
-                public void onGlobalLayout() {
-                    if (statusView != null && fullscreenView != null) {
-                        Point size = new Point();
-                        windowManager.getDefaultDisplay().getSize(size);
-                        statusView.setFullscreen(fullscreenView.getMeasuredHeight() == size.y);
+                fullscreenView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        if (statusView != null && fullscreenView != null) {
+                            Point size = new Point();
+                            windowManager.getDefaultDisplay().getSize(size);
+                            statusView.setFullscreen(fullscreenView.getMeasuredHeight() == size.y);
+                        }
                     }
-                }
-            });
-        }
+                });
+            }
 
-        statusView.setIcons(getIcons(this));
-        statusView.register();
+            statusView.setIcons(getIcons(this));
+            statusView.register();
+        }
 
         IntentFilter notificationFilter = new IntentFilter();
         notificationFilter.addAction(NotificationsIconData.ACTION_NOTIFICATION_ADDED);

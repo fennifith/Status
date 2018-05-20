@@ -433,7 +433,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                     new BasePreferenceData.OnPreferenceChangeListener<Boolean>() {
                         @Override
                         public void onPreferenceChange(Boolean preference) {
-                            StaticUtils.updateStatusService(getContext());
+                            StaticUtils.updateStatusService(getContext(), true);
                         }
                     }
             ));
@@ -450,7 +450,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                     new BasePreferenceData.OnPreferenceChangeListener<Boolean>() {
                         @Override
                         public void onPreferenceChange(Boolean preference) {
-                            StaticUtils.updateStatusService(getContext());
+                            StaticUtils.updateStatusService(getContext(), true);
                         }
                     }
             ));
@@ -468,7 +468,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                         new BasePreferenceData.OnPreferenceChangeListener<Integer>() {
                             @Override
                             public void onPreferenceChange(Integer preference) {
-                                StaticUtils.updateStatusService(getContext());
+                                StaticUtils.updateStatusService(getContext(), true);
                             }
                         },
                         new ListPreferenceData.ListPreference(
@@ -497,7 +497,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                         new BasePreferenceData.OnPreferenceChangeListener<Integer>() {
                             @Override
                             public void onPreferenceChange(Integer preference) {
-                                StaticUtils.updateStatusService(getContext());
+                                StaticUtils.updateStatusService(getContext(), true);
                             }
                         }
                 )
@@ -517,7 +517,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                     new BasePreferenceData.OnPreferenceChangeListener<Integer>() {
                         @Override
                         public void onPreferenceChange(Integer preference) {
-                            StaticUtils.updateStatusService(getContext());
+                            StaticUtils.updateStatusService(getContext(), true);
                         }
                     }
             ));
@@ -536,7 +536,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                     new BasePreferenceData.OnPreferenceChangeListener<Integer>() {
                         @Override
                         public void onPreferenceChange(Integer preference) {
-                            StaticUtils.updateStatusService(getContext());
+                            StaticUtils.updateStatusService(getContext(), true);
                         }
                     }
             ));
@@ -551,7 +551,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                     new BasePreferenceData.OnPreferenceChangeListener<Integer>() {
                         @Override
                         public void onPreferenceChange(Integer preference) {
-                            StaticUtils.updateStatusService(getContext());
+                            StaticUtils.updateStatusService(getContext(), true);
                         }
                     }
             ));
@@ -566,7 +566,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                     new BasePreferenceData.OnPreferenceChangeListener<String>() {
                         @Override
                         public void onPreferenceChange(String preference) {
-                            StaticUtils.updateStatusService(getContext());
+                            StaticUtils.updateStatusService(getContext(), true);
                         }
                     },
                     "Audiowide.ttf",
@@ -597,7 +597,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                     new BasePreferenceData.OnPreferenceChangeListener<Integer>() {
                         @Override
                         public void onPreferenceChange(Integer preference) {
-                            StaticUtils.updateStatusService(getContext());
+                            StaticUtils.updateStatusService(getContext(), true);
                         }
                     },
                     new ListPreferenceData.ListPreference(getContext().getString(R.string.text_effect_none), Typeface.NORMAL),
@@ -620,7 +620,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                         @Override
                         public void onPreferenceChange(IconStyleData preference) {
                             style = preference;
-                            StaticUtils.updateStatusService(getContext());
+                            StaticUtils.updateStatusService(getContext(), true);
                         }
                     }
             ));

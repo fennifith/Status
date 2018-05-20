@@ -88,7 +88,7 @@ public class NotificationsIconData extends IconData<NotificationsIconData.Notifi
                 new BasePreferenceData.OnPreferenceChangeListener<Integer>() {
                     @Override
                     public void onPreferenceChange(Integer preference) {
-                        StaticUtils.updateStatusService(getContext());
+                        StaticUtils.updateStatusService(getContext(), true);
                     }
                 }
         ));

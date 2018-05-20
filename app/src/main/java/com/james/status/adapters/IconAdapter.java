@@ -65,7 +65,7 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
                     holder.checkBox.setOnCheckedChangeListener(this);
                 } else {
                     PreferenceData.ICON_VISIBILITY.setValue(activity, isChecked, icon.getIdentifierArgs());
-                    StaticUtils.updateStatusService(activity);
+                    StaticUtils.updateStatusService(activity, false);
 
                     notifyItemChanged(holder.getAdapterPosition());
                 }
@@ -86,7 +86,7 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
 
                 setIcons(icons);
                 notifyDataSetChanged();
-                StaticUtils.updateStatusService(activity);
+                StaticUtils.updateStatusService(activity, true);
             }
         });
 
@@ -104,7 +104,7 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
 
                 setIcons(icons);
                 notifyDataSetChanged();
-                StaticUtils.updateStatusService(activity);
+                StaticUtils.updateStatusService(activity, true);
             }
         });
 

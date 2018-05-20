@@ -172,10 +172,17 @@ public class StaticUtils {
         return false;
     }
 
-    public static void updateStatusService(Context context) {
+    /**
+     * Sends an intent to apply preference changes to the StatusService
+     *
+     * @param context         current context to send intent from
+     * @param shouldKeepIcons whether to reuse existing instances of IconDatas
+     */
+    public static void updateStatusService(Context context, boolean shouldKeepIcons) {
         if (isStatusServiceRunning(context)) {
             Intent intent = new Intent(StatusService.ACTION_START);
             intent.setClass(context, StatusService.class);
+            intent.putExtra(StatusService.EXTRA_KEEP_OLD, shouldKeepIcons);
             context.startService(intent);
         }
 

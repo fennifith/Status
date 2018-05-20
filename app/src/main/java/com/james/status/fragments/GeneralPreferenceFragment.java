@@ -319,6 +319,6 @@ public class GeneralPreferenceFragment extends SimpleFragment implements BasePre
 
     @Override
     public void onPreferenceChange(Object preference) {
-        StaticUtils.updateStatusService(getContext());
+        StaticUtils.updateStatusService(getContext(), false);
     }
 }

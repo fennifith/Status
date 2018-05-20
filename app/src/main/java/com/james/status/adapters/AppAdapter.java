@@ -251,7 +251,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
 
                 app.putSpecificPreference(context, AppData.PreferenceIdentifier.NOTIFICATIONS, isChecked);
 
-                StaticUtils.updateStatusService(context);
+                StaticUtils.updateStatusService(context, true);
             }
         });
 
