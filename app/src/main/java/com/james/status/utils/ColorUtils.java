@@ -224,4 +224,18 @@ public class ColorUtils {
 
         return Color.argb(255, red / size, green / size, blue / size);
     }
+
+    /**
+     * Calculates the visible difference between two colors.
+     *
+     * @param color1 a color
+     * @param color2 another color
+     * @return the calculated difference between 0 and 255
+     */
+    public static double getDifference(@ColorInt int color1, @ColorInt int color2) {
+        double diff = Math.abs(0.299 * (Color.red(color1) - Color.red(color2)));
+        diff += Math.abs(0.587 * (Color.green(color1) - Color.green(color2)));
+        diff += Math.abs(0.114 * (Color.blue(color1) - Color.blue(color2)));
+        return diff;
+    }
 }

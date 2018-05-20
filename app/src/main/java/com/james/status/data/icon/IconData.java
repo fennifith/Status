@@ -56,8 +56,10 @@ public abstract class IconData<T extends IconUpdateReceiver> {
 
     int defaultTextColor;
     int defaultTextDarkColor;
+    int defaultTextLightColor;
     int defaultIconColor;
     int defaultIconDarkColor;
+    int defaultIconLightColor;
 
     int drawnTextColor;
     float drawnTextSize;
@@ -101,9 +103,11 @@ public abstract class IconData<T extends IconUpdateReceiver> {
         defaultIconColor = (int) PreferenceData.ICON_ICON_COLOR.getSpecificOverriddenValue(getContext(),
                 PreferenceData.STATUS_ICON_COLOR.getValue(getContext()), getIdentifierArgs());
         defaultIconDarkColor = PreferenceData.STATUS_DARK_ICON_COLOR.getValue(getContext());
+        defaultIconLightColor = PreferenceData.STATUS_LIGHT_ICON_COLOR.getValue(getContext());
         defaultTextColor = (int) PreferenceData.ICON_TEXT_COLOR.getSpecificOverriddenValue(getContext(),
                 PreferenceData.STATUS_ICON_TEXT_COLOR.getValue(getContext()), getIdentifierArgs());
         defaultTextDarkColor = PreferenceData.STATUS_DARK_ICON_TEXT_COLOR.getValue(getContext());
+        defaultTextLightColor = PreferenceData.STATUS_LIGHT_ICON_TEXT_COLOR.getValue(getContext());
         targetIconSize = (int) StaticUtils.getPixelsFromDp((int) PreferenceData.ICON_ICON_SCALE.getSpecificValue(getContext(), getIdentifierArgs()));
         targetTextSize = StaticUtils.getPixelsFromSp(getContext(), (float) (int) PreferenceData.ICON_TEXT_SIZE.getSpecificValue(getContext(), getIdentifierArgs()));
         targetPadding = (int) StaticUtils.getPixelsFromDp((int) PreferenceData.ICON_ICON_PADDING.getSpecificValue(getContext(), getIdentifierArgs()));
@@ -264,13 +268,11 @@ public abstract class IconData<T extends IconUpdateReceiver> {
             targetIconColor = color;
             targetTextColor = color;
         } else {
-            if ((boolean) PreferenceData.STATUS_DARK_ICONS.getValue(getContext()) && ColorUtils.isColorDark(color)) {
-                targetIconColor = defaultIconColor;
-                targetTextColor = defaultTextColor;
-            } else {
-                targetIconColor = defaultIconDarkColor;
-                targetTextColor = defaultTextDarkColor;
-            }
+            boolean isIconContrast = PreferenceData.STATUS_DARK_ICONS.getValue(getContext());
+            targetIconColor = isIconContrast && ColorUtils.getDifference(color, defaultIconColor) < 100 ?
+                    (ColorUtils.isColorDark(color) ? defaultIconLightColor : defaultIconDarkColor) : defaultIconColor;
+            targetTextColor = isIconContrast && ColorUtils.getDifference(color, defaultTextColor) < 100 ?
+                    (ColorUtils.isColorDark(color) ? defaultTextLightColor : defaultTextDarkColor) : defaultTextColor;
         }
 
         requestReDraw();
