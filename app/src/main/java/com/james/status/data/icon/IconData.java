@@ -82,9 +82,11 @@ public abstract class IconData<T extends IconUpdateReceiver> {
 
         iconPaint = new Paint();
         iconPaint.setAntiAlias(true);
+        iconPaint.setDither(true);
 
         textPaint = new Paint();
         textPaint.setAntiAlias(true);
+        textPaint.setDither(true);
 
         styles = getIconStyles();
         level = 0;
@@ -358,8 +360,8 @@ public abstract class IconData<T extends IconUpdateReceiver> {
 
         if (hasIcon() && bitmap != null) {
             Matrix matrix = new Matrix();
-            matrix.postScale(drawnIconSize / bitmap.getWidth(), drawnIconSize / bitmap.getWidth());
-            matrix.postTranslate(x, canvas.getHeight() - drawnIconSize);
+            matrix.postScale((float) drawnIconSize / bitmap.getWidth(), (float) drawnIconSize / bitmap.getWidth());
+            matrix.postTranslate(x, ((float) canvas.getHeight() - drawnIconSize) / 2);
             canvas.drawBitmap(bitmap, matrix, iconPaint);
 
             x += drawnIconSize + drawnPadding;
