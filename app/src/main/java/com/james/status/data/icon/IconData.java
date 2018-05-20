@@ -358,7 +358,20 @@ public abstract class IconData<T extends IconUpdateReceiver> {
 
         x += drawnPadding;
 
-        if (hasIcon() && bitmap != null) {
+        if (hasIcon() && bitmap != null && drawnIconSize > 0) {
+            if (drawnIconSize == targetIconSize && targetIconSize != bitmap.getWidth()) {
+                if (bitmap.getWidth() > targetIconSize)
+                    bitmap = Bitmap.createScaledBitmap(bitmap, targetIconSize, targetIconSize, true);
+                else {
+                    Bitmap bitmap = style.getBitmap(context, level);
+                    if (bitmap != null) {
+                        this.bitmap = bitmap;
+                        if (this.bitmap.getWidth() != targetIconSize)
+                            this.bitmap = Bitmap.createScaledBitmap(bitmap, targetIconSize, targetIconSize, true);
+                    }
+                }
+            }
+
             Matrix matrix = new Matrix();
             matrix.postScale((float) drawnIconSize / bitmap.getWidth(), (float) drawnIconSize / bitmap.getWidth());
             matrix.postTranslate(x, ((float) canvas.getHeight() - drawnIconSize) / 2);
@@ -369,7 +382,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
 
         if (hasText() && text != null) {
             Paint.FontMetrics metrics = textPaint.getFontMetrics();
-            canvas.drawText(text, x, (canvas.getHeight() / 2) + metrics.descent, textPaint);
+            canvas.drawText(text, x, ((canvas.getHeight() - metrics.descent - metrics.ascent) / 2), textPaint);
         }
     }
 
