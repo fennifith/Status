@@ -90,17 +90,19 @@ public abstract class IconData<T extends IconUpdateReceiver> {
 
         styles = getIconStyles();
         level = 0;
-        init();
-        drawnIconColor = defaultIconColor;
-        drawnTextColor = defaultTextColor;
+        init(true);
     }
 
     public void init() {
-        defaultIconColor = targetIconColor = (int) PreferenceData.ICON_ICON_COLOR.getSpecificOverriddenValue(
-                getContext(), PreferenceData.STATUS_ICON_COLOR.getValue(getContext()), getIdentifierArgs());
+        init(false);
+    }
+
+    private void init(boolean isFirstInit) {
+        defaultIconColor = (int) PreferenceData.ICON_ICON_COLOR.getSpecificOverriddenValue(getContext(),
+                PreferenceData.STATUS_ICON_COLOR.getValue(getContext()), getIdentifierArgs());
         defaultIconDarkColor = PreferenceData.STATUS_DARK_ICON_COLOR.getValue(getContext());
-        defaultTextColor = targetTextColor = (int) PreferenceData.ICON_TEXT_COLOR.getSpecificOverriddenValue(
-                getContext(), PreferenceData.STATUS_ICON_TEXT_COLOR.getValue(getContext()), getIdentifierArgs());
+        defaultTextColor = (int) PreferenceData.ICON_TEXT_COLOR.getSpecificOverriddenValue(getContext(),
+                PreferenceData.STATUS_ICON_TEXT_COLOR.getValue(getContext()), getIdentifierArgs());
         defaultTextDarkColor = PreferenceData.STATUS_DARK_ICON_TEXT_COLOR.getValue(getContext());
         targetIconSize = (int) StaticUtils.getPixelsFromDp((int) PreferenceData.ICON_ICON_SCALE.getSpecificValue(getContext(), getIdentifierArgs()));
         targetTextSize = StaticUtils.getPixelsFromSp(getContext(), (float) (int) PreferenceData.ICON_TEXT_SIZE.getSpecificValue(getContext(), getIdentifierArgs()));
@@ -118,11 +120,6 @@ public abstract class IconData<T extends IconUpdateReceiver> {
 
         typeface = Typeface.create(typefaceFont, (int) PreferenceData.ICON_TEXT_EFFECT.getSpecificValue(getContext(), getIdentifierArgs()));
 
-        drawnTextAlpha = 0;
-        targetTextAlpha = 255;
-        drawnIconAlpha = 0;
-        targetIconAlpha = 255;
-
         isAnimations = PreferenceData.STATUS_ICON_ANIMATIONS.getValue(getContext());
 
         if (styles.size() > 0) {
@@ -137,6 +134,16 @@ public abstract class IconData<T extends IconUpdateReceiver> {
             }
 
             if (style == null) style = styles.get(0);
+        }
+
+        if (isFirstInit) {
+            drawnTextAlpha = drawnIconAlpha = 0;
+            targetTextAlpha = targetIconAlpha = 255;
+
+            targetIconColor = defaultIconColor;
+            targetTextColor = defaultTextColor;
+            drawnIconColor = defaultIconColor;
+            drawnTextColor = defaultTextColor;
         }
     }
 
@@ -158,11 +165,9 @@ public abstract class IconData<T extends IconUpdateReceiver> {
     }
 
     public final void onTextUpdate(@Nullable String text) {
-        if (hasText()) {
-            this.text = text;
-            if (reDrawListener != null)
-                reDrawListener.onRequestReDraw();
-        }
+        this.text = text;
+        if (hasText() && reDrawListener != null)
+            reDrawListener.onRequestReDraw();
     }
 
     public final void requestReDraw() {

@@ -255,9 +255,7 @@ public class BatteryIconData extends IconData {
                 iconLevel += 7;
 
             icon.onIconUpdate(iconLevel);
-
-            if (icon.hasText())
-                icon.onTextUpdate(String.valueOf((int) (((double) level / scale) * 100)) + "%");
+            icon.onTextUpdate(String.valueOf((int) (((double) level / scale) * 100)) + "%");
         }
     }
 }
