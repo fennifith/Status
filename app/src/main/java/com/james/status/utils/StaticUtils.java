@@ -106,8 +106,15 @@ public class StaticUtils {
 
     public static int getAnimatedValue(int drawn, int target) {
         int difference = target - drawn;
-        if (difference > 0)
+        if (Math.abs(difference) > 1)
             return drawn + (target < drawn ? Math.min(difference / 8, -1) : Math.max(difference / 8, 1));
+        else return target;
+    }
+
+    public static float getAnimatedValue(float drawn, float target) {
+        float difference = target - drawn;
+        if (Math.abs(difference) > .1f)
+            return drawn + (target < drawn ? Math.min(difference / 8, -.1f) : Math.max(difference / 8, .1f));
         else return target;
     }
 
