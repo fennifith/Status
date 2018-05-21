@@ -264,8 +264,8 @@ public class StatusView extends View implements IconData.ReDrawListener {
             animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    float y = (float) valueAnimator.getAnimatedValue();
-                    setY(y);
+                    setY((float) valueAnimator.getAnimatedValue());
+                    setAlpha(visible ? valueAnimator.getAnimatedFraction() : 1 - valueAnimator.getAnimatedFraction());
                 }
             });
             animator.addListener(new Animator.AnimatorListener() {
@@ -277,6 +277,7 @@ public class StatusView extends View implements IconData.ReDrawListener {
                 @Override
                 public void onAnimationEnd(Animator animator) {
                     if (!visible) setVisibility(View.GONE);
+                    else setAlpha(1);
                 }
 
                 @Override
