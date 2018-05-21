@@ -20,6 +20,7 @@ import android.view.View;
 
 import com.james.status.data.PreferenceData;
 import com.james.status.data.icon.IconData;
+import com.james.status.utils.AnimatedColor;
 import com.james.status.utils.ColorUtils;
 import com.james.status.utils.ImageUtils;
 import com.james.status.utils.StaticUtils;
@@ -33,14 +34,12 @@ public class StatusView extends View implements IconData.ReDrawListener {
 
     private int burnInOffsetX, burnInOffsetY;
 
-    private int drawnBackgroundColor;
-    private int targetBackgroundColor;
+    private AnimatedColor backgroundColor;
     private Paint paint;
 
     @Nullable
     private Bitmap backgroundImage;
     private boolean needsBackgroundImageDraw;
-    private int defaultBackgroundColor;
 
     /**
      * True if ".register()" has been called on all of the icons
@@ -137,13 +136,13 @@ public class StatusView extends View implements IconData.ReDrawListener {
         paint.setFilterBitmap(true);
         paint.setDither(true);
 
-        defaultBackgroundColor = drawnBackgroundColor = targetBackgroundColor = PreferenceData.STATUS_COLOR.getValue(getContext());
+        backgroundColor = new AnimatedColor((int) PreferenceData.STATUS_COLOR.getValue(getContext()));
         init();
     }
 
     public void init() {
         isAnimations = PreferenceData.STATUS_ICON_ANIMATIONS.getValue(getContext());
-        defaultBackgroundColor = PreferenceData.STATUS_COLOR.getValue(getContext());
+        backgroundColor.setDefault((int) PreferenceData.STATUS_COLOR.getValue(getContext()));
         isTransparentHome = PreferenceData.STATUS_HOME_TRANSPARENT.getValue(getContext());
         sidePadding = (int) StaticUtils.getPixelsFromDp((int) PreferenceData.STATUS_SIDE_PADDING.getValue(getContext()));
         isBurnInProtection = PreferenceData.STATUS_BURNIN_PROTECTION.getValue(getContext());
@@ -296,18 +295,18 @@ public class StatusView extends View implements IconData.ReDrawListener {
     }
 
     public void setColor(@ColorInt int color) {
-        targetBackgroundColor = Color.argb(255, Color.red(color), Color.green(color), Color.blue(color));
+        backgroundColor.to(Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
         backgroundImage = null;
         needsBackgroundImageDraw = false;
         for (IconData icon : icons)
-            icon.setBackgroundColor(targetBackgroundColor);
+            icon.setBackgroundColor(backgroundColor.val());
 
         postInvalidate();
     }
 
     @ColorInt
     public int getColor() {
-        return drawnBackgroundColor;
+        return backgroundColor.val();
     }
 
     @ColorInt
@@ -321,7 +320,7 @@ public class StatusView extends View implements IconData.ReDrawListener {
     }
 
     private void setStatusBackgroundColor(@ColorInt int color) {
-        targetBackgroundColor = color;
+        backgroundColor.to(color);
         postInvalidate();
     }
 
@@ -349,7 +348,7 @@ public class StatusView extends View implements IconData.ReDrawListener {
                 backgroundImage = background;
                 needsBackgroundImageDraw = true;
             }
-        } else setColor(defaultBackgroundColor);
+        } else setColor(backgroundColor.getDefault());
 
         postInvalidate();
     }
@@ -365,20 +364,11 @@ public class StatusView extends View implements IconData.ReDrawListener {
                 return true;
         }
 
-        return Color.red(drawnBackgroundColor) != Color.red(targetBackgroundColor) ||
-                Color.green(drawnBackgroundColor) != Color.green(targetBackgroundColor) ||
-                Color.blue(drawnBackgroundColor) != Color.blue(targetBackgroundColor) ||
-                needsBackgroundImageDraw;
+        return !backgroundColor.isTarget() || needsBackgroundImageDraw;
     }
 
     private void updateAnimatedValues() {
-        if (isAnimations) {
-            drawnBackgroundColor = Color.rgb(
-                    StaticUtils.getAnimatedValue(Color.red(drawnBackgroundColor), Color.red(targetBackgroundColor)),
-                    StaticUtils.getAnimatedValue(Color.green(drawnBackgroundColor), Color.green(targetBackgroundColor)),
-                    StaticUtils.getAnimatedValue(Color.blue(drawnBackgroundColor), Color.blue(targetBackgroundColor))
-            );
-        } else drawnBackgroundColor = targetBackgroundColor;
+        backgroundColor.next(isAnimations);
     }
 
     @Override
@@ -391,7 +381,7 @@ public class StatusView extends View implements IconData.ReDrawListener {
 
         if (backgroundImage != null)
             canvas.drawBitmap(backgroundImage, 0, 0, paint);
-        else canvas.drawColor(drawnBackgroundColor);
+        else canvas.drawColor(backgroundColor.val());
 
         int leftWidth = 0, centerWidth = 0, rightWidth = 0;
 

@@ -104,20 +104,6 @@ public class StaticUtils {
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(context);
     }
 
-    public static int getAnimatedValue(int drawn, int target) {
-        int difference = target - drawn;
-        if (Math.abs(difference) > 1)
-            return drawn + (target < drawn ? Math.min(difference / 8, -1) : Math.max(difference / 8, 1));
-        else return target;
-    }
-
-    public static float getAnimatedValue(float drawn, float target) {
-        float difference = target - drawn;
-        if (Math.abs(difference) > .1f)
-            return drawn + (target < drawn ? Math.min(difference / 8, -.1f) : Math.max(difference / 8, .1f));
-        else return target;
-    }
-
     public static int getMergedValue(int v1, int v2, float r) {
         return (int) ((v1 * r) + (v2 * (1 - r)));
     }

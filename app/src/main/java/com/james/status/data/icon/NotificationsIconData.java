@@ -126,20 +126,20 @@ public class NotificationsIconData extends IconData<NotificationsIconData.Notifi
     @Override
     public void draw(Canvas canvas, int x, int width) {
         updateAnimatedValues();
-        int itemsWidth = notifications.size() * (drawnIconSize + drawnPadding);
-        int items = itemsWidth <= width ? notifications.size() : (width / (drawnIconSize + drawnPadding)) - 1;
+        int itemsWidth = notifications.size() * (iconSize.val() + padding.val());
+        int items = itemsWidth <= width ? notifications.size() : (width / (iconSize.val() + padding.val())) - 1;
 
-        x += drawnPadding;
+        x += padding.val();
 
         for (int i = 0; i < items; i++) {
             Bitmap bitmap = notifications.valueAt(i).getIcon(getContext());
             if (bitmap != null) {
                 Matrix matrix = new Matrix();
-                matrix.postScale(drawnIconSize / bitmap.getWidth(), drawnIconSize / bitmap.getWidth());
-                matrix.postTranslate(x, canvas.getHeight() - drawnIconSize);
+                matrix.postScale(iconSize.val() / bitmap.getWidth(), iconSize.val() / bitmap.getWidth());
+                matrix.postTranslate(x, canvas.getHeight() - iconSize.val());
                 canvas.drawBitmap(bitmap, matrix, iconPaint);
 
-                x += drawnIconSize + drawnPadding;
+                x += iconSize.val() + padding.val();
             }
         }
 
@@ -152,10 +152,10 @@ public class NotificationsIconData extends IconData<NotificationsIconData.Notifi
     public int getWidth(int height, int available) {
         if (available < 0)
             return -1;
-        else if (drawnIconSize == 0 && drawnPadding == 0)
+        else if (iconSize.val() == 0 && padding.val() == 0)
             return 0;
         else
-            return Math.min(notifications.size(), available / (drawnIconSize + drawnPadding)) * (drawnIconSize + drawnPadding) + drawnPadding;
+            return Math.min(notifications.size(), available / (iconSize.val() + padding.val())) * (iconSize.val() + padding.val()) + padding.val();
     }
 
     private void removeNotification(NotificationData notification) {

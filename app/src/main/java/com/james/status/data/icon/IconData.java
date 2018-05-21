@@ -28,6 +28,9 @@ import com.james.status.data.preference.IconPreferenceData;
 import com.james.status.data.preference.IntegerPreferenceData;
 import com.james.status.data.preference.ListPreferenceData;
 import com.james.status.receivers.IconUpdateReceiver;
+import com.james.status.utils.AnimatedColor;
+import com.james.status.utils.AnimatedFloat;
+import com.james.status.utils.AnimatedInteger;
 import com.james.status.utils.ColorUtils;
 import com.james.status.utils.StaticUtils;
 
@@ -54,28 +57,19 @@ public abstract class IconData<T extends IconUpdateReceiver> {
     Paint textPaint;
     private String text;
 
-    int defaultTextColor;
-    int defaultTextDarkColor;
-    int defaultTextLightColor;
-    int defaultIconColor;
-    int defaultIconDarkColor;
-    int defaultIconLightColor;
+    private AnimatedColor textColor;
+    private AnimatedFloat textSize;
+    private AnimatedInteger textAlpha;
+    private int defaultTextDarkColor;
+    private int defaultTextLightColor;
 
-    int drawnTextColor;
-    float drawnTextSize;
-    int drawnTextAlpha;
-    int drawnIconColor;
-    int drawnIconSize;
-    int drawnIconAlpha;
-    int drawnPadding;
+    private AnimatedColor iconColor;
+    AnimatedInteger iconSize;
+    private AnimatedInteger iconAlpha;
+    private int defaultIconDarkColor;
+    private int defaultIconLightColor;
 
-    int targetTextColor;
-    float targetTextSize;
-    int targetTextAlpha;
-    int targetIconColor;
-    int targetIconSize;
-    int targetIconAlpha;
-    int targetPadding;
+    AnimatedInteger padding;
 
     boolean isAnimations;
 
@@ -92,6 +86,15 @@ public abstract class IconData<T extends IconUpdateReceiver> {
 
         styles = getIconStyles();
         level = 0;
+
+        textColor = new AnimatedColor(Color.WHITE);
+        textSize = new AnimatedFloat(0);
+        textAlpha = new AnimatedInteger(0);
+        iconColor = new AnimatedColor(Color.WHITE);
+        iconSize = new AnimatedInteger(0);
+        iconAlpha = new AnimatedInteger(0);
+        padding = new AnimatedInteger(0);
+
         init(true);
     }
 
@@ -100,17 +103,17 @@ public abstract class IconData<T extends IconUpdateReceiver> {
     }
 
     private void init(boolean isFirstInit) {
-        defaultIconColor = (int) PreferenceData.ICON_ICON_COLOR.getSpecificOverriddenValue(getContext(),
-                PreferenceData.STATUS_ICON_COLOR.getValue(getContext()), getIdentifierArgs());
+        iconColor.setDefault((int) PreferenceData.ICON_ICON_COLOR.getSpecificOverriddenValue(getContext(),
+                PreferenceData.STATUS_ICON_COLOR.getValue(getContext()), getIdentifierArgs()));
         defaultIconDarkColor = PreferenceData.STATUS_DARK_ICON_COLOR.getValue(getContext());
         defaultIconLightColor = PreferenceData.STATUS_LIGHT_ICON_COLOR.getValue(getContext());
-        defaultTextColor = (int) PreferenceData.ICON_TEXT_COLOR.getSpecificOverriddenValue(getContext(),
-                PreferenceData.STATUS_ICON_TEXT_COLOR.getValue(getContext()), getIdentifierArgs());
+        textColor.setDefault((int) PreferenceData.ICON_TEXT_COLOR.getSpecificOverriddenValue(getContext(),
+                PreferenceData.STATUS_ICON_TEXT_COLOR.getValue(getContext()), getIdentifierArgs()));
         defaultTextDarkColor = PreferenceData.STATUS_DARK_ICON_TEXT_COLOR.getValue(getContext());
         defaultTextLightColor = PreferenceData.STATUS_LIGHT_ICON_TEXT_COLOR.getValue(getContext());
-        targetIconSize = (int) StaticUtils.getPixelsFromDp((int) PreferenceData.ICON_ICON_SCALE.getSpecificValue(getContext(), getIdentifierArgs()));
-        targetTextSize = StaticUtils.getPixelsFromSp(getContext(), (float) (int) PreferenceData.ICON_TEXT_SIZE.getSpecificValue(getContext(), getIdentifierArgs()));
-        targetPadding = (int) StaticUtils.getPixelsFromDp((int) PreferenceData.ICON_ICON_PADDING.getSpecificValue(getContext(), getIdentifierArgs()));
+        iconSize.setDefault((int) StaticUtils.getPixelsFromDp((int) PreferenceData.ICON_ICON_SCALE.getSpecificValue(getContext(), getIdentifierArgs())));
+        textSize.setDefault((float) StaticUtils.getPixelsFromSp(getContext(), (float) (int) PreferenceData.ICON_TEXT_SIZE.getSpecificValue(getContext(), getIdentifierArgs())));
+        padding.setDefault((int) StaticUtils.getPixelsFromDp((int) PreferenceData.ICON_ICON_PADDING.getSpecificValue(getContext(), getIdentifierArgs())));
         backgroundColor = PreferenceData.STATUS_COLOR.getValue(getContext());
 
         Typeface typefaceFont = Typeface.DEFAULT;
@@ -141,13 +144,10 @@ public abstract class IconData<T extends IconUpdateReceiver> {
         }
 
         if (isFirstInit) {
-            drawnTextAlpha = drawnIconAlpha = 0;
-            targetTextAlpha = targetIconAlpha = 255;
-
-            targetIconColor = defaultIconColor;
-            targetTextColor = defaultTextColor;
-            drawnIconColor = defaultIconColor;
-            drawnTextColor = defaultTextColor;
+            textAlpha.to(255);
+            iconAlpha.to(255);
+            textColor.setCurrent(textColor.getDefault());
+            iconColor.setCurrent(iconColor.getDefault());
         }
     }
 
@@ -265,14 +265,14 @@ public abstract class IconData<T extends IconUpdateReceiver> {
     public void setBackgroundColor(@ColorInt int color) {
         backgroundColor = color;
         if (PreferenceData.STATUS_TINTED_ICONS.getValue(getContext())) {
-            targetIconColor = color;
-            targetTextColor = color;
+            iconColor.to(color);
+            textColor.to(color);
         } else {
             boolean isIconContrast = PreferenceData.STATUS_DARK_ICONS.getValue(getContext());
-            targetIconColor = isIconContrast && ColorUtils.getDifference(color, defaultIconColor) < 100 ?
-                    (ColorUtils.isColorDark(color) ? defaultIconLightColor : defaultIconDarkColor) : defaultIconColor;
-            targetTextColor = isIconContrast && ColorUtils.getDifference(color, defaultTextColor) < 100 ?
-                    (ColorUtils.isColorDark(color) ? defaultTextLightColor : defaultTextDarkColor) : defaultTextColor;
+            iconColor.to(isIconContrast && ColorUtils.getDifference(color, iconColor.getDefault()) < 100 ?
+                    (ColorUtils.isColorDark(color) ? defaultIconLightColor : defaultIconDarkColor) : iconColor.getDefault());
+            textColor.to(isIconContrast && ColorUtils.getDifference(color, textColor.getDefault()) < 100 ?
+                    (ColorUtils.isColorDark(color) ? defaultTextLightColor : defaultTextDarkColor) : textColor.getDefault());
         }
 
         requestReDraw();
@@ -300,45 +300,23 @@ public abstract class IconData<T extends IconUpdateReceiver> {
     }
 
     public boolean needsDraw() {
-        return drawnIconSize != targetIconSize ||
-                Color.red(drawnIconColor) != Color.red(targetIconColor) ||
-                Color.green(drawnIconColor) != Color.green(targetIconColor) ||
-                Color.blue(drawnIconColor) != Color.blue(targetIconColor) ||
-                drawnTextSize != targetTextSize ||
-                Color.red(drawnTextColor) != Color.red(drawnTextColor) ||
-                Color.green(drawnTextColor) != Color.green(drawnTextColor) ||
-                Color.blue(drawnTextColor) != Color.blue(drawnTextColor) ||
-                drawnPadding != targetPadding ||
-                drawnTextAlpha != targetTextAlpha ||
-                drawnIconAlpha != targetIconAlpha;
+        return !iconSize.isTarget() ||
+                !iconColor.isTarget() ||
+                !textSize.isTarget() ||
+                !textColor.isTarget() ||
+                !padding.isTarget() ||
+                !textAlpha.isTarget() ||
+                !iconAlpha.isTarget();
     }
 
     public void updateAnimatedValues() {
-        if (isAnimations) {
-            drawnIconColor = Color.rgb(
-                    StaticUtils.getAnimatedValue(Color.red(drawnIconColor), Color.red(targetIconColor)),
-                    StaticUtils.getAnimatedValue(Color.green(drawnIconColor), Color.green(targetIconColor)),
-                    StaticUtils.getAnimatedValue(Color.blue(drawnIconColor), Color.blue(targetIconColor))
-            );
-            drawnIconSize = StaticUtils.getAnimatedValue(drawnIconSize, targetIconSize);
-            drawnTextColor = Color.rgb(
-                    StaticUtils.getAnimatedValue(Color.red(drawnTextColor), Color.red(targetTextColor)),
-                    StaticUtils.getAnimatedValue(Color.green(drawnTextColor), Color.green(targetTextColor)),
-                    StaticUtils.getAnimatedValue(Color.blue(drawnTextColor), Color.blue(targetTextColor))
-            );
-            drawnTextSize = StaticUtils.getAnimatedValue(drawnTextSize, targetTextSize);
-            drawnPadding = StaticUtils.getAnimatedValue(drawnPadding, targetPadding);
-            drawnTextAlpha = StaticUtils.getAnimatedValue(drawnTextAlpha, targetTextAlpha);
-            drawnIconAlpha = StaticUtils.getAnimatedValue(drawnIconAlpha, targetIconAlpha);
-        } else {
-            drawnIconColor = targetIconColor;
-            drawnIconSize = targetIconSize;
-            drawnTextColor = targetTextColor;
-            drawnTextSize = targetTextSize;
-            drawnPadding = targetPadding;
-            drawnTextAlpha = targetTextAlpha;
-            drawnIconAlpha = targetIconAlpha;
-        }
+        iconColor.next(isAnimations);
+        iconSize.next(isAnimations);
+        textColor.next(isAnimations);
+        textSize.next(isAnimations);
+        padding.next(isAnimations);
+        textAlpha.next(isAnimations);
+        iconAlpha.next(isAnimations);
     }
 
     /**
@@ -351,40 +329,41 @@ public abstract class IconData<T extends IconUpdateReceiver> {
     public void draw(Canvas canvas, int x, int width) {
         updateAnimatedValues();
 
+        int drawnIconColor = iconColor.val();
         int iconColor = Color.rgb(
-                StaticUtils.getMergedValue(Color.red(drawnIconColor), Color.red(backgroundColor), (float) drawnIconAlpha / 255),
-                StaticUtils.getMergedValue(Color.green(drawnIconColor), Color.green(backgroundColor), (float) drawnIconAlpha / 255),
-                StaticUtils.getMergedValue(Color.blue(drawnIconColor), Color.blue(backgroundColor), (float) drawnIconAlpha / 255)
+                StaticUtils.getMergedValue(Color.red(drawnIconColor), Color.red(backgroundColor), (float) iconAlpha.val() / 255),
+                StaticUtils.getMergedValue(Color.green(drawnIconColor), Color.green(backgroundColor), (float) iconAlpha.val() / 255),
+                StaticUtils.getMergedValue(Color.blue(drawnIconColor), Color.blue(backgroundColor), (float) iconAlpha.val() / 255)
         );
         iconPaint.setColor(iconColor);
         iconPaint.setColorFilter(new PorterDuffColorFilter(iconColor, PorterDuff.Mode.SRC_IN));
-        textPaint.setColor(drawnTextColor);
-        textPaint.setAlpha(drawnTextAlpha);
-        textPaint.setTextSize(drawnTextSize);
+        textPaint.setColor(textColor.val());
+        textPaint.setAlpha(textAlpha.val());
+        textPaint.setTextSize(textSize.val());
         textPaint.setTypeface(typeface);
 
-        x += drawnPadding;
+        x += padding.val();
 
-        if (hasIcon() && bitmap != null && drawnIconSize > 0) {
-            if (drawnIconSize == targetIconSize && targetIconSize != bitmap.getWidth()) {
-                if (bitmap.getWidth() > targetIconSize)
-                    bitmap = Bitmap.createScaledBitmap(bitmap, targetIconSize, targetIconSize, true);
+        if (hasIcon() && bitmap != null && iconSize.val() > 0) {
+            if (iconSize.isTarget() && iconSize.val() != bitmap.getWidth()) {
+                if (bitmap.getWidth() > iconSize.val())
+                    bitmap = Bitmap.createScaledBitmap(bitmap, iconSize.val(), iconSize.val(), true);
                 else {
                     Bitmap bitmap = style.getBitmap(context, level);
                     if (bitmap != null) {
                         this.bitmap = bitmap;
-                        if (this.bitmap.getWidth() != targetIconSize)
-                            this.bitmap = Bitmap.createScaledBitmap(bitmap, targetIconSize, targetIconSize, true);
+                        if (this.bitmap.getWidth() != iconSize.val())
+                            this.bitmap = Bitmap.createScaledBitmap(bitmap, iconSize.val(), iconSize.val(), true);
                     }
                 }
             }
 
             Matrix matrix = new Matrix();
-            matrix.postScale((float) drawnIconSize / bitmap.getWidth(), (float) drawnIconSize / bitmap.getWidth());
-            matrix.postTranslate(x, ((float) canvas.getHeight() - drawnIconSize) / 2);
+            matrix.postScale((float) iconSize.val() / bitmap.getWidth(), (float) iconSize.val() / bitmap.getWidth());
+            matrix.postTranslate(x, ((float) canvas.getHeight() - iconSize.val()) / 2);
             canvas.drawBitmap(bitmap, matrix, iconPaint);
 
-            x += drawnIconSize + drawnPadding;
+            x += iconSize.val() + padding.val();
         }
 
         if (hasText() && text != null) {
@@ -405,22 +384,22 @@ public abstract class IconData<T extends IconUpdateReceiver> {
     public int getWidth(int height, int available) {
         int width = 0;
         if ((hasIcon() && bitmap != null) || (hasText() && text != null))
-            width += StaticUtils.getAnimatedValue(drawnPadding, targetPadding);
+            width += padding.nextVal();
 
         if (hasIcon() && bitmap != null) {
-            width += StaticUtils.getAnimatedValue(drawnIconSize, targetIconSize);
-            width += StaticUtils.getAnimatedValue(drawnPadding, targetPadding);
+            width += iconSize.nextVal();
+            width += padding.nextVal();
         }
 
         if (hasText() && text != null) {
             Paint textPaint = new Paint();
-            textPaint.setTextSize(StaticUtils.getAnimatedValue(drawnTextSize, targetTextSize));
+            textPaint.setTextSize(textSize.nextVal());
             textPaint.setTypeface(typeface);
 
             Rect bounds = new Rect();
             textPaint.getTextBounds(text, 0, text.length(), bounds);
             width += hasText() ? bounds.width() : 0;
-            width += StaticUtils.getAnimatedValue(drawnPadding, targetPadding);
+            width += padding.nextVal();
         }
 
         return width;
