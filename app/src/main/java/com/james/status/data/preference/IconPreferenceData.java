@@ -27,6 +27,7 @@ public class IconPreferenceData extends BasePreferenceData<String> {
     public IconPreferenceData(Context context, Identifier<String> identifier, IconData iconData, OnPreferenceChangeListener<IconStyleData> listener) {
         super(context, identifier);
         this.iconData = iconData;
+        this.listener = listener;
         styles = new HashMap<>();
 
         List<IconStyleData> styleList = iconData.getIconStyles();
