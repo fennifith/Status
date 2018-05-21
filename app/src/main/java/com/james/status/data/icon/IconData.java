@@ -107,13 +107,16 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                 PreferenceData.STATUS_ICON_COLOR.getValue(getContext()), getIdentifierArgs()));
         defaultIconDarkColor = PreferenceData.STATUS_DARK_ICON_COLOR.getValue(getContext());
         defaultIconLightColor = PreferenceData.STATUS_LIGHT_ICON_COLOR.getValue(getContext());
+
         textColor.setDefault((int) PreferenceData.ICON_TEXT_COLOR.getSpecificOverriddenValue(getContext(),
                 PreferenceData.STATUS_ICON_TEXT_COLOR.getValue(getContext()), getIdentifierArgs()));
         defaultTextDarkColor = PreferenceData.STATUS_DARK_ICON_TEXT_COLOR.getValue(getContext());
         defaultTextLightColor = PreferenceData.STATUS_LIGHT_ICON_TEXT_COLOR.getValue(getContext());
-        iconSize.setDefault((int) StaticUtils.getPixelsFromDp((int) PreferenceData.ICON_ICON_SCALE.getSpecificValue(getContext(), getIdentifierArgs())));
-        textSize.setDefault((float) StaticUtils.getPixelsFromSp(getContext(), (float) (int) PreferenceData.ICON_TEXT_SIZE.getSpecificValue(getContext(), getIdentifierArgs())));
-        padding.setDefault((int) StaticUtils.getPixelsFromDp((int) PreferenceData.ICON_ICON_PADDING.getSpecificValue(getContext(), getIdentifierArgs())));
+
+        iconSize.to((int) StaticUtils.getPixelsFromDp((int) PreferenceData.ICON_ICON_SCALE.getSpecificValue(getContext(), getIdentifierArgs())));
+        textSize.to((float) StaticUtils.getPixelsFromSp(getContext(), (float) (int) PreferenceData.ICON_TEXT_SIZE.getSpecificValue(getContext(), getIdentifierArgs())));
+        padding.to((int) StaticUtils.getPixelsFromDp((int) PreferenceData.ICON_ICON_PADDING.getSpecificValue(getContext(), getIdentifierArgs())));
+
         backgroundColor = PreferenceData.STATUS_COLOR.getValue(getContext());
 
         Typeface typefaceFont = Typeface.DEFAULT;

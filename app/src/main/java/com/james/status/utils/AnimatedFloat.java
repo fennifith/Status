@@ -34,7 +34,7 @@ public class AnimatedFloat {
 
     public float nextVal(long duration) {
         float difference = (targetValue - drawnValue) * (float) Math.sqrt((double) (System.currentTimeMillis() - start) / (duration));
-        if (Math.abs(targetValue - drawnValue) > .1f)
+        if (Math.abs(targetValue - drawnValue) > .1f && System.currentTimeMillis() - start < duration)
             return drawnValue + (targetValue < drawnValue ? Math.min(difference, -.1f) : Math.max(difference, .1f));
         else return targetValue;
     }
@@ -44,7 +44,7 @@ public class AnimatedFloat {
     }
 
     public Float getDefault() {
-        return defaultValue;
+        return defaultValue != null ? defaultValue : targetValue;
     }
 
     public boolean isTarget() {
@@ -52,11 +52,11 @@ public class AnimatedFloat {
     }
 
     public boolean isDefault() {
-        return drawnValue == defaultValue;
+        return defaultValue != null && drawnValue == defaultValue;
     }
 
     public boolean isTargetDefault() {
-        return targetValue == defaultValue;
+        return defaultValue != null && targetValue == defaultValue;
     }
 
     public void toDefault() {

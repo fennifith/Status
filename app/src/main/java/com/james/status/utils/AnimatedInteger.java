@@ -31,7 +31,7 @@ public class AnimatedInteger {
 
     public int nextVal(long duration) {
         int difference = (int) ((targetValue - drawnValue) * Math.sqrt((double) (System.currentTimeMillis() - start) / (duration)));
-        if (Math.abs(targetValue - drawnValue) > 1)
+        if (Math.abs(targetValue - drawnValue) > 1 && System.currentTimeMillis() - start < duration)
             return drawnValue + (targetValue < drawnValue ? Math.min(difference, -1) : Math.max(difference, 1));
         else return targetValue;
     }
@@ -41,7 +41,7 @@ public class AnimatedInteger {
     }
 
     public Integer getDefault() {
-        return defaultValue;
+        return defaultValue != null ? defaultValue : targetValue;
     }
 
     public boolean isTarget() {
@@ -49,11 +49,11 @@ public class AnimatedInteger {
     }
 
     public boolean isDefault() {
-        return drawnValue == defaultValue;
+        return defaultValue != null && drawnValue == defaultValue;
     }
 
     public boolean isTargetDefault() {
-        return targetValue == defaultValue;
+        return defaultValue != null && targetValue == defaultValue;
     }
 
     public void toDefault() {

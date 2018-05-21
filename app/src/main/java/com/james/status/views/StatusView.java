@@ -117,12 +117,7 @@ public class StatusView extends View implements IconData.ReDrawListener {
     }
 
     public StatusView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        this(context, attrs, defStyleAttr, 0);
-    }
-
-    @TargetApi(21)
-    public StatusView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
+        super(context, attrs, defStyleAttr);
         icons = new ArrayList<>();
         leftIcons = new ArrayList<>();
         centerIcons = new ArrayList<>();
@@ -138,6 +133,11 @@ public class StatusView extends View implements IconData.ReDrawListener {
 
         backgroundColor = new AnimatedColor((int) PreferenceData.STATUS_COLOR.getValue(getContext()));
         init();
+    }
+
+    @TargetApi(21)
+    public StatusView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        this(context, attrs, defStyleAttr);
     }
 
     public void init() {

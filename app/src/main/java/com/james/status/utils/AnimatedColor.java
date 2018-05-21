@@ -4,27 +4,32 @@ import android.graphics.Color;
 
 public class AnimatedColor {
 
-    private int targetValue;
-    private int drawnValue;
-    private Integer defaultValue;
-
-    private long start;
+    private AnimatedInteger redValue, blueValue, greenValue;
 
     public AnimatedColor(int value) {
-        targetValue = value;
-        drawnValue = value;
+        redValue = new AnimatedInteger(Color.red(value));
+        greenValue = new AnimatedInteger(Color.green(value));
+        blueValue = new AnimatedInteger(Color.blue(value));
     }
 
     public void setDefault(Integer defaultValue) {
-        this.defaultValue = defaultValue;
+        redValue.setDefault(Color.red(defaultValue));
+        greenValue.setDefault(Color.green(defaultValue));
+        blueValue.setDefault(Color.blue(defaultValue));
     }
 
     public void setCurrent(int value) {
-        drawnValue = targetValue = value;
+        redValue.setCurrent(Color.red(value));
+        greenValue.setCurrent(Color.green(value));
+        blueValue.setCurrent(Color.blue(value));
     }
 
     public int val() {
-        return drawnValue;
+        return Color.rgb(
+                redValue.val(),
+                greenValue.val(),
+                blueValue.val()
+        );
     }
 
     public int nextVal() {
@@ -32,42 +37,51 @@ public class AnimatedColor {
     }
 
     public int nextVal(long duration) {
-        return Color.argb(
-                next(Color.alpha(drawnValue), Color.alpha(targetValue), duration),
-                next(Color.red(drawnValue), Color.red(targetValue), duration),
-                next(Color.green(drawnValue), Color.green(targetValue), duration),
-                next(Color.blue(drawnValue), Color.blue(targetValue), duration)
+        return Color.rgb(
+                redValue.nextVal(duration),
+                greenValue.nextVal(duration),
+                blueValue.nextVal(duration)
         );
     }
 
     public int getTarget() {
-        return targetValue;
+        return Color.rgb(
+                redValue.getTarget(),
+                greenValue.getTarget(),
+                blueValue.getTarget()
+        );
     }
 
     public Integer getDefault() {
-        return defaultValue;
+        return Color.rgb(
+                redValue.getDefault(),
+                greenValue.getDefault(),
+                blueValue.getDefault()
+        );
     }
 
     public boolean isTarget() {
-        return drawnValue == targetValue;
+        return redValue.isTarget() && greenValue.isTarget() && blueValue.isTarget();
     }
 
     public boolean isDefault() {
-        return drawnValue == defaultValue;
+        return redValue.isDefault() && greenValue.isDefault() && blueValue.isDefault();
     }
 
     public boolean isTargetDefault() {
-        return targetValue == defaultValue;
+        return redValue.isTargetDefault() && greenValue.isTargetDefault() && blueValue.isTargetDefault();
     }
 
     public void toDefault() {
-        if (defaultValue != null)
-            to(defaultValue);
+        redValue.toDefault();
+        greenValue.toDefault();
+        blueValue.toDefault();
     }
 
     public void to(int value) {
-        targetValue = value;
-        start = System.currentTimeMillis();
+        redValue.to(Color.red(value));
+        greenValue.to(Color.green(value));
+        blueValue.to(Color.blue(value));
     }
 
     public void next(boolean animate) {
@@ -75,14 +89,9 @@ public class AnimatedColor {
     }
 
     public void next(boolean animate, long duration) {
-        drawnValue = animate ? nextVal(duration) : targetValue;
-    }
-
-    private int next(int drawn, int target, long duration) {
-        int difference = (int) ((target - drawn) * Math.sqrt((float) (System.currentTimeMillis() - start) / (duration)));
-        if (Math.abs(target - drawn) > 1)
-            return drawn + (target < drawn ? Math.min(difference, -1) : Math.max(difference, 1));
-        else return target;
+        redValue.next(animate, duration);
+        greenValue.next(animate, duration);
+        blueValue.next(animate, duration);
     }
 
 }
