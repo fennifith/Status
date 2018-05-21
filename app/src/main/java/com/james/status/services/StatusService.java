@@ -68,8 +68,6 @@ import com.james.status.views.CustomImageView;
 import com.james.status.views.StatusView;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class StatusService extends Service {
@@ -647,19 +645,6 @@ public class StatusService extends Service {
         icons.add(new RingerIconData(context));
         icons.add(new HeadphoneIconData(context));
         icons.add(new OrientationIconData(context));
-
-        for (IconData icon : icons) {
-            int position = PreferenceData.ICON_POSITION.getSpecificOverriddenValue(context, -1, icon.getIdentifierArgs());
-            if (position < 0)
-                PreferenceData.ICON_POSITION.setValue(context, icons.indexOf(icon), icon.getIdentifierArgs());
-        }
-
-        Collections.sort(icons, new Comparator<IconData>() {
-            @Override
-            public int compare(IconData lhs, IconData rhs) {
-                return lhs.getPosition() - rhs.getPosition();
-            }
-        });
 
         return icons;
     }

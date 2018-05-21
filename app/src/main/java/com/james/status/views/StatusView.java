@@ -25,6 +25,8 @@ import com.james.status.utils.ImageUtils;
 import com.james.status.utils.StaticUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class StatusView extends View implements IconData.ReDrawListener {
@@ -169,6 +171,19 @@ public class StatusView extends View implements IconData.ReDrawListener {
         leftIcons.clear();
         centerIcons.clear();
         rightIcons.clear();
+
+        for (IconData icon : icons) {
+            int position = PreferenceData.ICON_POSITION.getSpecificOverriddenValue(getContext(), -1, icon.getIdentifierArgs());
+            if (position < 0)
+                PreferenceData.ICON_POSITION.setValue(getContext(), icons.indexOf(icon), icon.getIdentifierArgs());
+        }
+
+        Collections.sort(icons, new Comparator<IconData>() {
+            @Override
+            public int compare(IconData lhs, IconData rhs) {
+                return lhs.getPosition() - rhs.getPosition();
+            }
+        });
 
         for (IconData icon : icons) {
             if (!icon.isVisible())
