@@ -6,6 +6,8 @@ public class AnimatedInteger {
     private int drawnValue;
     private Integer defaultValue;
 
+    private long start;
+
     public AnimatedInteger(int value) {
         targetValue = value;
         drawnValue = value;
@@ -24,9 +26,13 @@ public class AnimatedInteger {
     }
 
     public int nextVal() {
-        int difference = targetValue - drawnValue;
-        if (Math.abs(difference) > 1)
-            return drawnValue + (targetValue < drawnValue ? Math.min(difference / 8, -1) : Math.max(difference / 8, 1));
+        return nextVal(250);
+    }
+
+    public int nextVal(long duration) {
+        int difference = (int) ((targetValue - drawnValue) * Math.sqrt((double) (System.currentTimeMillis() - start) / (duration)));
+        if (Math.abs(targetValue - drawnValue) > 1)
+            return drawnValue + (targetValue < drawnValue ? Math.min(difference, -1) : Math.max(difference, 1));
         else return targetValue;
     }
 
@@ -57,14 +63,15 @@ public class AnimatedInteger {
 
     public void to(int value) {
         targetValue = value;
-    }
-
-    public void next() {
-        next(true);
+        start = System.currentTimeMillis();
     }
 
     public void next(boolean animate) {
-        drawnValue = animate ? nextVal() : targetValue;
+        next(animate, 250);
+    }
+
+    public void next(boolean animate, long duration) {
+        drawnValue = animate ? nextVal(duration) : targetValue;
     }
 
 }

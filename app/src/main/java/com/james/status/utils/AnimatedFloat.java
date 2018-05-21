@@ -6,6 +6,8 @@ public class AnimatedFloat {
     private float drawnValue;
     private Float defaultValue;
 
+    private long start;
+
     public AnimatedFloat(float value) {
         targetValue = value;
         drawnValue = value;
@@ -27,6 +29,13 @@ public class AnimatedFloat {
         float difference = targetValue - drawnValue;
         if (Math.abs(difference) > .1f)
             return drawnValue + (targetValue < drawnValue ? Math.min(difference / 8, -.1f) : Math.max(difference / 8, .1f));
+        else return targetValue;
+    }
+
+    public float nextVal(long duration) {
+        float difference = (targetValue - drawnValue) * (float) Math.sqrt((double) (System.currentTimeMillis() - start) / (duration));
+        if (Math.abs(targetValue - drawnValue) > .1f)
+            return drawnValue + (targetValue < drawnValue ? Math.min(difference, -.1f) : Math.max(difference, .1f));
         else return targetValue;
     }
 
@@ -57,14 +66,15 @@ public class AnimatedFloat {
 
     public void to(float value) {
         targetValue = value;
-    }
-
-    public void next() {
-        next(true);
+        start = System.currentTimeMillis();
     }
 
     public void next(boolean animate) {
-        drawnValue = animate ? nextVal() : targetValue;
+        next(animate, 250);
+    }
+
+    public void next(boolean animate, long duration) {
+        drawnValue = animate ? nextVal(duration) : targetValue;
     }
 
 }
