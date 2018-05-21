@@ -37,7 +37,7 @@ public class GeneralPreferenceFragment extends SimpleFragment implements BasePre
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_settings, container, false);
 
-        RecyclerView recycler = (RecyclerView) v.findViewById(R.id.recycler);
+        RecyclerView recycler = v.findViewById(R.id.recycler);
         recycler.setLayoutManager(new GridLayoutManager(getContext(), 1));
 
         List<BasePreferenceData> preferences = new ArrayList<>();

@@ -44,8 +44,8 @@ public class BasePreferenceData<T> implements View.OnClickListener {
 
     public void onBindViewHolder(ViewHolder holder, int position) {
         if (identifier != null) {
-            TextView title = (TextView) holder.v.findViewById(R.id.title);
-            TextView subtitle = (TextView) holder.v.findViewById(R.id.subtitle);
+            TextView title = holder.v.findViewById(R.id.title);
+            TextView subtitle = holder.v.findViewById(R.id.subtitle);
 
             if (title != null)
                 title.setText(identifier.getTitle());

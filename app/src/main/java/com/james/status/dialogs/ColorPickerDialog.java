@@ -170,7 +170,7 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> implements Stat
         for (int preset : colors) {
             View v = inflater.inflate(R.layout.item_color, presetLayout, false);
 
-            ColorImageView colorView = (ColorImageView) v.findViewById(R.id.color);
+            ColorImageView colorView = v.findViewById(R.id.color);
             colorView.setColor(preset);
             colorView.setTag(preset);
             colorView.setOnClickListener(new View.OnClickListener() {

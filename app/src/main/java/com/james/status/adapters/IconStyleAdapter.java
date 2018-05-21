@@ -121,8 +121,8 @@ public class IconStyleAdapter extends RecyclerView.Adapter<IconStyleAdapter.View
             super(v);
             this.v = v;
             edit = v.findViewById(R.id.edit);
-            button = (AppCompatRadioButton) v.findViewById(R.id.radio);
-            layout = (LinearLayout) v.findViewById(R.id.icons);
+            button = v.findViewById(R.id.radio);
+            layout = v.findViewById(R.id.icons);
         }
     }
 

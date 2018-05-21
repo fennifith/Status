@@ -26,7 +26,7 @@ public class IconPreferenceFragment extends SimpleFragment implements Status.OnP
         status = (Status) getContext().getApplicationContext();
         status.addListener(this);
 
-        RecyclerView recycler = (RecyclerView) v.findViewById(R.id.recycler);
+        RecyclerView recycler = v.findViewById(R.id.recycler);
         recycler.setLayoutManager(new GridLayoutManager(getContext(), 1));
 
         adapter = new IconAdapter(getActivity());

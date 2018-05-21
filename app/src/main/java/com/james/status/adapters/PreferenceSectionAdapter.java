@@ -82,8 +82,8 @@ public class PreferenceSectionAdapter extends RecyclerView.Adapter<PreferenceSec
         public ViewHolder(View v) {
             super(v);
             this.v = v;
-            title = (TextView) v.findViewById(R.id.title);
-            recycler = (RecyclerView) v.findViewById(R.id.recycler);
+            title = v.findViewById(R.id.title);
+            recycler = v.findViewById(R.id.recycler);
         }
     }
 

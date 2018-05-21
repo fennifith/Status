@@ -108,7 +108,7 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
             }
         });
 
-        RecyclerView recycler = (RecyclerView) holder.v.findViewById(R.id.recycler);
+        RecyclerView recycler = holder.v.findViewById(R.id.recycler);
         recycler.setVisibility(isVisible ? View.VISIBLE : View.GONE);
 
         recycler.setLayoutManager(new GridLayoutManager(activity, 1));
@@ -168,7 +168,7 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
         public ViewHolder(View v) {
             super(v);
             this.v = v;
-            checkBox = (AppCompatCheckBox) v.findViewById(R.id.iconCheckBox);
+            checkBox = v.findViewById(R.id.iconCheckBox);
             moveUp = v.findViewById(R.id.moveUp);
             moveDown = v.findViewById(R.id.moveDown);
         }

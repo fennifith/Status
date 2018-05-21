@@ -325,17 +325,17 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
             super(v);
             this.v = v;
             titleBar = v.findViewById(R.id.titleBar);
-            name = (TextView) v.findViewById(R.id.appName);
-            packageName = (TextView) v.findViewById(R.id.appPackage);
-            icon = (CustomImageView) v.findViewById(R.id.icon);
+            name = v.findViewById(R.id.appName);
+            packageName = v.findViewById(R.id.appPackage);
+            icon = v.findViewById(R.id.icon);
             launch = v.findViewById(R.id.launch);
-            launchIcon = (CustomImageView) v.findViewById(R.id.launchIcon);
-            launchText = (TextView) v.findViewById(R.id.launchText);
+            launchIcon = v.findViewById(R.id.launchIcon);
+            launchText = v.findViewById(R.id.launchText);
             color = v.findViewById(R.id.color);
-            colorView = (ColorImageView) v.findViewById(R.id.colorView);
+            colorView = v.findViewById(R.id.colorView);
             notifications = v.findViewById(R.id.notifications);
-            notificationSwitch = (SwitchCompat) v.findViewById(R.id.notificationSwitch);
-            fullscreenSwitch = (SwitchCompat) v.findViewById(R.id.fullscreenSwitch);
+            notificationSwitch = v.findViewById(R.id.notificationSwitch);
+            fullscreenSwitch = v.findViewById(R.id.fullscreenSwitch);
         }
     }
 }

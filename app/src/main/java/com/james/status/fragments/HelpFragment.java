@@ -25,7 +25,7 @@ public class HelpFragment extends SimpleFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_help, container, false);
 
-        RecyclerView recycler = (RecyclerView) v.findViewById(R.id.recycler);
+        RecyclerView recycler = v.findViewById(R.id.recycler);
 
         recycler.setLayoutManager(new GridLayoutManager(getContext(), 1));
         recycler.setNestedScrollingEnabled(false);

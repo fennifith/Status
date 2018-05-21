@@ -75,8 +75,8 @@ public class ArrayAdapter extends RecyclerView.Adapter<ArrayAdapter.ViewHolder> 
         public ViewHolder(View v) {
             super(v);
             this.v = v;
-            title = (TextView) v.findViewById(R.id.title);
-            subtitle = (TextView) v.findViewById(R.id.subtitle);
+            title = v.findViewById(R.id.title);
+            subtitle = v.findViewById(R.id.subtitle);
         }
     }
 }

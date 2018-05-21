@@ -472,16 +472,16 @@ public class StatusService extends Service {
         headsUpDuration = (int) PreferenceData.STATUS_HEADS_UP_DURATION.getValue(this) * 1000;
         headsUpHandler.postDelayed(headsUpRunnable, headsUpDuration);
 
-        CustomImageView icon = (CustomImageView) headsUpView.findViewById(R.id.icon);
+        CustomImageView icon = headsUpView.findViewById(R.id.icon);
         Bitmap bitmap = notification.getIcon(this);
         Drawable drawable = bitmap != null ? new BitmapDrawable(getResources(), bitmap) : null;
         if (drawable != null) icon.setImageDrawable(drawable, notification.color);
 
-        CustomImageView largeIcon = (CustomImageView) headsUpView.findViewById(R.id.largeIcon);
+        CustomImageView largeIcon = headsUpView.findViewById(R.id.largeIcon);
         Drawable largeDrawable = notification.getLargeIcon(this);
         if (drawable != null) largeIcon.setImageDrawable(largeDrawable);
 
-        TextView name = (TextView) headsUpView.findViewById(R.id.name);
+        TextView name = headsUpView.findViewById(R.id.name);
         name.setText(notification.getName(this));
         name.setTextColor(notification.color);
 
@@ -507,7 +507,7 @@ public class StatusService extends Service {
             });
         }
 
-        LinearLayout actionsLayout = (LinearLayout) headsUpView.findViewById(R.id.actions);
+        LinearLayout actionsLayout = headsUpView.findViewById(R.id.actions);
         ActionData[] actions = notification.getActions();
 
         if (actions.length > 0) {
@@ -521,7 +521,7 @@ public class StatusService extends Service {
                     ((CustomImageView) button.findViewById(R.id.icon)).setImageDrawable(actionIcon, notification.color);
                 else button.findViewById(R.id.icon).setVisibility(View.GONE);
 
-                TextView title = (TextView) button.findViewById(R.id.title);
+                TextView title = button.findViewById(R.id.title);
                 title.setText(action.getTitle());
                 title.setTextColor(notification.color);
 
