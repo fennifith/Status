@@ -113,8 +113,8 @@ public abstract class IconData<T extends IconUpdateReceiver> {
         defaultTextDarkColor = PreferenceData.STATUS_DARK_ICON_TEXT_COLOR.getValue(getContext());
         defaultTextLightColor = PreferenceData.STATUS_LIGHT_ICON_TEXT_COLOR.getValue(getContext());
 
-        iconSize.to((int) StaticUtils.getPixelsFromDp((int) PreferenceData.ICON_ICON_SCALE.getSpecificValue(getContext(), getIdentifierArgs())));
-        textSize.to((float) StaticUtils.getPixelsFromSp(getContext(), (float) (int) PreferenceData.ICON_TEXT_SIZE.getSpecificValue(getContext(), getIdentifierArgs())));
+        iconSize.setDefault((int) StaticUtils.getPixelsFromDp((int) PreferenceData.ICON_ICON_SCALE.getSpecificValue(getContext(), getIdentifierArgs())));
+        textSize.setDefault((float) StaticUtils.getPixelsFromSp(getContext(), (float) (int) PreferenceData.ICON_TEXT_SIZE.getSpecificValue(getContext(), getIdentifierArgs())));
         padding.to((int) StaticUtils.getPixelsFromDp((int) PreferenceData.ICON_ICON_PADDING.getSpecificValue(getContext(), getIdentifierArgs())));
 
         backgroundColor = PreferenceData.STATUS_COLOR.getValue(getContext());
@@ -144,6 +144,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
             }
 
             if (style == null) style = styles.get(0);
+            onIconUpdate(level);
         }
 
         if (isFirstInit) {
@@ -151,6 +152,8 @@ public abstract class IconData<T extends IconUpdateReceiver> {
             iconAlpha.to(255);
             textColor.setCurrent(textColor.getDefault());
             iconColor.setCurrent(iconColor.getDefault());
+            textSize.toDefault();
+            iconSize.toDefault();
         }
     }
 
@@ -165,14 +168,27 @@ public abstract class IconData<T extends IconUpdateReceiver> {
     public final void onIconUpdate(int level) {
         this.level = level;
         if (hasIcon()) {
-            bitmap = style.getBitmap(context, level);
+            Bitmap bitmap = style.getBitmap(context, level);
+            if (bitmap == null)
+                iconSize.to(0);
+            else {
+                this.bitmap = bitmap;
+                iconSize.toDefault();
+            }
+
             if (reDrawListener != null)
                 reDrawListener.onRequestReDraw();
         }
     }
 
     public final void onTextUpdate(@Nullable String text) {
-        this.text = text;
+        if (text == null)
+            textSize.to(0f);
+        else {
+            this.text = text;
+            textSize.toDefault();
+        }
+
         if (hasText() && reDrawListener != null)
             reDrawListener.onRequestReDraw();
     }
@@ -385,6 +401,9 @@ public abstract class IconData<T extends IconUpdateReceiver> {
      * @return the estimated width (px) of the icon
      */
     public int getWidth(int height, int available) {
+        if ((!hasIcon() || iconSize.nextVal() == 0) && (!hasText() || textSize.nextVal() == 0))
+            return 0;
+
         int width = 0;
         if ((hasIcon() && bitmap != null) || (hasText() && text != null))
             width += padding.nextVal();

@@ -299,7 +299,7 @@ public class StatusView extends View implements IconData.ReDrawListener {
         backgroundImage = null;
         needsBackgroundImageDraw = false;
         for (IconData icon : icons)
-            icon.setBackgroundColor(backgroundColor.val());
+            icon.setBackgroundColor(color);
 
         postInvalidate();
     }

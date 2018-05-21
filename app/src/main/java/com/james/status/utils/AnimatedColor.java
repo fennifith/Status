@@ -33,7 +33,7 @@ public class AnimatedColor {
     }
 
     public int nextVal() {
-        return nextVal(250);
+        return nextVal(AnimatedValue.DEFAULT_ANIMATION_DURATION);
     }
 
     public int nextVal(long duration) {
@@ -85,7 +85,7 @@ public class AnimatedColor {
     }
 
     public void next(boolean animate) {
-        next(animate, 250);
+        next(animate, AnimatedValue.DEFAULT_ANIMATION_DURATION);
     }
 
     public void next(boolean animate, long duration) {
