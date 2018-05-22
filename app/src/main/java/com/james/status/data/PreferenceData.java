@@ -64,7 +64,11 @@ public enum PreferenceData {
     ICON_ICON_STYLE("%1$s/ICON_STYLE", ""),
     ICON_ICON_STYLE_NAMES("%1$s/ICON_STYLE_NAMES", new String[]{}),
     ICON_ICON_PADDING("%1$s/ICON_PADDING", 2),
-    ICON_ICON_SCALE("%1$s/ICON_SCALE", 18);
+    ICON_ICON_SCALE("%1$s/ICON_SCALE", 18),
+    ICON_ICON_OFFSET_X("%1$s/ICON_ICON_OFFSET_X", 0),
+    ICON_ICON_OFFSET_Y("%1$s/ICON_ICON_OFFSET_Y", 0),
+    ICON_TEXT_OFFSET_X("%1$s/ICON_TEXT_OFFSET_X", 0),
+    ICON_TEXT_OFFSET_Y("%1$s/ICON_TEXT_OFFSET_Y", 0);
 
     private String name;
     private Object defaultValue;

@@ -62,12 +62,14 @@ public abstract class IconData<T extends IconUpdateReceiver> {
     private AnimatedInteger textAlpha;
     private int defaultTextDarkColor;
     private int defaultTextLightColor;
+    private AnimatedInteger textOffsetX, textOffsetY;
 
     private AnimatedColor iconColor;
     AnimatedInteger iconSize;
     private AnimatedInteger iconAlpha;
     private int defaultIconDarkColor;
     private int defaultIconLightColor;
+    private AnimatedInteger iconOffsetX, iconOffsetY;
 
     AnimatedInteger padding;
 
@@ -90,9 +92,13 @@ public abstract class IconData<T extends IconUpdateReceiver> {
         textColor = new AnimatedColor(Color.WHITE);
         textSize = new AnimatedFloat(0);
         textAlpha = new AnimatedInteger(0);
+        textOffsetX = new AnimatedInteger(0);
+        textOffsetY = new AnimatedInteger(0);
         iconColor = new AnimatedColor(Color.WHITE);
         iconSize = new AnimatedInteger(0);
         iconAlpha = new AnimatedInteger(0);
+        iconOffsetX = new AnimatedInteger(0);
+        iconOffsetY = new AnimatedInteger(0);
         padding = new AnimatedInteger(0);
 
         init(true);
@@ -114,7 +120,11 @@ public abstract class IconData<T extends IconUpdateReceiver> {
         defaultTextLightColor = PreferenceData.STATUS_LIGHT_ICON_TEXT_COLOR.getValue(getContext());
 
         iconSize.setDefault((int) StaticUtils.getPixelsFromDp((int) PreferenceData.ICON_ICON_SCALE.getSpecificValue(getContext(), getIdentifierArgs())));
+        iconOffsetX.to((int) PreferenceData.ICON_ICON_OFFSET_X.getSpecificValue(getContext(), getIdentifierArgs()));
+        iconOffsetY.to((int) PreferenceData.ICON_ICON_OFFSET_Y.getSpecificValue(getContext(), getIdentifierArgs()));
         textSize.setDefault((float) StaticUtils.getPixelsFromSp(getContext(), (float) (int) PreferenceData.ICON_TEXT_SIZE.getSpecificValue(getContext(), getIdentifierArgs())));
+        textOffsetX.to((int) PreferenceData.ICON_TEXT_OFFSET_X.getSpecificValue(getContext(), getIdentifierArgs()));
+        textOffsetY.to((int) PreferenceData.ICON_TEXT_OFFSET_Y.getSpecificValue(getContext(), getIdentifierArgs()));
         padding.to((int) StaticUtils.getPixelsFromDp((int) PreferenceData.ICON_ICON_PADDING.getSpecificValue(getContext(), getIdentifierArgs())));
 
         backgroundColor = PreferenceData.STATUS_COLOR.getValue(getContext());
@@ -153,7 +163,11 @@ public abstract class IconData<T extends IconUpdateReceiver> {
             textColor.setCurrent(textColor.getDefault());
             iconColor.setCurrent(iconColor.getDefault());
             textSize.toDefault();
+            textOffsetX.setCurrent(textOffsetX.getTarget());
+            textOffsetY.setCurrent(textOffsetY.getTarget());
             iconSize.toDefault();
+            iconOffsetX.setCurrent(iconOffsetX.getTarget());
+            iconOffsetY.setCurrent(iconOffsetY.getTarget());
         }
     }
 
@@ -320,8 +334,12 @@ public abstract class IconData<T extends IconUpdateReceiver> {
 
     public boolean needsDraw() {
         return !iconSize.isTarget() ||
+                !iconOffsetX.isTarget() ||
+                !iconOffsetY.isTarget() ||
                 !iconColor.isTarget() ||
                 !textSize.isTarget() ||
+                !textOffsetX.isTarget() ||
+                !textOffsetY.isTarget() ||
                 !textColor.isTarget() ||
                 !padding.isTarget() ||
                 !textAlpha.isTarget() ||
@@ -331,8 +349,12 @@ public abstract class IconData<T extends IconUpdateReceiver> {
     public void updateAnimatedValues() {
         iconColor.next(isAnimations);
         iconSize.next(isAnimations);
+        iconOffsetX.next(isAnimations);
+        iconOffsetY.next(isAnimations);
         textColor.next(isAnimations);
         textSize.next(isAnimations);
+        textOffsetX.next(isAnimations);
+        textOffsetY.next(isAnimations);
         padding.next(isAnimations);
         textAlpha.next(isAnimations);
         iconAlpha.next(isAnimations);
@@ -364,6 +386,8 @@ public abstract class IconData<T extends IconUpdateReceiver> {
         x += padding.val();
 
         if (hasIcon() && bitmap != null && iconSize.val() > 0) {
+            x += iconOffsetX.val();
+
             if (iconSize.isTarget() && iconSize.val() != bitmap.getWidth()) {
                 if (bitmap.getWidth() > iconSize.val())
                     bitmap = Bitmap.createScaledBitmap(bitmap, iconSize.val(), iconSize.val(), true);
@@ -379,15 +403,15 @@ public abstract class IconData<T extends IconUpdateReceiver> {
 
             Matrix matrix = new Matrix();
             matrix.postScale((float) iconSize.val() / bitmap.getWidth(), (float) iconSize.val() / bitmap.getWidth());
-            matrix.postTranslate(x, ((float) canvas.getHeight() - iconSize.val()) / 2);
+            matrix.postTranslate(x, (((float) canvas.getHeight() - iconSize.val()) / 2) - iconOffsetY.val());
             canvas.drawBitmap(bitmap, matrix, iconPaint);
 
-            x += iconSize.val() + padding.val();
+            x += iconSize.val() + padding.val() - iconOffsetX.val();
         }
 
         if (hasText() && text != null) {
             Paint.FontMetrics metrics = textPaint.getFontMetrics();
-            canvas.drawText(text, x, ((canvas.getHeight() - metrics.descent - metrics.ascent) / 2), textPaint);
+            canvas.drawText(text, x + textOffsetX.val(), ((canvas.getHeight() - metrics.descent - metrics.ascent) / 2) - textOffsetY.val(), textPaint);
         }
     }
 
@@ -614,6 +638,42 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                     new ListPreferenceData.ListPreference(getContext().getString(R.string.text_effect_italic), Typeface.ITALIC),
                     new ListPreferenceData.ListPreference(getContext().getString(R.string.text_effect_bold_italic), Typeface.BOLD_ITALIC)
             ));
+
+            preferences.add(new IntegerPreferenceData(
+                    getContext(),
+                    new BasePreferenceData.Identifier<Integer>(
+                            PreferenceData.ICON_TEXT_OFFSET_X,
+                            "Horizontal Text Offset",
+                            getIdentifierArgs()
+                    ),
+                    "px",
+                    -100,
+                    100,
+                    new BasePreferenceData.OnPreferenceChangeListener<Integer>() {
+                        @Override
+                        public void onPreferenceChange(Integer preference) {
+                            StaticUtils.updateStatusService(getContext(), true);
+                        }
+                    }
+            ));
+
+            preferences.add(new IntegerPreferenceData(
+                    getContext(),
+                    new BasePreferenceData.Identifier<Integer>(
+                            PreferenceData.ICON_TEXT_OFFSET_Y,
+                            "Vertical Text Offset",
+                            getIdentifierArgs()
+                    ),
+                    "px",
+                    -100,
+                    100,
+                    new BasePreferenceData.OnPreferenceChangeListener<Integer>() {
+                        @Override
+                        public void onPreferenceChange(Integer preference) {
+                            StaticUtils.updateStatusService(getContext(), true);
+                        }
+                    }
+            ));
         }
 
         if (hasIcon()) {
@@ -629,6 +689,42 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                         @Override
                         public void onPreferenceChange(IconStyleData preference) {
                             style = preference;
+                            StaticUtils.updateStatusService(getContext(), true);
+                        }
+                    }
+            ));
+
+            preferences.add(new IntegerPreferenceData(
+                    getContext(),
+                    new BasePreferenceData.Identifier<Integer>(
+                            PreferenceData.ICON_ICON_OFFSET_X,
+                            "Horizontal Icon Offset",
+                            getIdentifierArgs()
+                    ),
+                    "px",
+                    -100,
+                    100,
+                    new BasePreferenceData.OnPreferenceChangeListener<Integer>() {
+                        @Override
+                        public void onPreferenceChange(Integer preference) {
+                            StaticUtils.updateStatusService(getContext(), true);
+                        }
+                    }
+            ));
+
+            preferences.add(new IntegerPreferenceData(
+                    getContext(),
+                    new BasePreferenceData.Identifier<Integer>(
+                            PreferenceData.ICON_ICON_OFFSET_Y,
+                            "Vertical Icon Offset",
+                            getIdentifierArgs()
+                    ),
+                    "px",
+                    -100,
+                    100,
+                    new BasePreferenceData.OnPreferenceChangeListener<Integer>() {
+                        @Override
+                        public void onPreferenceChange(Integer preference) {
                             StaticUtils.updateStatusService(getContext(), true);
                         }
                     }
