@@ -53,9 +53,9 @@ public abstract class IconData<T extends IconUpdateReceiver> {
     private int level;
 
     private Bitmap bitmap;
-    Paint iconPaint;
-    Paint textPaint;
     private String text;
+    Paint iconPaint, textPaint;
+    private boolean isIcon, isText;
 
     private AnimatedColor textColor;
     private AnimatedFloat textSize;
@@ -168,6 +168,11 @@ public abstract class IconData<T extends IconUpdateReceiver> {
             iconSize.toDefault();
             iconOffsetX.setCurrent(iconOffsetX.getTarget());
             iconOffsetY.setCurrent(iconOffsetY.getTarget());
+        } else {
+            if (isText)
+                textSize.toDefault();
+            if (isIcon)
+                iconSize.toDefault();
         }
     }
 
@@ -183,12 +188,11 @@ public abstract class IconData<T extends IconUpdateReceiver> {
         this.level = level;
         if (hasIcon()) {
             Bitmap bitmap = style.getBitmap(context, level);
-            if (bitmap == null)
-                iconSize.to(0);
-            else {
+            isIcon = bitmap != null;
+            if (isIcon) {
                 this.bitmap = bitmap;
                 iconSize.toDefault();
-            }
+            } else iconSize.to(0);
 
             if (reDrawListener != null)
                 reDrawListener.onRequestReDraw();
@@ -196,12 +200,11 @@ public abstract class IconData<T extends IconUpdateReceiver> {
     }
 
     public final void onTextUpdate(@Nullable String text) {
-        if (text == null)
-            textSize.to(0f);
-        else {
+        isText = text != null;
+        if (isText) {
             this.text = text;
             textSize.toDefault();
-        }
+        } else textSize.to(0f);
 
         if (hasText() && reDrawListener != null)
             reDrawListener.onRequestReDraw();
