@@ -642,7 +642,8 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                     new ListPreferenceData.ListPreference(getContext().getString(R.string.text_effect_bold_italic), Typeface.BOLD_ITALIC)
             ));
 
-            preferences.add(new IntegerPreferenceData(
+            //TODO: uncomment after fixing #115
+            /*preferences.add(new IntegerPreferenceData(
                     getContext(),
                     new BasePreferenceData.Identifier<Integer>(
                             PreferenceData.ICON_TEXT_OFFSET_X,
@@ -676,7 +677,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                             StaticUtils.updateStatusService(getContext(), true);
                         }
                     }
-            ));
+            ));*/
         }
 
         if (hasIcon()) {
@@ -697,7 +698,8 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                     }
             ));
 
-            preferences.add(new IntegerPreferenceData(
+            //TODO: uncomment after fixing #115
+            /*preferences.add(new IntegerPreferenceData(
                     getContext(),
                     new BasePreferenceData.Identifier<Integer>(
                             PreferenceData.ICON_ICON_OFFSET_X,
@@ -731,7 +733,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                             StaticUtils.updateStatusService(getContext(), true);
                         }
                     }
-            ));
+            ));*/
         }
 
         return preferences;
