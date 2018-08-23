@@ -155,9 +155,7 @@ public class StaticUtils {
                     }
                 }
 
-                Intent intent = new Intent(StatusServiceImpl.ACTION_START);
-                intent.setClass(context, StatusServiceImpl.getCompatClass());
-                context.startService(intent);
+                StatusServiceImpl.start(context);
                 return true;
             }
         }
@@ -174,7 +172,7 @@ public class StaticUtils {
     public static void updateStatusService(Context context, boolean shouldKeepIcons) {
         if (isStatusServiceRunning(context)) {
             Intent intent = new Intent(StatusServiceImpl.ACTION_START);
-            intent.setClass(context, StatusServiceImpl.getCompatClass());
+            intent.setClass(context, StatusServiceImpl.getCompatClass(context));
             intent.putExtra(StatusServiceImpl.EXTRA_KEEP_OLD, shouldKeepIcons);
             context.startService(intent);
         }

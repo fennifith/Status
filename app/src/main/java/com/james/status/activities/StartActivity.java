@@ -41,7 +41,7 @@ public class StartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
-        SteppersView steppersView = (SteppersView) findViewById(R.id.steppersView);
+        SteppersView steppersView = findViewById(R.id.steppersView);
 
         SteppersView.Config steppersViewConfig = new SteppersView.Config();
         steppersViewConfig.setOnFinishAction(new OnFinishAction() {
@@ -49,10 +49,7 @@ public class StartActivity extends AppCompatActivity {
             public void onFinish() {
                 PreferenceData.STATUS_ENABLED.setValue(StartActivity.this, true);
 
-                Intent intent = new Intent(StatusServiceImpl.ACTION_START);
-                intent.setClass(StartActivity.this, StatusServiceImpl.getCompatClass());
-                startService(intent);
-
+                StatusServiceImpl.start(StartActivity.this);
                 finish();
             }
         });

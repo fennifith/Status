@@ -67,6 +67,13 @@ public class StatusService extends NotificationListenerService {
         return impl.onStartCommand(intent, flags, startId);
     }
 
+    @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT)
+            impl.onTaskRemoved(rootIntent);
+        else super.onTaskRemoved(rootIntent);
+    }
+
     public void tryReconnectService() {
         toggleNotificationListenerService();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
@@ -95,6 +102,7 @@ public class StatusService extends NotificationListenerService {
 
     @Override
     public void onListenerDisconnected() {
+        impl.onDestroy();
         super.onListenerDisconnected();
         isConnected = false;
     }

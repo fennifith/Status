@@ -200,7 +200,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
 
     private void setStatusBar(@Nullable @ColorInt Integer color, @Nullable Boolean isTransparent, @Nullable Boolean isFullscreen, @Nullable Boolean isSystemFullscreen, @Nullable String packageName, @Nullable AppData.ActivityData activityData) {
         Intent intent = new Intent(StatusServiceImpl.ACTION_UPDATE);
-        intent.setClass(this, StatusServiceImpl.getCompatClass());
+        intent.setClass(this, StatusServiceImpl.getCompatClass(this));
 
         if (color != null) intent.putExtra(StatusServiceImpl.EXTRA_COLOR, color);
 

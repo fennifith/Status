@@ -3,6 +3,7 @@ package com.james.status.services;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -17,7 +18,6 @@ import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.util.ArrayMap;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -74,8 +74,6 @@ public class StatusServiceImpl {
     private WindowManager windowManager;
     private PackageManager packageManager;
 
-    private ArrayMap<String, NotificationData> notifications;
-
     private String packageName;
     private AppData.ActivityData activityData;
 
@@ -95,13 +93,8 @@ public class StatusServiceImpl {
 
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (!(boolean) PreferenceData.STATUS_ENABLED.getValue(service)) {
-            if (statusView != null) {
-                if (statusView.getParent() != null) windowManager.removeView(statusView);
-                statusView.unregister();
-                statusView = null;
-            }
-
-            service.stopSelf();
+            onDestroy();
+            stop(service);
             return Service.START_NOT_STICKY;
         }
 
@@ -320,19 +313,6 @@ public class StatusServiceImpl {
         }
     }
 
-    private boolean containsNotification(NotificationData notification) {
-        if (notifications == null) notifications = new ArrayMap<>();
-        for (NotificationData data : notifications.values()) {
-            if (data.equals(notification)) return true;
-        }
-        return false;
-    }
-
-    public ArrayMap<String, NotificationData> getNotifications() {
-        if (notifications == null) notifications = new ArrayMap<>();
-        return notifications;
-    }
-
     public static List<IconData> getIcons(Context context) {
         List<IconData> icons = new ArrayList<>();
         icons.add(new NotificationsIconData(context));
@@ -369,15 +349,36 @@ public class StatusServiceImpl {
     }
 
     public void onNotificationAdded(String key, NotificationData notification) {
-        notifications.put(key, notification);
+        //notifications.put(key, notification);
     }
 
     public void onNotificationRemoved(String key) {
-        notifications.remove(key);
+        //notifications.remove(key);
     }
 
-    public static Class getCompatClass() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 ? StatusService.class : StatusServiceCompat.class;
+    public static Class getCompatClass(Context context) {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 && !((Boolean) PreferenceData.STATUS_NOTIFICATIONS_COMPAT.getValue(context))
+                ? StatusService.class : StatusServiceCompat.class;
+    }
+
+    public static void start(Context context) {
+        PackageManager pm = context.getPackageManager();
+        pm.setComponentEnabledSetting(new ComponentName(context, getCompatClass(context)),
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+
+        Intent intent = new Intent(ACTION_START);
+        intent.setClass(context, getCompatClass(context));
+        context.startService(intent);
+    }
+
+    public static void stop(Context context) {
+        Intent intent = new Intent(ACTION_STOP);
+        intent.setClass(context, getCompatClass(context));
+        context.stopService(intent);
+
+        PackageManager pm = context.getPackageManager();
+        pm.setComponentEnabledSetting(new ComponentName(context, getCompatClass(context)),
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
     }
 
 }

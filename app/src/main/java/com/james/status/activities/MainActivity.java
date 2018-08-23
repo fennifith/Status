@@ -80,15 +80,15 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
-        appbar = (AppBarLayout) findViewById(R.id.appbar);
-        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-        service = (SwitchCompat) findViewById(R.id.serviceEnabled);
-        viewPager = (ViewPager) findViewById(R.id.viewPager);
+        appbar = findViewById(R.id.appbar);
+        tabLayout = findViewById(R.id.tabLayout);
+        service = findViewById(R.id.serviceEnabled);
+        viewPager = findViewById(R.id.viewPager);
         bottomSheet = findViewById(R.id.bottomSheet);
-        expand = (ImageView) findViewById(R.id.expand);
-        title = (TextView) findViewById(R.id.title);
-        content = (TextView) findViewById(R.id.content);
-        icon = (ImageView) findViewById(R.id.tutorialIcon);
+        expand = findViewById(R.id.expand);
+        title = findViewById(R.id.title);
+        content = findViewById(R.id.content);
+        icon = findViewById(R.id.tutorialIcon);
 
         ViewCompat.setElevation(bottomSheet, StaticUtils.getPixelsFromDp(10));
 
@@ -379,21 +379,19 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-        if (b && !StaticUtils.isReady(this)) {
-            startActivity(new Intent(this, StartActivity.class));
+        if (b) {
+            StatusServiceImpl.start(this);
+            if (!StaticUtils.isReady(this)) {
+                startActivity(new Intent(this, StartActivity.class));
 
-            service.setOnCheckedChangeListener(null);
-            service.setChecked(false);
-            service.setOnCheckedChangeListener(this);
-        } else {
-            PreferenceData.STATUS_ENABLED.setValue(this, b);
+                service.setOnCheckedChangeListener(null);
+                service.setChecked(false);
+                service.setOnCheckedChangeListener(this);
+                return;
+            }
+        } else StatusServiceImpl.stop(this);
 
-            Intent intent = new Intent(b ? StatusServiceImpl.ACTION_START : StatusServiceImpl.ACTION_STOP);
-            intent.setClass(this, StatusServiceImpl.getCompatClass());
-            if (b)
-                startService(intent);
-            else stopService(intent);
-        }
+        PreferenceData.STATUS_ENABLED.setValue(this, b);
     }
 
     public interface OnTutorialClickListener {
