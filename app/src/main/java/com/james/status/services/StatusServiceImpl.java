@@ -55,6 +55,7 @@ import java.util.List;
 
 public class StatusServiceImpl {
 
+    public static final String ACTION_CREATE = "com.james.status.ACTION_CREATE";
     public static final String ACTION_START = "com.james.status.ACTION_START";
     public static final String ACTION_STOP = "com.james.status.ACTION_STOP";
     public static final String ACTION_UPDATE = "com.james.status.ACTION_UPDATE";
@@ -102,6 +103,10 @@ public class StatusServiceImpl {
         String action = intent.getAction();
         if (action == null) return Service.START_STICKY;
         switch (action) {
+            case ACTION_CREATE:
+                if (statusView == null)
+                    setUp(false);
+                break;
             case ACTION_START:
                 setUp(intent.getBooleanExtra(EXTRA_KEEP_OLD, false));
                 break;
@@ -366,7 +371,7 @@ public class StatusServiceImpl {
         pm.setComponentEnabledSetting(new ComponentName(context, getCompatClass(context)),
                 PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
 
-        Intent intent = new Intent(ACTION_START);
+        Intent intent = new Intent(ACTION_CREATE);
         intent.setClass(context, getCompatClass(context));
         context.startService(intent);
     }
