@@ -25,7 +25,7 @@ import com.james.status.activities.StartActivity;
 import com.james.status.data.PreferenceData;
 import com.james.status.data.icon.IconData;
 import com.james.status.services.AccessibilityService;
-import com.james.status.services.StatusService;
+import com.james.status.services.StatusServiceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -121,7 +121,7 @@ public class StaticUtils {
     }
 
     public static boolean isAllPermissionsGranted(Context context) {
-        for (IconData icon : StatusService.getIcons(context)) {
+        for (IconData icon : StatusServiceImpl.getIcons(context)) {
             for (String permission : icon.getPermissions()) {
                 if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
                     if (BuildConfig.DEBUG)
@@ -150,13 +150,13 @@ public class StaticUtils {
             ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
             if (manager != null) {
                 for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-                    if (StatusService.class.getName().equals(service.service.getClassName())) {
+                    if (StatusServiceImpl.class.getName().equals(service.service.getClassName())) {
                         return true;
                     }
                 }
 
-                Intent intent = new Intent(StatusService.ACTION_START);
-                intent.setClass(context, StatusService.class);
+                Intent intent = new Intent(StatusServiceImpl.ACTION_START);
+                intent.setClass(context, StatusServiceImpl.class);
                 context.startService(intent);
                 return true;
             }
@@ -173,9 +173,9 @@ public class StaticUtils {
      */
     public static void updateStatusService(Context context, boolean shouldKeepIcons) {
         if (isStatusServiceRunning(context)) {
-            Intent intent = new Intent(StatusService.ACTION_START);
-            intent.setClass(context, StatusService.class);
-            intent.putExtra(StatusService.EXTRA_KEEP_OLD, shouldKeepIcons);
+            Intent intent = new Intent(StatusServiceImpl.ACTION_START);
+            intent.setClass(context, StatusServiceImpl.class);
+            intent.putExtra(StatusServiceImpl.EXTRA_KEEP_OLD, shouldKeepIcons);
             context.startService(intent);
         }
 

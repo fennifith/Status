@@ -13,7 +13,7 @@ import android.widget.CompoundButton;
 import com.james.status.R;
 import com.james.status.data.PreferenceData;
 import com.james.status.data.icon.IconData;
-import com.james.status.services.StatusService;
+import com.james.status.services.StatusServiceImpl;
 import com.james.status.utils.StaticUtils;
 
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
 
     public IconAdapter(Activity activity) {
         this.activity = activity;
-        setIcons(StatusService.getIcons(activity));
+        setIcons(StatusServiceImpl.getIcons(activity));
     }
 
     @Override

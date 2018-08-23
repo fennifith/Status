@@ -20,7 +20,7 @@ import android.widget.Toast;
 
 import com.james.status.R;
 import com.james.status.data.PreferenceData;
-import com.james.status.services.StatusService;
+import com.james.status.services.StatusServiceImpl;
 import com.james.status.utils.StaticUtils;
 
 import java.util.ArrayList;
@@ -49,8 +49,8 @@ public class StartActivity extends AppCompatActivity {
             public void onFinish() {
                 PreferenceData.STATUS_ENABLED.setValue(StartActivity.this, true);
 
-                Intent intent = new Intent(StatusService.ACTION_START);
-                intent.setClass(StartActivity.this, StatusService.class);
+                Intent intent = new Intent(StatusServiceImpl.ACTION_START);
+                intent.setClass(StartActivity.this, StatusServiceImpl.class);
                 startService(intent);
 
                 finish();

@@ -21,7 +21,7 @@ import com.james.status.data.preference.ColorPreferenceData;
 import com.james.status.data.preference.IntegerPreferenceData;
 import com.james.status.data.preference.ListPreferenceData;
 import com.james.status.dialogs.BackupDialog;
-import com.james.status.services.StatusService;
+import com.james.status.services.StatusServiceImpl;
 import com.james.status.utils.StaticUtils;
 
 import java.util.ArrayList;
@@ -174,19 +174,19 @@ public class GeneralPreferenceFragment extends SimpleFragment implements BasePre
                         null,
                         new ListPreferenceData.ListPreference(
                                 getString(R.string.heads_up_plain),
-                                StatusService.HEADSUP_LAYOUT_PLAIN
+                                StatusServiceImpl.HEADSUP_LAYOUT_PLAIN
                         ),
                         new ListPreferenceData.ListPreference(
                                 getString(R.string.heads_up_card),
-                                StatusService.HEADSUP_LAYOUT_CARD
+                                StatusServiceImpl.HEADSUP_LAYOUT_CARD
                         ),
                         new ListPreferenceData.ListPreference(
                                 getString(R.string.heads_up_condensed),
-                                StatusService.HEADSUP_LAYOUT_CONDENSED
+                                StatusServiceImpl.HEADSUP_LAYOUT_CONDENSED
                         ),
                         new ListPreferenceData.ListPreference(
                                 getString(R.string.heads_up_transparent),
-                                StatusService.HEADSUP_LAYOUT_TRANSPARENT
+                                StatusServiceImpl.HEADSUP_LAYOUT_TRANSPARENT
                         )
                 ),
                 new BooleanPreferenceData(

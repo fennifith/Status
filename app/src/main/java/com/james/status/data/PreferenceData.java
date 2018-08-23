@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.james.status.BuildConfig;
-import com.james.status.services.StatusService;
+import com.james.status.services.StatusServiceImpl;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -41,7 +41,7 @@ public enum PreferenceData {
     STATUS_HEADS_UP_DURATION(10),
     STATUS_BACKGROUND_ANIMATIONS(true),
     STATUS_ICON_ANIMATIONS(true),
-    STATUS_HEADS_UP_LAYOUT(StatusService.HEADSUP_LAYOUT_PLAIN),
+    STATUS_HEADS_UP_LAYOUT(StatusServiceImpl.HEADSUP_LAYOUT_PLAIN),
     STATUS_HIDE_ON_VOLUME(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP),
     STATUS_PERSISTENT_NOTIFICATION(true),
     STATUS_IGNORE_PERMISSION_CHECKING(false),

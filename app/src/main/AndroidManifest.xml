@@ -56,7 +56,7 @@
 
         <receiver android:name=".receivers.ActivityVisibilitySettingReceiver" />
 
-        <service android:name=".services.StatusService" />
+        <service android:name=".services.StatusServiceCompat" />
 
         <service
             android:name=".services.AccessibilityService"
@@ -73,7 +73,8 @@
 
         </service>
 
-        <service android:name=".services.NotificationService"
+        <service
+            android:name=".services.StatusService"
             android:label="@string/service_name"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
             <intent-filter>

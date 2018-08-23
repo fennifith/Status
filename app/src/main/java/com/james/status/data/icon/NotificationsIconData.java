@@ -15,7 +15,7 @@ import com.james.status.data.PreferenceData;
 import com.james.status.data.preference.BasePreferenceData;
 import com.james.status.data.preference.IntegerPreferenceData;
 import com.james.status.receivers.IconUpdateReceiver;
-import com.james.status.services.NotificationService;
+import com.james.status.services.StatusService;
 import com.james.status.utils.StaticUtils;
 
 import java.util.List;
@@ -103,8 +103,8 @@ public class NotificationsIconData extends IconData<NotificationsIconData.Notifi
         requestReDraw();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            Intent intent = new Intent(NotificationService.ACTION_GET_NOTIFICATIONS);
-            intent.setClass(getContext(), NotificationService.class);
+            Intent intent = new Intent(StatusService.ACTION_GET_NOTIFICATIONS);
+            intent.setClass(getContext(), StatusService.class);
             getContext().startService(intent);
         }
     }

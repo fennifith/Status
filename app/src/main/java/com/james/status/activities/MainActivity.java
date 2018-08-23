@@ -40,7 +40,7 @@ import com.james.status.fragments.AppPreferenceFragment;
 import com.james.status.fragments.GeneralPreferenceFragment;
 import com.james.status.fragments.HelpFragment;
 import com.james.status.fragments.IconPreferenceFragment;
-import com.james.status.services.StatusService;
+import com.james.status.services.StatusServiceImpl;
 import com.james.status.utils.StaticUtils;
 
 import java.util.ArrayList;
@@ -208,7 +208,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                     @Override
                     public void onClick() {
                         List<String> permissions = new ArrayList<>();
-                        for (IconData icon : StatusService.getIcons(MainActivity.this)) {
+                        for (IconData icon : StatusServiceImpl.getIcons(MainActivity.this)) {
                             permissions.addAll(Arrays.asList(icon.getPermissions()));
                         }
 
@@ -388,8 +388,8 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         } else {
             PreferenceData.STATUS_ENABLED.setValue(this, b);
 
-            Intent intent = new Intent(b ? StatusService.ACTION_START : StatusService.ACTION_STOP);
-            intent.setClass(this, StatusService.class);
+            Intent intent = new Intent(b ? StatusServiceImpl.ACTION_START : StatusServiceImpl.ACTION_STOP);
+            intent.setClass(this, StatusServiceImpl.class);
             if (b)
                 startService(intent);
             else stopService(intent);
