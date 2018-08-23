@@ -363,6 +363,9 @@ public class StatusServiceImpl {
     }
 
     public static Class getCompatClass(Context context) {
+        if (context instanceof StatusService || context instanceof StatusServiceCompat)
+            return context.getClass(); //prevents issues disabling services during compatibility switch
+
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 && !((Boolean) PreferenceData.STATUS_NOTIFICATIONS_COMPAT.getValue(context))
                 ? StatusService.class : StatusServiceCompat.class;
     }
