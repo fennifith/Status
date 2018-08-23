@@ -18,6 +18,7 @@ import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -95,7 +96,7 @@ public class StatusServiceImpl {
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (!(boolean) PreferenceData.STATUS_ENABLED.getValue(service)) {
             onDestroy();
-            stop(service);
+            disable(service);
             return Service.START_NOT_STICKY;
         }
 
@@ -111,9 +112,9 @@ public class StatusServiceImpl {
                 setUp(intent.getBooleanExtra(EXTRA_KEEP_OLD, false));
                 break;
             case ACTION_STOP:
-                windowManager.removeView(statusView);
-                statusView = null;
-                service.stopSelf();
+                Log.d("STOP", "action received");
+                onDestroy();
+                disable(service);
                 break;
             case ACTION_UPDATE:
                 if (statusView != null) {
@@ -377,6 +378,12 @@ public class StatusServiceImpl {
     }
 
     public static void stop(Context context) {
+        Intent intent = new Intent(ACTION_STOP);
+        intent.setClass(context, getCompatClass(context));
+        context.startService(intent);
+    }
+
+    public static void disable(Context context) {
         Intent intent = new Intent(ACTION_STOP);
         intent.setClass(context, getCompatClass(context));
         context.stopService(intent);

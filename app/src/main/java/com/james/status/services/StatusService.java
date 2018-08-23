@@ -8,6 +8,7 @@ import android.os.Build;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.support.v7.app.NotificationCompat;
+import android.util.Log;
 
 import com.james.status.data.AppData;
 import com.james.status.data.NotificationData;
@@ -74,6 +75,13 @@ public class StatusService extends NotificationListenerService {
         else super.onTaskRemoved(rootIntent);
     }
 
+    @Override
+    public void onDestroy() {
+        Log.d("STOP", "listener destroyed");
+        impl.onDestroy();
+        super.onDestroy();
+    }
+
     public void tryReconnectService() {
         toggleNotificationListenerService();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
@@ -94,6 +102,7 @@ public class StatusService extends NotificationListenerService {
         packageManager = getPackageManager();
         isConnected = true;
 
+        //impl.onStartCommand(new Intent(StatusServiceImpl.ACTION_CREATE), 0, 0);
         if (shouldSendOnConnect) {
             sendNotifications();
             shouldSendOnConnect = false;
@@ -102,7 +111,8 @@ public class StatusService extends NotificationListenerService {
 
     @Override
     public void onListenerDisconnected() {
-        impl.onDestroy();
+        Log.d("STOP", "listener disconnected");
+        //impl.onDestroy();
         super.onListenerDisconnected();
         isConnected = false;
     }
