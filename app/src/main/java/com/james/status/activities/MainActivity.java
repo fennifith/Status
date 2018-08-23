@@ -389,7 +389,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             PreferenceData.STATUS_ENABLED.setValue(this, b);
 
             Intent intent = new Intent(b ? StatusServiceImpl.ACTION_START : StatusServiceImpl.ACTION_STOP);
-            intent.setClass(this, StatusServiceImpl.class);
+            intent.setClass(this, StatusServiceImpl.getCompatClass());
             if (b)
                 startService(intent);
             else stopService(intent);

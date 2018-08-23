@@ -19,9 +19,7 @@ import com.james.status.data.preference.BasePreferenceData;
 import com.james.status.data.preference.BooleanPreferenceData;
 import com.james.status.data.preference.ColorPreferenceData;
 import com.james.status.data.preference.IntegerPreferenceData;
-import com.james.status.data.preference.ListPreferenceData;
 import com.james.status.dialogs.BackupDialog;
-import com.james.status.services.StatusServiceImpl;
 import com.james.status.utils.StaticUtils;
 
 import java.util.ArrayList;
@@ -150,44 +148,6 @@ public class GeneralPreferenceFragment extends SimpleFragment implements BasePre
                                 BasePreferenceData.Identifier.SectionIdentifier.NOTIFICATIONS
                         ),
                         null
-                ),
-                new IntegerPreferenceData(
-                        getContext(),
-                        new BasePreferenceData.Identifier<Integer>(
-                                PreferenceData.STATUS_HEADS_UP_DURATION,
-                                getString(R.string.preference_heads_up_duration),
-                                getString(R.string.preference_heads_up_duration_desc),
-                                BasePreferenceData.Identifier.SectionIdentifier.NOTIFICATIONS
-                        ),
-                        getString(R.string.unit_seconds),
-                        0,
-                        20,
-                        null
-                ),
-                new ListPreferenceData(
-                        getContext(),
-                        new BasePreferenceData.Identifier<Integer>(
-                                PreferenceData.STATUS_HEADS_UP_LAYOUT,
-                                getString(R.string.preference_heads_up_layout),
-                                BasePreferenceData.Identifier.SectionIdentifier.NOTIFICATIONS
-                        ),
-                        null,
-                        new ListPreferenceData.ListPreference(
-                                getString(R.string.heads_up_plain),
-                                StatusServiceImpl.HEADSUP_LAYOUT_PLAIN
-                        ),
-                        new ListPreferenceData.ListPreference(
-                                getString(R.string.heads_up_card),
-                                StatusServiceImpl.HEADSUP_LAYOUT_CARD
-                        ),
-                        new ListPreferenceData.ListPreference(
-                                getString(R.string.heads_up_condensed),
-                                StatusServiceImpl.HEADSUP_LAYOUT_CONDENSED
-                        ),
-                        new ListPreferenceData.ListPreference(
-                                getString(R.string.heads_up_transparent),
-                                StatusServiceImpl.HEADSUP_LAYOUT_TRANSPARENT
-                        )
                 ),
                 new BooleanPreferenceData(
                         getContext(),

@@ -50,7 +50,7 @@ public class StartActivity extends AppCompatActivity {
                 PreferenceData.STATUS_ENABLED.setValue(StartActivity.this, true);
 
                 Intent intent = new Intent(StatusServiceImpl.ACTION_START);
-                intent.setClass(StartActivity.this, StatusServiceImpl.class);
+                intent.setClass(StartActivity.this, StatusServiceImpl.getCompatClass());
                 startService(intent);
 
                 finish();

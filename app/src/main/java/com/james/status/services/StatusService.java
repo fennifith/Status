@@ -1,18 +1,14 @@
 package com.james.status.services;
 
 import android.annotation.TargetApi;
-import android.app.Notification;
-import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
-import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.NotificationCompat;
 
-import com.james.status.R;
 import com.james.status.data.AppData;
 import com.james.status.data.NotificationData;
 import com.james.status.data.PreferenceData;
@@ -31,11 +27,8 @@ public class StatusService extends NotificationListenerService {
     public static final String ACTION_CANCEL_NOTIFICATION = "com.james.status.ACTION_CANCEL_NOTIFICATION";
     public static final String EXTRA_NOTIFICATION = "com.james.status.EXTRA_NOTIFICATION";
 
-    public static final int BLANK_NOTIFICATION = 254231;
-
     private boolean isConnected, shouldSendOnConnect;
     private PackageManager packageManager;
-    private NotificationManagerCompat notificationManager;
 
     private StatusServiceImpl impl;
 
@@ -92,7 +85,6 @@ public class StatusService extends NotificationListenerService {
     public void onListenerConnected() {
         super.onListenerConnected();
         packageManager = getPackageManager();
-        notificationManager = NotificationManagerCompat.from(this);
         isConnected = true;
 
         if (shouldSendOnConnect) {
@@ -122,20 +114,7 @@ public class StatusService extends NotificationListenerService {
 
         if ((boolean) PreferenceData.STATUS_ENABLED.getValue(this) && isEnabled && !StaticUtils.shouldUseCompatNotifications(this) && !sbn.getPackageName().matches("com.james.status")) {
             NotificationData notification = new NotificationData(sbn, getKey(sbn));
-
-            if (notification.shouldShowHeadsUp(this)) {
-                if (sbn.getId() != BLANK_NOTIFICATION) {
-                    notificationManager.notify(BLANK_NOTIFICATION, new Notification.Builder(this)
-                            .setContentTitle("").setContentText("")
-                            .setSmallIcon(R.drawable.transparent)
-                            .setPriority(Notification.PRIORITY_DEFAULT)
-                            .setFullScreenIntent(PendingIntent.getBroadcast(this, 0, new Intent(), 0), true)
-                            .setAutoCancel(true)
-                            .build());
-
-                    notificationManager.cancel(BLANK_NOTIFICATION);
-                } else return;
-            }
+            impl.onNotificationAdded(getKey(sbn), notification);
 
             Intent intent = new Intent(NotificationsIconData.ACTION_NOTIFICATION_ADDED);
             intent.putExtra(NotificationsIconData.EXTRA_NOTIFICATION, notification);
@@ -146,6 +125,8 @@ public class StatusService extends NotificationListenerService {
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn) {
         if ((boolean) PreferenceData.STATUS_ENABLED.getValue(this) && !StaticUtils.shouldUseCompatNotifications(this)) {
+            impl.onNotificationRemoved(getKey(sbn));
+
             Intent intent = new Intent(NotificationsIconData.ACTION_NOTIFICATION_REMOVED);
             intent.putExtra(NotificationsIconData.EXTRA_NOTIFICATION, new NotificationData(sbn, getKey(sbn)));
             sendBroadcast(intent);
