@@ -81,6 +81,8 @@ public class StatusService extends NotificationListenerService {
 
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
+        Log.d("NOTIFICATION", "sending added notification " + getKey(sbn));
+
         AppData app = null;
         try {
             app = new AppData(packageManager, packageManager.getApplicationInfo(sbn.getPackageName(), PackageManager.GET_META_DATA), packageManager.getPackageInfo(sbn.getPackageName(), PackageManager.GET_ACTIVITIES));
@@ -100,6 +102,7 @@ public class StatusService extends NotificationListenerService {
 
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn) {
+        Log.d("NOTIFICATION", "sending removed notification " + getKey(sbn));
         if ((boolean) PreferenceData.STATUS_ENABLED.getValue(this) && !StaticUtils.shouldUseCompatNotifications(this)) {
             impl.onNotificationRemoved(getKey(sbn));
         }

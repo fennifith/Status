@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.support.v4.util.ArrayMap;
+import android.util.Log;
 
 import com.james.status.R;
 import com.james.status.data.NotificationData;
@@ -119,7 +120,7 @@ public class NotificationsIconData extends IconData {
                     * (iconSize.val() + padding.val())) + padding.val();
     }
 
-    private void addNotification(NotificationData notification) {
+    private void addNotification(String key, NotificationData notification) {
         for (int i = 0; i < notifications.size(); i++) {
             NotificationData notification2 = notifications.valueAt(i);
             if (notification2 != null && (notification.getKey().equals(notification2.getKey()) || notification.equals(notification2) || (notification.group != null && notification2.group != null && notification.group.equals(notification2.group)))) {
@@ -128,12 +129,14 @@ public class NotificationsIconData extends IconData {
         }
 
         if (notification.getIcon(getContext()) != null) {
-            notifications.put(notification.getKey(), notification);
+            Log.d("NOTIFICATION", "adding notification " + key);
+            notifications.put(key, notification);
             requestReDraw();
         }
     }
 
     private void removeNotification(String key) {
+        Log.d("NOTIFICATION", "removing notification " + key);
         notifications.remove(key);
         requestReDraw();
     }
@@ -142,7 +145,7 @@ public class NotificationsIconData extends IconData {
     public void onMessage(Object... message) {
         if (message.length > 0 && message[0] instanceof String) {
             if (message.length > 1 && message[1] instanceof NotificationData)
-                addNotification((NotificationData) message[1]);
+                addNotification((String) message[0], (NotificationData) message[1]);
             else removeNotification((String) message[0]);
         }
     }
