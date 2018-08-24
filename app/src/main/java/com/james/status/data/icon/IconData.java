@@ -46,7 +46,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
     private ReDrawListener reDrawListener;
     private Typeface typeface;
     private T receiver;
-    private int backgroundColor;
+    int backgroundColor;
 
     private List<IconStyleData> styles;
     private IconStyleData style;
@@ -64,9 +64,9 @@ public abstract class IconData<T extends IconUpdateReceiver> {
     private int defaultTextLightColor;
     private AnimatedInteger textOffsetX, textOffsetY;
 
-    private AnimatedColor iconColor;
+    AnimatedColor iconColor;
     AnimatedInteger iconSize;
-    private AnimatedInteger iconAlpha;
+    AnimatedInteger iconAlpha;
     private int defaultIconDarkColor;
     private int defaultIconLightColor;
     private AnimatedInteger iconOffsetX, iconOffsetY;
@@ -317,6 +317,18 @@ public abstract class IconData<T extends IconUpdateReceiver> {
         requestReDraw();
     }
 
+    public AnimatedColor getIconColor() {
+        return iconColor;
+    }
+
+    public AnimatedInteger getIconAlpha() {
+        return iconAlpha;
+    }
+
+    public int getBackgroundColor() {
+        return backgroundColor;
+    }
+
     @Nullable
     public Bitmap getBitmap() {
         if (hasIcon()) return bitmap;
@@ -364,17 +376,6 @@ public abstract class IconData<T extends IconUpdateReceiver> {
         padding.next(isAnimations);
         textAlpha.next(isAnimations);
         iconAlpha.next(isAnimations);
-    }
-
-    /**
-     * Draws the icon on a canvas.
-     *
-     * @param canvas the canvas to draw on
-     * @param x      the x position (LTR px) to start drawing the icon at
-     * @param width  the available width for the icon to be drawn within
-     */
-    public void draw(Canvas canvas, int x, int width) {
-        updateAnimatedValues();
 
         int drawnIconColor = iconColor.val();
         int iconColor = Color.rgb(
@@ -388,6 +389,17 @@ public abstract class IconData<T extends IconUpdateReceiver> {
         textPaint.setAlpha(textAlpha.val());
         textPaint.setTextSize(textSize.val());
         textPaint.setTypeface(typeface);
+    }
+
+    /**
+     * Draws the icon on a canvas.
+     *
+     * @param canvas the canvas to draw on
+     * @param x      the x position (LTR px) to start drawing the icon at
+     * @param width  the available width for the icon to be drawn within
+     */
+    public void draw(Canvas canvas, int x, int width) {
+        updateAnimatedValues();
 
         x += padding.val();
 
