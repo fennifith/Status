@@ -77,6 +77,7 @@ public class StatusService extends NotificationListenerService {
     public void onListenerConnected() {
         super.onListenerConnected();
         packageManager = getPackageManager();
+        sendNotifications();
     }
 
     @Override
@@ -143,7 +144,7 @@ public class StatusService extends NotificationListenerService {
                 NotificationData notification = new NotificationData(sbn, getKey(sbn));
                 notification.priority = NotificationCompat.PRIORITY_DEFAULT;
 
-                impl.onNotificationAdded(notification.getKey(), notification);
+                impl.onNotificationAdded(getKey(sbn), notification);
             }
         }
     }
