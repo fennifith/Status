@@ -406,21 +406,21 @@ public abstract class IconData<T extends IconUpdateReceiver> {
         if (hasIcon() && bitmap != null && iconSize.val() > 0) {
             x += iconOffsetX.val();
 
-            if (iconSize.isTarget() && iconSize.val() != bitmap.getWidth()) {
-                if (bitmap.getWidth() > iconSize.val())
+            if (iconSize.isTarget() && iconSize.val() != bitmap.getHeight()) {
+                if (bitmap.getHeight() > iconSize.val())
                     bitmap = Bitmap.createScaledBitmap(bitmap, iconSize.val(), iconSize.val(), true);
                 else {
                     Bitmap bitmap = style.getBitmap(context, level);
                     if (bitmap != null) {
                         this.bitmap = bitmap;
-                        if (this.bitmap.getWidth() != iconSize.val())
+                        if (this.bitmap.getHeight() != iconSize.val())
                             this.bitmap = Bitmap.createScaledBitmap(bitmap, iconSize.val(), iconSize.val(), true);
                     }
                 }
             }
 
             Matrix matrix = new Matrix();
-            matrix.postScale((float) iconSize.val() / bitmap.getWidth(), (float) iconSize.val() / bitmap.getWidth());
+            matrix.postScale((float) iconSize.val() / bitmap.getHeight(), (float) iconSize.val() / bitmap.getHeight());
             matrix.postTranslate(x, (((float) canvas.getHeight() - iconSize.val()) / 2) - iconOffsetY.val());
             canvas.drawBitmap(bitmap, matrix, iconPaint);
 
