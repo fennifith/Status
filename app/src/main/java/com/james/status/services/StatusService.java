@@ -8,7 +8,6 @@ import android.os.Build;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.support.v7.app.NotificationCompat;
-import android.util.Log;
 
 import com.james.status.data.AppData;
 import com.james.status.data.NotificationData;
@@ -54,7 +53,6 @@ public class StatusService extends NotificationListenerService {
 
     @Override
     public void onDestroy() {
-        Log.d("STOP", "listener destroyed");
         impl.onDestroy();
         super.onDestroy();
     }
@@ -82,7 +80,6 @@ public class StatusService extends NotificationListenerService {
 
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
-        Log.d("NOTIFICATION", "sending added notification " + getKey(sbn));
 
         AppData app = null;
         try {
@@ -95,18 +92,14 @@ public class StatusService extends NotificationListenerService {
             isEnabled = app.getSpecificBooleanPreference(this, AppData.PreferenceIdentifier.NOTIFICATIONS);
         if (isEnabled == null) isEnabled = true;
 
-        if ((boolean) PreferenceData.STATUS_ENABLED.getValue(this) && isEnabled && !StaticUtils.shouldUseCompatNotifications(this) && !sbn.getPackageName().matches("com.james.status")) {
-            NotificationData notification = new NotificationData(sbn, getKey(sbn));
-            impl.onNotificationAdded(getKey(sbn), notification);
-        }
+        if ((boolean) PreferenceData.STATUS_ENABLED.getValue(this) && isEnabled && !StaticUtils.shouldUseCompatNotifications(this) && !sbn.getPackageName().matches("com.james.status"))
+            impl.onNotificationAdded(getKey(sbn), new NotificationData(sbn, getKey(sbn)));
     }
 
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn) {
-        Log.d("NOTIFICATION", "sending removed notification " + getKey(sbn));
-        if ((boolean) PreferenceData.STATUS_ENABLED.getValue(this) && !StaticUtils.shouldUseCompatNotifications(this)) {
+        if ((boolean) PreferenceData.STATUS_ENABLED.getValue(this) && !StaticUtils.shouldUseCompatNotifications(this))
             impl.onNotificationRemoved(getKey(sbn));
-        }
     }
 
     private ArrayList<StatusBarNotification> getNotifications() {

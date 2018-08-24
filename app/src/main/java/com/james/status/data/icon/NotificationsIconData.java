@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.support.v4.util.ArrayMap;
-import android.util.Log;
 
 import com.james.status.R;
 import com.james.status.data.NotificationData;
@@ -153,7 +152,6 @@ public class NotificationsIconData extends IconData {
     }
 
     private void removeNotification(String key) {
-        Log.d("NOTIFICATION", "removing notification " + key);
         notifications.remove(key);
         requestReDraw();
     }
