@@ -18,6 +18,10 @@ public abstract class AnimatedValue<T> {
         targetValue = drawnValue = value;
     }
 
+    public void set(T value) {
+        drawnValue = value;
+    }
+
     public void setDefault(T defaultValue) {
         this.defaultValue = defaultValue;
     }

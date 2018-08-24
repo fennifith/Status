@@ -22,6 +22,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.NotificationCompat;
 
+import com.james.status.utils.AnimatedFloat;
 import com.james.status.utils.ImageUtils;
 
 public class NotificationData implements Parcelable {
@@ -32,6 +33,8 @@ public class NotificationData implements Parcelable {
     private Bitmap icon;
     private Bitmap largeIcon;
     private Icon unloadedIcon, unloadedLargeIcon;
+
+    private AnimatedFloat scale;
 
     public PendingIntent intent;
     public ActionData[] actions;
@@ -126,6 +129,27 @@ public class NotificationData implements Parcelable {
         for (int i = 0; i < actions.length; i++) {
             actions[i] = new ActionData(NotificationCompat.getAction(notification, i), packageName);
         }
+
+        scale = new AnimatedFloat(0);
+        scale.to(1f);
+    }
+
+    public boolean set(NotificationData notification) {
+        boolean isChange = false;
+
+        if (iconRes != notification.iconRes) {
+            iconRes = notification.iconRes;
+            icon = null;
+            isChange = true;
+        }
+
+        if ((unloadedIcon == null && notification.unloadedIcon != null) || (unloadedIcon != null && !unloadedIcon.equals(notification.unloadedIcon))) {
+            unloadedIcon = notification.unloadedIcon;
+            icon = null;
+            isChange = true;
+        }
+
+        return isChange;
     }
 
     protected NotificationData(Parcel in) {
@@ -268,6 +292,10 @@ public class NotificationData implements Parcelable {
         } catch (Resources.NotFoundException | OutOfMemoryError e) {
             return null;
         }
+    }
+
+    public AnimatedFloat getScale() {
+        return scale;
     }
 
     public boolean equals(NotificationData obj) {

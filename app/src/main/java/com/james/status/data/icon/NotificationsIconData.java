@@ -83,6 +83,15 @@ public class NotificationsIconData extends IconData {
     }
 
     @Override
+    public boolean needsDraw() {
+        boolean needsDraw = false;
+        for (int i = 0; i < notifications.size(); i++)
+            needsDraw = needsDraw || !notifications.valueAt(i).getScale().isTarget();
+
+        return needsDraw || super.needsDraw();
+    }
+
+    @Override
     public void draw(Canvas canvas, int x, int width) {
         updateAnimatedValues();
         int itemsWidth = notifications.size() * (iconSize.val() + padding.val());
@@ -91,14 +100,20 @@ public class NotificationsIconData extends IconData {
         x += padding.val();
 
         for (int i = 0; i < items; i++) {
+            NotificationData notification = notifications.valueAt(i);
+            notification.getScale().next(isAnimations);
+
             Bitmap bitmap = notifications.valueAt(i).getIcon(getContext());
             if (bitmap != null) {
+                float scaledIconSize = iconSize.val() * notification.getScale().val();
+                iconPaint.setAlpha((int) (notification.getScale().val() * 255));
+
                 Matrix matrix = new Matrix();
-                matrix.postScale((float) iconSize.val() / bitmap.getHeight(), (float) iconSize.val() / bitmap.getHeight());
-                matrix.postTranslate(x, ((float) canvas.getHeight() - iconSize.val()) / 2);
+                matrix.postScale(scaledIconSize / bitmap.getHeight(), scaledIconSize / bitmap.getHeight());
+                matrix.postTranslate(x, ((float) canvas.getHeight() - scaledIconSize) / 2);
                 canvas.drawBitmap(bitmap, matrix, iconPaint);
 
-                x += iconSize.val() + padding.val();
+                x += scaledIconSize + padding.val();
             }
         }
 
@@ -124,12 +139,14 @@ public class NotificationsIconData extends IconData {
         for (int i = 0; i < notifications.size(); i++) {
             NotificationData notification2 = notifications.valueAt(i);
             if (notification2 != null && (notification.getKey().equals(notification2.getKey()) || notification.equals(notification2) || (notification.group != null && notification2.group != null && notification.group.equals(notification2.group)))) {
-                notifications.remove(notification2);
+                if (notification2.set(notification))
+                    requestReDraw();
+
+                return;
             }
         }
 
         if (notification.getIcon(getContext()) != null) {
-            Log.d("NOTIFICATION", "adding notification " + key);
             notifications.put(key, notification);
             requestReDraw();
         }
