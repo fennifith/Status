@@ -210,6 +210,9 @@ public abstract class IconData<T extends IconUpdateReceiver> {
             reDrawListener.onRequestReDraw();
     }
 
+    public void onMessage(Object... message) {
+    }
+
     public final void requestReDraw() {
         if (reDrawListener != null)
             reDrawListener.onRequestReDraw();

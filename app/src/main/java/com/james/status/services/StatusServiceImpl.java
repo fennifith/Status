@@ -6,7 +6,6 @@ import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -18,7 +17,6 @@ import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -112,7 +110,6 @@ public class StatusServiceImpl {
                 setUp(intent.getBooleanExtra(EXTRA_KEEP_OLD, false));
                 break;
             case ACTION_STOP:
-                Log.d("STOP", "action received");
                 onDestroy();
                 disable(service);
                 break;
@@ -285,11 +282,10 @@ public class StatusServiceImpl {
 
             statusView.setIcons(getIcons(service));
             statusView.register();
-        }
 
-        IntentFilter notificationFilter = new IntentFilter();
-        notificationFilter.addAction(NotificationsIconData.ACTION_NOTIFICATION_ADDED);
-        notificationFilter.addAction(NotificationsIconData.ACTION_NOTIFICATION_REMOVED);
+            if (service instanceof StatusService)
+                ((StatusService) service).sendNotifications();
+        }
 
         if (StaticUtils.isAccessibilityServiceRunning(service)) {
             Intent intent = new Intent(AccessibilityService.ACTION_GET_COLOR);
@@ -355,11 +351,13 @@ public class StatusServiceImpl {
     }
 
     public void onNotificationAdded(String key, NotificationData notification) {
-        //notifications.put(key, notification);
+        if (statusView != null)
+            statusView.sendMessage(NotificationsIconData.class, key, notification);
     }
 
     public void onNotificationRemoved(String key) {
-        //notifications.remove(key);
+        if (statusView != null)
+            statusView.sendMessage(NotificationsIconData.class, key);
     }
 
     public static Class getCompatClass(Context context) {

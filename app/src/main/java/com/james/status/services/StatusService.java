@@ -13,7 +13,6 @@ import android.util.Log;
 import com.james.status.data.AppData;
 import com.james.status.data.NotificationData;
 import com.james.status.data.PreferenceData;
-import com.james.status.data.icon.NotificationsIconData;
 import com.james.status.utils.StaticUtils;
 
 import java.util.ArrayList;
@@ -24,13 +23,7 @@ import java.util.List;
 @TargetApi(18)
 public class StatusService extends NotificationListenerService {
 
-    public static final String ACTION_GET_NOTIFICATIONS = "com.james.status.ACTION_GET_NOTIFICATIONS";
-    public static final String ACTION_CANCEL_NOTIFICATION = "com.james.status.ACTION_CANCEL_NOTIFICATION";
-    public static final String EXTRA_NOTIFICATION = "com.james.status.EXTRA_NOTIFICATION";
-
-    private boolean isConnected, shouldSendOnConnect;
     private PackageManager packageManager;
-
     private StatusServiceImpl impl;
 
     @Override
@@ -48,22 +41,6 @@ public class StatusService extends NotificationListenerService {
         if (intent == null) return START_STICKY;
         String action = intent.getAction();
         if (action == null) return START_STICKY;
-
-        switch (action) {
-            case ACTION_GET_NOTIFICATIONS:
-                if (isConnected) sendNotifications();
-                else shouldSendOnConnect = true;
-                break;
-            case ACTION_CANCEL_NOTIFICATION:
-                NotificationData notification = intent.getParcelableExtra(EXTRA_NOTIFICATION);
-                if (isConnected && notification != null) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                        cancelNotification(notification.key);
-                    else
-                        cancelNotification(notification.packageName, notification.tag, notification.id);
-                }
-                break;
-        }
 
         return impl.onStartCommand(intent, flags, startId);
     }
@@ -100,21 +77,6 @@ public class StatusService extends NotificationListenerService {
     public void onListenerConnected() {
         super.onListenerConnected();
         packageManager = getPackageManager();
-        isConnected = true;
-
-        //impl.onStartCommand(new Intent(StatusServiceImpl.ACTION_CREATE), 0, 0);
-        if (shouldSendOnConnect) {
-            sendNotifications();
-            shouldSendOnConnect = false;
-        }
-    }
-
-    @Override
-    public void onListenerDisconnected() {
-        Log.d("STOP", "listener disconnected");
-        //impl.onDestroy();
-        super.onListenerDisconnected();
-        isConnected = false;
     }
 
     @Override
@@ -133,10 +95,6 @@ public class StatusService extends NotificationListenerService {
         if ((boolean) PreferenceData.STATUS_ENABLED.getValue(this) && isEnabled && !StaticUtils.shouldUseCompatNotifications(this) && !sbn.getPackageName().matches("com.james.status")) {
             NotificationData notification = new NotificationData(sbn, getKey(sbn));
             impl.onNotificationAdded(getKey(sbn), notification);
-
-            Intent intent = new Intent(NotificationsIconData.ACTION_NOTIFICATION_ADDED);
-            intent.putExtra(NotificationsIconData.EXTRA_NOTIFICATION, notification);
-            sendBroadcast(intent);
         }
     }
 
@@ -144,10 +102,6 @@ public class StatusService extends NotificationListenerService {
     public void onNotificationRemoved(StatusBarNotification sbn) {
         if ((boolean) PreferenceData.STATUS_ENABLED.getValue(this) && !StaticUtils.shouldUseCompatNotifications(this)) {
             impl.onNotificationRemoved(getKey(sbn));
-
-            Intent intent = new Intent(NotificationsIconData.ACTION_NOTIFICATION_REMOVED);
-            intent.putExtra(NotificationsIconData.EXTRA_NOTIFICATION, new NotificationData(sbn, getKey(sbn)));
-            sendBroadcast(intent);
         }
     }
 
@@ -162,7 +116,7 @@ public class StatusService extends NotificationListenerService {
         return activeNotifications;
     }
 
-    private void sendNotifications() {
+    public void sendNotifications() {
         if ((boolean) PreferenceData.STATUS_ENABLED.getValue(this) && !StaticUtils.shouldUseCompatNotifications(this)) {
             List<StatusBarNotification> notifications = getNotifications();
             Collections.reverse(notifications);
@@ -186,10 +140,7 @@ public class StatusService extends NotificationListenerService {
                 NotificationData notification = new NotificationData(sbn, getKey(sbn));
                 notification.priority = NotificationCompat.PRIORITY_DEFAULT;
 
-                Intent intent = new Intent(NotificationsIconData.ACTION_NOTIFICATION_ADDED);
-                intent.putExtra(NotificationsIconData.EXTRA_NOTIFICATION, notification);
-
-                sendBroadcast(intent);
+                impl.onNotificationAdded(notification.getKey(), notification);
             }
         }
     }

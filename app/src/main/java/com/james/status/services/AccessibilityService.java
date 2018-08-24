@@ -16,7 +16,6 @@ import android.os.Parcelable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.Toast;
 
@@ -25,7 +24,6 @@ import com.james.status.Status;
 import com.james.status.data.AppData;
 import com.james.status.data.NotificationData;
 import com.james.status.data.PreferenceData;
-import com.james.status.data.icon.NotificationsIconData;
 import com.james.status.utils.ColorUtils;
 import com.james.status.utils.StaticUtils;
 
@@ -100,8 +98,9 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                         if (parcelable instanceof Notification) {
                             NotificationData notification = new NotificationData((Notification) parcelable, event.getPackageName().toString());
 
-                            Intent intent = new Intent(NotificationsIconData.ACTION_NOTIFICATION_ADDED);
-                            intent.putExtra(NotificationsIconData.EXTRA_NOTIFICATION, notification);
+                            Intent intent = new Intent(StatusServiceCompat.ACTION_NOTIFICATION_ADDED);
+                            intent.putExtra(StatusServiceCompat.EXTRA_NOTIFICATION, notification);
+                            intent.setClass(this, StatusServiceCompat.class);
                             sendBroadcast(intent);
 
                             notifications.add(notification);
@@ -129,8 +128,8 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
 
                                     if (StaticUtils.shouldUseCompatNotifications(this)) {
                                         for (NotificationData notification : notifications) {
-                                            Intent intent = new Intent(NotificationsIconData.ACTION_NOTIFICATION_REMOVED);
-                                            intent.putExtra(NotificationsIconData.EXTRA_NOTIFICATION, notification);
+                                            Intent intent = new Intent(StatusServiceCompat.ACTION_NOTIFICATION_REMOVED);
+                                            intent.putExtra(StatusServiceCompat.EXTRA_NOTIFICATION, notification);
                                             sendBroadcast(intent);
                                         }
 
@@ -230,7 +229,6 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
 
     @Override
     public void onDestroy() {
-        Log.d("SOMETHING", "destroyed");
         if (volumeReceiver != null) unregisterReceiver(volumeReceiver);
         super.onDestroy();
     }

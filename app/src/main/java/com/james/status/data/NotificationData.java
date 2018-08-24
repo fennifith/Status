@@ -68,9 +68,20 @@ public class NotificationData implements Parcelable {
         if (iconRes == 0 && Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
             iconRes = notification.icon;
 
-        if (iconRes == 0 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            unloadedIcon = extras.getParcelable(NotificationCompat.EXTRA_SMALL_ICON);
-            if (unloadedIcon == null) unloadedIcon = notification.getSmallIcon();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            try {
+                if (iconRes == 0)
+                    iconRes = extras.getInt(NotificationCompat.EXTRA_SMALL_ICON, 0);
+            } catch (Exception ignored) {
+            }
+
+            try {
+                unloadedIcon = extras.getParcelable(NotificationCompat.EXTRA_SMALL_ICON);
+            } catch (Exception ignored) {
+            }
+
+            if (unloadedIcon == null)
+                unloadedIcon = notification.getSmallIcon();
         }
 
         Object parcelable = extras.getParcelable(NotificationCompat.EXTRA_LARGE_ICON);
@@ -170,14 +181,11 @@ public class NotificationData implements Parcelable {
 
             if (drawable != null) {
                 Bitmap bitmap = ImageUtils.drawableToBitmap(drawable);
-                if (bitmap != null) {
+                if (bitmap != null)
                     icon = bitmap;
-                    return bitmap;
-                }
             }
         }
-
-        return null;
+        return icon;
     }
 
     @Nullable

@@ -15,7 +15,6 @@ import android.os.Handler;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 import com.james.status.data.PreferenceData;
@@ -166,6 +165,21 @@ public class StatusView extends View implements IconData.ReDrawListener {
         sortIcons();
     }
 
+    /**
+     * Vaguely hacky method of sending notifications to the NotificationIconData class.
+     * This may be used for other things in the future.
+     *
+     * @param tClass  IconData class to send a message to
+     * @param message the arguments of the message
+     * @param <T>     type of IconData class to send the message to
+     */
+    public <T extends IconData> void sendMessage(Class<T> tClass, Object... message) {
+        for (IconData icon : icons) {
+            if (tClass.isAssignableFrom(icon.getClass()))
+                icon.onMessage(message);
+        }
+    }
+
     private void sortIcons() {
         leftIcons.clear();
         centerIcons.clear();
@@ -190,22 +204,18 @@ public class StatusView extends View implements IconData.ReDrawListener {
 
             switch (icon.getGravity()) {
                 case IconData.LEFT_GRAVITY:
-                    Log.d("StatusView", "left " + icon.getClass().getName());
                     leftIcons.add(icon);
                     break;
                 case IconData.CENTER_GRAVITY:
-                    Log.d("StatusView", "center " + icon.getClass().getName());
                     centerIcons.add(icon);
                     break;
                 case IconData.RIGHT_GRAVITY:
-                    Log.d("StatusView", "right " + icon.getClass().getName());
                     rightIcons.add(icon);
                     break;
             }
         }
 
         postInvalidate();
-        Log.d("StatusView", "sorted icons");
     }
 
     public List<IconData> getIcons() {
@@ -413,11 +423,11 @@ public class StatusView extends View implements IconData.ReDrawListener {
 
         for (int i = 0, x = sidePadding; i < leftIcons.size(); i++) {
             IconData icon = leftIcons.get(i);
-            int width = icon.getWidth(canvas.getHeight(), leftWidth - x);
+            int width = icon.getWidth(canvas.getHeight(), leftWidth - (x - sidePadding));
             if (width > 0) {
                 icon.draw(canvas, x, width);
                 x += width;
-            }
+            } else icon.updateAnimatedValues();
         }
 
         for (int i = 0, x = (canvas.getWidth() / 2) - (centerWidth / 2); i < centerIcons.size(); i++) {
@@ -426,7 +436,7 @@ public class StatusView extends View implements IconData.ReDrawListener {
             if (width > 0) {
                 icon.draw(canvas, x, width);
                 x += width;
-            }
+            } else icon.updateAnimatedValues();
         }
 
         for (int i = 0, x = canvas.getWidth() - sidePadding; i < rightIcons.size(); i++) {
@@ -435,7 +445,7 @@ public class StatusView extends View implements IconData.ReDrawListener {
             if (width > 0) {
                 icon.draw(canvas, x - width, width);
                 x -= width;
-            }
+            } else icon.updateAnimatedValues();
         }
 
         if (isBurnInProtection)
