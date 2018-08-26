@@ -139,7 +139,7 @@ public class GeneralPreferenceFragment extends SimpleFragment implements BasePre
                         ),
                         this
                 ),
-                new BooleanPreferenceData(
+                /*new BooleanPreferenceData( //TODO: re-enable once stuff is fixed
                         getContext(),
                         new BasePreferenceData.Identifier<Boolean>(
                                 PreferenceData.STATUS_NOTIFICATIONS_HEADS_UP,
@@ -148,7 +148,7 @@ public class GeneralPreferenceFragment extends SimpleFragment implements BasePre
                                 BasePreferenceData.Identifier.SectionIdentifier.NOTIFICATIONS
                         ),
                         null
-                ),
+                ),*/
                 new BooleanPreferenceData(
                         getContext(),
                         new BasePreferenceData.Identifier<Boolean>(
