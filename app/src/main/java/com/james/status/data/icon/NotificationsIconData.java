@@ -107,6 +107,9 @@ public class NotificationsIconData extends IconData {
                 float scaledIconSize = iconSize.val() * notification.getScale().val();
                 iconPaint.setAlpha((int) (notification.getScale().val() * 255));
 
+                if (iconSize.isTarget() && iconSize.val() != bitmap.getHeight() && notification.getScale().isTarget() && notification.getScale().val() == 1f)
+                    bitmap = notification.getIcon(iconSize.val());
+
                 Matrix matrix = new Matrix();
                 matrix.postScale(scaledIconSize / bitmap.getHeight(), scaledIconSize / bitmap.getHeight());
                 matrix.postTranslate(x, ((float) canvas.getHeight() - scaledIconSize) / 2);

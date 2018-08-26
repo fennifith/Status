@@ -30,7 +30,7 @@ public class NotificationData implements Parcelable {
     public String category, title, subtitle, packageName, group, key, tag = "";
     public int priority, id, iconRes, color = Color.BLACK;
     private boolean isAlert;
-    private Bitmap icon;
+    private Bitmap icon, scaledIcon;
     private Bitmap largeIcon;
     private Icon unloadedIcon, unloadedLargeIcon;
 
@@ -195,6 +195,16 @@ public class NotificationData implements Parcelable {
         }
     };
 
+    public Bitmap getIcon(float height) {
+        if (icon.getHeight() == Math.round(height))
+            return icon;
+
+        if (icon != null && (scaledIcon == null || scaledIcon.getHeight() != Math.round(height)))
+            scaledIcon = Bitmap.createScaledBitmap(icon, Math.round(height), Math.round(height), true);
+
+        return scaledIcon;
+    }
+
     @Nullable
     public Bitmap getIcon(Context context) {
         if (icon == null) {
@@ -205,8 +215,10 @@ public class NotificationData implements Parcelable {
 
             if (drawable != null) {
                 Bitmap bitmap = ImageUtils.drawableToBitmap(drawable);
-                if (bitmap != null)
+                if (bitmap != null) {
                     icon = bitmap;
+                    scaledIcon = null;
+                }
             }
         }
         return icon;
