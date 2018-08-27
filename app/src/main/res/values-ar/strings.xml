@@ -396,6 +396,8 @@
     <string name="section_notifications">Notifications</string>
     <string name="section_other">Other</string>
     <string name="preference_text_font">Text Font</string>
+    <string name="preference_default_color_icon_dark">Default (Dark) Icon Color</string>
+    <string name="preference_default_color_text_dark">Default (Dark) Text Color</string>
 
     <string-array name="faq">
         <item>
