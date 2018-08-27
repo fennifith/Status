@@ -3,6 +3,7 @@ package com.james.status.fragments;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -20,6 +21,7 @@ import com.james.status.data.preference.BooleanPreferenceData;
 import com.james.status.data.preference.ColorPreferenceData;
 import com.james.status.data.preference.IntegerPreferenceData;
 import com.james.status.dialogs.BackupDialog;
+import com.james.status.services.AccessibilityService;
 import com.james.status.utils.StaticUtils;
 
 import java.util.ArrayList;
@@ -42,6 +44,16 @@ public class GeneralPreferenceFragment extends SimpleFragment {
             StaticUtils.updateStatusService(getContext(), false);
         }
     };
+    private final BasePreferenceData.OnPreferenceChangeListener colorListener = new BasePreferenceData.OnPreferenceChangeListener() {
+        @Override
+        public void onPreferenceChange(Object preference) {
+            if (StaticUtils.isStatusServiceRunning(getContext())) {
+                Intent intent = new Intent(AccessibilityService.ACTION_GET_COLOR);
+                intent.setClass(getContext(), AccessibilityService.class);
+                getContext().startService(intent);
+            }
+        }
+    };
 
     @Nullable
     @Override
@@ -62,7 +74,7 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                                 getString(R.string.preference_bar_color_auto_desc),
                                 BasePreferenceData.Identifier.SectionIdentifier.COLORS
                         ),
-                        null
+                        colorListener
                 ),
                 new ColorPreferenceData(
                         getContext(),
@@ -90,7 +102,7 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                                 getString(R.string.preference_default_color_icon),
                                 BasePreferenceData.Identifier.SectionIdentifier.ICONS
                         ),
-                        null
+                        colorListener
                 ),
                 new BooleanPreferenceData(
                         getContext(),
@@ -100,7 +112,7 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                                 getString(R.string.preference_dark_icons_desc),
                                 BasePreferenceData.Identifier.SectionIdentifier.ICONS
                         ),
-                        recreateListener
+                        colorListener
                 ),
                 new BooleanPreferenceData(
                         getContext(),

@@ -146,7 +146,7 @@ public class StaticUtils {
     }
 
     public static boolean isStatusServiceRunning(Context context) {
-        if ((boolean) PreferenceData.STATUS_ENABLED.getValue(context) && isReady(context)) {
+        if (context != null && (boolean) PreferenceData.STATUS_ENABLED.getValue(context) && isReady(context)) {
             ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
             if (manager != null) {
                 for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {

@@ -58,7 +58,8 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                     case ACTION_GET_COLOR:
                         Intent i = new Intent(StatusServiceImpl.ACTION_UPDATE);
                         i.setClass(this, StatusServiceImpl.getCompatClass(this));
-                        i.putExtra(StatusServiceImpl.EXTRA_COLOR, color);
+                        i.putExtra(StatusServiceImpl.EXTRA_COLOR, PreferenceData.STATUS_COLOR_AUTO.getValue(this) ? color
+                                : (Integer) PreferenceData.STATUS_COLOR.getValue(this));
                         startService(i);
                         break;
                 }
