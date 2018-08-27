@@ -131,4 +131,23 @@
 
     </me.jfenn.attribouter.wedges.LicensesWedge>
 
+    <com.james.status.wedges.IconSourcesWedge>
+
+        <com.james.status.wedges.IconSourceWedge
+            name="Google Design"
+            description="@string/google_icons_desc"
+            url="https://material.io/icons/" />
+
+        <com.james.status.wedges.IconSourceWedge
+            name="Material Design Icons (.com)"
+            description="@string/md_icons_desc"
+            url="https://github.com/Templarian/MaterialDesign" />
+
+        <com.james.status.wedges.IconSourceWedge
+            name="Icons8"
+            description="@string/icons8_icons_desc"
+            url="https://icons8.com/" />
+
+    </com.james.status.wedges.IconSourcesWedge>
+
 </about>
