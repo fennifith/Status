@@ -25,7 +25,7 @@ import com.james.status.data.AppData;
 import com.james.status.dialogs.ColorPickerDialog;
 import com.james.status.dialogs.PreferenceDialog;
 import com.james.status.utils.ColorUtils;
-import com.james.status.views.ColorImageView;
+import com.james.status.views.CircleColorView;
 import com.james.status.views.CustomImageView;
 
 import java.util.List;
@@ -244,7 +244,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
         View v, titleBar;
         TextView name, packageName;
         CustomImageView icon;
-        ColorImageView colorView;
+        CircleColorView colorView;
         View launch;
         View color;
         View notifications;

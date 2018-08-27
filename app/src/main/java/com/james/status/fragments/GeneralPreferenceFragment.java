@@ -103,7 +103,7 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                                 BasePreferenceData.Identifier.SectionIdentifier.ICONS
                         ),
                         updateListener
-                ),
+                ).withAlpha(true),
                 new ColorPreferenceData(
                         getContext(),
                         new BasePreferenceData.Identifier<Integer>(
@@ -112,7 +112,7 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                                 BasePreferenceData.Identifier.SectionIdentifier.ICONS
                         ),
                         updateListener
-                ),
+                ).withAlpha(true),
                 new BooleanPreferenceData(
                         getContext(),
                         new BasePreferenceData.Identifier<Boolean>(
@@ -137,7 +137,7 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                                 BasePreferenceData.Identifier.SectionIdentifier.ICONS
                         ),
                         updateListener
-                ).withVisibility(new BasePreferenceData.VisibilityInterface() {
+                ).withAlpha(true).withVisibility(new BasePreferenceData.VisibilityInterface() {
                     @Override
                     public PreferenceData getDependent() {
                         return PreferenceData.STATUS_DARK_ICONS;
@@ -156,7 +156,7 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                                 BasePreferenceData.Identifier.SectionIdentifier.ICONS
                         ),
                         updateListener
-                ).withVisibility(new BasePreferenceData.VisibilityInterface() {
+                ).withAlpha(true).withVisibility(new BasePreferenceData.VisibilityInterface() {
                     @Override
                     public PreferenceData getDependent() {
                         return PreferenceData.STATUS_DARK_ICONS;

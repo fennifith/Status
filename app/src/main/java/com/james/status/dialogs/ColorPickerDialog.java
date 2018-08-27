@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.ColorInt;
@@ -27,8 +26,8 @@ import com.james.status.Status;
 import com.james.status.activities.ImagePickerActivity;
 import com.james.status.utils.ColorUtils;
 import com.james.status.utils.StaticUtils;
-import com.james.status.views.ColorImageView;
-import com.james.status.views.CustomImageView;
+import com.james.status.views.CircleColorView;
+import com.james.status.views.ColorView;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -40,13 +39,13 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> implements Stat
     private TextWatcher textWatcher;
     private List<Integer> presetColors;
 
-    private CustomImageView colorImage;
+    private ColorView colorImage;
     private AppCompatEditText colorHex;
-    private TextView redInt, greenInt, blueInt;
-    private AppCompatSeekBar red, green, blue;
+    private TextView redInt, greenInt, blueInt, alphaInt;
+    private AppCompatSeekBar red, green, blue, alpha;
     private View reset;
 
-    private boolean isTrackingTouch;
+    private boolean isAlpha, isTrackingTouch;
 
     public ColorPickerDialog(Context context) {
         super(context);
@@ -60,15 +59,20 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> implements Stat
         status = (Status) getContext().getApplicationContext();
         status.addListener(this);
 
-        colorImage = (CustomImageView) findViewById(R.id.color);
-        colorHex = (AppCompatEditText) findViewById(R.id.colorHex);
-        red = (AppCompatSeekBar) findViewById(R.id.red);
-        redInt = (TextView) findViewById(R.id.redInt);
-        green = (AppCompatSeekBar) findViewById(R.id.green);
-        greenInt = (TextView) findViewById(R.id.greenInt);
-        blue = (AppCompatSeekBar) findViewById(R.id.blue);
-        blueInt = (TextView) findViewById(R.id.blueInt);
+        colorImage = findViewById(R.id.color);
+        colorHex = findViewById(R.id.colorHex);
+        red = findViewById(R.id.red);
+        redInt = findViewById(R.id.redInt);
+        green = findViewById(R.id.green);
+        greenInt = findViewById(R.id.greenInt);
+        blue = findViewById(R.id.blue);
+        blueInt = findViewById(R.id.blueInt);
+        alpha = findViewById(R.id.alpha);
+        alphaInt = findViewById(R.id.alphaInt);
         reset = findViewById(R.id.reset);
+
+        if (!isAlpha)
+            findViewById(R.id.alphaView).setVisibility(View.GONE);
 
         textWatcher = new TextWatcher() {
             @Override
@@ -96,7 +100,7 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> implements Stat
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 int color = getPreference();
-                color = Color.argb(255, i, Color.green(color), Color.blue(color));
+                color = Color.argb(isAlpha ? Color.alpha(color) : 255, i, Color.green(color), Color.blue(color));
                 setColor(color, false);
                 setPreference(color);
             }
@@ -116,7 +120,7 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> implements Stat
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 int color = getPreference();
-                color = Color.argb(255, Color.red(color), i, Color.blue(color));
+                color = Color.argb(isAlpha ? Color.alpha(color) : 255, Color.red(color), i, Color.blue(color));
                 setColor(color, false);
                 setPreference(color);
             }
@@ -136,7 +140,27 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> implements Stat
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 int color = getPreference();
-                color = Color.argb(255, Color.red(color), Color.green(color), i);
+                color = Color.argb(isAlpha ? Color.alpha(color) : 255, Color.red(color), Color.green(color), i);
+                setColor(color, false);
+                setPreference(color);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                isTrackingTouch = true;
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                isTrackingTouch = false;
+            }
+        });
+
+        alpha.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                int color = getPreference();
+                color = Color.argb(isAlpha ? i : 255, Color.red(color), Color.green(color), Color.blue(color));
                 setColor(color, false);
                 setPreference(color);
             }
@@ -154,7 +178,7 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> implements Stat
 
         setColor(getPreference(), false);
 
-        LinearLayout presetLayout = (LinearLayout) findViewById(R.id.colors);
+        LinearLayout presetLayout = findViewById(R.id.colors);
         LayoutInflater inflater = LayoutInflater.from(getContext());
 
         if (presetColors == null) presetColors = new ArrayList<>();
@@ -170,7 +194,7 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> implements Stat
         for (int preset : colors) {
             View v = inflater.inflate(R.layout.item_color, presetLayout, false);
 
-            ColorImageView colorView = v.findViewById(R.id.color);
+            CircleColorView colorView = v.findViewById(R.id.color);
             colorView.setColor(preset);
             colorView.setTag(preset);
             colorView.setOnClickListener(new View.OnClickListener() {
@@ -233,6 +257,7 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> implements Stat
                     red.setProgress(Color.red(color));
                     green.setProgress(Color.green(color));
                     blue.setProgress(Color.blue(color));
+                    alpha.setProgress(Color.alpha(color));
                 }
             });
             animator.addListener(new Animator.AnimatorListener() {
@@ -256,19 +281,26 @@ public class ColorPickerDialog extends PreferenceDialog<Integer> implements Stat
             });
             animator.start();
         } else {
-            colorImage.setImageDrawable(new ColorDrawable(color));
+            colorImage.setColor(color);
             colorHex.removeTextChangedListener(textWatcher);
-            colorHex.setText(String.format("#%06X", (0xFFFFFF & color)));
+            colorHex.setText(String.format("#%06X", isAlpha ? color : (0xFFFFFF & color)));
             colorHex.setTextColor(ColorUtils.isColorDark(color) ? Color.WHITE : Color.BLACK);
             colorHex.addTextChangedListener(textWatcher);
             redInt.setText(String.valueOf(Color.red(color)));
             greenInt.setText(String.valueOf(Color.green(color)));
             blueInt.setText(String.valueOf(Color.blue(color)));
+            alphaInt.setText(String.valueOf(Color.alpha(color)));
 
             if (red.getProgress() != Color.red(color)) red.setProgress(Color.red(color));
             if (green.getProgress() != Color.green(color)) green.setProgress(Color.green(color));
             if (blue.getProgress() != Color.blue(color)) blue.setProgress(Color.blue(color));
+            if (alpha.getProgress() != Color.alpha(color)) alpha.setProgress(Color.alpha(color));
         }
+    }
+
+    public ColorPickerDialog withAlpha(boolean isAlpha) {
+        this.isAlpha = isAlpha;
+        return this;
     }
 
     public ColorPickerDialog setPresetColors(List<Integer> presetColors) {

@@ -372,15 +372,16 @@ public abstract class IconData<T extends IconUpdateReceiver> {
         iconAlpha.next(isAnimations);
 
         int drawnIconColor = iconColor.val();
+        float drawnIconAlpha = ((float) iconAlpha.val() / 255) * ((float) Color.alpha(drawnIconColor) / 255);
         int iconColor = Color.rgb(
-                StaticUtils.getMergedValue(Color.red(drawnIconColor), Color.red(backgroundColor), (float) iconAlpha.val() / 255),
-                StaticUtils.getMergedValue(Color.green(drawnIconColor), Color.green(backgroundColor), (float) iconAlpha.val() / 255),
-                StaticUtils.getMergedValue(Color.blue(drawnIconColor), Color.blue(backgroundColor), (float) iconAlpha.val() / 255)
+                StaticUtils.getMergedValue(Color.red(drawnIconColor), Color.red(backgroundColor), drawnIconAlpha),
+                StaticUtils.getMergedValue(Color.green(drawnIconColor), Color.green(backgroundColor), drawnIconAlpha),
+                StaticUtils.getMergedValue(Color.blue(drawnIconColor), Color.blue(backgroundColor), drawnIconAlpha)
         );
         iconPaint.setColor(iconColor);
         iconPaint.setColorFilter(new PorterDuffColorFilter(iconColor, PorterDuff.Mode.SRC_IN));
         textPaint.setColor(textColor.val());
-        textPaint.setAlpha(textAlpha.val());
+        textPaint.setAlpha((int) (((float) textAlpha.val() / 255) * ((float) Color.alpha(textColor.val()) / 255) * 255));
         textPaint.setTextSize(textSize.val());
         textPaint.setTypeface(typeface);
     }
