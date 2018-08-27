@@ -7,7 +7,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
-import android.support.v7.app.NotificationCompat;
+import android.support.v4.app.NotificationCompat;
 
 import com.james.status.data.AppData;
 import com.james.status.data.NotificationData;

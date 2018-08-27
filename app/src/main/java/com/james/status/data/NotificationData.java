@@ -19,8 +19,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.service.notification.StatusBarNotification;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.res.ResourcesCompat;
-import android.support.v7.app.NotificationCompat;
 
 import com.james.status.utils.AnimatedFloat;
 import com.james.status.utils.ImageUtils;
