@@ -20,6 +20,7 @@ import android.view.View;
 import com.james.status.data.PreferenceData;
 import com.james.status.data.icon.IconData;
 import com.james.status.utils.AnimatedColor;
+import com.james.status.utils.AnimatedInteger;
 import com.james.status.utils.ColorUtils;
 import com.james.status.utils.ImageUtils;
 import com.james.status.utils.StaticUtils;
@@ -52,7 +53,7 @@ public class StatusView extends View implements IconData.ReDrawListener {
     private boolean isSystemShowing;
 
     private boolean isTransparentHome;
-    private int sidePadding;
+    private AnimatedInteger sidePadding;
     private boolean isAnimations;
 
     private List<IconData> icons, leftIcons, centerIcons, rightIcons;
@@ -143,7 +144,12 @@ public class StatusView extends View implements IconData.ReDrawListener {
         isAnimations = PreferenceData.STATUS_ICON_ANIMATIONS.getValue(getContext());
         backgroundColor.setDefault((int) PreferenceData.STATUS_COLOR.getValue(getContext()));
         isTransparentHome = PreferenceData.STATUS_HOME_TRANSPARENT.getValue(getContext());
-        sidePadding = (int) StaticUtils.getPixelsFromDp((int) PreferenceData.STATUS_SIDE_PADDING.getValue(getContext()));
+
+        int sidePaddingInt = (int) StaticUtils.getPixelsFromDp((int) PreferenceData.STATUS_SIDE_PADDING.getValue(getContext()));
+        if (sidePadding == null)
+            sidePadding = new AnimatedInteger(sidePaddingInt);
+        else sidePadding.to(sidePaddingInt);
+
         isBurnInProtection = PreferenceData.STATUS_BURNIN_PROTECTION.getValue(getContext());
 
         for (IconData icon : icons)
@@ -155,6 +161,7 @@ public class StatusView extends View implements IconData.ReDrawListener {
         }
 
         sortIcons();
+        postInvalidate();
     }
 
     public void setIcons(List<IconData> icons) {
@@ -375,11 +382,14 @@ public class StatusView extends View implements IconData.ReDrawListener {
                 return true;
         }
 
-        return !backgroundColor.isTarget() || needsBackgroundImageDraw;
+        return needsBackgroundImageDraw
+                || !backgroundColor.isTarget()
+                || !sidePadding.isTarget();
     }
 
     private void updateAnimatedValues() {
         backgroundColor.next(isAnimations);
+        sidePadding.next(isAnimations);
     }
 
     @Override
@@ -411,19 +421,19 @@ public class StatusView extends View implements IconData.ReDrawListener {
             rightWidth += width > 0 ? width : 0;
         }
 
-        centerWidth = Math.min(centerWidth, canvas.getWidth() - (2 * sidePadding));
-        leftWidth = Math.min(leftWidth, (canvas.getWidth() / 2) - (centerWidth / 2) - sidePadding);
-        rightWidth = Math.min(rightWidth, (canvas.getWidth() / 2) - (centerWidth / 2) - sidePadding);
+        centerWidth = Math.min(centerWidth, canvas.getWidth() - (2 * sidePadding.val()));
+        leftWidth = Math.min(leftWidth, (canvas.getWidth() / 2) - (centerWidth / 2) - sidePadding.val());
+        rightWidth = Math.min(rightWidth, (canvas.getWidth() / 2) - (centerWidth / 2) - sidePadding.val());
 
         if (leftWidth < 0 || rightWidth < 0) {
             leftWidth = 0;
             rightWidth = 0;
-            centerWidth = canvas.getWidth() - (2 * sidePadding);
+            centerWidth = canvas.getWidth() - (2 * sidePadding.val());
         }
 
-        for (int i = 0, x = sidePadding; i < leftIcons.size(); i++) {
+        for (int i = 0, x = sidePadding.val(); i < leftIcons.size(); i++) {
             IconData icon = leftIcons.get(i);
-            int width = icon.getWidth(canvas.getHeight(), leftWidth - (x - sidePadding));
+            int width = icon.getWidth(canvas.getHeight(), leftWidth - (x - sidePadding.val()));
             if (width > 0) {
                 icon.draw(canvas, x, width);
                 x += width;
@@ -439,7 +449,7 @@ public class StatusView extends View implements IconData.ReDrawListener {
             } else icon.updateAnimatedValues();
         }
 
-        for (int i = 0, x = canvas.getWidth() - sidePadding; i < rightIcons.size(); i++) {
+        for (int i = 0, x = canvas.getWidth() - sidePadding.val(); i < rightIcons.size(); i++) {
             IconData icon = rightIcons.get(i);
             int width = icon.getWidth(canvas.getHeight(), rightWidth - x);
             if (width > 0) {

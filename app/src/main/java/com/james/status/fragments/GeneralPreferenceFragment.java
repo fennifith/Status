@@ -26,9 +26,22 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class GeneralPreferenceFragment extends SimpleFragment implements BasePreferenceData.OnPreferenceChangeListener {
+public class GeneralPreferenceFragment extends SimpleFragment {
 
     private PreferenceSectionAdapter adapter;
+
+    private final BasePreferenceData.OnPreferenceChangeListener updateListener = new BasePreferenceData.OnPreferenceChangeListener() {
+        @Override
+        public void onPreferenceChange(Object preference) {
+            StaticUtils.updateStatusService(getContext(), true);
+        }
+    };
+    private final BasePreferenceData.OnPreferenceChangeListener recreateListener = new BasePreferenceData.OnPreferenceChangeListener() {
+        @Override
+        public void onPreferenceChange(Object preference) {
+            StaticUtils.updateStatusService(getContext(), false);
+        }
+    };
 
     @Nullable
     @Override
@@ -49,7 +62,7 @@ public class GeneralPreferenceFragment extends SimpleFragment implements BasePre
                                 getString(R.string.preference_bar_color_auto_desc),
                                 BasePreferenceData.Identifier.SectionIdentifier.COLORS
                         ),
-                        this
+                        recreateListener
                 ),
                 new ColorPreferenceData(
                         getContext(),
@@ -58,7 +71,7 @@ public class GeneralPreferenceFragment extends SimpleFragment implements BasePre
                                 getString(R.string.preference_bar_color_chooser),
                                 BasePreferenceData.Identifier.SectionIdentifier.COLORS
                         ),
-                        this
+                        recreateListener
                 ),
                 new BooleanPreferenceData(
                         getContext(),
@@ -87,7 +100,7 @@ public class GeneralPreferenceFragment extends SimpleFragment implements BasePre
                                 getString(R.string.preference_dark_icons_desc),
                                 BasePreferenceData.Identifier.SectionIdentifier.ICONS
                         ),
-                        this
+                        recreateListener
                 ),
                 new BooleanPreferenceData(
                         getContext(),
@@ -97,7 +110,7 @@ public class GeneralPreferenceFragment extends SimpleFragment implements BasePre
                                 getString(R.string.preference_prevent_icon_overlap_desc),
                                 BasePreferenceData.Identifier.SectionIdentifier.ICONS
                         ),
-                        this
+                        recreateListener
                 ),
                 new BooleanPreferenceData(
                         getContext(),
@@ -107,9 +120,9 @@ public class GeneralPreferenceFragment extends SimpleFragment implements BasePre
                                 getString(R.string.preference_tinted_icons_desc),
                                 BasePreferenceData.Identifier.SectionIdentifier.ICONS
                         ),
-                        this
+                        recreateListener
                 ),
-                new BooleanPreferenceData(
+                /*new BooleanPreferenceData(
                         getContext(),
                         new BasePreferenceData.Identifier<Boolean>(
                                 PreferenceData.STATUS_BUMP_MODE,
@@ -117,8 +130,8 @@ public class GeneralPreferenceFragment extends SimpleFragment implements BasePre
                                 getString(R.string.preference_bump_mode_desc),
                                 BasePreferenceData.Identifier.SectionIdentifier.ICONS
                         ),
-                        this
-                ),
+                        recreateListener
+                ),*/
                 new BooleanPreferenceData(
                         getContext(),
                         new BasePreferenceData.Identifier<Boolean>(
@@ -127,7 +140,7 @@ public class GeneralPreferenceFragment extends SimpleFragment implements BasePre
                                 getString(R.string.preference_background_animations_desc),
                                 BasePreferenceData.Identifier.SectionIdentifier.ANIMATIONS
                         ),
-                        this
+                        recreateListener
                 ),
                 new BooleanPreferenceData(
                         getContext(),
@@ -137,7 +150,7 @@ public class GeneralPreferenceFragment extends SimpleFragment implements BasePre
                                 getString(R.string.preference_icon_animations_desc),
                                 BasePreferenceData.Identifier.SectionIdentifier.ANIMATIONS
                         ),
-                        this
+                        recreateListener
                 ),
                 /*new BooleanPreferenceData( //TODO: re-enable once stuff is fixed
                         getContext(),
@@ -157,7 +170,7 @@ public class GeneralPreferenceFragment extends SimpleFragment implements BasePre
                                 getString(R.string.preference_persistent_notification_desc),
                                 BasePreferenceData.Identifier.SectionIdentifier.OTHER
                         ),
-                        this
+                        recreateListener
                 )));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -170,7 +183,7 @@ public class GeneralPreferenceFragment extends SimpleFragment implements BasePre
                                     getString(R.string.preference_ignore_permission_checking_desc),
                                     BasePreferenceData.Identifier.SectionIdentifier.OTHER
                             ),
-                            this
+                            recreateListener
                     )
             );
         }
@@ -187,7 +200,7 @@ public class GeneralPreferenceFragment extends SimpleFragment implements BasePre
                         getString(R.string.unit_px),
                         0,
                         Integer.MAX_VALUE,
-                        this
+                        recreateListener
                 ),
                 new BooleanPreferenceData(
                         getContext(),
@@ -197,7 +210,7 @@ public class GeneralPreferenceFragment extends SimpleFragment implements BasePre
                                 getString(R.string.preference_transparent_mode_desc),
                                 BasePreferenceData.Identifier.SectionIdentifier.OTHER
                         ),
-                        this
+                        recreateListener
                 ),
                 new IntegerPreferenceData(
                         getContext(),
@@ -210,7 +223,7 @@ public class GeneralPreferenceFragment extends SimpleFragment implements BasePre
                         getString(R.string.unit_dp),
                         0,
                         100,
-                        this
+                        updateListener
                 ),
                 new BooleanPreferenceData(
                         getContext(),
@@ -220,7 +233,7 @@ public class GeneralPreferenceFragment extends SimpleFragment implements BasePre
                                 getString(R.string.preference_burnin_protection_desc),
                                 BasePreferenceData.Identifier.SectionIdentifier.OTHER
                         ),
-                        this
+                        recreateListener
                 ),
                 new BasePreferenceData(
                         getContext(),
@@ -275,10 +288,5 @@ public class GeneralPreferenceFragment extends SimpleFragment implements BasePre
     @Override
     public String getTitle(Context context) {
         return context.getString(R.string.tab_settings);
-    }
-
-    @Override
-    public void onPreferenceChange(Object preference) {
-        StaticUtils.updateStatusService(getContext(), false);
     }
 }
