@@ -71,7 +71,7 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                                 getString(R.string.preference_bar_color_chooser),
                                 BasePreferenceData.Identifier.SectionIdentifier.COLORS
                         ),
-                        recreateListener
+                        updateListener
                 ),
                 new BooleanPreferenceData(
                         getContext(),

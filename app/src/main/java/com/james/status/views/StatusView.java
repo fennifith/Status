@@ -155,6 +155,10 @@ public class StatusView extends View implements IconData.ReDrawListener {
         for (IconData icon : icons)
             icon.init();
 
+        if (backgroundImage != null)
+            setTransparent();
+        else setColor(backgroundColor.getTarget());
+
         if (isBurnInProtection && !isBurnInProtectionStarted) {
             handler.post(burnInRunnable);
             isBurnInProtectionStarted = true;
@@ -343,29 +347,30 @@ public class StatusView extends View implements IconData.ReDrawListener {
     }
 
     public void setTransparent() {
-        Drawable backgroundDrawable;
-        WallpaperInfo wallpaperInfo = wallpaperManager.getWallpaperInfo();
-        if (wallpaperInfo != null)
-            backgroundDrawable = wallpaperInfo.loadThumbnail(getContext().getPackageManager());
-        else {
-            try {
-                backgroundDrawable = wallpaperManager.getDrawable();
-            } catch (SecurityException e) {
-                setColor(getDefaultColor());
-                return;
+        if (backgroundImage == null) {
+            Drawable backgroundDrawable;
+            WallpaperInfo wallpaperInfo = wallpaperManager.getWallpaperInfo();
+            if (wallpaperInfo != null)
+                backgroundDrawable = wallpaperInfo.loadThumbnail(getContext().getPackageManager());
+            else {
+                try {
+                    backgroundDrawable = wallpaperManager.getDrawable();
+                } catch (SecurityException e) {
+                    setColor(getDefaultColor());
+                    return;
+                }
             }
+
+            backgroundImage = ImageUtils.cropBitmapToBar(getContext(), ImageUtils.drawableToBitmap(backgroundDrawable));
         }
 
-        Bitmap background = ImageUtils.cropBitmapToBar(getContext(), ImageUtils.drawableToBitmap(backgroundDrawable));
-
-        if (background != null) {
-            int color = ColorUtils.getAverageColor(background);
+        if (backgroundImage != null) {
+            int color = ColorUtils.getAverageColor(backgroundImage);
 
             setColor(color);
-            if (isTransparentHome) {
-                backgroundImage = background;
+            if (isTransparentHome)
                 needsBackgroundImageDraw = true;
-            }
+            else backgroundImage = null;
         } else setColor(backgroundColor.getDefault());
 
         postInvalidate();
