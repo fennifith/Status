@@ -160,6 +160,13 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
         this.icons.addAll(originalIcons);
     }
 
+    public void notifyIconsChanged(IconData... icons) {
+        for (IconData icon : icons) {
+            if (this.icons.contains(icon))
+                notifyItemChanged(this.icons.indexOf(icon));
+        }
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         View v;
         AppCompatCheckBox checkBox;

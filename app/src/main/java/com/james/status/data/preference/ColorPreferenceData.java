@@ -1,7 +1,8 @@
 package com.james.status.data.preference;
 
-import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,17 +10,15 @@ import android.view.ViewGroup;
 import com.james.status.R;
 import com.james.status.dialogs.ColorPickerDialog;
 import com.james.status.dialogs.PreferenceDialog;
-import com.james.status.views.CircleColorView;
+import com.james.status.views.ColorView;
 
 public class ColorPreferenceData extends BasePreferenceData<Integer> {
 
-    private int value;
+    private Integer value;
     private boolean isAlpha;
 
     public ColorPreferenceData(Context context, Identifier<Integer> identifier, OnPreferenceChangeListener<Integer> listener) {
         super(context, identifier, listener);
-
-        value = identifier.getPreferenceValue(context);
     }
 
     public ColorPreferenceData withAlpha(boolean isAlpha) {
@@ -35,16 +34,29 @@ public class ColorPreferenceData extends BasePreferenceData<Integer> {
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
-        ((CircleColorView) holder.v.findViewById(R.id.color)).setColor(value);
+        value = getIdentifier().getPreferenceValue(getContext());
+        ColorView colorView = holder.v.findViewById(R.id.color);
+        if (value != null && !value.equals(getNullValue())) {
+            colorView.setVisibility(View.VISIBLE);
+            colorView.setColor(value);
+        } else colorView.setVisibility(View.GONE);
     }
 
     @Override
     public void onClick(final View v) {
-        Dialog dialog = new ColorPickerDialog(getContext()).withAlpha(isAlpha).setPreference(value).setDefaultPreference((int) getIdentifier().getPreference().getDefaultValue()).setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
+        ColorPickerDialog dialog = new ColorPickerDialog(getContext()).withAlpha(isAlpha);
+
+        dialog.setPreference(value != null && !value.equals(getNullValue()) ? value : Color.BLACK);
+
+        Integer defaultValue = getIdentifier().getPreference().getDefaultValue();
+        if (defaultValue != null)
+            dialog.setDefaultPreference(defaultValue);
+
+        dialog.setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
             @Override
             public void onPreference(PreferenceDialog dialog, Integer color) {
                 value = color;
-                ((CircleColorView) v.findViewById(R.id.color)).setColor(color);
+                onBindViewHolder(new ViewHolder(v), -1);
 
                 getIdentifier().setPreferenceValue(getContext(), color);
                 onPreferenceChange(color);
@@ -55,8 +67,14 @@ public class ColorPreferenceData extends BasePreferenceData<Integer> {
             }
         });
 
-        dialog.setTitle(getIdentifier().getTitle());
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                onBindViewHolder(new ViewHolder(v), -1);
+            }
+        });
 
+        dialog.setTitle(getIdentifier().getTitle());
         dialog.show();
     }
 }

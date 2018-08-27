@@ -18,6 +18,7 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 
 import com.james.status.R;
+import com.james.status.Status;
 import com.james.status.data.IconStyleData;
 import com.james.status.data.PreferenceData;
 import com.james.status.data.preference.BasePreferenceData;
@@ -107,13 +108,15 @@ public abstract class IconData<T extends IconUpdateReceiver> {
     }
 
     private void init(boolean isFirstInit) {
-        iconColor.setDefault((int) PreferenceData.ICON_ICON_COLOR.getSpecificOverriddenValue(getContext(),
+        iconColor.setDefault((int) PreferenceData.ICON_ICON_COLOR_LIGHT.getSpecificOverriddenValue(getContext(),
                 PreferenceData.STATUS_ICON_COLOR.getValue(getContext()), getIdentifierArgs()));
-        defaultIconDarkColor = PreferenceData.STATUS_DARK_ICON_COLOR.getValue(getContext());
+        defaultIconDarkColor = (int) PreferenceData.ICON_ICON_COLOR_DARK.getSpecificOverriddenValue(getContext(),
+                PreferenceData.STATUS_DARK_ICON_COLOR.getValue(getContext()), getIdentifierArgs());
 
-        textColor.setDefault((int) PreferenceData.ICON_TEXT_COLOR.getSpecificOverriddenValue(getContext(),
+        textColor.setDefault((int) PreferenceData.ICON_TEXT_COLOR_LIGHT.getSpecificOverriddenValue(getContext(),
                 PreferenceData.STATUS_ICON_TEXT_COLOR.getValue(getContext()), getIdentifierArgs()));
-        defaultTextDarkColor = PreferenceData.STATUS_DARK_ICON_TEXT_COLOR.getValue(getContext());
+        defaultTextDarkColor = (int) PreferenceData.ICON_TEXT_COLOR_DARK.getSpecificOverriddenValue(getContext(),
+                PreferenceData.STATUS_DARK_ICON_TEXT_COLOR.getValue(getContext()), getIdentifierArgs());
 
         iconSize.setDefault((int) StaticUtils.getPixelsFromDp((int) PreferenceData.ICON_ICON_SCALE.getSpecificValue(getContext(), getIdentifierArgs())));
         iconOffsetX.to((int) PreferenceData.ICON_ICON_OFFSET_X.getSpecificValue(getContext(), getIdentifierArgs()));
@@ -272,11 +275,6 @@ public abstract class IconData<T extends IconUpdateReceiver> {
 
     public final float getTextSize() {
         return (float) (int) PreferenceData.ICON_TEXT_SIZE.getSpecificValue(getContext(), getIdentifierArgs());
-    }
-
-    @ColorInt
-    public final Integer getTextColor() {
-        return PreferenceData.ICON_TEXT_COLOR.getSpecificValue(getContext(), getIdentifierArgs());
     }
 
     public final int getPosition() {
@@ -479,6 +477,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                         @Override
                         public void onPreferenceChange(Boolean preference) {
                             StaticUtils.updateStatusService(getContext(), true);
+                            ((Status) getContext().getApplicationContext()).onIconPreferenceChanged(IconData.this);
                         }
                     }
             ));
@@ -496,6 +495,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                         @Override
                         public void onPreferenceChange(Boolean preference) {
                             StaticUtils.updateStatusService(getContext(), true);
+                            ((Status) getContext().getApplicationContext()).onIconPreferenceChanged(IconData.this);
                         }
                     }
             ));
@@ -549,6 +549,38 @@ public abstract class IconData<T extends IconUpdateReceiver> {
         ));
 
         if (hasIcon()) {
+            preferences.add(new ColorPreferenceData(
+                    getContext(),
+                    new BasePreferenceData.Identifier<Integer>(
+                            PreferenceData.ICON_ICON_COLOR_LIGHT,
+                            getContext().getString(R.string.preference_icon_color_light),
+                            null,
+                            getIdentifierArgs()
+                    ),
+                    new BasePreferenceData.OnPreferenceChangeListener<Integer>() {
+                        @Override
+                        public void onPreferenceChange(Integer preference) {
+                            StaticUtils.updateStatusService(getContext(), true);
+                        }
+                    }
+            ).withAlpha(true).withNullable(true));
+
+            preferences.add(new ColorPreferenceData(
+                    getContext(),
+                    new BasePreferenceData.Identifier<Integer>(
+                            PreferenceData.ICON_ICON_COLOR_DARK,
+                            getContext().getString(R.string.preference_icon_color_dark),
+                            null,
+                            getIdentifierArgs()
+                    ),
+                    new BasePreferenceData.OnPreferenceChangeListener<Integer>() {
+                        @Override
+                        public void onPreferenceChange(Integer preference) {
+                            StaticUtils.updateStatusService(getContext(), true);
+                        }
+                    }
+            ).withAlpha(true).withNullable(true));
+
             preferences.add(new IntegerPreferenceData(
                     getContext(),
                     new BasePreferenceData.Identifier<Integer>(
@@ -590,8 +622,9 @@ public abstract class IconData<T extends IconUpdateReceiver> {
             preferences.add(new ColorPreferenceData(
                     getContext(),
                     new BasePreferenceData.Identifier<Integer>(
-                            PreferenceData.ICON_TEXT_COLOR,
-                            getContext().getString(R.string.preference_text_color),
+                            PreferenceData.ICON_TEXT_COLOR_LIGHT,
+                            getContext().getString(R.string.preference_text_color_light),
+                            null,
                             getIdentifierArgs()
                     ),
                     new BasePreferenceData.OnPreferenceChangeListener<Integer>() {
@@ -600,7 +633,23 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                             StaticUtils.updateStatusService(getContext(), true);
                         }
                     }
-            ));
+            ).withAlpha(true).withNullable(true));
+
+            preferences.add(new ColorPreferenceData(
+                    getContext(),
+                    new BasePreferenceData.Identifier<Integer>(
+                            PreferenceData.ICON_TEXT_COLOR_DARK,
+                            getContext().getString(R.string.preference_text_color_dark),
+                            null,
+                            getIdentifierArgs()
+                    ),
+                    new BasePreferenceData.OnPreferenceChangeListener<Integer>() {
+                        @Override
+                        public void onPreferenceChange(Integer preference) {
+                            StaticUtils.updateStatusService(getContext(), true);
+                        }
+                    }
+            ).withAlpha(true).withNullable(true));
 
             preferences.add(new FontPreferenceData(
                     getContext(),

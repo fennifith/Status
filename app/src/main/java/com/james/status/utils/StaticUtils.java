@@ -20,7 +20,6 @@ import android.util.Log;
 import android.util.TypedValue;
 
 import com.james.status.BuildConfig;
-import com.james.status.Status;
 import com.james.status.activities.StartActivity;
 import com.james.status.data.PreferenceData;
 import com.james.status.data.icon.IconData;
@@ -176,8 +175,6 @@ public class StaticUtils {
             intent.putExtra(StatusServiceImpl.EXTRA_KEEP_OLD, shouldKeepIcons);
             context.startService(intent);
         }
-
-        ((Status) context.getApplicationContext()).onPreferenceChanged();
     }
 
     public static boolean isAccessibilityServiceRunning(Context context) {

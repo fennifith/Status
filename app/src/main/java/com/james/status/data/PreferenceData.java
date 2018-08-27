@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -51,11 +52,13 @@ public enum PreferenceData {
     ICON_TEXT_VISIBILITY("%1$s/TEXT_VISIBILITY", false),
     ICON_TEXT_FORMAT("%1$s/TEXT_FORMAT", "h:mm a"),
     ICON_TEXT_SIZE("%1$s/TEXT_SIZE", 14),
-    ICON_TEXT_COLOR("%1$s/TEXT_COLOR", Color.WHITE),
+    ICON_TEXT_COLOR_LIGHT("%1$s/TEXT_COLOR_LIGHT", 0),
+    ICON_TEXT_COLOR_DARK("%1$s/TEXT_COLOR_DARK", 0),
     ICON_TEXT_TYPEFACE("%1$s/TEXT_TYPEFACE", ""),
     ICON_TEXT_EFFECT("%1$s/TEXT_EFFECT", Typeface.BOLD),
     ICON_ICON_VISIBILITY("%1$s/ICON_VISIBILITY", true),
-    ICON_ICON_COLOR("%1$s/ICON_COLOR", Color.WHITE),
+    ICON_ICON_COLOR_LIGHT("%1$s/ICON_COLOR_LIGHT", 0),
+    ICON_ICON_COLOR_DARK("%1$s/ICON_COLOR_DARK", 0),
     ICON_ICON_STYLE("%1$s/ICON_STYLE", ""),
     ICON_ICON_STYLE_NAMES("%1$s/ICON_STYLE_NAMES", new String[]{}),
     ICON_ICON_PADDING("%1$s/ICON_PADDING", 2),
@@ -139,15 +142,18 @@ public enum PreferenceData {
         } else if (prefs.contains(name)) {
             try {
                 if (type instanceof Boolean)
-                    return (T) new Boolean(prefs.getBoolean(name, (Boolean) defaultValue));
+                    return (T) new Boolean(prefs.getBoolean(name, defaultValue != null ? (Boolean) defaultValue : false));
                 else if (type instanceof Integer)
-                    return (T) new Integer(prefs.getInt(name, (Integer) defaultValue));
+                    return (T) new Integer(prefs.getInt(name, defaultValue != null ? (Integer) defaultValue : -1));
                 else if (type instanceof String)
-                    return (T) prefs.getString(name, (String) defaultValue);
+                    return (T) prefs.getString(name, defaultValue != null ? (String) defaultValue : "");
             } catch (ClassCastException e) {
                 throw new TypeMismatchException(this, type.getClass());
             }
         }
+
+        if (defaultValue == null)
+            Log.d("Preference", "returning default value " + defaultValue + " for preference " + name);
 
         return defaultValue;
     }
