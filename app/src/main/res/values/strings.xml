@@ -154,10 +154,8 @@
     <string name="preference_time_format">Time Format</string>
     <string name="preference_heads_up_layout">Heads Up Notification Style</string>
     <string name="preference_default_color_icon">Default Icon Color</string>
-    <string name="preference_default_color_icon_light">Default (Light) Icon Color</string>
     <string name="preference_default_color_icon_dark">Default (Dark) Icon Color</string>
     <string name="preference_default_color_text">Default Text Color</string>
-    <string name="preference_default_color_text_light">Default (Light) Text Color</string>
     <string name="preference_default_color_text_dark">Default (Dark) Text Color</string>
     <string name="preference_hide_on_volume">Hide Status on Volume Change</string>
     <string name="preference_hide_on_volume_desc">This option handles how the status bar responds to the volume popup. If it does not overlap the status bar, this does not need to be checked. This might not work on some devices.</string>

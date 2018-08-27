@@ -181,6 +181,9 @@ public class StaticUtils {
     }
 
     public static boolean isAccessibilityServiceRunning(Context context) {
+        if (context == null)
+            return false;
+
         ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         if (manager != null) {
             for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {

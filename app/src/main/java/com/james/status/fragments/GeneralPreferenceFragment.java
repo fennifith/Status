@@ -47,7 +47,7 @@ public class GeneralPreferenceFragment extends SimpleFragment {
     private final BasePreferenceData.OnPreferenceChangeListener colorListener = new BasePreferenceData.OnPreferenceChangeListener() {
         @Override
         public void onPreferenceChange(Object preference) {
-            if (StaticUtils.isStatusServiceRunning(getContext())) {
+            if (StaticUtils.isAccessibilityServiceRunning(getContext())) {
                 Intent intent = new Intent(AccessibilityService.ACTION_GET_COLOR);
                 intent.setClass(getContext(), AccessibilityService.class);
                 getContext().startService(intent);
@@ -102,7 +102,7 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                                 getString(R.string.preference_default_color_icon),
                                 BasePreferenceData.Identifier.SectionIdentifier.ICONS
                         ),
-                        colorListener
+                        updateListener
                 ),
                 new ColorPreferenceData(
                         getContext(),
@@ -111,7 +111,7 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                                 getString(R.string.preference_default_color_text),
                                 BasePreferenceData.Identifier.SectionIdentifier.ICONS
                         ),
-                        colorListener
+                        updateListener
                 ),
                 new BooleanPreferenceData(
                         getContext(),
@@ -126,29 +126,11 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                 new ColorPreferenceData(
                         getContext(),
                         new BasePreferenceData.Identifier<Integer>(
-                                PreferenceData.STATUS_LIGHT_ICON_COLOR,
-                                getString(R.string.preference_default_color_icon_light),
-                                BasePreferenceData.Identifier.SectionIdentifier.ICONS
-                        ),
-                        colorListener
-                ),
-                new ColorPreferenceData(
-                        getContext(),
-                        new BasePreferenceData.Identifier<Integer>(
-                                PreferenceData.STATUS_LIGHT_ICON_TEXT_COLOR,
-                                getString(R.string.preference_default_color_text_light),
-                                BasePreferenceData.Identifier.SectionIdentifier.ICONS
-                        ),
-                        colorListener
-                ),
-                new ColorPreferenceData(
-                        getContext(),
-                        new BasePreferenceData.Identifier<Integer>(
                                 PreferenceData.STATUS_DARK_ICON_COLOR,
                                 getString(R.string.preference_default_color_icon_dark),
                                 BasePreferenceData.Identifier.SectionIdentifier.ICONS
                         ),
-                        colorListener
+                        updateListener
                 ),
                 new ColorPreferenceData(
                         getContext(),
@@ -157,7 +139,7 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                                 getString(R.string.preference_default_color_text_dark),
                                 BasePreferenceData.Identifier.SectionIdentifier.ICONS
                         ),
-                        colorListener
+                        updateListener
                 ),
                 new BooleanPreferenceData(
                         getContext(),
