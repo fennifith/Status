@@ -104,12 +104,57 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                         ),
                         colorListener
                 ),
+                new ColorPreferenceData(
+                        getContext(),
+                        new BasePreferenceData.Identifier<Integer>(
+                                PreferenceData.STATUS_ICON_TEXT_COLOR,
+                                getString(R.string.preference_default_color_text),
+                                BasePreferenceData.Identifier.SectionIdentifier.ICONS
+                        ),
+                        colorListener
+                ),
                 new BooleanPreferenceData(
                         getContext(),
                         new BasePreferenceData.Identifier<Boolean>(
                                 PreferenceData.STATUS_DARK_ICONS,
                                 getString(R.string.preference_dark_icons),
                                 getString(R.string.preference_dark_icons_desc),
+                                BasePreferenceData.Identifier.SectionIdentifier.ICONS
+                        ),
+                        colorListener
+                ),
+                new ColorPreferenceData(
+                        getContext(),
+                        new BasePreferenceData.Identifier<Integer>(
+                                PreferenceData.STATUS_LIGHT_ICON_COLOR,
+                                getString(R.string.preference_default_color_icon_light),
+                                BasePreferenceData.Identifier.SectionIdentifier.ICONS
+                        ),
+                        colorListener
+                ),
+                new ColorPreferenceData(
+                        getContext(),
+                        new BasePreferenceData.Identifier<Integer>(
+                                PreferenceData.STATUS_LIGHT_ICON_TEXT_COLOR,
+                                getString(R.string.preference_default_color_text_light),
+                                BasePreferenceData.Identifier.SectionIdentifier.ICONS
+                        ),
+                        colorListener
+                ),
+                new ColorPreferenceData(
+                        getContext(),
+                        new BasePreferenceData.Identifier<Integer>(
+                                PreferenceData.STATUS_DARK_ICON_COLOR,
+                                getString(R.string.preference_default_color_icon_dark),
+                                BasePreferenceData.Identifier.SectionIdentifier.ICONS
+                        ),
+                        colorListener
+                ),
+                new ColorPreferenceData(
+                        getContext(),
+                        new BasePreferenceData.Identifier<Integer>(
+                                PreferenceData.STATUS_DARK_ICON_TEXT_COLOR,
+                                getString(R.string.preference_default_color_text_dark),
                                 BasePreferenceData.Identifier.SectionIdentifier.ICONS
                         ),
                         colorListener
