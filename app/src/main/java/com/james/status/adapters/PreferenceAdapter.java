@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import com.james.status.data.PreferenceData;
 import com.james.status.data.preference.BasePreferenceData;
 
 import java.util.List;
@@ -19,6 +20,11 @@ public class PreferenceAdapter extends RecyclerView.Adapter<BasePreferenceData.V
         this.datas = datas;
     }
 
+    public void setItems(List<BasePreferenceData> datas) {
+        this.datas = datas;
+        notifyDataSetChanged();
+    }
+
     @Override
     public BasePreferenceData.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType < 0 || viewType >= datas.size()) return null;
@@ -27,10 +33,21 @@ public class PreferenceAdapter extends RecyclerView.Adapter<BasePreferenceData.V
 
     @Override
     public void onBindViewHolder(BasePreferenceData.ViewHolder holder, int position) {
-        datas.get(position).onBindViewHolder(holder, position);
+        if (datas.get(position).isVisible()) {
+            holder.itemView.setFocusable(true);
+            holder.itemView.setClickable(true);
+            holder.itemView.setAlpha(0);
+            holder.itemView.animate().alpha(1).setDuration(500).start();
 
-        holder.itemView.setAlpha(0);
-        holder.itemView.animate().alpha(1).setDuration(500).start();
+            datas.get(position).onBindViewHolder(holder, position);
+        } else {
+            datas.get(position).onBindViewHolder(holder, position);
+
+            holder.itemView.setFocusable(false);
+            holder.itemView.setClickable(false);
+            holder.itemView.setAlpha(0);
+            holder.itemView.animate().alpha(0.5f).setDuration(250).start();
+        }
     }
 
     @Override
@@ -46,5 +63,17 @@ public class PreferenceAdapter extends RecyclerView.Adapter<BasePreferenceData.V
     @Override
     public int getItemCount() {
         return datas.size();
+    }
+
+    public boolean notifyPreferenceChanged(PreferenceData dependent) {
+        boolean didTheThing = false;
+        for (int i = 0; i < datas.size(); i++) {
+            if (dependent.equals(datas.get(i).getVisibilityDependent())) {
+                notifyItemChanged(i);
+                didTheThing = true;
+            }
+        }
+
+        return didTheThing;
     }
 }

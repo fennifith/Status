@@ -17,6 +17,7 @@ public class BasePreferenceData<T> implements View.OnClickListener {
     private final Context context;
     private final Identifier<T> identifier;
     private final OnPreferenceChangeListener<T> listener;
+    private VisibilityInterface visibility;
 
     public BasePreferenceData(Context context, Identifier<T> identifier) {
         this.context = context;
@@ -28,6 +29,23 @@ public class BasePreferenceData<T> implements View.OnClickListener {
         this.context = context;
         this.identifier = identifier;
         this.listener = listener;
+    }
+
+    public BasePreferenceData withVisibility(VisibilityInterface visibility) {
+        this.visibility = visibility;
+        return this;
+    }
+
+    public boolean isVisible() {
+        if (visibility != null) {
+            Object value = visibility.getValue();
+            return value != null && value.equals(visibility.getDependent().getValue(context));
+        } else return true;
+    }
+
+    @Nullable
+    public PreferenceData getVisibilityDependent() {
+        return visibility != null ? visibility.getDependent() : null;
     }
 
     public Context getContext() {
@@ -71,6 +89,12 @@ public class BasePreferenceData<T> implements View.OnClickListener {
 
     public interface OnPreferenceChangeListener<T> {
         void onPreferenceChange(T preference);
+    }
+
+    public interface VisibilityInterface {
+        PreferenceData getDependent();
+
+        Object getValue();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

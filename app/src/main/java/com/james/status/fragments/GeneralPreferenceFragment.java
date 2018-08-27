@@ -121,7 +121,13 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                                 getString(R.string.preference_dark_icons_desc),
                                 BasePreferenceData.Identifier.SectionIdentifier.ICONS
                         ),
-                        colorListener
+                        new BasePreferenceData.OnPreferenceChangeListener<Boolean>() {
+                            @Override
+                            public void onPreferenceChange(Boolean preference) {
+                                colorListener.onPreferenceChange(preference);
+                                adapter.notifyPreferenceChanged(PreferenceData.STATUS_DARK_ICONS);
+                            }
+                        }
                 ),
                 new ColorPreferenceData(
                         getContext(),
@@ -131,7 +137,17 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                                 BasePreferenceData.Identifier.SectionIdentifier.ICONS
                         ),
                         updateListener
-                ),
+                ).withVisibility(new BasePreferenceData.VisibilityInterface() {
+                    @Override
+                    public PreferenceData getDependent() {
+                        return PreferenceData.STATUS_DARK_ICONS;
+                    }
+
+                    @Override
+                    public Boolean getValue() {
+                        return true;
+                    }
+                }),
                 new ColorPreferenceData(
                         getContext(),
                         new BasePreferenceData.Identifier<Integer>(
@@ -140,7 +156,17 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                                 BasePreferenceData.Identifier.SectionIdentifier.ICONS
                         ),
                         updateListener
-                ),
+                ).withVisibility(new BasePreferenceData.VisibilityInterface() {
+                    @Override
+                    public PreferenceData getDependent() {
+                        return PreferenceData.STATUS_DARK_ICONS;
+                    }
+
+                    @Override
+                    public Boolean getValue() {
+                        return true;
+                    }
+                }),
                 new BooleanPreferenceData(
                         getContext(),
                         new BasePreferenceData.Identifier<Boolean>(
