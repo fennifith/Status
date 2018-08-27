@@ -563,7 +563,12 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                             StaticUtils.updateStatusService(getContext(), true);
                         }
                     }
-            ).withAlpha(true).withNullable(true));
+            ).withAlpha(new BasePreferenceData.ValueGetter<Boolean>() {
+                @Override
+                public Boolean get() {
+                    return true;
+                }
+            }).withNullable(true));
 
             preferences.add(new ColorPreferenceData(
                     getContext(),
@@ -579,7 +584,12 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                             StaticUtils.updateStatusService(getContext(), true);
                         }
                     }
-            ).withAlpha(true).withNullable(true));
+            ).withAlpha(new BasePreferenceData.ValueGetter<Boolean>() {
+                @Override
+                public Boolean get() {
+                    return true;
+                }
+            }).withNullable(true));
 
             preferences.add(new IntegerPreferenceData(
                     getContext(),
@@ -633,7 +643,12 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                             StaticUtils.updateStatusService(getContext(), true);
                         }
                     }
-            ).withAlpha(true).withNullable(true));
+            ).withAlpha(new BasePreferenceData.ValueGetter<Boolean>() {
+                @Override
+                public Boolean get() {
+                    return true;
+                }
+            }).withNullable(true));
 
             preferences.add(new ColorPreferenceData(
                     getContext(),
@@ -649,7 +664,12 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                             StaticUtils.updateStatusService(getContext(), true);
                         }
                     }
-            ).withAlpha(true).withNullable(true));
+            ).withAlpha(new BasePreferenceData.ValueGetter<Boolean>() {
+                @Override
+                public Boolean get() {
+                    return true;
+                }
+            }).withNullable(true));
 
             preferences.add(new FontPreferenceData(
                     getContext(),

@@ -317,7 +317,9 @@ public class StatusView extends View implements IconData.ReDrawListener {
     }
 
     public void setColor(@ColorInt int color) {
-        backgroundColor.to(Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
+        backgroundColor.to(Color.argb(PreferenceData.STATUS_TRANSPARENT_MODE.getValue(getContext()) ? Color.alpha(color) : 255,
+                Color.red(color), Color.green(color), Color.blue(color)));
+
         backgroundImage = null;
         needsBackgroundImageDraw = false;
         for (IconData icon : icons)

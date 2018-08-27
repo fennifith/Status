@@ -26,6 +26,7 @@ import com.afollestad.async.Result;
 import com.james.status.R;
 import com.james.status.activities.AppSettingActivity;
 import com.james.status.data.AppData;
+import com.james.status.data.PreferenceData;
 import com.james.status.dialogs.ColorPickerDialog;
 import com.james.status.dialogs.PreferenceDialog;
 import com.james.status.utils.ColorUtils;
@@ -162,7 +163,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
                         AppData app = getApp(holder.getAdapterPosition());
                         if (app == null) return;
 
-                        ColorPickerDialog dialog = new ColorPickerDialog(context);
+                        ColorPickerDialog dialog = new ColorPickerDialog(context).withAlpha((Boolean) PreferenceData.STATUS_TRANSPARENT_MODE.getValue(context));
                         if (colorsAction != null && colorsAction.getResult() != null)
                             dialog.setPresetColors((List<Integer>) colorsAction.getResult());
                         if (colorAction != null && colorAction.getResult() != null)

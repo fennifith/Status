@@ -72,7 +72,7 @@ public class AppSettingActivity extends AppCompatActivity {
 
                     @Override
                     protected void done(@Nullable Integer result) {
-                        ColorPickerDialog dialog = new ColorPickerDialog(AppSettingActivity.this);
+                        ColorPickerDialog dialog = new ColorPickerDialog(AppSettingActivity.this).withAlpha((Boolean) PreferenceData.STATUS_TRANSPARENT_MODE.getValue(AppSettingActivity.this));
                         dialog.setPreference(app.getIntegerPreference(AppSettingActivity.this, AppData.PreferenceIdentifier.COLOR));
                         dialog.setDefaultPreference(result != null ? result : (int) PreferenceData.STATUS_COLOR.getValue(AppSettingActivity.this));
                         dialog.setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {

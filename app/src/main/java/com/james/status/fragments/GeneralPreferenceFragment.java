@@ -84,7 +84,12 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                                 BasePreferenceData.Identifier.SectionIdentifier.COLORS
                         ),
                         updateListener
-                ),
+                ).withAlpha(new BasePreferenceData.ValueGetter<Boolean>() {
+                    @Override
+                    public Boolean get() {
+                        return PreferenceData.STATUS_TRANSPARENT_MODE.getValue(getContext());
+                    }
+                }),
                 new BooleanPreferenceData(
                         getContext(),
                         new BasePreferenceData.Identifier<Boolean>(
@@ -103,7 +108,12 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                                 BasePreferenceData.Identifier.SectionIdentifier.ICONS
                         ),
                         updateListener
-                ).withAlpha(true),
+                ).withAlpha(new BasePreferenceData.ValueGetter<Boolean>() {
+                    @Override
+                    public Boolean get() {
+                        return true;
+                    }
+                }),
                 new ColorPreferenceData(
                         getContext(),
                         new BasePreferenceData.Identifier<Integer>(
@@ -112,7 +122,12 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                                 BasePreferenceData.Identifier.SectionIdentifier.ICONS
                         ),
                         updateListener
-                ).withAlpha(true),
+                ).withAlpha(new BasePreferenceData.ValueGetter<Boolean>() {
+                    @Override
+                    public Boolean get() {
+                        return true;
+                    }
+                }),
                 new BooleanPreferenceData(
                         getContext(),
                         new BasePreferenceData.Identifier<Boolean>(
@@ -137,7 +152,12 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                                 BasePreferenceData.Identifier.SectionIdentifier.ICONS
                         ),
                         updateListener
-                ).withAlpha(true).withVisibility(new BasePreferenceData.VisibilityInterface() {
+                ).withAlpha(new BasePreferenceData.ValueGetter<Boolean>() {
+                    @Override
+                    public Boolean get() {
+                        return true;
+                    }
+                }).withVisibility(new BasePreferenceData.VisibilityInterface() {
                     @Override
                     public PreferenceData getDependent() {
                         return PreferenceData.STATUS_DARK_ICONS;
@@ -156,7 +176,12 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                                 BasePreferenceData.Identifier.SectionIdentifier.ICONS
                         ),
                         updateListener
-                ).withAlpha(true).withVisibility(new BasePreferenceData.VisibilityInterface() {
+                ).withAlpha(new BasePreferenceData.ValueGetter<Boolean>() {
+                    @Override
+                    public Boolean get() {
+                        return true;
+                    }
+                }).withVisibility(new BasePreferenceData.VisibilityInterface() {
                     @Override
                     public PreferenceData getDependent() {
                         return PreferenceData.STATUS_DARK_ICONS;
@@ -275,7 +300,7 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                                 getString(R.string.preference_transparent_mode_desc),
                                 BasePreferenceData.Identifier.SectionIdentifier.OTHER
                         ),
-                        recreateListener
+                        updateListener
                 ),
                 new IntegerPreferenceData(
                         getContext(),

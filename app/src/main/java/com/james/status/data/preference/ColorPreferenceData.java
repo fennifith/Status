@@ -15,15 +15,19 @@ import com.james.status.views.ColorView;
 public class ColorPreferenceData extends BasePreferenceData<Integer> {
 
     private Integer value;
-    private boolean isAlpha;
+    private ValueGetter<Boolean> isAlpha;
 
     public ColorPreferenceData(Context context, Identifier<Integer> identifier, OnPreferenceChangeListener<Integer> listener) {
         super(context, identifier, listener);
     }
 
-    public ColorPreferenceData withAlpha(boolean isAlpha) {
+    public ColorPreferenceData withAlpha(ValueGetter<Boolean> isAlpha) {
         this.isAlpha = isAlpha;
         return this;
+    }
+
+    public boolean isAlpha() {
+        return isAlpha != null ? isAlpha.get() : false;
     }
 
     @Override
@@ -44,7 +48,7 @@ public class ColorPreferenceData extends BasePreferenceData<Integer> {
 
     @Override
     public void onClick(final View v) {
-        ColorPickerDialog dialog = new ColorPickerDialog(getContext()).withAlpha(isAlpha);
+        ColorPickerDialog dialog = new ColorPickerDialog(getContext()).withAlpha(isAlpha());
 
         dialog.setPreference(value != null && !value.equals(getNullValue()) ? value : Color.BLACK);
 

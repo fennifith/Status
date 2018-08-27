@@ -156,6 +156,10 @@ public class BasePreferenceData<T> implements View.OnClickListener {
         Object getValue();
     }
 
+    public interface ValueGetter<X> {
+        X get();
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         View v;
 
