@@ -52,8 +52,6 @@
             android:name=".activities.NotificationCompatActivity"
             android:theme="@style/AppTheme.Transparent" />
 
-        <activity android:name=".activities.AboutActivity" />
-
         <receiver android:name=".receivers.ActivityVisibilitySettingReceiver" />
 
         <service android:name=".services.StatusServiceCompat" />

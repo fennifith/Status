@@ -351,16 +351,9 @@
     <string name="empty">Nothing here…</string>
     <string name="reset_apps_confirm">Are you sure you want to reset all the app-specific preferences? This cannot be undone.</string>
 
-    <string name="james_name" translatable="false">James Fenn</string>
     <string name="james_desc">Android developer and professional cabbage eater.</string>
-
-    <string name="anas_name" translatable="false">Anas Khan</string>
     <string name="anas_desc">Better known as the Oreo lord, this guy can add more butter to buttery interfaces.</string>
-
-    <string name="vuk_name" translatable="false">Vukašin Anđelković</string>
     <string name="vuk_desc">The great lord of Material Design, yeah he makes icons and stuff.</string>
-
-    <string name="ghost_name" translatable="false">Ghost Ninja</string>
     <string name="ghost_desc">A graphic designer, web designer, and the owner of technologx.com.</string>
 
     <string name="about_translators">Translators</string>

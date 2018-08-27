@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<about>
+
+    <me.jfenn.attribouter.wedges.AppWedge repo="TheAndroidMaster/Status" />
+
+    <me.jfenn.attribouter.wedges.ContributorsWedge repo="TheAndroidMaster/Status">
+
+        <me.jfenn.attribouter.wedges.ContributorWedge
+            name="James Fenn"
+            avatar="https://avatars3.githubusercontent.com/u/13000407"
+            bio="@string/james_desc"
+            login="TheAndroidMaster"
+            position="1"
+            task="^Developer">
+
+            <me.jfenn.attribouter.wedges.link.LinkWedge
+                name="Twitter"
+                icon="@drawable/ic_twitter"
+                url="https://jfenn.me/links/twitter" />
+
+        </me.jfenn.attribouter.wedges.ContributorWedge>
+
+        <me.jfenn.attribouter.wedges.ContributorWedge
+            name="Anas Khan"
+            avatar="https://lh3.googleusercontent.com/4QfAwrb-aRMi6cKju0vY4wgcx0zY4enVXsT1GJr703nAw_j3vRRkgUy0--mB7ilZgTbNkSrrXxsp-4E"
+            bio="@string/anas_desc"
+            position="2"
+            task="^UX Designer">
+
+            <me.jfenn.attribouter.wedges.link.LinkWedge
+                name="Twitter"
+                icon="@drawable/ic_twitter"
+                url="https://twitter.com/MAKTHG" />
+
+            <me.jfenn.attribouter.wedges.link.LinkWedge
+                name="Google Plus"
+                icon="@drawable/ic_gplus"
+                url="https://plus.google.com/101325935187431392674" />
+
+            <me.jfenn.attribouter.wedges.link.LinkWedge
+                name="Dribbble"
+                icon="@drawable/ic_dribbble"
+                url="https://dribbble.com/AnasKhan" />
+
+        </me.jfenn.attribouter.wedges.ContributorWedge>
+
+        <me.jfenn.attribouter.wedges.ContributorWedge
+            name="Vukašin Anđelković"
+            avatar="https://avatars3.githubusercontent.com/u/5407632"
+            bio="@string/vuk_desc"
+            login="zavukodlak"
+            position="3"
+            task="^Icon Designer">
+
+            <me.jfenn.attribouter.wedges.link.LinkWedge
+                name="Twitter"
+                icon="@drawable/ic_twitter"
+                url="https://twitter.com/MAKTHG" />
+
+            <me.jfenn.attribouter.wedges.link.LinkWedge
+                name="Google Play"
+                icon="@drawable/ic_gplay"
+                url="https://play.google.com/store/apps/dev?id=6941105890231522296" />
+
+            <me.jfenn.attribouter.wedges.link.LinkWedge
+                name="Dribbble"
+                icon="@drawable/ic_dribbble"
+                url="https://dribbble.com/zavukodlak" />
+
+        </me.jfenn.attribouter.wedges.ContributorWedge>
+
+        <me.jfenn.attribouter.wedges.ContributorWedge
+            name="Ghost Ninja"
+            bio="@string/ghost_desc"
+            blog="https://technologx.com/"
+            login="Technologx"
+            task="^Icon Designer">
+
+            <me.jfenn.attribouter.wedges.link.LinkWedge
+                name="Google Plus"
+                icon="@drawable/ic_gplus"
+                url="https://plus.google.com/109414818005290076221" />
+
+        </me.jfenn.attribouter.wedges.ContributorWedge>
+
+        <me.jfenn.attribouter.wedges.ContributorWedge
+            hidden="true"
+            login="opnay" />
+
+    </me.jfenn.attribouter.wedges.ContributorsWedge>
+
+    <me.jfenn.attribouter.wedges.TranslatorsWedge>
+
+        <me.jfenn.attribouter.wedges.TranslatorWedge
+            name="Kim Inseop"
+            locales="ko"
+            login="opnay" />
+
+        <me.jfenn.attribouter.wedges.TranslatorWedge
+            name="^Eugenio \'Ryo567\' Martínez Seguín"
+            locales="es"
+            login="Ryo567" />
+
+        <me.jfenn.attribouter.wedges.TranslatorWedge
+            name="Marwan ALsidi"
+            locales="ar"
+            login="Alsidi-Group" />
+
+        <me.jfenn.attribouter.wedges.TranslatorWedge
+            name="Majida Whale"
+            locales="zh" />
+
+    </me.jfenn.attribouter.wedges.TranslatorsWedge>
+
+    <me.jfenn.attribouter.wedges.LicensesWedge>
+
+        <me.jfenn.attribouter.wedges.LicenseWedge
+            description="Steppers view library for Android, based on Google Material Design guidelines."
+            license="apache-2.0"
+            licenseName="Apache License 2.0"
+            licenseUrl="https://choosealicense.com/licenses/apache-2.0"
+            repo="drozdzynski/Steppers" />
+
+        <me.jfenn.attribouter.wedges.LicenseWedge
+            description="A library designed to allow simple execution of asynchronous processes on Android."
+            license="apache-2.0"
+            licenseName="Apache License 2.0"
+            licenseUrl="https://choosealicense.com/licenses/apache-2.0"
+            title="Async"
+            website="https://bintray.com/drummer-aidan/maven/async" />
+
+    </me.jfenn.attribouter.wedges.LicensesWedge>
+
+</about>

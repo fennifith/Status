@@ -47,6 +47,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import me.jfenn.attribouter.Attribouter;
+
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, CompoundButton.OnCheckedChangeListener {
 
     public static final String ACTION_TOO_MANY_ICONS = "com.james.status.MainActivity.TOO_MANY_ICONS";
@@ -303,7 +305,12 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 editor.apply();
                 break;
             case R.id.action_about:
-                startActivity(new Intent(this, AboutActivity.class));
+                Attribouter attribouter = Attribouter.from(this);
+                int githubAuthKey = getResources().getIdentifier("githubAuthKey", "string", getPackageName());
+                if (githubAuthKey != 0)
+                    attribouter = attribouter.withGitHubToken(getString(githubAuthKey));
+
+                attribouter.show();
                 break;
             case R.id.action_reset:
                 if (adapter.getItem(viewPager.getCurrentItem()) instanceof AppPreferenceFragment)
