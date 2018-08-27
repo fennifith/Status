@@ -8,7 +8,6 @@ import android.os.Build;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -151,9 +150,6 @@ public enum PreferenceData {
                 throw new TypeMismatchException(this, type.getClass());
             }
         }
-
-        if (defaultValue == null)
-            Log.d("Preference", "returning default value " + defaultValue + " for preference " + name);
 
         return defaultValue;
     }

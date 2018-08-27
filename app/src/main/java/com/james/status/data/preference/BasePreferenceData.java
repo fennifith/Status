@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -110,7 +109,6 @@ public class BasePreferenceData<T> implements View.OnClickListener {
                 if (isNullable) {
                     Object value = identifier.getPreferenceValue(getContext());
                     boolean isNonNull = value != null && !value.equals(nullValue);
-                    Log.d("ColorNull", "value " + identifier.getPreferenceValue(checkBox.getContext()) + ", nonnull " + isNonNull);
 
                     if (title != null)
                         title.setAlpha(isNonNull ? 1 : 0.5f);
