@@ -112,7 +112,7 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                         ),
                         recreateListener
                 ),
-                new BooleanPreferenceData(
+                /*new BooleanPreferenceData( TODO: #137
                         getContext(),
                         new BasePreferenceData.Identifier<Boolean>(
                                 PreferenceData.STATUS_TINTED_ICONS,
@@ -122,7 +122,7 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                         ),
                         recreateListener
                 ),
-                /*new BooleanPreferenceData(
+                new BooleanPreferenceData(
                         getContext(),
                         new BasePreferenceData.Identifier<Boolean>(
                                 PreferenceData.STATUS_BUMP_MODE,

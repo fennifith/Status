@@ -303,16 +303,16 @@ public abstract class IconData<T extends IconUpdateReceiver> {
      */
     public void setBackgroundColor(@ColorInt int color) {
         backgroundColor = color;
-        if (PreferenceData.STATUS_TINTED_ICONS.getValue(getContext())) {
+        /*if (PreferenceData.STATUS_TINTED_ICONS.getValue(getContext())) { TODO: #137
             iconColor.to(color);
             textColor.to(color);
-        } else {
+        } else {*/
             boolean isIconContrast = PreferenceData.STATUS_DARK_ICONS.getValue(getContext());
             iconColor.to(isIconContrast && ColorUtils.getDifference(color, iconColor.getDefault()) < 100 ?
                     (ColorUtils.isColorDark(color) ? defaultIconLightColor : defaultIconDarkColor) : iconColor.getDefault());
             textColor.to(isIconContrast && ColorUtils.getDifference(color, textColor.getDefault()) < 100 ?
                     (ColorUtils.isColorDark(color) ? defaultTextLightColor : defaultTextDarkColor) : textColor.getDefault());
-        }
+        //}
 
         requestReDraw();
     }
