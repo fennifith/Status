@@ -32,7 +32,7 @@ import com.james.status.dialogs.PreferenceDialog;
 import com.james.status.utils.ColorUtils;
 import com.james.status.utils.StaticUtils;
 import com.james.status.utils.StringUtils;
-import com.james.status.views.CircleColorView;
+import com.james.status.views.ColorView;
 import com.james.status.views.CustomImageView;
 
 import java.util.Collections;
@@ -315,7 +315,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
         View v, titleBar;
         TextView name, packageName;
         CustomImageView icon, launchIcon;
-        CircleColorView colorView;
+        ColorView colorView;
         View launch;
         TextView launchText;
         View color;

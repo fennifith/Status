@@ -179,8 +179,7 @@ public class ColorUtils {
             int statusBarRes = typedArray.getResourceId(i, 0);
             if (statusBarRes != 0) {
                 try {
-                    int color = ResourcesCompat.getColor(resources, statusBarRes, theme);
-                    colors.add(Color.rgb(Color.red(color), Color.green(color), Color.blue(color)));
+                    colors.add(ResourcesCompat.getColor(resources, statusBarRes, theme));
                 } catch (Resources.NotFoundException ignored) {
                 }
             }
@@ -197,8 +196,7 @@ public class ColorUtils {
             int statusBarRes = typedArray.getResourceId(i, 0);
             if (statusBarRes != 0) {
                 try {
-                    int color = darkColor(ResourcesCompat.getColor(resources, statusBarRes, theme));
-                    colors.add(Color.rgb(Color.red(color), Color.green(color), Color.blue(color)));
+                    colors.add(darkColor(ResourcesCompat.getColor(resources, statusBarRes, theme)));
                 } catch (Resources.NotFoundException ignored) {
                 }
             }
