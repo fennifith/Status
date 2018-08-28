@@ -272,6 +272,12 @@ public class StatusServiceImpl {
                     @Override
                     public void onGlobalLayout() {
                         if (statusView != null && fullscreenView != null) {
+                            if (activityData != null) {
+                                Boolean shouldIgnore = activityData.getBooleanPreference(service, AppData.PreferenceIdentifier.IGNORE_AUTO_DETECT);
+                                if (shouldIgnore != null && shouldIgnore)
+                                    return;
+                            }
+
                             Point size = new Point();
                             windowManager.getDefaultDisplay().getSize(size);
                             statusView.setFullscreen(fullscreenView.getMeasuredHeight() == size.y);
