@@ -28,6 +28,7 @@ import com.james.status.dialogs.FullscreenEditorDialog;
 import com.james.status.dialogs.PreferenceDialog;
 import com.james.status.utils.ColorUtils;
 import com.james.status.views.CircleColorView;
+import com.james.status.views.ColorView;
 import com.james.status.views.CustomImageView;
 
 import java.util.List;
@@ -201,8 +202,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
             protected void done(@Nullable Integer result) {
                 if (result != null) {
                     holder.colorView.setColor(result);
-
-                    holder.titleBar.setBackgroundColor(result);
+                    holder.backgroundView.setColor(result);
                     holder.name.setTextColor(ContextCompat.getColor(context, ColorUtils.isColorDark(result) ? R.color.textColorPrimaryInverse : R.color.textColorPrimary));
                     holder.packageName.setTextColor(ContextCompat.getColor(context, ColorUtils.isColorDark(result) ? R.color.textColorSecondaryInverse : R.color.textColorSecondary));
                 }
@@ -245,7 +245,8 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        View v, titleBar;
+        View v;
+        ColorView backgroundView;
         TextView name, packageName;
         CustomImageView icon;
         CircleColorView colorView;
@@ -258,7 +259,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
         public ViewHolder(View v) {
             super(v);
             this.v = v;
-            titleBar = v.findViewById(R.id.titleBar);
+            backgroundView = v.findViewById(R.id.backgroundColor);
             name = v.findViewById(R.id.appName);
             packageName = v.findViewById(R.id.appPackage);
             icon = v.findViewById(R.id.icon);

@@ -217,8 +217,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
             protected void done(@Nullable Integer result) {
                 if (result != null) {
                     holder.colorView.setColor(result);
-
-                    holder.titleBar.setBackgroundColor(result);
+                    holder.backgroundView.setColor(result);
                     holder.name.setTextColor(ContextCompat.getColor(context, ColorUtils.isColorDark(result) ? R.color.textColorPrimaryInverse : R.color.textColorPrimary));
                     holder.packageName.setTextColor(ContextCompat.getColor(context, ColorUtils.isColorDark(result) ? R.color.textColorSecondaryInverse : R.color.textColorSecondary));
                 }
@@ -317,7 +316,8 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        View v, titleBar;
+        View v;
+        ColorView backgroundView;
         TextView name, packageName;
         CustomImageView icon, launchIcon;
         ColorView colorView;
@@ -332,7 +332,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
         public ViewHolder(View v) {
             super(v);
             this.v = v;
-            titleBar = v.findViewById(R.id.titleBar);
+            backgroundView = v.findViewById(R.id.backgroundColor);
             name = v.findViewById(R.id.appName);
             packageName = v.findViewById(R.id.appPackage);
             icon = v.findViewById(R.id.icon);

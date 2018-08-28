@@ -29,55 +29,65 @@
             android:orientation="vertical"
             android:paddingBottom="12dp">
 
-            <LinearLayout
-                android:id="@+id/titleBar"
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:gravity="center_vertical"
-                android:minHeight="72dp"
-                android:orientation="horizontal">
+                android:layout_marginBottom="8dp">
 
-                <com.james.status.views.SquareImageView
-                    android:id="@+id/icon"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:scaleType="fitCenter" />
+                <com.james.status.views.ColorView
+                    android:id="@+id/backgroundColor"
+                    android:layout_width="fill_parent"
+                    android:layout_height="72dp" />
 
                 <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:padding="4dp">
+                    android:id="@+id/titleBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="72dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/appName"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:lines="1"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        android:textColor="@color/textColorPrimary"
-                        android:textSize="16sp" />
+                    <com.james.status.views.SquareImageView
+                        android:id="@+id/icon"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:scaleType="fitCenter" />
 
-                    <TextView
-                        android:id="@+id/appPackage"
-                        android:layout_width="match_parent"
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:lines="1"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        android:textColor="@color/textColorSecondary"
-                        android:textSize="14sp" />
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:padding="4dp">
+
+                        <TextView
+                            android:id="@+id/appName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:lines="1"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textColor="@color/textColorPrimary"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/appPackage"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:lines="1"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textColor="@color/textColorSecondary"
+                            android:textSize="14sp" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
-            </LinearLayout>
+            </FrameLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -134,12 +144,12 @@
                         android:id="@+id/fullscreenImage"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:layout_marginTop="2dp"
+                        android:layout_gravity="center_horizontal"
                         android:layout_marginBottom="2dp"
-                        app:srcCompat="@drawable/ic_fullscreen"
+                        android:layout_marginTop="2dp"
                         android:scaleType="centerInside"
                         android:tint="?android:textColorSecondary"
-                        android:layout_gravity="center_horizontal" />
+                        app:srcCompat="@drawable/ic_fullscreen" />
 
                     <TextView
                         android:layout_width="wrap_content"
