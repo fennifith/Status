@@ -7,11 +7,11 @@ import android.support.annotation.Nullable;
 
 import java.lang.ref.WeakReference;
 
-public class ViewRenderTask extends AsyncTask<Integer, Void, Bitmap> {
+public class CanvasRenderTask extends AsyncTask<Integer, Void, Bitmap> {
 
     private final WeakReference<Renderable> reference;
 
-    public ViewRenderTask(Renderable renderable) {
+    public CanvasRenderTask(Renderable renderable) {
         reference = new WeakReference<>(renderable);
     }
 

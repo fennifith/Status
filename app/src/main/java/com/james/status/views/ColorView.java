@@ -47,10 +47,12 @@ public class ColorView extends RenderableView {
 
     @Override
     public void render(Canvas canvas) {
-        int outline = Math.round(outlineSize) * 4;
-        for (int x = 0; x < canvas.getWidth(); x += outline) {
-            for (int y = x % (outline * 2) == 0 ? 0 : outline; y < canvas.getWidth(); y += (outline * 2)) {
-                canvas.drawRect(x, y, x + outline, y + outline, tilePaint);
+        if (Color.alpha(color) < 255) {
+            int outline = Math.round(outlineSize) * 4;
+            for (int x = 0; x < canvas.getWidth(); x += outline) {
+                for (int y = x % (outline * 2) == 0 ? 0 : outline; y < canvas.getWidth(); y += (outline * 2)) {
+                    canvas.drawRect(x, y, x + outline, y + outline, tilePaint);
+                }
             }
         }
 

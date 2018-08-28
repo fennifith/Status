@@ -10,9 +10,9 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.james.status.utils.ViewRenderTask;
+import com.james.status.utils.CanvasRenderTask;
 
-public abstract class RenderableView extends View implements ViewRenderTask.Renderable {
+public abstract class RenderableView extends View implements CanvasRenderTask.Renderable {
 
     private Paint paint;
     private Bitmap render;
@@ -49,7 +49,7 @@ public abstract class RenderableView extends View implements ViewRenderTask.Rend
 
     public void startRender() {
         if (task == null)
-            task = new ViewRenderTask(this).execute(width, height);
+            task = new CanvasRenderTask(this).execute(width, height);
     }
 
     @Override
