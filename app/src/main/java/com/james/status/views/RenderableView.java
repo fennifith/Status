@@ -48,8 +48,10 @@ public abstract class RenderableView extends View implements CanvasRenderTask.Re
     }
 
     public void startRender() {
-        if (task == null)
-            task = new CanvasRenderTask(this).execute(width, height);
+        if (task != null)
+            task.cancel(true);
+
+        task = new CanvasRenderTask(this).execute(width, height);
     }
 
     @Override
