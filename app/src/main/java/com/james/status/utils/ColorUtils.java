@@ -179,7 +179,8 @@ public class ColorUtils {
             int statusBarRes = typedArray.getResourceId(i, 0);
             if (statusBarRes != 0) {
                 try {
-                    colors.add(ResourcesCompat.getColor(resources, statusBarRes, theme));
+                    int color = ResourcesCompat.getColor(resources, statusBarRes, theme);
+                    colors.add(Color.rgb(Color.red(color), Color.green(color), Color.blue(color)));
                 } catch (Resources.NotFoundException ignored) {
                 }
             }
@@ -196,7 +197,8 @@ public class ColorUtils {
             int statusBarRes = typedArray.getResourceId(i, 0);
             if (statusBarRes != 0) {
                 try {
-                    colors.add(darkColor(ResourcesCompat.getColor(resources, statusBarRes, theme)));
+                    int color = darkColor(ResourcesCompat.getColor(resources, statusBarRes, theme));
+                    colors.add(Color.rgb(Color.red(color), Color.green(color), Color.blue(color)));
                 } catch (Resources.NotFoundException ignored) {
                 }
             }
@@ -222,7 +224,7 @@ public class ColorUtils {
             }
         }
 
-        return Color.argb(255, red / size, green / size, blue / size);
+        return Color.rgb(red / size, green / size, blue / size);
     }
 
     /**
