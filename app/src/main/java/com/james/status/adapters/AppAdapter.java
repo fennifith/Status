@@ -1,6 +1,7 @@
 package com.james.status.adapters;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -17,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.afollestad.async.Action;
@@ -28,6 +30,7 @@ import com.james.status.activities.AppSettingActivity;
 import com.james.status.data.AppData;
 import com.james.status.data.PreferenceData;
 import com.james.status.dialogs.ColorPickerDialog;
+import com.james.status.dialogs.FullscreenEditorDialog;
 import com.james.status.dialogs.PreferenceDialog;
 import com.james.status.utils.ColorUtils;
 import com.james.status.utils.StaticUtils;
@@ -222,20 +225,22 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
             }
         }.execute();
 
-        holder.fullscreenSwitch.setOnCheckedChangeListener(null);
-
         Boolean isFullscreen = app.getBooleanPreference(context, AppData.PreferenceIdentifier.FULLSCREEN);
-        holder.fullscreenSwitch.setChecked(isFullscreen != null && isFullscreen);
-        holder.color.setVisibility(holder.fullscreenSwitch.isChecked() ? View.GONE : View.VISIBLE);
-
-        holder.fullscreenSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        holder.fullscreenImage.setImageResource(isFullscreen != null && isFullscreen ? R.drawable.ic_fullscreen : R.drawable.ic_fullscreen_exit);
+        holder.fullscreen.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            public void onClick(View v) {
                 AppData app = getApp(holder.getAdapterPosition());
-                if (app == null) return;
-
-                app.putPreference(context, AppData.PreferenceIdentifier.FULLSCREEN, isChecked);
-                holder.color.setVisibility(isChecked ? View.GONE : View.VISIBLE);
+                if (app != null) {
+                    FullscreenEditorDialog dialog = new FullscreenEditorDialog(context, app);
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            notifyItemChanged(holder.getAdapterPosition());
+                        }
+                    });
+                    dialog.show();
+                }
             }
         });
 
@@ -320,7 +325,9 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
         TextView launchText;
         View color;
         View notifications;
-        SwitchCompat fullscreenSwitch, notificationSwitch;
+        SwitchCompat notificationSwitch;
+        View fullscreen;
+        ImageView fullscreenImage;
 
         public ViewHolder(View v) {
             super(v);
@@ -336,7 +343,8 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
             colorView = v.findViewById(R.id.colorView);
             notifications = v.findViewById(R.id.notifications);
             notificationSwitch = v.findViewById(R.id.notificationSwitch);
-            fullscreenSwitch = v.findViewById(R.id.fullscreenSwitch);
+            fullscreen = v.findViewById(R.id.fullscreen);
+            fullscreenImage = v.findViewById(R.id.fullscreenImage);
         }
     }
 }

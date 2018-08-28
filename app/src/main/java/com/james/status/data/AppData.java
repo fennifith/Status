@@ -179,6 +179,7 @@ public class AppData implements Parcelable {
         NOTIFICATIONS,
         COLOR,
         FULLSCREEN,
+        IGNORE_AUTO_DETECT,
         CACHE_COLOR,
         CACHE_VERSION
     }

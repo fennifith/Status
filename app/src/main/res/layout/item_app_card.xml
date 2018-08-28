@@ -119,6 +119,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/fullscreen"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top"
@@ -129,10 +130,15 @@
                     android:paddingBottom="12dp"
                     android:paddingTop="12dp">
 
-                    <android.support.v7.widget.SwitchCompat
-                        android:id="@+id/fullscreenSwitch"
-                        android:layout_width="wrap_content"
-                        android:layout_height="28dp"
+                    <ImageView
+                        android:id="@+id/fullscreenImage"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="2dp"
+                        app:srcCompat="@drawable/ic_fullscreen"
+                        android:scaleType="centerInside"
+                        android:tint="?android:textColorSecondary"
                         android:layout_gravity="center_horizontal" />
 
                     <TextView
