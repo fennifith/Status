@@ -200,7 +200,7 @@ public class NotificationData implements Parcelable {
             return icon;
 
         if (icon != null && (scaledIcon == null || scaledIcon.getHeight() != Math.round(height)))
-            scaledIcon = Bitmap.createScaledBitmap(icon, Math.round(height), Math.round(height), true);
+            scaledIcon = Bitmap.createScaledBitmap(icon, Math.round(height * icon.getWidth() / icon.getHeight()), Math.round(height), true);
 
         return scaledIcon;
     }
