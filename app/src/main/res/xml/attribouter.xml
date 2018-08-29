@@ -3,7 +3,7 @@
 
     <me.jfenn.attribouter.wedges.AppWedge repo="TheAndroidMaster/Status" />
 
-    <me.jfenn.attribouter.wedges.ContributorsWedge repo="TheAndroidMaster/Status">
+    <com.james.status.wedges.CabbageContributorsWedge repo="TheAndroidMaster/Status">
 
         <me.jfenn.attribouter.wedges.ContributorWedge
             name="James Fenn"
@@ -87,7 +87,7 @@
             hidden="true"
             login="opnay" />
 
-    </me.jfenn.attribouter.wedges.ContributorsWedge>
+    </com.james.status.wedges.CabbageContributorsWedge>
 
     <me.jfenn.attribouter.wedges.TranslatorsWedge>
 

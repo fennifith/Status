@@ -43,7 +43,7 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.6.1'
     implementation 'me.drozdzynski.library.steppers:steppers:1.0.0'
     implementation 'james.signalstrengths:signalstrengths:0.0.4'
-    implementation 'me.jfenn:attribouter:0.1.1'
+    implementation 'me.jfenn:attribouter:0.1.2'
     implementation 'com.afollestad:async:0.2.3'
     implementation 'com.google.code.gson:gson:2.8.2'
 
