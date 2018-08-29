@@ -8,12 +8,6 @@ import android.support.v4.util.ArrayMap;
 
 import com.james.status.R;
 import com.james.status.data.NotificationData;
-import com.james.status.data.PreferenceData;
-import com.james.status.data.preference.BasePreferenceData;
-import com.james.status.data.preference.IntegerPreferenceData;
-import com.james.status.utils.StaticUtils;
-
-import java.util.List;
 
 public class NotificationsIconData extends IconData {
 
@@ -35,6 +29,11 @@ public class NotificationsIconData extends IconData {
     }
 
     @Override
+    public boolean hasIcon() {
+        return true;
+    }
+
+    @Override
     public boolean canHazText() {
         return false;
     }
@@ -47,31 +46,6 @@ public class NotificationsIconData extends IconData {
     @Override
     public String getTitle() {
         return getContext().getString(R.string.icon_notifications);
-    }
-
-    @Override
-    public List<BasePreferenceData> getPreferences() {
-        List<BasePreferenceData> preferences = super.getPreferences();
-
-        preferences.add(new IntegerPreferenceData(
-                getContext(),
-                new BasePreferenceData.Identifier<Integer>(
-                        PreferenceData.ICON_ICON_SCALE,
-                        getContext().getString(R.string.preference_icon_scale),
-                        getIdentifierArgs()
-                ),
-                getContext().getString(R.string.unit_dp),
-                0,
-                null,
-                new BasePreferenceData.OnPreferenceChangeListener<Integer>() {
-                    @Override
-                    public void onPreferenceChange(Integer preference) {
-                        StaticUtils.updateStatusService(getContext(), true);
-                    }
-                }
-        ));
-
-        return preferences;
     }
 
     @Override

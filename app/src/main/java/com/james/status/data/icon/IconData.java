@@ -185,7 +185,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
 
     public final void onIconUpdate(int level) {
         this.level = level;
-        if (hasIcon()) {
+        if (hasIcon() && style != null) {
             Bitmap bitmap = style.getBitmap(context, level);
             isIcon = bitmap != null;
             if (isIcon) {
@@ -759,7 +759,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
             ));*/
         }
 
-        if (hasIcon()) {
+        if (hasIcon() && getIconStyleSize() > 0) {
             preferences.add(new IconPreferenceData(
                     getContext(),
                     new BasePreferenceData.Identifier<String>(
