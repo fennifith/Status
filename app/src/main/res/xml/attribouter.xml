@@ -112,25 +112,6 @@
 
     </me.jfenn.attribouter.wedges.TranslatorsWedge>
 
-    <me.jfenn.attribouter.wedges.LicensesWedge>
-
-        <me.jfenn.attribouter.wedges.LicenseWedge
-            description="Steppers view library for Android, based on Google Material Design guidelines."
-            license="apache-2.0"
-            licenseName="Apache License 2.0"
-            licenseUrl="https://choosealicense.com/licenses/apache-2.0"
-            repo="drozdzynski/Steppers" />
-
-        <me.jfenn.attribouter.wedges.LicenseWedge
-            description="A library designed to allow simple execution of asynchronous processes on Android."
-            license="apache-2.0"
-            licenseName="Apache License 2.0"
-            licenseUrl="https://choosealicense.com/licenses/apache-2.0"
-            title="Async"
-            website="https://bintray.com/drummer-aidan/maven/async" />
-
-    </me.jfenn.attribouter.wedges.LicensesWedge>
-
     <com.james.status.wedges.IconSourcesWedge>
 
         <com.james.status.wedges.IconSourceWedge
@@ -149,5 +130,24 @@
             url="https://icons8.com/" />
 
     </com.james.status.wedges.IconSourcesWedge>
+
+    <me.jfenn.attribouter.wedges.LicensesWedge>
+
+        <me.jfenn.attribouter.wedges.LicenseWedge
+            description="Steppers view library for Android, based on Google Material Design guidelines."
+            license="apache-2.0"
+            licenseName="Apache License 2.0"
+            licenseUrl="https://choosealicense.com/licenses/apache-2.0"
+            repo="drozdzynski/Steppers" />
+
+        <me.jfenn.attribouter.wedges.LicenseWedge
+            description="A library designed to allow simple execution of asynchronous processes on Android."
+            license="apache-2.0"
+            licenseName="Apache License 2.0"
+            licenseUrl="https://choosealicense.com/licenses/apache-2.0"
+            title="Async"
+            website="https://bintray.com/drummer-aidan/maven/async" />
+
+    </me.jfenn.attribouter.wedges.LicensesWedge>
 
 </about>
