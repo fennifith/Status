@@ -9,8 +9,8 @@ android {
         minSdkVersion 16
         targetSdkVersion 27
         maxSdkVersion 25
-        versionCode 36
-        versionName "3.7"
+        versionCode 37
+        versionName "3.8-beta"
         vectorDrawables.useSupportLibrary = true
         resConfigs "ar", "en", "es", "ko", "zh"
     }
