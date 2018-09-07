@@ -16,7 +16,6 @@ import android.os.Parcelable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.Toast;
 
@@ -25,7 +24,6 @@ import com.james.status.Status;
 import com.james.status.data.AppData;
 import com.james.status.data.NotificationData;
 import com.james.status.data.PreferenceData;
-import com.james.status.data.icon.NotificationsIconData;
 import com.james.status.utils.ColorUtils;
 import com.james.status.utils.StaticUtils;
 
@@ -48,22 +46,20 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.d("SOMETHING", "created");
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d("SOMETHING", "started");
-
         if (intent != null) {
             String action = intent.getAction();
 
             if (action != null) {
                 switch (action) {
                     case ACTION_GET_COLOR:
-                        Intent i = new Intent(StatusService.ACTION_UPDATE);
-                        i.setClass(this, StatusService.class);
-                        i.putExtra(StatusService.EXTRA_COLOR, color);
+                        Intent i = new Intent(StatusServiceImpl.ACTION_UPDATE);
+                        i.setClass(this, StatusServiceImpl.getCompatClass(this));
+                        i.putExtra(StatusServiceImpl.EXTRA_COLOR, PreferenceData.STATUS_COLOR_AUTO.getValue(this) ? color
+                                : (Integer) PreferenceData.STATUS_COLOR.getValue(this));
                         startService(i);
                         break;
                 }
@@ -76,8 +72,6 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
     @Override
     protected void onServiceConnected() {
         super.onServiceConnected();
-
-        Log.d("SOMETHING", "connected");
 
         packageManager = getPackageManager();
 
@@ -97,7 +91,6 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
 
     @Override
     public void onAccessibilityEvent(final AccessibilityEvent event) {
-        Log.d("SOMETHING", "Accessibility Event");
         if (PreferenceData.STATUS_ENABLED.getValue(this)) {
             switch (event.getEventType()) {
                 case AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED:
@@ -106,8 +99,9 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                         if (parcelable instanceof Notification) {
                             NotificationData notification = new NotificationData((Notification) parcelable, event.getPackageName().toString());
 
-                            Intent intent = new Intent(NotificationsIconData.ACTION_NOTIFICATION_ADDED);
-                            intent.putExtra(NotificationsIconData.EXTRA_NOTIFICATION, notification);
+                            Intent intent = new Intent(StatusServiceCompat.ACTION_NOTIFICATION_ADDED);
+                            intent.putExtra(StatusServiceCompat.EXTRA_NOTIFICATION, notification);
+                            intent.setClass(this, StatusServiceCompat.class);
                             sendBroadcast(intent);
 
                             notifications.add(notification);
@@ -135,8 +129,8 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
 
                                     if (StaticUtils.shouldUseCompatNotifications(this)) {
                                         for (NotificationData notification : notifications) {
-                                            Intent intent = new Intent(NotificationsIconData.ACTION_NOTIFICATION_REMOVED);
-                                            intent.putExtra(NotificationsIconData.EXTRA_NOTIFICATION, notification);
+                                            Intent intent = new Intent(StatusServiceCompat.ACTION_NOTIFICATION_REMOVED);
+                                            intent.putExtra(StatusServiceCompat.EXTRA_NOTIFICATION, notification);
                                             sendBroadcast(intent);
                                         }
 
@@ -205,24 +199,25 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
     }
 
     private void setStatusBar(@Nullable @ColorInt Integer color, @Nullable Boolean isTransparent, @Nullable Boolean isFullscreen, @Nullable Boolean isSystemFullscreen, @Nullable String packageName, @Nullable AppData.ActivityData activityData) {
-        Intent intent = new Intent(StatusService.ACTION_UPDATE);
-        intent.setClass(this, StatusService.class);
+        Intent intent = new Intent(StatusServiceImpl.ACTION_UPDATE);
+        intent.setClass(this, StatusServiceImpl.getCompatClass(this));
 
-        if (color != null) intent.putExtra(StatusService.EXTRA_COLOR, color);
+        if (color != null) intent.putExtra(StatusServiceImpl.EXTRA_COLOR, color);
 
         if (isTransparent != null)
-            intent.putExtra(StatusService.EXTRA_IS_TRANSPARENT, isTransparent);
+            intent.putExtra(StatusServiceImpl.EXTRA_IS_TRANSPARENT, isTransparent);
 
-        if (isFullscreen != null) intent.putExtra(StatusService.EXTRA_IS_FULLSCREEN, isFullscreen);
+        if (isFullscreen != null)
+            intent.putExtra(StatusServiceImpl.EXTRA_IS_FULLSCREEN, isFullscreen);
 
         if (isSystemFullscreen != null)
-            intent.putExtra(StatusService.EXTRA_IS_SYSTEM_FULLSCREEN, isSystemFullscreen);
+            intent.putExtra(StatusServiceImpl.EXTRA_IS_SYSTEM_FULLSCREEN, isSystemFullscreen);
 
         if (packageName != null)
-            intent.putExtra(StatusService.EXTRA_PACKAGE, packageName);
+            intent.putExtra(StatusServiceImpl.EXTRA_PACKAGE, packageName);
 
         if (activityData != null)
-            intent.putExtra(StatusService.EXTRA_ACTIVITY, activityData);
+            intent.putExtra(StatusServiceImpl.EXTRA_ACTIVITY, activityData);
 
         startService(intent);
 
@@ -235,7 +230,6 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
 
     @Override
     public void onDestroy() {
-        Log.d("SOMETHING", "destroyed");
         if (volumeReceiver != null) unregisterReceiver(volumeReceiver);
         super.onDestroy();
     }

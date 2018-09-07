@@ -40,12 +40,14 @@ import com.james.status.fragments.AppPreferenceFragment;
 import com.james.status.fragments.GeneralPreferenceFragment;
 import com.james.status.fragments.HelpFragment;
 import com.james.status.fragments.IconPreferenceFragment;
-import com.james.status.services.StatusService;
+import com.james.status.services.StatusServiceImpl;
 import com.james.status.utils.StaticUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import me.jfenn.attribouter.Attribouter;
 
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, CompoundButton.OnCheckedChangeListener {
 
@@ -80,15 +82,15 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
-        appbar = (AppBarLayout) findViewById(R.id.appbar);
-        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-        service = (SwitchCompat) findViewById(R.id.serviceEnabled);
-        viewPager = (ViewPager) findViewById(R.id.viewPager);
+        appbar = findViewById(R.id.appbar);
+        tabLayout = findViewById(R.id.tabLayout);
+        service = findViewById(R.id.serviceEnabled);
+        viewPager = findViewById(R.id.viewPager);
         bottomSheet = findViewById(R.id.bottomSheet);
-        expand = (ImageView) findViewById(R.id.expand);
-        title = (TextView) findViewById(R.id.title);
-        content = (TextView) findViewById(R.id.content);
-        icon = (ImageView) findViewById(R.id.tutorialIcon);
+        expand = findViewById(R.id.expand);
+        title = findViewById(R.id.title);
+        content = findViewById(R.id.content);
+        icon = findViewById(R.id.tutorialIcon);
 
         ViewCompat.setElevation(bottomSheet, StaticUtils.getPixelsFromDp(10));
 
@@ -208,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                     @Override
                     public void onClick() {
                         List<String> permissions = new ArrayList<>();
-                        for (IconData icon : StatusService.getIcons(MainActivity.this)) {
+                        for (IconData icon : StatusServiceImpl.getIcons(MainActivity.this)) {
                             permissions.addAll(Arrays.asList(icon.getPermissions()));
                         }
 
@@ -303,7 +305,12 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 editor.apply();
                 break;
             case R.id.action_about:
-                startActivity(new Intent(this, AboutActivity.class));
+                Attribouter attribouter = Attribouter.from(this);
+                int githubAuthKey = getResources().getIdentifier("githubAuthKey", "string", getPackageName());
+                if (githubAuthKey != 0)
+                    attribouter = attribouter.withGitHubToken(getString(githubAuthKey));
+
+                attribouter.show();
                 break;
             case R.id.action_reset:
                 if (adapter.getItem(viewPager.getCurrentItem()) instanceof AppPreferenceFragment)
@@ -379,21 +386,19 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-        if (b && !StaticUtils.isReady(this)) {
-            startActivity(new Intent(this, StartActivity.class));
+        if (b) {
+            StatusServiceImpl.start(this);
+            if (!StaticUtils.isReady(this)) {
+                startActivity(new Intent(this, StartActivity.class));
 
-            service.setOnCheckedChangeListener(null);
-            service.setChecked(false);
-            service.setOnCheckedChangeListener(this);
-        } else {
-            PreferenceData.STATUS_ENABLED.setValue(this, b);
+                service.setOnCheckedChangeListener(null);
+                service.setChecked(false);
+                service.setOnCheckedChangeListener(this);
+                return;
+            }
+        } else StatusServiceImpl.stop(this);
 
-            Intent intent = new Intent(b ? StatusService.ACTION_START : StatusService.ACTION_STOP);
-            intent.setClass(this, StatusService.class);
-            if (b)
-                startService(intent);
-            else stopService(intent);
-        }
+        PreferenceData.STATUS_ENABLED.setValue(this, b);
     }
 
     public interface OnTutorialClickListener {

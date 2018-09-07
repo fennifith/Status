@@ -12,7 +12,6 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.james.status.BuildConfig;
-import com.james.status.services.StatusService;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -24,28 +23,25 @@ import java.util.Set;
 public enum PreferenceData {
     STATUS_ENABLED(false),
     STATUS_NOTIFICATIONS_COMPAT(false),
-    STATUS_NOTIFICATIONS_HEADS_UP(false),
+    //STATUS_NOTIFICATIONS_HEADS_UP(false), TODO: #137
     STATUS_COLOR_AUTO(true),
     STATUS_COLOR(Color.BLACK),
     STATUS_HOME_TRANSPARENT(true),
     STATUS_ICON_COLOR(Color.WHITE),
     STATUS_ICON_TEXT_COLOR(Color.WHITE),
-    STATUS_DARK_ICON_COLOR(Color.BLACK),
-    STATUS_DARK_ICON_TEXT_COLOR(Color.BLACK),
+    STATUS_DARK_ICON_COLOR(Color.argb(150, 0, 0, 0)),
+    STATUS_DARK_ICON_TEXT_COLOR(Color.argb(150, 0, 0, 0)),
     STATUS_DARK_ICONS(true),
-    STATUS_TINTED_ICONS(false),
-    STATUS_PREVENT_ICON_OVERLAP(false),
-    STATUS_BUMP_MODE(false),
-    STATUS_HEADS_UP_DURATION(10),
+    //STATUS_TINTED_ICONS(false), TODO: #137
+    //STATUS_BUMP_MODE(false), TODO: #137
     STATUS_BACKGROUND_ANIMATIONS(true),
     STATUS_ICON_ANIMATIONS(true),
-    STATUS_HEADS_UP_LAYOUT(StatusService.HEADSUP_LAYOUT_PLAIN),
     STATUS_HIDE_ON_VOLUME(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP),
     STATUS_PERSISTENT_NOTIFICATION(true),
     STATUS_IGNORE_PERMISSION_CHECKING(false),
     STATUS_TRANSPARENT_MODE(false),
     STATUS_BURNIN_PROTECTION(false),
-    STATUS_SIDE_PADDING(0),
+    STATUS_SIDE_PADDING(6),
     STATUS_HEIGHT(0),
     STATUS_DEBUG(BuildConfig.DEBUG),
     ICON_VISIBILITY("%1$s/VISIBILITY", true),
@@ -54,15 +50,21 @@ public enum PreferenceData {
     ICON_TEXT_VISIBILITY("%1$s/TEXT_VISIBILITY", false),
     ICON_TEXT_FORMAT("%1$s/TEXT_FORMAT", "h:mm a"),
     ICON_TEXT_SIZE("%1$s/TEXT_SIZE", 14),
-    ICON_TEXT_COLOR("%1$s/TEXT_COLOR", Color.WHITE),
+    ICON_TEXT_COLOR_LIGHT("%1$s/TEXT_COLOR_LIGHT", 0),
+    ICON_TEXT_COLOR_DARK("%1$s/TEXT_COLOR_DARK", 0),
     ICON_TEXT_TYPEFACE("%1$s/TEXT_TYPEFACE", ""),
     ICON_TEXT_EFFECT("%1$s/TEXT_EFFECT", Typeface.BOLD),
     ICON_ICON_VISIBILITY("%1$s/ICON_VISIBILITY", true),
-    ICON_ICON_COLOR("%1$s/ICON_COLOR", Color.WHITE),
+    ICON_ICON_COLOR_LIGHT("%1$s/ICON_COLOR_LIGHT", 0),
+    ICON_ICON_COLOR_DARK("%1$s/ICON_COLOR_DARK", 0),
     ICON_ICON_STYLE("%1$s/ICON_STYLE", ""),
     ICON_ICON_STYLE_NAMES("%1$s/ICON_STYLE_NAMES", new String[]{}),
     ICON_ICON_PADDING("%1$s/ICON_PADDING", 2),
-    ICON_ICON_SCALE("%1$s/ICON_SCALE", 18);
+    ICON_ICON_SCALE("%1$s/ICON_SCALE", 18),
+    ICON_ICON_OFFSET_X("%1$s/ICON_ICON_OFFSET_X", 0),
+    ICON_ICON_OFFSET_Y("%1$s/ICON_ICON_OFFSET_Y", 0),
+    ICON_TEXT_OFFSET_X("%1$s/ICON_TEXT_OFFSET_X", 0),
+    ICON_TEXT_OFFSET_Y("%1$s/ICON_TEXT_OFFSET_Y", 0);
 
     private String name;
     private Object defaultValue;
@@ -138,11 +140,11 @@ public enum PreferenceData {
         } else if (prefs.contains(name)) {
             try {
                 if (type instanceof Boolean)
-                    return (T) new Boolean(prefs.getBoolean(name, (Boolean) defaultValue));
+                    return (T) new Boolean(prefs.getBoolean(name, defaultValue != null ? (Boolean) defaultValue : false));
                 else if (type instanceof Integer)
-                    return (T) new Integer(prefs.getInt(name, (Integer) defaultValue));
+                    return (T) new Integer(prefs.getInt(name, defaultValue != null ? (Integer) defaultValue : -1));
                 else if (type instanceof String)
-                    return (T) prefs.getString(name, (String) defaultValue);
+                    return (T) prefs.getString(name, defaultValue != null ? (String) defaultValue : "");
             } catch (ClassCastException e) {
                 throw new TypeMismatchException(this, type.getClass());
             }

@@ -154,6 +154,9 @@
     <string name="preference_time_format">Time Format</string>
     <string name="preference_heads_up_layout">Heads Up Notification Style</string>
     <string name="preference_default_color_icon">Default Icon Color</string>
+    <string name="preference_default_color_text">Default Text Color</string>
+    <string name="preference_default_color_icon_dark">Default (Dark) Icon Color</string>
+    <string name="preference_default_color_text_dark">Default (Dark) Text Color</string>
     <string name="preference_hide_on_volume">Hide Status on Volume Change</string>
     <string name="preference_hide_on_volume_desc">This option handles how the status bar responds to the volume popup. If it does not overlap the status bar, this does not need to be checked. This might not work on some devices.</string>
     <string name="preference_debug">Debug Messages</string>
@@ -173,14 +176,17 @@
     <string name="preference_burnin_protection_desc">Prevents Status from causing a burn-in on some screens by moving the icons around every two seconds.</string>
     <string name="preference_prevent_icon_overlap">Prevent Icon Overlap</string>
     <string name="preference_prevent_icon_overlap_desc">Prevents icon \"sections\" from overlapping each other when there are too many icons displaying at once. This setting will cause battery drain with too many updates (music player notifications can be particularly taxing, especially if they update once every second), so be careful with it.</string>
-    <string name="preference_text_color">Text Color</string>
+    <string name="preference_icon_color_light">Icon Color (Light)</string>
+    <string name="preference_icon_color_dark">Icon Color (Dark)</string>
+    <string name="preference_text_color_light">Text Color (Light)</string>
+    <string name="preference_text_color_dark">Text Color (Dark)</string>
     <string name="preference_height">Status Bar Height</string>
     <string name="preference_height_desc">This setting will change the height of the status bar, but not the content underneath it! Setting this to 0 will cause Status to use the default height defined by the system.</string>
     <string name="preference_bump_mode">Bump Mode</string>
     <string name="preference_bump_mode_desc">Creates a fake (and really ugly) \"camera bump\" around the center aligned items in the status bar. Please don\'t ever enable this option.</string>
     <string name="preference_text_effect">Text Style</string>
     <string name="preference_transparent_mode">Transparent Mode</string>
-    <string name="preference_transparent_mode_desc">Makes the background of the status bar transparent at all times. Keep in mind that the original status bar will still be visible behind this one; the only times this option might be useful is if you disable all status bar icons using SystemUI tuner on Android Nougat or above.</string>
+    <string name="preference_transparent_mode_desc">Enables the alpha/transparency sliders for the background color-related settings. Keep in mind that the original status bar will be visible behind this one; the only time this option might be useful is if you disable all status bar icons using SystemUI tuner and turn off \"Resource-Based Colors\".</string>
 
     <string name="icon_notifications">Notifications</string>
     <string name="icon_clock">Clock</string>
@@ -348,16 +354,9 @@
     <string name="empty">Nothing here…</string>
     <string name="reset_apps_confirm">Are you sure you want to reset all the app-specific preferences? This cannot be undone.</string>
 
-    <string name="james_name" translatable="false">James Fenn</string>
     <string name="james_desc">Android developer and professional cabbage eater.</string>
-
-    <string name="anas_name" translatable="false">Anas Khan</string>
     <string name="anas_desc">Better known as the Oreo lord, this guy can add more butter to buttery interfaces.</string>
-
-    <string name="vuk_name" translatable="false">Vukašin Anđelković</string>
     <string name="vuk_desc">The great lord of Material Design, yeah he makes icons and stuff.</string>
-
-    <string name="ghost_name" translatable="false">Ghost Ninja</string>
     <string name="ghost_desc">A graphic designer, web designer, and the owner of technologx.com.</string>
 
     <string name="about_translators">Translators</string>
@@ -376,14 +375,9 @@
 
     <string name="about_icons">Icon Sources</string>
     <string name="about_icons_desc">Obviously, it would be hard to make over 100 icons used in this app by myself, so (as well as the ones by the people above) the app uses icons from a few different sources.</string>
-
-    <string name="google_icons">Google Design</string>
     <string name="google_icons_desc">Accounting for most of the icons in the app, Google Design has a large database of icons to choose from.</string>
-
-    <string name="md_icons">Material Design Icons</string>
+    >
     <string name="md_icons_desc">Made by many various contributors, this collection of icons contains useful resources unavailable from Google\'s site.</string>
-
-    <string name="icons8_icons">Icons8</string>
     <string name="icons8_icons_desc">57,700 free flat icons in any format, size and color in 20 seconds.</string>
 
     <string-array name="libraries">
@@ -516,5 +510,8 @@
     <string name="step_cancel">Cancel</string>
     <string name="step_skip">Skip</string>
     <string name="preference_text_font">Text Font</string>
+    <string name="alpha">Alpha</string>
+    <string name="dialog_preference_fullscreen">Fullscreen</string>
+    <string name="dialog_preference_fullscreen_ignore">Ignore Auto-Detection</string>
 
 </resources>

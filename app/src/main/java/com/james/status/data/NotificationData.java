@@ -19,9 +19,10 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.service.notification.StatusBarNotification;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.res.ResourcesCompat;
-import android.support.v7.app.NotificationCompat;
 
+import com.james.status.utils.AnimatedFloat;
 import com.james.status.utils.ImageUtils;
 
 public class NotificationData implements Parcelable {
@@ -29,9 +30,11 @@ public class NotificationData implements Parcelable {
     public String category, title, subtitle, packageName, group, key, tag = "";
     public int priority, id, iconRes, color = Color.BLACK;
     private boolean isAlert;
-    private Bitmap icon;
+    private Bitmap icon, scaledIcon;
     private Bitmap largeIcon;
     private Icon unloadedIcon, unloadedLargeIcon;
+
+    private AnimatedFloat scale;
 
     public PendingIntent intent;
     public ActionData[] actions;
@@ -68,9 +71,20 @@ public class NotificationData implements Parcelable {
         if (iconRes == 0 && Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
             iconRes = notification.icon;
 
-        if (iconRes == 0 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            unloadedIcon = extras.getParcelable(NotificationCompat.EXTRA_SMALL_ICON);
-            if (unloadedIcon == null) unloadedIcon = notification.getSmallIcon();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            try {
+                if (iconRes == 0)
+                    iconRes = extras.getInt(NotificationCompat.EXTRA_SMALL_ICON, 0);
+            } catch (Exception ignored) {
+            }
+
+            try {
+                unloadedIcon = extras.getParcelable(NotificationCompat.EXTRA_SMALL_ICON);
+            } catch (Exception ignored) {
+            }
+
+            if (unloadedIcon == null)
+                unloadedIcon = notification.getSmallIcon();
         }
 
         Object parcelable = extras.getParcelable(NotificationCompat.EXTRA_LARGE_ICON);
@@ -115,6 +129,27 @@ public class NotificationData implements Parcelable {
         for (int i = 0; i < actions.length; i++) {
             actions[i] = new ActionData(NotificationCompat.getAction(notification, i), packageName);
         }
+
+        scale = new AnimatedFloat(0);
+        scale.to(1f);
+    }
+
+    public boolean set(NotificationData notification) {
+        boolean isChange = false;
+
+        if (iconRes != notification.iconRes) {
+            iconRes = notification.iconRes;
+            icon = null;
+            isChange = true;
+        }
+
+        if ((unloadedIcon == null && notification.unloadedIcon != null) || (unloadedIcon != null && !unloadedIcon.equals(notification.unloadedIcon))) {
+            unloadedIcon = notification.unloadedIcon;
+            icon = null;
+            isChange = true;
+        }
+
+        return isChange;
     }
 
     protected NotificationData(Parcel in) {
@@ -160,6 +195,16 @@ public class NotificationData implements Parcelable {
         }
     };
 
+    public Bitmap getIcon(float height) {
+        if (icon.getHeight() == Math.round(height))
+            return icon;
+
+        if (icon != null && (scaledIcon == null || scaledIcon.getHeight() != Math.round(height)))
+            scaledIcon = Bitmap.createScaledBitmap(icon, Math.round(height * icon.getWidth() / icon.getHeight()), Math.round(height), true);
+
+        return scaledIcon;
+    }
+
     @Nullable
     public Bitmap getIcon(Context context) {
         if (icon == null) {
@@ -172,12 +217,11 @@ public class NotificationData implements Parcelable {
                 Bitmap bitmap = ImageUtils.drawableToBitmap(drawable);
                 if (bitmap != null) {
                     icon = bitmap;
-                    return bitmap;
+                    scaledIcon = null;
                 }
             }
         }
-
-        return null;
+        return icon;
     }
 
     @Nullable
@@ -207,7 +251,8 @@ public class NotificationData implements Parcelable {
     }
 
     public boolean shouldShowHeadsUp(Context context) {
-        return (boolean) PreferenceData.STATUS_NOTIFICATIONS_HEADS_UP.getValue(context) && (priority >= NotificationCompat.PRIORITY_HIGH || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) && isAlert;
+        return //(boolean) PreferenceData.STATUS_NOTIFICATIONS_HEADS_UP.getValue(context) && TODO: #137
+                (priority >= NotificationCompat.PRIORITY_HIGH || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) && isAlert;
     }
 
     public boolean shouldHideStatusBar() {
@@ -260,6 +305,10 @@ public class NotificationData implements Parcelable {
         } catch (Resources.NotFoundException | OutOfMemoryError e) {
             return null;
         }
+    }
+
+    public AnimatedFloat getScale() {
+        return scale;
     }
 
     public boolean equals(NotificationData obj) {

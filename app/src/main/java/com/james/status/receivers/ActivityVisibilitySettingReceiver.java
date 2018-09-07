@@ -17,7 +17,7 @@ public class ActivityVisibilitySettingReceiver extends BroadcastReceiver {
         if (intent.hasExtra(EXTRA_ACTIVITY) && intent.hasExtra(EXTRA_VISIBILITY)) {
             AppData.ActivityData activity = intent.getParcelableExtra(EXTRA_ACTIVITY);
             activity.putPreference(context, AppData.PreferenceIdentifier.FULLSCREEN, !intent.getBooleanExtra(EXTRA_VISIBILITY, true));
-            StaticUtils.updateStatusService(context);
+            StaticUtils.updateStatusService(context, true);
         }
     }
 }

@@ -92,7 +92,7 @@ public class TimeIconData extends IconData<TimeIconData.TimeReceiver> {
                     @Override
                     public void onPreferenceChange(String preference) {
                         format = preference;
-                        StaticUtils.updateStatusService(getContext());
+                        StaticUtils.updateStatusService(getContext(), true);
                     }
                 }
         ));

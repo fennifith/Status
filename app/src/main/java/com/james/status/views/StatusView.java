@@ -15,30 +15,31 @@ import android.os.Handler;
 import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 import com.james.status.data.PreferenceData;
 import com.james.status.data.icon.IconData;
+import com.james.status.utils.AnimatedColor;
+import com.james.status.utils.AnimatedInteger;
 import com.james.status.utils.ColorUtils;
 import com.james.status.utils.ImageUtils;
 import com.james.status.utils.StaticUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class StatusView extends View implements IconData.ReDrawListener {
 
     private int burnInOffsetX, burnInOffsetY;
 
-    private int drawnBackgroundColor;
-    private int targetBackgroundColor;
+    private AnimatedColor backgroundColor;
     private Paint paint;
 
     @Nullable
     private Bitmap backgroundImage;
     private boolean needsBackgroundImageDraw;
-    private int defaultBackgroundColor;
 
     /**
      * True if ".register()" has been called on all of the icons
@@ -52,7 +53,7 @@ public class StatusView extends View implements IconData.ReDrawListener {
     private boolean isSystemShowing;
 
     private boolean isTransparentHome;
-    private int sidePadding;
+    private AnimatedInteger sidePadding;
     private boolean isAnimations;
 
     private List<IconData> icons, leftIcons, centerIcons, rightIcons;
@@ -116,12 +117,7 @@ public class StatusView extends View implements IconData.ReDrawListener {
     }
 
     public StatusView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        this(context, attrs, defStyleAttr, 0);
-    }
-
-    @TargetApi(21)
-    public StatusView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
+        super(context, attrs, defStyleAttr);
         icons = new ArrayList<>();
         leftIcons = new ArrayList<>();
         centerIcons = new ArrayList<>();
@@ -135,19 +131,33 @@ public class StatusView extends View implements IconData.ReDrawListener {
         paint.setFilterBitmap(true);
         paint.setDither(true);
 
-        defaultBackgroundColor = drawnBackgroundColor = targetBackgroundColor = PreferenceData.STATUS_COLOR.getValue(getContext());
+        backgroundColor = new AnimatedColor((int) PreferenceData.STATUS_COLOR.getValue(getContext()));
         init();
+    }
+
+    @TargetApi(21)
+    public StatusView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        this(context, attrs, defStyleAttr);
     }
 
     public void init() {
         isAnimations = PreferenceData.STATUS_ICON_ANIMATIONS.getValue(getContext());
-        defaultBackgroundColor = PreferenceData.STATUS_COLOR.getValue(getContext());
+        backgroundColor.setDefault((int) PreferenceData.STATUS_COLOR.getValue(getContext()));
         isTransparentHome = PreferenceData.STATUS_HOME_TRANSPARENT.getValue(getContext());
-        sidePadding = (int) StaticUtils.getPixelsFromDp((int) PreferenceData.STATUS_SIDE_PADDING.getValue(getContext()));
+
+        int sidePaddingInt = (int) StaticUtils.getPixelsFromDp((int) PreferenceData.STATUS_SIDE_PADDING.getValue(getContext()));
+        if (sidePadding == null)
+            sidePadding = new AnimatedInteger(sidePaddingInt);
+        else sidePadding.to(sidePaddingInt);
+
         isBurnInProtection = PreferenceData.STATUS_BURNIN_PROTECTION.getValue(getContext());
 
         for (IconData icon : icons)
             icon.init();
+
+        if (backgroundImage != null)
+            setTransparent();
+        else setColor(backgroundColor.getTarget());
 
         if (isBurnInProtection && !isBurnInProtectionStarted) {
             handler.post(burnInRunnable);
@@ -155,6 +165,7 @@ public class StatusView extends View implements IconData.ReDrawListener {
         }
 
         sortIcons();
+        postInvalidate();
     }
 
     public void setIcons(List<IconData> icons) {
@@ -165,10 +176,38 @@ public class StatusView extends View implements IconData.ReDrawListener {
         sortIcons();
     }
 
+    /**
+     * Vaguely hacky method of sending notifications to the NotificationIconData class.
+     * This may be used for other things in the future.
+     *
+     * @param tClass  IconData class to send a message to
+     * @param message the arguments of the message
+     * @param <T>     type of IconData class to send the message to
+     */
+    public <T extends IconData> void sendMessage(Class<T> tClass, Object... message) {
+        for (IconData icon : icons) {
+            if (tClass.isAssignableFrom(icon.getClass()))
+                icon.onMessage(message);
+        }
+    }
+
     private void sortIcons() {
         leftIcons.clear();
         centerIcons.clear();
         rightIcons.clear();
+
+        for (IconData icon : icons) {
+            int position = PreferenceData.ICON_POSITION.getSpecificOverriddenValue(getContext(), -1, icon.getIdentifierArgs());
+            if (position < 0)
+                PreferenceData.ICON_POSITION.setValue(getContext(), icons.indexOf(icon), icon.getIdentifierArgs());
+        }
+
+        Collections.sort(icons, new Comparator<IconData>() {
+            @Override
+            public int compare(IconData lhs, IconData rhs) {
+                return lhs.getPosition() - rhs.getPosition();
+            }
+        });
 
         for (IconData icon : icons) {
             if (!icon.isVisible())
@@ -176,22 +215,18 @@ public class StatusView extends View implements IconData.ReDrawListener {
 
             switch (icon.getGravity()) {
                 case IconData.LEFT_GRAVITY:
-                    Log.d("StatusView", "left " + icon.getClass().getName());
                     leftIcons.add(icon);
                     break;
                 case IconData.CENTER_GRAVITY:
-                    Log.d("StatusView", "center " + icon.getClass().getName());
                     centerIcons.add(icon);
                     break;
                 case IconData.RIGHT_GRAVITY:
-                    Log.d("StatusView", "right " + icon.getClass().getName());
                     rightIcons.add(icon);
                     break;
             }
         }
 
         postInvalidate();
-        Log.d("StatusView", "sorted icons");
     }
 
     public List<IconData> getIcons() {
@@ -250,8 +285,8 @@ public class StatusView extends View implements IconData.ReDrawListener {
             animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    float y = (float) valueAnimator.getAnimatedValue();
-                    setY(y);
+                    setY((float) valueAnimator.getAnimatedValue());
+                    setAlpha(visible ? valueAnimator.getAnimatedFraction() : 1 - valueAnimator.getAnimatedFraction());
                 }
             });
             animator.addListener(new Animator.AnimatorListener() {
@@ -263,6 +298,7 @@ public class StatusView extends View implements IconData.ReDrawListener {
                 @Override
                 public void onAnimationEnd(Animator animator) {
                     if (!visible) setVisibility(View.GONE);
+                    else setAlpha(1);
                 }
 
                 @Override
@@ -281,18 +317,20 @@ public class StatusView extends View implements IconData.ReDrawListener {
     }
 
     public void setColor(@ColorInt int color) {
-        targetBackgroundColor = Color.argb(255, Color.red(color), Color.green(color), Color.blue(color));
+        backgroundColor.to(Color.argb(PreferenceData.STATUS_TRANSPARENT_MODE.getValue(getContext()) ? Color.alpha(color) : 255,
+                Color.red(color), Color.green(color), Color.blue(color)));
+
         backgroundImage = null;
         needsBackgroundImageDraw = false;
         for (IconData icon : icons)
-            icon.setBackgroundColor(targetBackgroundColor);
+            icon.setBackgroundColor(color);
 
         postInvalidate();
     }
 
     @ColorInt
     public int getColor() {
-        return drawnBackgroundColor;
+        return backgroundColor.val();
     }
 
     @ColorInt
@@ -306,35 +344,36 @@ public class StatusView extends View implements IconData.ReDrawListener {
     }
 
     private void setStatusBackgroundColor(@ColorInt int color) {
-        targetBackgroundColor = color;
+        backgroundColor.to(color);
         postInvalidate();
     }
 
     public void setTransparent() {
-        Drawable backgroundDrawable;
-        WallpaperInfo wallpaperInfo = wallpaperManager.getWallpaperInfo();
-        if (wallpaperInfo != null)
-            backgroundDrawable = wallpaperInfo.loadThumbnail(getContext().getPackageManager());
-        else {
-            try {
-                backgroundDrawable = wallpaperManager.getDrawable();
-            } catch (SecurityException e) {
-                setColor(getDefaultColor());
-                return;
+        if (backgroundImage == null) {
+            Drawable backgroundDrawable;
+            WallpaperInfo wallpaperInfo = wallpaperManager.getWallpaperInfo();
+            if (wallpaperInfo != null)
+                backgroundDrawable = wallpaperInfo.loadThumbnail(getContext().getPackageManager());
+            else {
+                try {
+                    backgroundDrawable = wallpaperManager.getDrawable();
+                } catch (SecurityException e) {
+                    setColor(getDefaultColor());
+                    return;
+                }
             }
+
+            backgroundImage = ImageUtils.cropBitmapToBar(getContext(), ImageUtils.drawableToBitmap(backgroundDrawable));
         }
 
-        Bitmap background = ImageUtils.cropBitmapToBar(getContext(), ImageUtils.drawableToBitmap(backgroundDrawable));
-
-        if (background != null) {
-            int color = ColorUtils.getAverageColor(background);
+        if (backgroundImage != null) {
+            int color = ColorUtils.getAverageColor(backgroundImage);
 
             setColor(color);
-            if (isTransparentHome) {
-                backgroundImage = background;
+            if (isTransparentHome)
                 needsBackgroundImageDraw = true;
-            }
-        } else setColor(defaultBackgroundColor);
+            else backgroundImage = null;
+        } else setColor(backgroundColor.getDefault());
 
         postInvalidate();
     }
@@ -350,20 +389,14 @@ public class StatusView extends View implements IconData.ReDrawListener {
                 return true;
         }
 
-        return Color.red(drawnBackgroundColor) != Color.red(targetBackgroundColor) ||
-                Color.green(drawnBackgroundColor) != Color.green(targetBackgroundColor) ||
-                Color.blue(drawnBackgroundColor) != Color.blue(targetBackgroundColor) ||
-                needsBackgroundImageDraw;
+        return needsBackgroundImageDraw
+                || !backgroundColor.isTarget()
+                || !sidePadding.isTarget();
     }
 
     private void updateAnimatedValues() {
-        if (isAnimations) {
-            drawnBackgroundColor = Color.rgb(
-                    StaticUtils.getAnimatedValue(Color.red(drawnBackgroundColor), Color.red(targetBackgroundColor)),
-                    StaticUtils.getAnimatedValue(Color.green(drawnBackgroundColor), Color.green(targetBackgroundColor)),
-                    StaticUtils.getAnimatedValue(Color.blue(drawnBackgroundColor), Color.blue(targetBackgroundColor))
-            );
-        } else drawnBackgroundColor = targetBackgroundColor;
+        backgroundColor.next(isAnimations);
+        sidePadding.next(isAnimations);
     }
 
     @Override
@@ -376,7 +409,7 @@ public class StatusView extends View implements IconData.ReDrawListener {
 
         if (backgroundImage != null)
             canvas.drawBitmap(backgroundImage, 0, 0, paint);
-        else canvas.drawColor(drawnBackgroundColor);
+        else canvas.drawColor(backgroundColor.val());
 
         int leftWidth = 0, centerWidth = 0, rightWidth = 0;
 
@@ -395,23 +428,23 @@ public class StatusView extends View implements IconData.ReDrawListener {
             rightWidth += width > 0 ? width : 0;
         }
 
-        centerWidth = Math.min(centerWidth, canvas.getWidth() - (2 * sidePadding));
-        leftWidth = Math.min(leftWidth, (canvas.getWidth() / 2) - (centerWidth / 2) - sidePadding);
-        rightWidth = Math.min(rightWidth, (canvas.getWidth() / 2) - (centerWidth / 2) - sidePadding);
+        centerWidth = Math.min(centerWidth, canvas.getWidth() - (2 * sidePadding.val()));
+        leftWidth = Math.min(leftWidth, (canvas.getWidth() / 2) - (centerWidth / 2) - sidePadding.val());
+        rightWidth = Math.min(rightWidth, (canvas.getWidth() / 2) - (centerWidth / 2) - sidePadding.val());
 
         if (leftWidth < 0 || rightWidth < 0) {
             leftWidth = 0;
             rightWidth = 0;
-            centerWidth = canvas.getWidth() - (2 * sidePadding);
+            centerWidth = canvas.getWidth() - (2 * sidePadding.val());
         }
 
-        for (int i = 0, x = sidePadding; i < leftIcons.size(); i++) {
+        for (int i = 0, x = sidePadding.val(); i < leftIcons.size(); i++) {
             IconData icon = leftIcons.get(i);
-            int width = icon.getWidth(canvas.getHeight(), leftWidth - x);
+            int width = icon.getWidth(canvas.getHeight(), leftWidth - (x - sidePadding.val()));
             if (width > 0) {
                 icon.draw(canvas, x, width);
                 x += width;
-            }
+            } else icon.updateAnimatedValues();
         }
 
         for (int i = 0, x = (canvas.getWidth() / 2) - (centerWidth / 2); i < centerIcons.size(); i++) {
@@ -420,16 +453,16 @@ public class StatusView extends View implements IconData.ReDrawListener {
             if (width > 0) {
                 icon.draw(canvas, x, width);
                 x += width;
-            }
+            } else icon.updateAnimatedValues();
         }
 
-        for (int i = 0, x = canvas.getWidth() - sidePadding; i < rightIcons.size(); i++) {
+        for (int i = 0, x = canvas.getWidth() - sidePadding.val(); i < rightIcons.size(); i++) {
             IconData icon = rightIcons.get(i);
             int width = icon.getWidth(canvas.getHeight(), rightWidth - x);
             if (width > 0) {
                 icon.draw(canvas, x - width, width);
                 x -= width;
-            }
+            } else icon.updateAnimatedValues();
         }
 
         if (isBurnInProtection)

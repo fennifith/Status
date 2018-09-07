@@ -12,8 +12,9 @@ import android.view.ViewGroup;
 import com.james.status.R;
 import com.james.status.Status;
 import com.james.status.adapters.IconAdapter;
+import com.james.status.data.icon.IconData;
 
-public class IconPreferenceFragment extends SimpleFragment implements Status.OnPreferenceChangedListener {
+public class IconPreferenceFragment extends SimpleFragment implements Status.OnIconPreferenceChangedListener {
 
     private Status status;
     private IconAdapter adapter;
@@ -26,7 +27,7 @@ public class IconPreferenceFragment extends SimpleFragment implements Status.OnP
         status = (Status) getContext().getApplicationContext();
         status.addListener(this);
 
-        RecyclerView recycler = (RecyclerView) v.findViewById(R.id.recycler);
+        RecyclerView recycler = v.findViewById(R.id.recycler);
         recycler.setLayoutManager(new GridLayoutManager(getContext(), 1));
 
         adapter = new IconAdapter(getActivity());
@@ -69,7 +70,8 @@ public class IconPreferenceFragment extends SimpleFragment implements Status.OnP
     }
 
     @Override
-    public void onPreferenceChanged() {
-        if (adapter != null) adapter.notifyDataSetChanged();
+    public void onIconPreferenceChanged(IconData... icons) {
+        if (adapter != null)
+            adapter.notifyIconsChanged(icons);
     }
 }

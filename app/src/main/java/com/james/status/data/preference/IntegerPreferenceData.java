@@ -30,7 +30,7 @@ public class IntegerPreferenceData extends BasePreferenceData<Integer> {
         Dialog dialog = new IntegerPickerDialog(getContext(), unit).setMinMax(min, max).setPreference(preference).setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
             @Override
             public void onPreference(PreferenceDialog dialog, Integer value) {
-                IntegerPreferenceData.this.preference = preference;
+                preference = value;
 
                 getIdentifier().setPreferenceValue(getContext(), value);
                 onPreferenceChange(value);

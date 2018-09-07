@@ -20,6 +20,7 @@ public class PreferenceSectionAdapter extends RecyclerView.Adapter<PreferenceSec
 
     private Context context;
     private List<BasePreferenceData.Identifier.SectionIdentifier> sections;
+    private List<PreferenceAdapter> adapters;
     private List<BasePreferenceData> originalDatas, datas;
 
     public PreferenceSectionAdapter(Context context, List<BasePreferenceData> datas) {
@@ -32,9 +33,13 @@ public class PreferenceSectionAdapter extends RecyclerView.Adapter<PreferenceSec
         this.datas.addAll(originalDatas);
 
         sections = new ArrayList<>();
+        adapters = new ArrayList<>();
         for (BasePreferenceData data : datas) {
             BasePreferenceData.Identifier.SectionIdentifier section = data.getIdentifier().getSection();
-            if (!sections.contains(section)) sections.add(section);
+            if (!sections.contains(section)) {
+                sections.add(section);
+                adapters.add(new PreferenceAdapter(context, getItems(section)));
+            }
         }
     }
 
@@ -48,10 +53,12 @@ public class PreferenceSectionAdapter extends RecyclerView.Adapter<PreferenceSec
         holder.title.setText(sections.get(position).getName(context));
 
         ArrayList<BasePreferenceData> items = getItems(sections.get(position));
+        PreferenceAdapter adapter = adapters.get(position);
+        adapter.setItems(items);
 
         holder.recycler.setNestedScrollingEnabled(false);
         holder.recycler.setLayoutManager(new GridLayoutManager(context, 1));
-        holder.recycler.setAdapter(new PreferenceAdapter(context, items));
+        holder.recycler.setAdapter(adapter);
 
         if (items.size() > 0) holder.v.setVisibility(View.VISIBLE);
         else holder.v.setVisibility(View.GONE);
@@ -73,6 +80,15 @@ public class PreferenceSectionAdapter extends RecyclerView.Adapter<PreferenceSec
         return datas;
     }
 
+    public void notifyPreferenceChanged(PreferenceData... preferences) {
+        for (PreferenceData preference : preferences) {
+            for (int i = 0; i < adapters.size(); i++) {
+                if (adapters.get(i).notifyPreferenceChanged(preference))
+                    notifyItemChanged(i);
+            }
+        }
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         View v;
@@ -82,8 +98,8 @@ public class PreferenceSectionAdapter extends RecyclerView.Adapter<PreferenceSec
         public ViewHolder(View v) {
             super(v);
             this.v = v;
-            title = (TextView) v.findViewById(R.id.title);
-            recycler = (RecyclerView) v.findViewById(R.id.recycler);
+            title = v.findViewById(R.id.title);
+            recycler = v.findViewById(R.id.recycler);
         }
     }
 

@@ -26,7 +26,7 @@ public class BooleanPreferenceData extends BasePreferenceData<Boolean> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
 
-        SwitchCompat titleView = (SwitchCompat) holder.v.findViewById(R.id.title);
+        SwitchCompat titleView = holder.v.findViewById(R.id.title);
 
         titleView.setOnCheckedChangeListener(null);
         titleView.setChecked(value);

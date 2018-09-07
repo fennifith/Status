@@ -3,6 +3,7 @@ package com.james.status.fragments;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -19,25 +20,47 @@ import com.james.status.data.preference.BasePreferenceData;
 import com.james.status.data.preference.BooleanPreferenceData;
 import com.james.status.data.preference.ColorPreferenceData;
 import com.james.status.data.preference.IntegerPreferenceData;
-import com.james.status.data.preference.ListPreferenceData;
 import com.james.status.dialogs.BackupDialog;
-import com.james.status.services.StatusService;
+import com.james.status.services.AccessibilityService;
 import com.james.status.utils.StaticUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class GeneralPreferenceFragment extends SimpleFragment implements BasePreferenceData.OnPreferenceChangeListener {
+public class GeneralPreferenceFragment extends SimpleFragment {
 
     private PreferenceSectionAdapter adapter;
+
+    private final BasePreferenceData.OnPreferenceChangeListener updateListener = new BasePreferenceData.OnPreferenceChangeListener() {
+        @Override
+        public void onPreferenceChange(Object preference) {
+            StaticUtils.updateStatusService(getContext(), true);
+        }
+    };
+    private final BasePreferenceData.OnPreferenceChangeListener recreateListener = new BasePreferenceData.OnPreferenceChangeListener() {
+        @Override
+        public void onPreferenceChange(Object preference) {
+            StaticUtils.updateStatusService(getContext(), false);
+        }
+    };
+    private final BasePreferenceData.OnPreferenceChangeListener colorListener = new BasePreferenceData.OnPreferenceChangeListener() {
+        @Override
+        public void onPreferenceChange(Object preference) {
+            if (StaticUtils.isAccessibilityServiceRunning(getContext())) {
+                Intent intent = new Intent(AccessibilityService.ACTION_GET_COLOR);
+                intent.setClass(getContext(), AccessibilityService.class);
+                getContext().startService(intent);
+            }
+        }
+    };
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_settings, container, false);
 
-        RecyclerView recycler = (RecyclerView) v.findViewById(R.id.recycler);
+        RecyclerView recycler = v.findViewById(R.id.recycler);
         recycler.setLayoutManager(new GridLayoutManager(getContext(), 1));
 
         List<BasePreferenceData> preferences = new ArrayList<>();
@@ -51,7 +74,7 @@ public class GeneralPreferenceFragment extends SimpleFragment implements BasePre
                                 getString(R.string.preference_bar_color_auto_desc),
                                 BasePreferenceData.Identifier.SectionIdentifier.COLORS
                         ),
-                        this
+                        colorListener
                 ),
                 new ColorPreferenceData(
                         getContext(),
@@ -60,8 +83,13 @@ public class GeneralPreferenceFragment extends SimpleFragment implements BasePre
                                 getString(R.string.preference_bar_color_chooser),
                                 BasePreferenceData.Identifier.SectionIdentifier.COLORS
                         ),
-                        this
-                ),
+                        updateListener
+                ).withAlpha(new BasePreferenceData.ValueGetter<Boolean>() {
+                    @Override
+                    public Boolean get() {
+                        return PreferenceData.STATUS_TRANSPARENT_MODE.getValue(getContext());
+                    }
+                }),
                 new BooleanPreferenceData(
                         getContext(),
                         new BasePreferenceData.Identifier<Boolean>(
@@ -79,8 +107,27 @@ public class GeneralPreferenceFragment extends SimpleFragment implements BasePre
                                 getString(R.string.preference_default_color_icon),
                                 BasePreferenceData.Identifier.SectionIdentifier.ICONS
                         ),
-                        null
-                ),
+                        updateListener
+                ).withAlpha(new BasePreferenceData.ValueGetter<Boolean>() {
+                    @Override
+                    public Boolean get() {
+                        return true;
+                    }
+                }),
+                new ColorPreferenceData(
+                        getContext(),
+                        new BasePreferenceData.Identifier<Integer>(
+                                PreferenceData.STATUS_ICON_TEXT_COLOR,
+                                getString(R.string.preference_default_color_text),
+                                BasePreferenceData.Identifier.SectionIdentifier.ICONS
+                        ),
+                        updateListener
+                ).withAlpha(new BasePreferenceData.ValueGetter<Boolean>() {
+                    @Override
+                    public Boolean get() {
+                        return true;
+                    }
+                }),
                 new BooleanPreferenceData(
                         getContext(),
                         new BasePreferenceData.Identifier<Boolean>(
@@ -89,19 +136,63 @@ public class GeneralPreferenceFragment extends SimpleFragment implements BasePre
                                 getString(R.string.preference_dark_icons_desc),
                                 BasePreferenceData.Identifier.SectionIdentifier.ICONS
                         ),
-                        this
+                        new BasePreferenceData.OnPreferenceChangeListener<Boolean>() {
+                            @Override
+                            public void onPreferenceChange(Boolean preference) {
+                                colorListener.onPreferenceChange(preference);
+                                adapter.notifyPreferenceChanged(PreferenceData.STATUS_DARK_ICONS);
+                            }
+                        }
                 ),
-                new BooleanPreferenceData(
+                new ColorPreferenceData(
                         getContext(),
-                        new BasePreferenceData.Identifier<Boolean>(
-                                PreferenceData.STATUS_PREVENT_ICON_OVERLAP,
-                                getString(R.string.preference_prevent_icon_overlap),
-                                getString(R.string.preference_prevent_icon_overlap_desc),
+                        new BasePreferenceData.Identifier<Integer>(
+                                PreferenceData.STATUS_DARK_ICON_COLOR,
+                                getString(R.string.preference_default_color_icon_dark),
                                 BasePreferenceData.Identifier.SectionIdentifier.ICONS
                         ),
-                        this
-                ),
-                new BooleanPreferenceData(
+                        updateListener
+                ).withAlpha(new BasePreferenceData.ValueGetter<Boolean>() {
+                    @Override
+                    public Boolean get() {
+                        return true;
+                    }
+                }).withVisibility(new BasePreferenceData.VisibilityInterface() {
+                    @Override
+                    public PreferenceData getDependent() {
+                        return PreferenceData.STATUS_DARK_ICONS;
+                    }
+
+                    @Override
+                    public Boolean getValue() {
+                        return true;
+                    }
+                }),
+                new ColorPreferenceData(
+                        getContext(),
+                        new BasePreferenceData.Identifier<Integer>(
+                                PreferenceData.STATUS_DARK_ICON_TEXT_COLOR,
+                                getString(R.string.preference_default_color_text_dark),
+                                BasePreferenceData.Identifier.SectionIdentifier.ICONS
+                        ),
+                        updateListener
+                ).withAlpha(new BasePreferenceData.ValueGetter<Boolean>() {
+                    @Override
+                    public Boolean get() {
+                        return true;
+                    }
+                }).withVisibility(new BasePreferenceData.VisibilityInterface() {
+                    @Override
+                    public PreferenceData getDependent() {
+                        return PreferenceData.STATUS_DARK_ICONS;
+                    }
+
+                    @Override
+                    public Boolean getValue() {
+                        return true;
+                    }
+                }),
+                /*new BooleanPreferenceData( TODO: #137
                         getContext(),
                         new BasePreferenceData.Identifier<Boolean>(
                                 PreferenceData.STATUS_TINTED_ICONS,
@@ -109,7 +200,7 @@ public class GeneralPreferenceFragment extends SimpleFragment implements BasePre
                                 getString(R.string.preference_tinted_icons_desc),
                                 BasePreferenceData.Identifier.SectionIdentifier.ICONS
                         ),
-                        this
+                        recreateListener
                 ),
                 new BooleanPreferenceData(
                         getContext(),
@@ -119,8 +210,8 @@ public class GeneralPreferenceFragment extends SimpleFragment implements BasePre
                                 getString(R.string.preference_bump_mode_desc),
                                 BasePreferenceData.Identifier.SectionIdentifier.ICONS
                         ),
-                        this
-                ),
+                        recreateListener
+                ),*/
                 new BooleanPreferenceData(
                         getContext(),
                         new BasePreferenceData.Identifier<Boolean>(
@@ -129,7 +220,7 @@ public class GeneralPreferenceFragment extends SimpleFragment implements BasePre
                                 getString(R.string.preference_background_animations_desc),
                                 BasePreferenceData.Identifier.SectionIdentifier.ANIMATIONS
                         ),
-                        this
+                        recreateListener
                 ),
                 new BooleanPreferenceData(
                         getContext(),
@@ -139,9 +230,9 @@ public class GeneralPreferenceFragment extends SimpleFragment implements BasePre
                                 getString(R.string.preference_icon_animations_desc),
                                 BasePreferenceData.Identifier.SectionIdentifier.ANIMATIONS
                         ),
-                        this
+                        recreateListener
                 ),
-                new BooleanPreferenceData(
+                /*new BooleanPreferenceData( //TODO: re-enable once stuff is fixed
                         getContext(),
                         new BasePreferenceData.Identifier<Boolean>(
                                 PreferenceData.STATUS_NOTIFICATIONS_HEADS_UP,
@@ -150,45 +241,7 @@ public class GeneralPreferenceFragment extends SimpleFragment implements BasePre
                                 BasePreferenceData.Identifier.SectionIdentifier.NOTIFICATIONS
                         ),
                         null
-                ),
-                new IntegerPreferenceData(
-                        getContext(),
-                        new BasePreferenceData.Identifier<Integer>(
-                                PreferenceData.STATUS_HEADS_UP_DURATION,
-                                getString(R.string.preference_heads_up_duration),
-                                getString(R.string.preference_heads_up_duration_desc),
-                                BasePreferenceData.Identifier.SectionIdentifier.NOTIFICATIONS
-                        ),
-                        getString(R.string.unit_seconds),
-                        0,
-                        20,
-                        null
-                ),
-                new ListPreferenceData(
-                        getContext(),
-                        new BasePreferenceData.Identifier<Integer>(
-                                PreferenceData.STATUS_HEADS_UP_LAYOUT,
-                                getString(R.string.preference_heads_up_layout),
-                                BasePreferenceData.Identifier.SectionIdentifier.NOTIFICATIONS
-                        ),
-                        null,
-                        new ListPreferenceData.ListPreference(
-                                getString(R.string.heads_up_plain),
-                                StatusService.HEADSUP_LAYOUT_PLAIN
-                        ),
-                        new ListPreferenceData.ListPreference(
-                                getString(R.string.heads_up_card),
-                                StatusService.HEADSUP_LAYOUT_CARD
-                        ),
-                        new ListPreferenceData.ListPreference(
-                                getString(R.string.heads_up_condensed),
-                                StatusService.HEADSUP_LAYOUT_CONDENSED
-                        ),
-                        new ListPreferenceData.ListPreference(
-                                getString(R.string.heads_up_transparent),
-                                StatusService.HEADSUP_LAYOUT_TRANSPARENT
-                        )
-                ),
+                ),*/
                 new BooleanPreferenceData(
                         getContext(),
                         new BasePreferenceData.Identifier<Boolean>(
@@ -197,7 +250,7 @@ public class GeneralPreferenceFragment extends SimpleFragment implements BasePre
                                 getString(R.string.preference_persistent_notification_desc),
                                 BasePreferenceData.Identifier.SectionIdentifier.OTHER
                         ),
-                        this
+                        recreateListener
                 )));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -210,7 +263,7 @@ public class GeneralPreferenceFragment extends SimpleFragment implements BasePre
                                     getString(R.string.preference_ignore_permission_checking_desc),
                                     BasePreferenceData.Identifier.SectionIdentifier.OTHER
                             ),
-                            this
+                            recreateListener
                     )
             );
         }
@@ -227,7 +280,7 @@ public class GeneralPreferenceFragment extends SimpleFragment implements BasePre
                         getString(R.string.unit_px),
                         0,
                         Integer.MAX_VALUE,
-                        this
+                        recreateListener
                 ),
                 new BooleanPreferenceData(
                         getContext(),
@@ -237,7 +290,7 @@ public class GeneralPreferenceFragment extends SimpleFragment implements BasePre
                                 getString(R.string.preference_transparent_mode_desc),
                                 BasePreferenceData.Identifier.SectionIdentifier.OTHER
                         ),
-                        this
+                        updateListener
                 ),
                 new IntegerPreferenceData(
                         getContext(),
@@ -250,7 +303,7 @@ public class GeneralPreferenceFragment extends SimpleFragment implements BasePre
                         getString(R.string.unit_dp),
                         0,
                         100,
-                        this
+                        updateListener
                 ),
                 new BooleanPreferenceData(
                         getContext(),
@@ -260,7 +313,7 @@ public class GeneralPreferenceFragment extends SimpleFragment implements BasePre
                                 getString(R.string.preference_burnin_protection_desc),
                                 BasePreferenceData.Identifier.SectionIdentifier.OTHER
                         ),
-                        this
+                        recreateListener
                 ),
                 new BasePreferenceData(
                         getContext(),
@@ -315,10 +368,5 @@ public class GeneralPreferenceFragment extends SimpleFragment implements BasePre
     @Override
     public String getTitle(Context context) {
         return context.getString(R.string.tab_settings);
-    }
-
-    @Override
-    public void onPreferenceChange(Object preference) {
-        StaticUtils.updateStatusService(getContext());
     }
 }

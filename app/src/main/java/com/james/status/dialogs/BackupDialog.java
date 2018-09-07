@@ -80,7 +80,7 @@ public class BackupDialog extends AppCompatDialog implements BackupCreatorDialog
             recyclerView.getAdapter().notifyDataSetChanged();
 
         if (isSettingsChanged) {
-            StaticUtils.updateStatusService(getContext());
+            StaticUtils.updateStatusService(getContext(), false);
             this.isSettingsChanged = true;
         }
     }

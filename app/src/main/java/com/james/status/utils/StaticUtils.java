@@ -20,12 +20,11 @@ import android.util.Log;
 import android.util.TypedValue;
 
 import com.james.status.BuildConfig;
-import com.james.status.Status;
 import com.james.status.activities.StartActivity;
 import com.james.status.data.PreferenceData;
 import com.james.status.data.icon.IconData;
 import com.james.status.services.AccessibilityService;
-import com.james.status.services.StatusService;
+import com.james.status.services.StatusServiceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,13 +103,6 @@ public class StaticUtils {
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(context);
     }
 
-    public static int getAnimatedValue(int drawn, int target) {
-        int difference = target - drawn;
-        if (difference > 0)
-            return drawn + (target < drawn ? Math.min(difference / 8, -1) : Math.max(difference / 8, 1));
-        else return target;
-    }
-
     public static int getMergedValue(int v1, int v2, float r) {
         return (int) ((v1 * r) + (v2 * (1 - r)));
     }
@@ -128,7 +120,7 @@ public class StaticUtils {
     }
 
     public static boolean isAllPermissionsGranted(Context context) {
-        for (IconData icon : StatusService.getIcons(context)) {
+        for (IconData icon : StatusServiceImpl.getIcons(context)) {
             for (String permission : icon.getPermissions()) {
                 if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
                     if (BuildConfig.DEBUG)
@@ -153,18 +145,16 @@ public class StaticUtils {
     }
 
     public static boolean isStatusServiceRunning(Context context) {
-        if ((boolean) PreferenceData.STATUS_ENABLED.getValue(context) && isReady(context)) {
+        if (context != null && (boolean) PreferenceData.STATUS_ENABLED.getValue(context) && isReady(context)) {
             ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
             if (manager != null) {
                 for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-                    if (StatusService.class.getName().equals(service.service.getClassName())) {
+                    if (StatusServiceImpl.class.getName().equals(service.service.getClassName())) {
                         return true;
                     }
                 }
 
-                Intent intent = new Intent(StatusService.ACTION_START);
-                intent.setClass(context, StatusService.class);
-                context.startService(intent);
+                StatusServiceImpl.start(context);
                 return true;
             }
         }
@@ -172,17 +162,25 @@ public class StaticUtils {
         return false;
     }
 
-    public static void updateStatusService(Context context) {
+    /**
+     * Sends an intent to apply preference changes to the StatusService
+     *
+     * @param context         current context to send intent from
+     * @param shouldKeepIcons whether to reuse existing instances of IconDatas
+     */
+    public static void updateStatusService(Context context, boolean shouldKeepIcons) {
         if (isStatusServiceRunning(context)) {
-            Intent intent = new Intent(StatusService.ACTION_START);
-            intent.setClass(context, StatusService.class);
+            Intent intent = new Intent(StatusServiceImpl.ACTION_START);
+            intent.setClass(context, StatusServiceImpl.getCompatClass(context));
+            intent.putExtra(StatusServiceImpl.EXTRA_KEEP_OLD, shouldKeepIcons);
             context.startService(intent);
         }
-
-        ((Status) context.getApplicationContext()).onPreferenceChanged();
     }
 
     public static boolean isAccessibilityServiceRunning(Context context) {
+        if (context == null)
+            return false;
+
         ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         if (manager != null) {
             for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {

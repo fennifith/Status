@@ -175,7 +175,6 @@
     <string name="preference_bump_mode_desc">ينشأ وهمية (وحقا مثير) \ "كاميرا الأنماط \" في جميع أنحاء مركز الانحياز عن طريق العناصر الموجودة في شريط الحالة. من فضلك لا أي وقت مضى تمكين هذا الخيار.</string>
     <string name="preference_text_effect">نمط النص</string>
     <string name="preference_transparent_mode">وضع الشفاف</string>
-    <string name="preference_transparent_mode_desc">يجعل خلفية شريط الحالة شفافة في جميع الأوقات. نضع في اعتبارنا أن الأصلي شريط ستظل مرئية وراء هذا واحد؛ فقط أوقات هذا الخيار قد يكون من المفيد هو إذا كنت تعطيل كافة شريط الرموز باستخدام systemui دعم على أندرويد النوغة مارشميلو أو أعلى.</string>
 
     <string name="icon_notifications">الإشعارات</string>
     <string name="icon_clock">الوقت</string>
@@ -396,6 +395,9 @@
     <string name="section_notifications">Notifications</string>
     <string name="section_other">Other</string>
     <string name="preference_text_font">Text Font</string>
+    <string name="preference_default_color_icon_dark">Default (Dark) Icon Color</string>
+    <string name="preference_default_color_text_dark">Default (Dark) Text Color</string>
+    <string name="preference_transparent_mode_desc">Enables the alpha/transparency sliders for the background color-related settings. Keep in mind that the original status bar will be visible behind this one; the only time this option might be useful is if you disable all status bar icons using SystemUI tuner and turn off \"Resource-Based Colors\".</string>
 
     <string-array name="faq">
         <item>

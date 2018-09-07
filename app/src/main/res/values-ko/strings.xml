@@ -173,7 +173,6 @@
     <string name="preference_bump_mode_desc">상태 표시줄의 가운데로 정렬된 항목에 가짜(그리고 정말 추한) \"카메라 범프\"를 만듭니다. 이 옵션을 절대로 활성화하지 말아주세요.</string>
     <string name="preference_text_effect">글자 스타일</string>
     <string name="preference_transparent_mode">투명 모드</string>
-    <string name="preference_transparent_mode_desc">상태 표시줄의 배경을 항상 투명으로 만듭니다. 기존의 상태 표시줄이 뒤로 보인다는 것을 명심하세요. 안드로이드 누가 이상에서 SystemUI 튜너를 이용해 상태 표시줄의 모든 아이콘을 해제하면 이 옵션은 매우 유용합니다.</string>
     <string name="preference_prevent_icon_overlap">아이콘 겹침 방지</string>
     <string name="preference_prevent_icon_overlap_desc">아이콘 \"영역\"이 한번에 너무 많은 아이콘이 동시에 표시될 때 서로 겹치지 않도록 방지합니다. 이 설정은 너무 많은 업데이트(음악 플레이어 알림이 특히 매초마다 업데이트 할경우 부담스러울 수 있습니다.)를 통해 배터리 방전을 초래할 수 있습니다. 그러니 사용할때 조심하세요.</string>
     <string name="preference_ignore_permission_checking">권환 확인 무시</string>
@@ -487,5 +486,8 @@
     <string name="james_desc">Android developer and professional cabbage eater.</string>
     <string name="anas_desc">Better known as the Oreo lord, this guy can add more butter to buttery interfaces.</string>
     <string name="preference_text_font">Text Font</string>
+    <string name="preference_default_color_icon_dark">Default (Dark) Icon Color</string>
+    <string name="preference_default_color_text_dark">Default (Dark) Text Color</string>
+    <string name="preference_transparent_mode_desc">Enables the alpha/transparency sliders for the background color-related settings. Keep in mind that the original status bar will be visible behind this one; the only time this option might be useful is if you disable all status bar icons using SystemUI tuner and turn off \"Resource-Based Colors\".</string>
 
 </resources>

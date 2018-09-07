@@ -13,7 +13,7 @@ import android.widget.CompoundButton;
 import com.james.status.R;
 import com.james.status.data.PreferenceData;
 import com.james.status.data.icon.IconData;
-import com.james.status.services.StatusService;
+import com.james.status.services.StatusServiceImpl;
 import com.james.status.utils.StaticUtils;
 
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
 
     public IconAdapter(Activity activity) {
         this.activity = activity;
-        setIcons(StatusService.getIcons(activity));
+        setIcons(StatusServiceImpl.getIcons(activity));
     }
 
     @Override
@@ -65,7 +65,7 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
                     holder.checkBox.setOnCheckedChangeListener(this);
                 } else {
                     PreferenceData.ICON_VISIBILITY.setValue(activity, isChecked, icon.getIdentifierArgs());
-                    StaticUtils.updateStatusService(activity);
+                    StaticUtils.updateStatusService(activity, false);
 
                     notifyItemChanged(holder.getAdapterPosition());
                 }
@@ -86,7 +86,7 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
 
                 setIcons(icons);
                 notifyDataSetChanged();
-                StaticUtils.updateStatusService(activity);
+                StaticUtils.updateStatusService(activity, true);
             }
         });
 
@@ -104,11 +104,11 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
 
                 setIcons(icons);
                 notifyDataSetChanged();
-                StaticUtils.updateStatusService(activity);
+                StaticUtils.updateStatusService(activity, true);
             }
         });
 
-        RecyclerView recycler = (RecyclerView) holder.v.findViewById(R.id.recycler);
+        RecyclerView recycler = holder.v.findViewById(R.id.recycler);
         recycler.setVisibility(isVisible ? View.VISIBLE : View.GONE);
 
         recycler.setLayoutManager(new GridLayoutManager(activity, 1));
@@ -160,6 +160,13 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
         this.icons.addAll(originalIcons);
     }
 
+    public void notifyIconsChanged(IconData... icons) {
+        for (IconData icon : icons) {
+            if (this.icons.contains(icon))
+                notifyItemChanged(this.icons.indexOf(icon));
+        }
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         View v;
         AppCompatCheckBox checkBox;
@@ -168,7 +175,7 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
         public ViewHolder(View v) {
             super(v);
             this.v = v;
-            checkBox = (AppCompatCheckBox) v.findViewById(R.id.iconCheckBox);
+            checkBox = v.findViewById(R.id.iconCheckBox);
             moveUp = v.findViewById(R.id.moveUp);
             moveDown = v.findViewById(R.id.moveDown);
         }

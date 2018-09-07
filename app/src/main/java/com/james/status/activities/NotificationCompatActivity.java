@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.FrameLayout;
 
 import com.james.status.dialogs.CompatibilityNotificationDialog;
+import com.james.status.services.StatusServiceImpl;
 import com.james.status.utils.StaticUtils;
 
 public class NotificationCompatActivity extends AppCompatActivity {
@@ -14,11 +15,13 @@ public class NotificationCompatActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(new FrameLayout(this));
+        StatusServiceImpl.stop(this);
 
         CompatibilityNotificationDialog dialog = new CompatibilityNotificationDialog(this);
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
+                StatusServiceImpl.stop(NotificationCompatActivity.this);
                 if (StaticUtils.shouldUseCompatNotifications(NotificationCompatActivity.this)) {
                     setResult(RESULT_OK);
                     finish();

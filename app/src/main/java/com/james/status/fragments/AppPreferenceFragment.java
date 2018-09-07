@@ -35,13 +35,8 @@ public class AppPreferenceFragment extends SimpleFragment {
     private List<AppData> apps;
     private PackageManager packageManager;
 
-    private boolean isSelected;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public AppPreferenceFragment() {
         apps = new ArrayList<>();
-        packageManager = getContext().getPackageManager();
     }
 
     @Nullable
@@ -49,8 +44,10 @@ public class AppPreferenceFragment extends SimpleFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_apps, container, false);
 
-        recycler = (RecyclerView) v.findViewById(R.id.recycler);
-        progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
+        packageManager = getContext().getPackageManager();
+
+        recycler = v.findViewById(R.id.recycler);
+        progressBar = v.findViewById(R.id.progressBar);
 
         recycler.setLayoutManager(new GridLayoutManager(getContext(), 1));
         progressBar.setVisibility(View.VISIBLE);
@@ -102,7 +99,7 @@ public class AppPreferenceFragment extends SimpleFragment {
                     app.clearPreferences(getContext());
                 }
 
-                StaticUtils.updateStatusService(getContext());
+                StaticUtils.updateStatusService(getContext(), true);
                 adapter.notifyDataSetChanged();
                 dialogInterface.dismiss();
             }
@@ -135,23 +132,8 @@ public class AppPreferenceFragment extends SimpleFragment {
             app.putSpecificPreference(getContext(), AppData.PreferenceIdentifier.NOTIFICATIONS, isNotifications);
         }
 
-        StaticUtils.updateStatusService(getContext());
+        StaticUtils.updateStatusService(getContext(), true);
         adapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onSelect() {
-        isSelected = true;
-    }
-
-    @Override
-    public void onEnterScroll(float offset) {
-        isSelected = offset == 0;
-    }
-
-    @Override
-    public void onExitScroll(float offset) {
-        isSelected = offset == 0;
     }
 
     @Override

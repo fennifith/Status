@@ -1,8 +1,10 @@
 package com.james.status.activities;
 
 import android.annotation.TargetApi;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,7 +22,7 @@ import android.widget.Toast;
 
 import com.james.status.R;
 import com.james.status.data.PreferenceData;
-import com.james.status.services.StatusService;
+import com.james.status.services.StatusServiceImpl;
 import com.james.status.utils.StaticUtils;
 
 import java.util.ArrayList;
@@ -41,7 +43,7 @@ public class StartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
-        SteppersView steppersView = (SteppersView) findViewById(R.id.steppersView);
+        SteppersView steppersView = findViewById(R.id.steppersView);
 
         SteppersView.Config steppersViewConfig = new SteppersView.Config();
         steppersViewConfig.setOnFinishAction(new OnFinishAction() {
@@ -49,10 +51,7 @@ public class StartActivity extends AppCompatActivity {
             public void onFinish() {
                 PreferenceData.STATUS_ENABLED.setValue(StartActivity.this, true);
 
-                Intent intent = new Intent(StatusService.ACTION_START);
-                intent.setClass(StartActivity.this, StatusService.class);
-                startService(intent);
-
+                StatusServiceImpl.start(StartActivity.this);
                 finish();
             }
         });
@@ -183,6 +182,10 @@ public class StartActivity extends AppCompatActivity {
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        PackageManager pm = v.getContext().getPackageManager();
+                        pm.setComponentEnabledSetting(new ComponentName(v.getContext(), StatusServiceImpl.getCompatClass(v.getContext())),
+                                PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP); //this should be redundant, but it isn't
+
                         startActivityForResult(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"), REQUEST_NOTIFICATION);
                         Toast.makeText(getContext(), R.string.msg_accessibility_switch_enable, Toast.LENGTH_LONG).show();
                     }

@@ -1,6 +1,7 @@
 package com.james.status.adapters;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -9,11 +10,10 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.afollestad.async.Action;
@@ -22,10 +22,13 @@ import com.afollestad.async.Done;
 import com.afollestad.async.Result;
 import com.james.status.R;
 import com.james.status.data.AppData;
+import com.james.status.data.PreferenceData;
 import com.james.status.dialogs.ColorPickerDialog;
+import com.james.status.dialogs.FullscreenEditorDialog;
 import com.james.status.dialogs.PreferenceDialog;
 import com.james.status.utils.ColorUtils;
-import com.james.status.views.ColorImageView;
+import com.james.status.views.CircleColorView;
+import com.james.status.views.ColorView;
 import com.james.status.views.CustomImageView;
 
 import java.util.List;
@@ -148,7 +151,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
                         AppData.ActivityData activity = getActivity(holder.getAdapterPosition());
                         if (activity == null) return;
 
-                        ColorPickerDialog dialog = new ColorPickerDialog(context);
+                        ColorPickerDialog dialog = new ColorPickerDialog(context).withAlpha((Boolean) PreferenceData.STATUS_TRANSPARENT_MODE.getValue(context));
                         if (colorsAction != null && colorsAction.getResult() != null)
                             dialog.setPresetColors((List<Integer>) colorsAction.getResult());
                         if (colorAction != null && colorAction.getResult() != null)
@@ -199,28 +202,29 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
             protected void done(@Nullable Integer result) {
                 if (result != null) {
                     holder.colorView.setColor(result);
-
-                    holder.titleBar.setBackgroundColor(result);
+                    holder.backgroundView.setColor(result);
                     holder.name.setTextColor(ContextCompat.getColor(context, ColorUtils.isColorDark(result) ? R.color.textColorPrimaryInverse : R.color.textColorPrimary));
                     holder.packageName.setTextColor(ContextCompat.getColor(context, ColorUtils.isColorDark(result) ? R.color.textColorSecondaryInverse : R.color.textColorSecondary));
                 }
             }
         }.execute();
 
-        holder.fullscreenSwitch.setOnCheckedChangeListener(null);
-
         Boolean isFullscreen = activity.getBooleanPreference(context, AppData.PreferenceIdentifier.FULLSCREEN);
-        holder.fullscreenSwitch.setChecked(isFullscreen != null && isFullscreen);
-        holder.color.setVisibility(holder.fullscreenSwitch.isChecked() ? View.GONE : View.VISIBLE);
-
-        holder.fullscreenSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        holder.fullscreenImage.setImageResource(isFullscreen != null && isFullscreen ? R.drawable.ic_fullscreen : R.drawable.ic_fullscreen_exit);
+        holder.fullscreen.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            public void onClick(View v) {
                 AppData.ActivityData activity = getActivity(holder.getAdapterPosition());
-                if (activity == null) return;
-
-                activity.putPreference(context, AppData.PreferenceIdentifier.FULLSCREEN, isChecked);
-                holder.color.setVisibility(isChecked ? View.GONE : View.VISIBLE);
+                if (activity != null) {
+                    FullscreenEditorDialog dialog = new FullscreenEditorDialog(context, activity);
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            notifyItemChanged(holder.getAdapterPosition());
+                        }
+                    });
+                    dialog.show();
+                }
             }
         });
 
@@ -241,28 +245,30 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        View v, titleBar;
+        View v;
+        ColorView backgroundView;
         TextView name, packageName;
         CustomImageView icon;
-        ColorImageView colorView;
+        CircleColorView colorView;
         View launch;
         View color;
         View notifications;
-        SwitchCompat fullscreenSwitch, notificationSwitch;
+        View fullscreen;
+        ImageView fullscreenImage;
 
         public ViewHolder(View v) {
             super(v);
             this.v = v;
-            titleBar = v.findViewById(R.id.titleBar);
-            name = (TextView) v.findViewById(R.id.appName);
-            packageName = (TextView) v.findViewById(R.id.appPackage);
-            icon = (CustomImageView) v.findViewById(R.id.icon);
+            backgroundView = v.findViewById(R.id.backgroundColor);
+            name = v.findViewById(R.id.appName);
+            packageName = v.findViewById(R.id.appPackage);
+            icon = v.findViewById(R.id.icon);
             launch = v.findViewById(R.id.launch);
             color = v.findViewById(R.id.color);
-            colorView = (ColorImageView) v.findViewById(R.id.colorView);
+            colorView = v.findViewById(R.id.colorView);
             notifications = v.findViewById(R.id.notifications);
-            notificationSwitch = (SwitchCompat) v.findViewById(R.id.notificationSwitch);
-            fullscreenSwitch = (SwitchCompat) v.findViewById(R.id.fullscreenSwitch);
+            fullscreen = v.findViewById(R.id.fullscreen);
+            fullscreenImage = v.findViewById(R.id.fullscreenImage);
         }
     }
 }

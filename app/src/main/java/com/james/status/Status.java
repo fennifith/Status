@@ -8,6 +8,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.james.status.data.PreferenceData;
+import com.james.status.data.icon.IconData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,7 @@ public class Status extends Application {
 
     private List<OnActivityResultListener> onActivityResultListeners;
     private List<OnColorPickedListener> onColorPickedListeners;
-    private List<OnPreferenceChangedListener> onPreferenceChangedListeners;
+    private List<OnIconPreferenceChangedListener> onIconPreferenceChangedListeners;
 
     @Override
     public void onCreate() {
@@ -24,7 +25,7 @@ public class Status extends Application {
 
         onActivityResultListeners = new ArrayList<>();
         onColorPickedListeners = new ArrayList<>();
-        onPreferenceChangedListeners = new ArrayList<>();
+        onIconPreferenceChangedListeners = new ArrayList<>();
     }
 
     public void addListener(OnActivityResultListener listener) {
@@ -35,8 +36,8 @@ public class Status extends Application {
         onColorPickedListeners.add(listener);
     }
 
-    public void addListener(OnPreferenceChangedListener listener) {
-        onPreferenceChangedListeners.add(listener);
+    public void addListener(OnIconPreferenceChangedListener listener) {
+        onIconPreferenceChangedListeners.add(listener);
     }
 
     public void removeListener(OnActivityResultListener listener) {
@@ -47,8 +48,8 @@ public class Status extends Application {
         onColorPickedListeners.remove(listener);
     }
 
-    public void removeListener(OnPreferenceChangedListener listener) {
-        onPreferenceChangedListeners.remove(listener);
+    public void removeListener(OnIconPreferenceChangedListener listener) {
+        onIconPreferenceChangedListeners.remove(listener);
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -63,9 +64,9 @@ public class Status extends Application {
         }
     }
 
-    public void onPreferenceChanged() {
-        for (OnPreferenceChangedListener listener : onPreferenceChangedListeners) {
-            listener.onPreferenceChanged();
+    public void onIconPreferenceChanged(IconData... icons) {
+        for (OnIconPreferenceChangedListener listener : onIconPreferenceChangedListeners) {
+            listener.onIconPreferenceChanged(icons);
         }
     }
 
@@ -77,8 +78,8 @@ public class Status extends Application {
         void onColorPicked(@Nullable Integer color);
     }
 
-    public interface OnPreferenceChangedListener {
-        void onPreferenceChanged();
+    public interface OnIconPreferenceChangedListener {
+        void onIconPreferenceChanged(IconData... icons);
     }
 
     public static void showDebug(Context context, String message, int length) {
