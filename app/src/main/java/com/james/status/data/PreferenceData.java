@@ -33,7 +33,6 @@ public enum PreferenceData {
     STATUS_DARK_ICON_TEXT_COLOR(Color.argb(150, 0, 0, 0)),
     STATUS_DARK_ICONS(true),
     //STATUS_TINTED_ICONS(false), TODO: #137
-    STATUS_PREVENT_ICON_OVERLAP(false),
     //STATUS_BUMP_MODE(false), TODO: #137
     STATUS_BACKGROUND_ANIMATIONS(true),
     STATUS_ICON_ANIMATIONS(true),

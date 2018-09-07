@@ -192,16 +192,6 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                         return true;
                     }
                 }),
-                new BooleanPreferenceData(
-                        getContext(),
-                        new BasePreferenceData.Identifier<Boolean>(
-                                PreferenceData.STATUS_PREVENT_ICON_OVERLAP,
-                                getString(R.string.preference_prevent_icon_overlap),
-                                getString(R.string.preference_prevent_icon_overlap_desc),
-                                BasePreferenceData.Identifier.SectionIdentifier.ICONS
-                        ),
-                        recreateListener
-                ),
                 /*new BooleanPreferenceData( TODO: #137
                         getContext(),
                         new BasePreferenceData.Identifier<Boolean>(
