@@ -34,7 +34,7 @@ There used to be a list of all the possible icon formats here to use as a refere
 ## License
 
 ```
-Copyright 2016 James Fenn
+Copyright 2018 James Fenn
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
