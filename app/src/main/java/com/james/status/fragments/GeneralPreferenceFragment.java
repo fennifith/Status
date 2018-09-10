@@ -313,7 +313,7 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                                 getString(R.string.preference_burnin_protection_desc),
                                 BasePreferenceData.Identifier.SectionIdentifier.OTHER
                         ),
-                        recreateListener
+                        updateListener
                 ),
                 new BasePreferenceData(
                         getContext(),

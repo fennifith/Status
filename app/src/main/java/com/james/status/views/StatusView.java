@@ -67,41 +67,31 @@ public class StatusView extends View implements IconData.ReDrawListener {
                 handler.postDelayed(this, 2000);
             else isBurnInProtectionStarted = false;
 
-            switch (burnInOffsetX) {
-                case 0:
+            if (burnInOffsetX == 1) {
+                if (burnInOffsetY == 1) {
+                    burnInOffsetY--;
+                } else if (burnInOffsetY == -1) {
+                    burnInOffsetX--;
+                } else {
+                    burnInOffsetY--;
+                }
+            } else if (burnInOffsetX == -1) {
+                if (burnInOffsetY == 1) {
                     burnInOffsetX++;
-                    break;
-                case 2:
-                case 3:
-                case 4:
-                    burnInOffsetX++;
-                    break;
-                case 6:
-                    burnInOffsetX++;
-                    break;
-                case 7:
-                    burnInOffsetX = 0;
-                    break;
-                default:
-                    burnInOffsetX++;
-            }
-
-            switch (burnInOffsetY) {
-                case 0:
-                case 1:
-                case 2:
+                } else if (burnInOffsetY == -1) {
                     burnInOffsetY++;
-                    break;
-                case 4:
-                case 5:
-                case 6:
+                } else {
                     burnInOffsetY++;
-                    break;
-                case 7:
-                    burnInOffsetY = 0;
-                    break;
-                default:
+                }
+            } else {
+                if (burnInOffsetY == 1) {
+                    burnInOffsetX++;
+                } else if (burnInOffsetY == -1) {
+                    burnInOffsetX--;
+                } else {
+                    burnInOffsetX++;
                     burnInOffsetY++;
+                }
             }
 
             postInvalidate();
@@ -411,6 +401,9 @@ public class StatusView extends View implements IconData.ReDrawListener {
             canvas.drawBitmap(backgroundImage, 0, 0, paint);
         else canvas.drawColor(backgroundColor.val());
 
+        if (isBurnInProtection)
+            canvas.translate(burnInOffsetX, burnInOffsetY);
+
         int leftWidth = 0, centerWidth = 0, rightWidth = 0;
 
         for (IconData icon : leftIcons) {
@@ -464,9 +457,6 @@ public class StatusView extends View implements IconData.ReDrawListener {
                 x -= width;
             } else icon.updateAnimatedValues();
         }
-
-        if (isBurnInProtection)
-            canvas.translate(burnInOffsetX, burnInOffsetY);
 
         if (needsDraw())
             postInvalidate();

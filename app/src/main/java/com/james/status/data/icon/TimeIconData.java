@@ -22,8 +22,19 @@ public class TimeIconData extends IconData<TimeIconData.TimeReceiver> {
 
     public TimeIconData(Context context) {
         super(context);
+    }
+
+    @Override
+    public void init(boolean isFirstInit) {
         calendar = Calendar.getInstance();
-        format = PreferenceData.ICON_TEXT_FORMAT.getValue(context, DateFormat.is24HourFormat(context) ? "HH:mm" : "h:mm a");
+        format = PreferenceData.ICON_TEXT_FORMAT.getSpecificOverriddenValue(getContext(), DateFormat.is24HourFormat(getContext()) ? "HH:mm" : "h:mm a", getIdentifierArgs());
+
+        if (!isFirstInit && calendar != null) {
+            calendar.setTimeInMillis(System.currentTimeMillis());
+            onTextUpdate(DateFormat.format(format, calendar).toString());
+        }
+
+        super.init(isFirstInit);
     }
 
     @Override

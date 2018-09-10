@@ -107,7 +107,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
         init(false);
     }
 
-    private void init(boolean isFirstInit) {
+    protected void init(boolean isFirstInit) {
         iconColor.setDefault((int) PreferenceData.ICON_ICON_COLOR_LIGHT.getSpecificOverriddenValue(getContext(),
                 PreferenceData.STATUS_ICON_COLOR.getValue(getContext()), getIdentifierArgs()));
         defaultIconDarkColor = (int) PreferenceData.ICON_ICON_COLOR_DARK.getSpecificOverriddenValue(getContext(),
