@@ -114,12 +114,17 @@ public class StatusService extends NotificationListenerService {
     }
 
     public void sendNotifications() {
+        if (packageManager == null)
+            packageManager = getPackageManager();
+        if (packageManager == null)
+            return;
+
         if ((boolean) PreferenceData.STATUS_ENABLED.getValue(this) && !StaticUtils.shouldUseCompatNotifications(this)) {
             List<StatusBarNotification> notifications = getNotifications();
             Collections.reverse(notifications);
 
             for (StatusBarNotification sbn : notifications) {
-                if (sbn.getPackageName().matches("com.james.status"))
+                if (sbn == null || sbn.getPackageName().matches("com.james.status"))
                     continue;
 
                 AppData app = null;
