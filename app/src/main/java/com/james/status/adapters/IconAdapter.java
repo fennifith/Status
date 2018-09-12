@@ -2,10 +2,12 @@ package com.james.status.adapters;
 
 import android.app.Activity;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.AppCompatCheckBox;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SwitchCompat;
+import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
@@ -26,8 +28,11 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
     private String filter;
     public View itemView;
 
-    public IconAdapter(Activity activity) {
+    private ItemTouchHelper helper;
+
+    public IconAdapter(Activity activity, ItemTouchHelper helper) {
         this.activity = activity;
+        this.helper = helper;
         setIcons(StatusServiceImpl.getIcons(activity));
     }
 
@@ -72,51 +77,24 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
             }
         });
 
-        holder.moveUp.setVisibility(isVisible && position > 0 && filter == null ? View.VISIBLE : View.GONE);
-        holder.moveUp.setOnClickListener(new View.OnClickListener() {
+        holder.dragView.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-                IconData icon = getIcon(holder.getAdapterPosition());
-                if (icon == null) return;
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN)
+                    helper.startDrag(holder);
 
-                int position = icons.indexOf(icon);
-                List<IconData> icons = getIcons();
-                icons.remove(icon);
-                icons.add(position - 1, icon);
-
-                setIcons(icons);
-                notifyDataSetChanged();
-                StaticUtils.updateStatusService(activity, true);
+                return false;
             }
         });
 
-        holder.moveDown.setVisibility(isVisible && position < icons.size() - 1 && filter == null ? View.VISIBLE : View.GONE);
-        holder.moveDown.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View v) {
-                IconData icon = getIcon(holder.getAdapterPosition());
-                if (icon == null) return;
-
-                int position = icons.indexOf(icon);
-                List<IconData> icons = getIcons();
-                icons.remove(icon);
-                icons.add(position + 1, icon);
-
-                setIcons(icons);
-                notifyDataSetChanged();
-                StaticUtils.updateStatusService(activity, true);
+            public boolean onLongClick(View v) {
+                v.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                helper.startDrag(holder);
+                return false;
             }
         });
-
-        RecyclerView recycler = holder.v.findViewById(R.id.recycler);
-        recycler.setVisibility(isVisible ? View.VISIBLE : View.GONE);
-
-        recycler.setLayoutManager(new GridLayoutManager(activity, 1));
-        recycler.setNestedScrollingEnabled(false);
-        recycler.setAdapter(new PreferenceAdapter(activity, icon.getPreferences()));
-
-        holder.v.setAlpha(0);
-        holder.v.animate().alpha(1).setDuration(500).start();
     }
 
     @Override
@@ -168,16 +146,16 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+
         View v;
-        AppCompatCheckBox checkBox;
-        View moveUp, moveDown;
+        SwitchCompat checkBox;
+        View dragView;
 
         public ViewHolder(View v) {
             super(v);
             this.v = v;
-            checkBox = v.findViewById(R.id.iconCheckBox);
-            moveUp = v.findViewById(R.id.moveUp);
-            moveDown = v.findViewById(R.id.moveDown);
+            checkBox = v.findViewById(R.id.iconSwitch);
+            dragView = v.findViewById(R.id.drag);
         }
     }
 }
