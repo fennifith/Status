@@ -1,9 +1,7 @@
 package com.james.status.activities;
 
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -11,18 +9,11 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 
-import com.afollestad.async.Action;
 import com.james.status.R;
-import com.james.status.adapters.ActivityAdapter;
 import com.james.status.data.AppData;
-import com.james.status.data.PreferenceData;
-import com.james.status.dialogs.ColorPickerDialog;
-import com.james.status.dialogs.PreferenceDialog;
-import com.james.status.utils.ColorUtils;
 
 public class AppSettingActivity extends AppCompatActivity {
 
@@ -33,7 +24,7 @@ public class AppSettingActivity extends AppCompatActivity {
     private AppData.ActivityData activity;
     private ImageView colorView;
 
-    private ActivityAdapter adapter;
+    private RecyclerView.Adapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,69 +44,6 @@ public class AppSettingActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        findViewById(R.id.color).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new Action<Integer>() {
-                    @NonNull
-                    @Override
-                    public String id() {
-                        return "activityColorDialog";
-                    }
-
-                    @Nullable
-                    @Override
-                    protected Integer run() throws InterruptedException {
-                        return ColorUtils.getPrimaryColor(AppSettingActivity.this, app.getComponentName());
-                    }
-
-                    @Override
-                    protected void done(@Nullable Integer result) {
-                        ColorPickerDialog dialog = new ColorPickerDialog(AppSettingActivity.this).withAlpha((Boolean) PreferenceData.STATUS_TRANSPARENT_MODE.getValue(AppSettingActivity.this));
-                        dialog.setPreference(app.getIntegerPreference(AppSettingActivity.this, AppData.PreferenceIdentifier.COLOR));
-                        dialog.setDefaultPreference(result != null ? result : (int) PreferenceData.STATUS_COLOR.getValue(AppSettingActivity.this));
-                        dialog.setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
-                            @Override
-                            public void onPreference(PreferenceDialog dialog, Integer preference) {
-                                app.putPreference(AppSettingActivity.this, AppData.PreferenceIdentifier.COLOR, preference);
-                                colorView.setImageDrawable(new ColorDrawable(preference));
-                                adapter.notifyDataSetChanged();
-                            }
-
-                            @Override
-                            public void onCancel(PreferenceDialog dialog) {
-                            }
-                        });
-                        dialog.show();
-                    }
-                }.execute();
-            }
-        });
-
-        Integer color = app.getIntegerPreference(this, AppData.PreferenceIdentifier.COLOR);
-        if (color != null) {
-            colorView.setImageDrawable(new ColorDrawable(color));
-        } else {
-            new Action<Integer>() {
-                @NonNull
-                @Override
-                public String id() {
-                    return "activityColor";
-                }
-
-                @Nullable
-                @Override
-                protected Integer run() throws InterruptedException {
-                    return ColorUtils.getPrimaryColor(AppSettingActivity.this, app.getComponentName());
-                }
-
-                @Override
-                protected void done(@Nullable Integer result) {
-                    colorView.setImageDrawable(new ColorDrawable(result != null ? result : (int) PreferenceData.STATUS_COLOR.getValue(AppSettingActivity.this)));
-                }
-            }.execute();
-        }
 
         Boolean isFullscreen = app.getBooleanPreference(this, AppData.PreferenceIdentifier.FULLSCREEN);
         fullscreenSwitch.setChecked(isFullscreen != null && isFullscreen);
@@ -141,48 +69,12 @@ public class AppSettingActivity extends AppCompatActivity {
         recycler.setLayoutManager(new GridLayoutManager(this, 1));
         recycler.setNestedScrollingEnabled(false);
 
-        adapter = new ActivityAdapter(this, app.activities);
-        recycler.setAdapter(adapter);
+        //set adapter
 
         if (intent.hasExtra(EXTRA_ACTIVITY)) {
             activity = intent.getParcelableExtra(EXTRA_ACTIVITY);
 
-            new Action<Integer>() {
-                @NonNull
-                @Override
-                public String id() {
-                    return "activityColorDialog";
-                }
-
-                @Nullable
-                @Override
-                protected Integer run() throws InterruptedException {
-                    return ColorUtils.getPrimaryColor(AppSettingActivity.this, activity.getComponentName());
-                }
-
-                @Override
-                protected void done(@Nullable Integer result) {
-                    if (activity == null) return;
-
-                    ColorPickerDialog dialog = new ColorPickerDialog(AppSettingActivity.this);
-                    dialog.setPreference(activity.getIntegerPreference(AppSettingActivity.this, AppData.PreferenceIdentifier.COLOR));
-                    dialog.setDefaultPreference(result != null ? result : (int) PreferenceData.STATUS_COLOR.getValue(AppSettingActivity.this));
-                    dialog.setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
-                        @Override
-                        public void onPreference(PreferenceDialog dialog, Integer preference) {
-                            if (activity != null) {
-                                activity.putPreference(AppSettingActivity.this, AppData.PreferenceIdentifier.COLOR, preference);
-                                adapter.notifyDataSetChanged();
-                            }
-                        }
-
-                        @Override
-                        public void onCancel(PreferenceDialog dialog) {
-                        }
-                    });
-                    dialog.show();
-                }
-            }.execute();
+            //TODO: set color
         }
     }
 

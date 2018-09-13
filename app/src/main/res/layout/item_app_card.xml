@@ -1,234 +1,73 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="72dp"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp">
 
     <com.james.status.views.SquareImageView
-        android:id="@+id/help"
-        android:layout_width="42dp"
-        android:layout_height="42dp"
-        android:layout_gravity="end"
+        android:id="@+id/icon"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:scaleType="fitCenter"
+        tools:src="@mipmap/ic_launcher_web" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:scaleType="centerInside"
-        android:visibility="gone"
-        app:srcCompat="@drawable/ic_help" />
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:padding="4dp">
 
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        app:cardUseCompatPadding="true">
-
-        <LinearLayout
+        <TextView
+            android:id="@+id/appName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/selectableItemBackground"
-            android:orientation="vertical"
-            android:paddingBottom="12dp">
+            android:ellipsize="end"
+            android:lines="1"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="@color/textColorPrimary"
+            android:textSize="16sp"
+            tools:text="App Name" />
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp">
+        <TextView
+            android:id="@+id/appPackage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:lines="1"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="@color/textColorSecondary"
+            android:textSize="14sp"
+            tools:text="com.app.package" />
 
-                <com.james.status.views.ColorView
-                    android:id="@+id/backgroundColor"
-                    android:layout_width="fill_parent"
-                    android:layout_height="72dp" />
+    </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/titleBar"
-                    android:layout_width="match_parent"
-                    android:layout_height="72dp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
+    <com.james.status.views.SquareImageView
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:alpha="0.5"
+        android:scaleType="centerInside"
+        android:tint="@android:color/black"
+        app:srcCompat="@drawable/ic_settings" />
 
-                    <com.james.status.views.SquareImageView
-                        android:id="@+id/icon"
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp"
-                        android:scaleType="fitCenter" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:padding="4dp">
-
-                        <TextView
-                            android:id="@+id/appName"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:ellipsize="end"
-                            android:lines="1"
-                            android:maxLines="1"
-                            android:singleLine="true"
-                            android:textColor="@color/textColorPrimary"
-                            android:textSize="16sp" />
-
-                        <TextView
-                            android:id="@+id/appPackage"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:ellipsize="end"
-                            android:lines="1"
-                            android:maxLines="1"
-                            android:singleLine="true"
-                            android:textColor="@color/textColorSecondary"
-                            android:textSize="14sp" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </FrameLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:baselineAligned="true"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:id="@+id/color"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="top"
-                    android:layout_weight="1"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:gravity="top|center_horizontal"
-                    android:orientation="vertical"
-                    android:padding="12dp">
-
-                    <com.james.status.views.CircleColorView
-                        android:id="@+id/colorView"
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
-                        android:layout_gravity="center_horizontal"
-                        android:src="@android:color/black" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="4dp"
-                        android:gravity="center_horizontal"
-                        android:paddingLeft="12dp"
-                        android:paddingRight="12dp"
-                        android:text="@string/preference_status_color"
-                        android:textAlignment="center"
-                        android:textColor="?android:textColorSecondary"
-                        android:textSize="14sp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/fullscreen"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="top"
-                    android:layout_weight="1"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:gravity="top|center_horizontal"
-                    android:orientation="vertical"
-                    android:paddingBottom="12dp"
-                    android:paddingTop="12dp">
-
-                    <ImageView
-                        android:id="@+id/fullscreenImage"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginBottom="2dp"
-                        android:layout_marginTop="2dp"
-                        android:scaleType="centerInside"
-                        android:tint="?android:textColorSecondary"
-                        app:srcCompat="@drawable/ic_fullscreen" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="4dp"
-                        android:gravity="center_horizontal"
-                        android:paddingLeft="12dp"
-                        android:paddingRight="12dp"
-                        android:text="@string/preference_fullscreen"
-                        android:textAlignment="center"
-                        android:textColor="?android:textColorSecondary"
-                        android:textSize="14sp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/notifications"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="top"
-                    android:layout_weight="1"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:gravity="top|center_horizontal"
-                    android:orientation="vertical"
-                    android:padding="12dp">
-
-                    <android.support.v7.widget.SwitchCompat
-                        android:id="@+id/notificationSwitch"
-                        android:layout_width="wrap_content"
-                        android:layout_height="28dp"
-                        android:layout_gravity="center_horizontal" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="4dp"
-                        android:gravity="center_horizontal"
-                        android:paddingLeft="12dp"
-                        android:paddingRight="12dp"
-                        android:text="@string/preference_notifications"
-                        android:textAlignment="center"
-                        android:textColor="?android:textColorSecondary"
-                        android:textSize="14sp" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/launch"
-                android:layout_width="match_parent"
-                android:layout_height="42dp"
-                android:background="?attr/selectableItemBackground"
-                android:orientation="horizontal">
-
-                <com.james.status.views.CustomImageView
-                    android:id="@+id/launchIcon"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    app:srcCompat="@drawable/ic_launch" />
-
-                <TextView
-                    android:id="@+id/launchText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:text="@string/msg_show_individual_screens"
-                    android:textColor="?android:textColorSecondary"
-                    android:textSize="16sp" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </android.support.v7.widget.CardView>
+    <com.james.status.views.SquareImageView
+        android:id="@+id/more"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:alpha="0.5"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:scaleType="centerInside"
+        android:tint="@android:color/black"
+        app:srcCompat="@drawable/ic_chevron_right" />
 
 </LinearLayout>

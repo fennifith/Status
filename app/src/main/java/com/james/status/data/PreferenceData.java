@@ -64,7 +64,10 @@ public enum PreferenceData {
     ICON_ICON_OFFSET_X("%1$s/ICON_ICON_OFFSET_X", 0),
     ICON_ICON_OFFSET_Y("%1$s/ICON_ICON_OFFSET_Y", 0),
     ICON_TEXT_OFFSET_X("%1$s/ICON_TEXT_OFFSET_X", 0),
-    ICON_TEXT_OFFSET_Y("%1$s/ICON_TEXT_OFFSET_Y", 0);
+    ICON_TEXT_OFFSET_Y("%1$s/ICON_TEXT_OFFSET_Y", 0),
+    APP_COLOR("%1$s/APP_COLOR", 0),
+    APP_FULLSCREEN("%1$s/APP_FULLSCREEN", false),
+    APP_FULLSCREEN_IGNORE("%1$s/APP_FULLSCREEN_IGNORE", false);
 
     private String name;
     private Object defaultValue;

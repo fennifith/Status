@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     private ImageView icon;
 
     private BottomSheetBehavior behavior;
-    private MenuItem resetItem, notificationItem;
+    private MenuItem resetItem;
 
     private TooManyIconsReceiver tooManyIconsReceiver;
 
@@ -259,7 +259,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
         resetItem = menu.findItem(R.id.action_reset);
-        notificationItem = menu.findItem(R.id.action_toggle_notifications);
         searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -316,13 +315,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 if (adapter.getItem(viewPager.getCurrentItem()) instanceof AppPreferenceFragment)
                     ((AppPreferenceFragment) adapter.getItem(viewPager.getCurrentItem())).reset();
                 break;
-            case R.id.action_toggle_notifications:
-                if (adapter.getItem(viewPager.getCurrentItem()) instanceof AppPreferenceFragment) {
-                    boolean isNotifications = ((AppPreferenceFragment) adapter.getItem(viewPager.getCurrentItem())).isNotifications();
-                    ((AppPreferenceFragment) adapter.getItem(viewPager.getCurrentItem())).setNotifications(!isNotifications);
-                    item.setTitle(!isNotifications ? R.string.notifications_disable : R.string.notifications_enable);
-                }
-                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -350,14 +342,11 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     @Override
     public void onPageSelected(int position) {
-        if (resetItem != null && notificationItem != null) {
+        if (resetItem != null) {
             if (adapter.getItem(position) instanceof AppPreferenceFragment) {
                 resetItem.setVisible(true);
-                notificationItem.setVisible(true);
-                notificationItem.setTitle(((AppPreferenceFragment) adapter.getItem(position)).isNotifications() ? R.string.notifications_disable : R.string.notifications_enable);
             } else {
                 resetItem.setVisible(false);
-                notificationItem.setVisible(false);
             }
         }
 
