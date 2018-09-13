@@ -232,7 +232,7 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                         ),
                         recreateListener
                 ),
-                /*new BooleanPreferenceData( //TODO: re-enable once stuff is fixed
+                /*new BooleanPreferenceData( //TODO: #137
                         getContext(),
                         new BasePreferenceData.Identifier<Boolean>(
                                 PreferenceData.STATUS_NOTIFICATIONS_HEADS_UP,
