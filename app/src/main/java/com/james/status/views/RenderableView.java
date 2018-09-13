@@ -56,6 +56,9 @@ public abstract class RenderableView extends View implements CanvasRenderTask.Re
 
     @Override
     public void onRendered(@Nullable Bitmap bitmap) {
+        if (render != null && render != bitmap)
+            render.recycle();
+
         task = null;
         render = bitmap;
         postInvalidate();
