@@ -13,6 +13,7 @@
         app:behavior_hideable="true"
         app:cardBackgroundColor="@android:color/white"
         app:cardCornerRadius="8dp"
+        app:behavior_peekHeight="300dp"
         app:layout_behavior="@string/bottom_sheet_behavior">
 
         <LinearLayout
