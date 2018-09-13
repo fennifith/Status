@@ -33,6 +33,13 @@
         <item name="android:windowAnimationStyle">@style/SlideAnimation</item>
     </style>
 
+    <style name="AppTheme.Dialog.BottomSheet" parent="AppTheme.Dialog.FullScreen">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:colorBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.5</item>
+    </style>
+
     <style name="SlideAnimation">
         <item name="android:windowEnterAnimation">@anim/slide_up</item>
         <item name="android:windowExitAnimation">@anim/slide_down</item>

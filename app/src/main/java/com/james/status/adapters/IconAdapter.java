@@ -15,6 +15,7 @@ import android.widget.CompoundButton;
 import com.james.status.R;
 import com.james.status.data.PreferenceData;
 import com.james.status.data.icon.IconData;
+import com.james.status.dialogs.IconPreferenceDialog;
 import com.james.status.services.StatusServiceImpl;
 import com.james.status.utils.StaticUtils;
 
@@ -60,6 +61,7 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 IconData icon = getIcon(holder.getAdapterPosition());
+
                 if (icon == null) return;
 
                 if (isChecked && !StaticUtils.isPermissionsGranted(activity, icon.getPermissions())) {
@@ -93,6 +95,15 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
                 v.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                 helper.startDrag(holder);
                 return false;
+            }
+        });
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IconData icon = getIcon(holder.getAdapterPosition());
+                if (icon != null)
+                    new IconPreferenceDialog(icon).show();
             }
         });
     }
