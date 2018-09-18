@@ -50,5 +50,4 @@ dependencies {
     implementation 'me.jfenn:attribouter:0.1.2'
     implementation 'com.afollestad:async:0.2.3'
     implementation 'com.google.code.gson:gson:2.8.4'
-
 }

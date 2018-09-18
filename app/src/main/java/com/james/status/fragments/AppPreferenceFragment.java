@@ -86,6 +86,10 @@ public class AppPreferenceFragment extends SimpleFragment {
         }).show();
     }
 
+    public void showDialog() {
+
+    }
+
     @Override
     public void filter(@Nullable String filter) {
         if (adapter != null) adapter.filter(filter);

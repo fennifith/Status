@@ -14,6 +14,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     ImageView expand;
     private TextView title, content;
     private ImageView icon;
+    private FloatingActionButton fab;
 
     private BottomSheetBehavior behavior;
     private MenuItem resetItem;
@@ -91,6 +93,15 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         title = findViewById(R.id.title);
         content = findViewById(R.id.content);
         icon = findViewById(R.id.tutorialIcon);
+        fab = findViewById(R.id.fab);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (adapter.getItem(viewPager.getCurrentItem()) instanceof AppPreferenceFragment)
+                    ((AppPreferenceFragment) adapter.getItem(viewPager.getCurrentItem())).showDialog();
+            }
+        });
 
         ViewCompat.setElevation(bottomSheet, StaticUtils.getPixelsFromDp(10));
 
@@ -344,8 +355,10 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     public void onPageSelected(int position) {
         if (resetItem != null) {
             if (adapter.getItem(position) instanceof AppPreferenceFragment) {
+                fab.show();
                 resetItem.setVisible(true);
             } else {
+                fab.hide();
                 resetItem.setVisible(false);
             }
         }
