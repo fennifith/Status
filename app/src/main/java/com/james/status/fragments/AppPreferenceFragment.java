@@ -16,9 +16,11 @@ import android.view.ViewGroup;
 import com.james.status.R;
 import com.james.status.adapters.AppAdapter;
 import com.james.status.data.AppPreferenceData;
+import com.james.status.dialogs.AppChooserDialog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class AppPreferenceFragment extends SimpleFragment {
@@ -27,6 +29,7 @@ public class AppPreferenceFragment extends SimpleFragment {
 
     private AppAdapter adapter;
     private View emptyView;
+    private List<AppPreferenceData> allApps;
 
     @Nullable
     @Override
@@ -87,7 +90,18 @@ public class AppPreferenceFragment extends SimpleFragment {
     }
 
     public void showDialog() {
+        AppChooserDialog dialog = new AppChooserDialog(getContext(), allApps);
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                if (dialog instanceof AppChooserDialog)
+                    allApps = ((AppChooserDialog) dialog).getPackages();
+                if (recycler != null)
+                    updateItems();
+            }
+        });
 
+        dialog.show();
     }
 
     @Override

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -24,26 +23,29 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
                 android:paddingTop="24dp">
 
                 <TextView
-                    android:id="@+id/iconName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginRight="24dp"
                     android:ellipsize="end"
                     android:lines="1"
                     android:maxLines="1"
                     android:singleLine="true"
+                    android:text="@string/tab_apps"
                     android:textAllCaps="true"
                     android:textColor="?android:textColorPrimary"
                     android:textSize="18sp"
-                    android:textStyle="bold"
-                    tools:text="Icon Name" />
+                    android:textStyle="bold" />
+
+                <ProgressBar
+                    android:id="@+id/progress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recycler"
