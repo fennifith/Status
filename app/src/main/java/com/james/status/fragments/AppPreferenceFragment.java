@@ -50,8 +50,8 @@ public class AppPreferenceFragment extends SimpleFragment {
         for (String key : prefs.keySet()) {
             for (String pref : new String[]{"/APP_COLOR", "/APP_FULLSCREEN", "/APP_FULLSCREEN_IGNORE"}) {
                 if (key.endsWith(pref)) {
-                    String component = key.substring(0, key.length() - pref.length());
-                    if (!component.contains("/"))
+                    String component = key.substring(0, key.length() - pref.length()).split("/")[0];
+                    if (!apps.containsKey(component))
                         apps.put(component, new AppPreferenceData(getContext(), component));
                 }
             }
