@@ -31,15 +31,14 @@ public class PackagesGetterTask extends AsyncTask<Object, Integer, AppPreference
                     List<ApplicationInfo> packages = manager.getInstalledApplications(0);
                     publishProgress(1, packages.size());
                     AppPreferenceData[] preferences = new AppPreferenceData[packages.size()];
-                    Thread.sleep(200);
+                    Thread.sleep(100);
                     for (int i = 0; i < packages.size(); i++) {
                         preferences[i] = new AppPreferenceData(context, packages.get(i).packageName);
-                        publishProgress(i + 1, packages.size());
-                        Thread.sleep(20);
+                        publishProgress(i + 1, (int) (packages.size() * 1.3));
+                        Thread.sleep(5);
                     }
 
                     publishProgress(1, 1);
-                    Thread.sleep(100);
                     return preferences;
                 } catch (InterruptedException ignored) {
                 }
