@@ -28,17 +28,19 @@ public class ActivitiesGetterTask extends AsyncTask<String, Integer, AppPreferen
                 try {
                     Thread.sleep(100);
                     ActivityInfo[] activities = manager.getPackageInfo(objects[0], PackageManager.GET_ACTIVITIES).activities;
-                    publishProgress(1, activities.length);
-                    AppPreferenceData[] preferences = new AppPreferenceData[activities.length];
-                    Thread.sleep(100);
-                    for (int i = 0; i < activities.length; i++) {
-                        preferences[i] = new AppPreferenceData(context, objects[i] + "/" + activities[i].packageName);
-                        publishProgress(i + 1, (int) (activities.length * 1.3));
-                        Thread.sleep(5);
-                    }
+                    if (activities != null) {
+                        publishProgress(1, activities.length);
+                        AppPreferenceData[] preferences = new AppPreferenceData[activities.length];
+                        Thread.sleep(100);
+                        for (int i = 0; i < activities.length; i++) {
+                            preferences[i] = new AppPreferenceData(context, objects[0] + "/" + activities[i].name);
+                            publishProgress(i + 1, (int) (activities.length * 1.3));
+                            Thread.sleep(5);
+                        }
 
-                    publishProgress(1, 1);
-                    return preferences;
+                        publishProgress(1, 1);
+                        return preferences;
+                    }
                 } catch (InterruptedException | PackageManager.NameNotFoundException ignored) {
                 }
             }

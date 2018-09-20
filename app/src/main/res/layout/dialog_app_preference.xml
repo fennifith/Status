@@ -47,13 +47,9 @@
                     android:id="@+id/packageName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
+                    android:layout_marginBottom="18dp"
                     android:layout_marginLeft="24dp"
                     android:layout_marginRight="24dp"
-                    android:ellipsize="end"
-                    android:lines="1"
-                    android:maxLines="1"
-                    android:singleLine="true"
                     tools:text="com.package.name"
                     android:textColor="?android:textColorSecondary"
                     android:textSize="14sp" />
@@ -75,6 +71,12 @@
                             android:paddingBottom="20dp"
                             android:paddingLeft="12dp"
                             android:paddingRight="12dp" />
+
+                        <ProgressBar
+                            android:id="@+id/progress"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal" />
 
                         <android.support.v7.widget.RecyclerView
                             android:id="@+id/activities"

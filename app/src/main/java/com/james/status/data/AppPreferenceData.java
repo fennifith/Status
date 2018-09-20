@@ -24,6 +24,8 @@ public class AppPreferenceData {
     private boolean isFullScreen;
     private boolean isFullScreenIgnore;
 
+    private List<AppPreferenceData> activities;
+
     public AppPreferenceData(Context context, String componentName) {
         this.componentName = componentName;
         color = PreferenceData.APP_COLOR.getSpecificOverriddenValue(context, null, componentName);
@@ -40,9 +42,22 @@ public class AppPreferenceData {
     }
 
     @Nullable
-    public String getActivityName() {
+    public String getName() {
         String[] arr = componentName.split("/");
         if (arr.length > 0)
+            return arr[arr.length - 1];
+        else return null;
+    }
+
+    @Nullable
+    public List<AppPreferenceData> getActivities() {
+        return activities;
+    }
+
+    @Nullable
+    public String getActivityName() {
+        String[] arr = componentName.split("/");
+        if (arr.length > 1)
             return arr[1];
         else return null;
     }
@@ -102,6 +117,11 @@ public class AppPreferenceData {
     public void setFullScreenIgnore(Context context, boolean isFullScreenIgnore) {
         PreferenceData.APP_FULLSCREEN_IGNORE.setValue(context, isFullScreenIgnore);
         this.isFullScreenIgnore = isFullScreenIgnore;
+    }
+
+    public void setActivities(List<AppPreferenceData> activities) {
+        if (activities != null)
+            this.activities = activities;
     }
 
     public List<BasePreferenceData> getPreferences(final Context context) {

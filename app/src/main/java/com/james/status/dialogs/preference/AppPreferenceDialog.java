@@ -9,19 +9,33 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.james.status.R;
+import com.james.status.adapters.AppAdapter;
 import com.james.status.adapters.PreferenceAdapter;
 import com.james.status.data.AppPreferenceData;
+import com.james.status.utils.ActivitiesGetterTask;
 
-public class AppPreferenceDialog extends AppCompatDialog {
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
+public class AppPreferenceDialog extends AppCompatDialog implements ActivitiesGetterTask.OnGottenListener {
+
+    private RecyclerView recycler;
+    private ProgressBar progress;
+    private BottomSheetBehavior behavior;
+
+    private ActivitiesGetterTask task;
+    private List<AppPreferenceData> activities;
     private AppPreferenceData app;
 
     public AppPreferenceDialog(Context context, AppPreferenceData app) {
         super(context, R.style.AppTheme_Dialog_BottomSheet);
         this.app = app;
+        activities = app.getActivities();
     }
 
     @Override
@@ -32,9 +46,10 @@ public class AppPreferenceDialog extends AppCompatDialog {
         TextView appName = findViewById(R.id.appName);
         TextView packageName = findViewById(R.id.packageName);
         RecyclerView preferenceRecycler = findViewById(R.id.preferences);
-        RecyclerView activitiesRecycler = findViewById(R.id.activities);
+        recycler = findViewById(R.id.activities);
+        progress = findViewById(R.id.progress);
 
-        BottomSheetBehavior behavior = BottomSheetBehavior.from(findViewById(R.id.root));
+        behavior = BottomSheetBehavior.from(findViewById(R.id.root));
         behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
@@ -48,11 +63,54 @@ public class AppPreferenceDialog extends AppCompatDialog {
         });
 
         appName.setText(app.getLabel(getContext()));
-        packageName.setText(app.getPackageName());
+        packageName.setText(app.getComponentName().replace("/", "\n"));
 
         preferenceRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         preferenceRecycler.setAdapter(new PreferenceAdapter(getContext(), app.getPreferences(getContext())));
-        activitiesRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
-        activitiesRecycler.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+
+        if (app.isActivity()) {
+            recycler.setVisibility(View.GONE);
+            progress.setVisibility(View.GONE);
+        } else {
+            recycler.setVisibility(View.VISIBLE);
+            recycler.setLayoutManager(new LinearLayoutManager(getContext()));
+            recycler.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+            if (activities != null)
+                recycler.setAdapter(new AppAdapter(getContext(), activities));
+            else if (task == null) {
+                task = new ActivitiesGetterTask(getContext(), this);
+                task.execute(app.getPackageName());
+            }
+        }
+    }
+
+    @Override
+    public void onGottenProgressUpdate(int progress, int max) {
+        if (this.progress != null) {
+            this.progress.setMax(max);
+            this.progress.setProgress(progress);
+        }
+    }
+
+    @Override
+    public void onGottenPackages(AppPreferenceData[] packages) {
+        this.activities = new ArrayList<>(Arrays.asList(packages));
+        app.setActivities(this.activities);
+        if (recycler != null) {
+            recycler.setAdapter(new AppAdapter(getContext(), this.activities));
+            if (progress != null)
+                progress.setVisibility(View.GONE);
+            if (behavior != null)
+                behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        }
+    }
+
+    @Override
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if (task != null && !task.isCancelled()) {
+            task.cancel(true);
+            task = null;
+        }
     }
 }

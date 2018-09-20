@@ -54,7 +54,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
         if (app == null) return;
 
         holder.name.setText(app.getLabel(holder.name.getContext()));
-        holder.packageName.setText(app.getComponentName());
+        holder.packageName.setText(app.getName());
 
         holder.icon.setImageDrawable(new ColorDrawable(Color.TRANSPARENT));
 
