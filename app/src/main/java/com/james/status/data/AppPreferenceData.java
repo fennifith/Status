@@ -1,6 +1,8 @@
 package com.james.status.data;
 
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.support.annotation.Nullable;
@@ -38,11 +40,33 @@ public class AppPreferenceData {
     }
 
     @Nullable
+    public String getActivityName() {
+        String[] arr = componentName.split("/");
+        if (arr.length > 0)
+            return arr[1];
+        else return null;
+    }
+
+    public boolean isActivity() {
+        return componentName.contains("/");
+    }
+
+    @Nullable
     public String getLabel(Context context) {
         if (label != null)
             return label;
 
         PackageManager manager = context.getPackageManager();
+        String activityName = getActivityName();
+        if (activityName != null) {
+            try {
+                ActivityInfo info = manager.getActivityInfo(new ComponentName(getPackageName(), activityName), 0);
+                label = info.loadLabel(manager).toString();
+                return label;
+            } catch (PackageManager.NameNotFoundException ignored) {
+            }
+        }
+
         try {
             ApplicationInfo info = manager.getApplicationInfo(getPackageName(), 0);
             label = manager.getApplicationLabel(info).toString();
