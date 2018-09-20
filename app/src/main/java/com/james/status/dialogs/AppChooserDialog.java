@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.app.AppCompatDialog;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -64,6 +65,7 @@ public class AppChooserDialog extends AppCompatDialog implements PackagesGetterT
         });
 
         recycler.setLayoutManager(new LinearLayoutManager(getContext()));
+        recycler.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         if (packages != null) {
             recycler.setAdapter(new AppAdapter(getContext(), packages));
             progress.setVisibility(View.GONE);

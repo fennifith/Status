@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.afollestad.async.Action;
 import com.james.status.R;
 import com.james.status.data.AppPreferenceData;
+import com.james.status.dialogs.AppPreferenceDialog;
 import com.james.status.utils.StringUtils;
 import com.james.status.views.CustomImageView;
 
@@ -84,6 +85,15 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
                     holder.icon.setImageDrawable(result);
             }
         }.execute();
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AppPreferenceData app = getApp(holder.getAdapterPosition());
+                if (app != null)
+                    new AppPreferenceDialog(context, app).show();
+            }
+        });
     }
 
     @Nullable
