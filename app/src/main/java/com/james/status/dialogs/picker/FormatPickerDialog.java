@@ -1,4 +1,4 @@
-package com.james.status.dialogs;
+package com.james.status.dialogs.picker;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,13 +10,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.james.status.R;
+import com.james.status.dialogs.PreferenceDialog;
 
-public class FormatDialog extends PreferenceDialog<String> {
+public class FormatPickerDialog extends PreferenceDialog<String> {
 
     private EditText editText;
     private Integer hintResId;
 
-    public FormatDialog(Context context) {
+    public FormatPickerDialog(Context context) {
         super(context);
     }
 
@@ -60,7 +61,7 @@ public class FormatDialog extends PreferenceDialog<String> {
         });
     }
 
-    public FormatDialog setHint(@StringRes int resId) {
+    public FormatPickerDialog setHint(@StringRes int resId) {
         hintResId = resId;
         return this;
     }

@@ -16,7 +16,7 @@ import android.widget.TextView;
 import com.afollestad.async.Action;
 import com.james.status.R;
 import com.james.status.data.AppPreferenceData;
-import com.james.status.dialogs.AppPreferenceDialog;
+import com.james.status.dialogs.preference.AppPreferenceDialog;
 import com.james.status.utils.StringUtils;
 import com.james.status.views.CustomImageView;
 

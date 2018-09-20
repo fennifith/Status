@@ -1,4 +1,4 @@
-package com.james.status.dialogs;
+package com.james.status.dialogs.picker;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.james.status.R;
+import com.james.status.dialogs.PreferenceDialog;
 import com.james.status.utils.WhileHeldListener;
 
 public class IntegerPickerDialog extends PreferenceDialog<Integer> {

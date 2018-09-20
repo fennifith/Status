@@ -8,8 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.james.status.R;
-import com.james.status.dialogs.ColorPickerDialog;
 import com.james.status.dialogs.PreferenceDialog;
+import com.james.status.dialogs.picker.ColorPickerDialog;
 import com.james.status.views.ColorView;
 
 public class ColorPreferenceData extends BasePreferenceData<Integer> {

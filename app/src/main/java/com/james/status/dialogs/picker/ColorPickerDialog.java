@@ -1,4 +1,4 @@
-package com.james.status.dialogs;
+package com.james.status.dialogs.picker;
 
 import android.Manifest;
 import android.animation.Animator;
@@ -24,6 +24,7 @@ import android.widget.TextView;
 import com.james.status.R;
 import com.james.status.Status;
 import com.james.status.activities.ImagePickerActivity;
+import com.james.status.dialogs.PreferenceDialog;
 import com.james.status.utils.ColorUtils;
 import com.james.status.utils.StaticUtils;
 import com.james.status.views.CircleColorView;

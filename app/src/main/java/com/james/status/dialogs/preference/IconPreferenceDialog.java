@@ -1,4 +1,4 @@
-package com.james.status.dialogs;
+package com.james.status.dialogs.preference;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
