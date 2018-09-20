@@ -66,7 +66,9 @@ public class AppPreferenceDialog extends AppCompatDialog implements ActivitiesGe
         packageName.setText(app.getComponentName().replace("/", "\n"));
 
         preferenceRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+        preferenceRecycler.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         preferenceRecycler.setAdapter(new PreferenceAdapter(getContext(), app.getPreferences(getContext())));
+        preferenceRecycler.setNestedScrollingEnabled(false);
 
         if (app.isActivity()) {
             recycler.setVisibility(View.GONE);
@@ -75,9 +77,11 @@ public class AppPreferenceDialog extends AppCompatDialog implements ActivitiesGe
             recycler.setVisibility(View.VISIBLE);
             recycler.setLayoutManager(new LinearLayoutManager(getContext()));
             recycler.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-            if (activities != null)
+            recycler.setNestedScrollingEnabled(false);
+            if (activities != null) {
                 recycler.setAdapter(new AppAdapter(getContext(), activities));
-            else if (task == null) {
+                progress.setVisibility(View.GONE);
+            } else if (task == null) {
                 task = new ActivitiesGetterTask(getContext(), this);
                 task.execute(app.getPackageName());
             }

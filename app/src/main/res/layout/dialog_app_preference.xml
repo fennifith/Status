@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="match_parent">
 
     <FrameLayout
         android:id="@+id/root"
@@ -37,11 +37,11 @@
                     android:lines="1"
                     android:maxLines="1"
                     android:singleLine="true"
-                    tools:text="App Name"
                     android:textAllCaps="true"
                     android:textColor="?android:textColorPrimary"
                     android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    tools:text="App Name" />
 
                 <TextView
                     android:id="@+id/packageName"
@@ -50,9 +50,9 @@
                     android:layout_marginBottom="18dp"
                     android:layout_marginLeft="24dp"
                     android:layout_marginRight="24dp"
-                    tools:text="com.package.name"
                     android:textColor="?android:textColorSecondary"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    tools:text="com.package.name" />
 
                 <android.support.v4.widget.NestedScrollView
                     android:layout_width="match_parent"
@@ -70,22 +70,25 @@
                             android:clipToPadding="false"
                             android:paddingBottom="20dp"
                             android:paddingLeft="12dp"
-                            android:paddingRight="12dp" />
+                            android:paddingRight="12dp"
+                            android:nestedScrollingEnabled="false" />
 
                         <ProgressBar
                             android:id="@+id/progress"
+                            style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal" />
+                            android:layout_height="wrap_content" />
 
                         <android.support.v7.widget.RecyclerView
                             android:id="@+id/activities"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
                             android:clipToPadding="false"
                             android:paddingBottom="20dp"
                             android:paddingLeft="4dp"
-                            android:paddingRight="4dp" />
+                            android:paddingRight="4dp"
+                            android:nestedScrollingEnabled="false" />
 
                     </LinearLayout>
 
