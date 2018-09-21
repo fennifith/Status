@@ -95,7 +95,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
         if (PreferenceData.STATUS_ENABLED.getValue(this)) {
             switch (event.getEventType()) {
                 case AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED:
-                    if (StaticUtils.shouldUseCompatNotifications(this) && !event.getPackageName().toString().matches("com.james.status")) {
+                    if (StaticUtils.shouldUseCompatNotifications(this) && event.getPackageName() != null && !event.getPackageName().toString().matches("com.james.status") && (boolean) PreferenceData.APP_NOTIFICATIONS.getSpecificValue(this, event.getPackageName().toString())) {
                         Parcelable parcelable = event.getParcelableData();
                         if (parcelable instanceof Notification) {
                             NotificationData notification = new NotificationData((Notification) parcelable, event.getPackageName().toString());

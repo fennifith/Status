@@ -9,7 +9,6 @@ import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.support.v4.app.NotificationCompat;
 
-import com.james.status.data.AppData;
 import com.james.status.data.NotificationData;
 import com.james.status.data.PreferenceData;
 import com.james.status.utils.StaticUtils;
@@ -80,19 +79,7 @@ public class StatusService extends NotificationListenerService {
 
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
-
-        AppData app = null;
-        try {
-            app = new AppData(packageManager, packageManager.getApplicationInfo(sbn.getPackageName(), PackageManager.GET_META_DATA), packageManager.getPackageInfo(sbn.getPackageName(), PackageManager.GET_ACTIVITIES));
-        } catch (PackageManager.NameNotFoundException ignored) {
-        }
-
-        Boolean isEnabled = null;
-        if (app != null)
-            isEnabled = app.getSpecificBooleanPreference(this, AppData.PreferenceIdentifier.NOTIFICATIONS);
-        if (isEnabled == null) isEnabled = true;
-
-        if ((boolean) PreferenceData.STATUS_ENABLED.getValue(this) && isEnabled && !StaticUtils.shouldUseCompatNotifications(this) && !sbn.getPackageName().matches("com.james.status"))
+        if ((boolean) PreferenceData.STATUS_ENABLED.getValue(this) && (boolean) PreferenceData.APP_NOTIFICATIONS.getSpecificValue(this, sbn.getPackageName()) && !StaticUtils.shouldUseCompatNotifications(this) && !sbn.getPackageName().matches("com.james.status"))
             impl.onNotificationAdded(getKey(sbn), new NotificationData(sbn, getKey(sbn)));
     }
 
@@ -127,17 +114,8 @@ public class StatusService extends NotificationListenerService {
                 if (sbn == null || sbn.getPackageName().matches("com.james.status"))
                     continue;
 
-                AppData app = null;
-                try {
-                    app = new AppData(packageManager, packageManager.getApplicationInfo(sbn.getPackageName(), PackageManager.GET_META_DATA), packageManager.getPackageInfo(sbn.getPackageName(), PackageManager.GET_ACTIVITIES));
-                } catch (PackageManager.NameNotFoundException e) {
-                    e.printStackTrace();
-                }
-
-                Boolean isEnabled = null;
-                if (app != null)
-                    isEnabled = app.getSpecificBooleanPreference(this, AppData.PreferenceIdentifier.NOTIFICATIONS);
-                if (isEnabled != null && !isEnabled) continue;
+                if (!((boolean) PreferenceData.APP_NOTIFICATIONS.getSpecificValue(this, sbn.getPackageName())))
+                    continue;
 
                 NotificationData notification = new NotificationData(sbn, getKey(sbn));
                 notification.priority = NotificationCompat.PRIORITY_DEFAULT;

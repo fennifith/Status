@@ -69,7 +69,8 @@ public enum PreferenceData {
     APP_COLOR_CACHE("%1$s/APP_COLOR_CACHE", 0),
     APP_COLOR_CACHE_VERSION("%1$s/APP_COLOR_CACHE_VERSION", 0),
     APP_FULLSCREEN("%1$s/APP_FULLSCREEN", false),
-    APP_FULLSCREEN_IGNORE("%1$s/APP_FULLSCREEN_IGNORE", false);
+    APP_FULLSCREEN_IGNORE("%1$s/APP_FULLSCREEN_IGNORE", false),
+    APP_NOTIFICATIONS("%1$s/APP_NOTIFICATIONS", true);
 
     private String name;
     private Object defaultValue;
