@@ -1,4 +1,4 @@
-package com.james.status.utils;
+package com.james.status.utils.anim;
 
 import android.support.annotation.Nullable;
 

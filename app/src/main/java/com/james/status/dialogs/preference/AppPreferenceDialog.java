@@ -16,7 +16,7 @@ import com.james.status.R;
 import com.james.status.adapters.AppAdapter;
 import com.james.status.adapters.PreferenceAdapter;
 import com.james.status.data.AppPreferenceData;
-import com.james.status.utils.ActivitiesGetterTask;
+import com.james.status.utils.tasks.ActivitiesGetterTask;
 
 import java.util.ArrayList;
 import java.util.Arrays;

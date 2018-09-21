@@ -22,8 +22,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.res.ResourcesCompat;
 
-import com.james.status.utils.AnimatedFloat;
 import com.james.status.utils.ImageUtils;
+import com.james.status.utils.anim.AnimatedFloat;
 
 public class NotificationData implements Parcelable {
 

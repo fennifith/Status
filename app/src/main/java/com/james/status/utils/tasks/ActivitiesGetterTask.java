@@ -1,4 +1,4 @@
-package com.james.status.utils;
+package com.james.status.utils.tasks;
 
 import android.content.Context;
 import android.content.pm.ActivityInfo;

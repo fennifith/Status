@@ -29,11 +29,11 @@ import com.james.status.data.preference.IconPreferenceData;
 import com.james.status.data.preference.IntegerPreferenceData;
 import com.james.status.data.preference.ListPreferenceData;
 import com.james.status.receivers.IconUpdateReceiver;
-import com.james.status.utils.AnimatedColor;
-import com.james.status.utils.AnimatedFloat;
-import com.james.status.utils.AnimatedInteger;
 import com.james.status.utils.ColorUtils;
 import com.james.status.utils.StaticUtils;
+import com.james.status.utils.anim.AnimatedColor;
+import com.james.status.utils.anim.AnimatedFloat;
+import com.james.status.utils.anim.AnimatedInteger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
