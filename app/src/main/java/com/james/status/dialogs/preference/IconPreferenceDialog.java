@@ -31,7 +31,7 @@ public class IconPreferenceDialog extends AppCompatDialog implements Status.OnIc
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.dialog_icon_preference);
+        setContentView(R.layout.dialog_sheet_icon_preference);
 
         BottomSheetBehavior behavior = BottomSheetBehavior.from(findViewById(R.id.root));
         behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {

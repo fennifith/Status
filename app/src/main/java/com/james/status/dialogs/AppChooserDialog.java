@@ -45,7 +45,7 @@ public class AppChooserDialog extends AppCompatDialog implements PackagesGetterT
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.dialog_apps_preference);
+        setContentView(R.layout.dialog_sheet_apps_preference);
 
         recycler = findViewById(R.id.recycler);
         progress = findViewById(R.id.progress);

@@ -9,6 +9,7 @@
         android:id="@+id/root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
         app:behavior_hideable="true"
         app:behavior_peekHeight="300dp"
         app:layout_behavior="@string/bottom_sheet_behavior">

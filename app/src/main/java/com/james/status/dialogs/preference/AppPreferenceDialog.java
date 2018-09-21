@@ -26,7 +26,6 @@ public class AppPreferenceDialog extends AppCompatDialog implements ActivitiesGe
 
     private RecyclerView recycler;
     private ProgressBar progress;
-    private BottomSheetBehavior behavior;
 
     private ActivitiesGetterTask task;
     private List<AppPreferenceData> activities;
@@ -41,7 +40,7 @@ public class AppPreferenceDialog extends AppCompatDialog implements ActivitiesGe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.dialog_app_preference);
+        setContentView(R.layout.dialog_sheet_app_preference);
 
         TextView appName = findViewById(R.id.appName);
         TextView packageName = findViewById(R.id.packageName);
@@ -49,7 +48,7 @@ public class AppPreferenceDialog extends AppCompatDialog implements ActivitiesGe
         recycler = findViewById(R.id.activities);
         progress = findViewById(R.id.progress);
 
-        behavior = BottomSheetBehavior.from(findViewById(R.id.root));
+        BottomSheetBehavior behavior = BottomSheetBehavior.from(findViewById(R.id.root));
         behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
@@ -104,8 +103,6 @@ public class AppPreferenceDialog extends AppCompatDialog implements ActivitiesGe
             recycler.setAdapter(new AppAdapter(getContext(), this.activities));
             if (progress != null)
                 progress.setVisibility(View.GONE);
-            if (behavior != null)
-                behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         }
     }
 
