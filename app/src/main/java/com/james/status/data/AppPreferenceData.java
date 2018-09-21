@@ -20,17 +20,10 @@ public class AppPreferenceData {
     private String componentName;
     private String label;
 
-    private Integer color;
-    private boolean isFullScreen;
-    private boolean isFullScreenIgnore;
-
     private List<AppPreferenceData> activities;
 
     public AppPreferenceData(Context context, String componentName) {
         this.componentName = componentName;
-        color = PreferenceData.APP_COLOR.getSpecificOverriddenValue(context, null, componentName);
-        isFullScreen = PreferenceData.APP_FULLSCREEN.getSpecificValue(context, componentName);
-        isFullScreen = PreferenceData.APP_FULLSCREEN_IGNORE.getSpecificValue(context, componentName);
     }
 
     public String getComponentName() {
@@ -92,31 +85,28 @@ public class AppPreferenceData {
     }
 
     @Nullable
-    public Integer getColor() {
-        return color;
+    public Integer getColor(Context context) {
+        return PreferenceData.APP_COLOR.getSpecificOverriddenValue(context, (Integer) PreferenceData.APP_COLOR.getSpecificOverriddenValue(context, null, getPackageName()), getIdentifierArgs());
     }
 
-    public boolean isFullScreen() {
-        return isFullScreen;
+    public boolean isFullScreen(Context context) {
+        return PreferenceData.APP_FULLSCREEN.getSpecificOverriddenValue(context, (Boolean) PreferenceData.APP_FULLSCREEN.getSpecificValue(context, getPackageName()), getIdentifierArgs());
     }
 
-    public boolean isFullScreenIgnore() {
-        return isFullScreenIgnore;
+    public boolean isFullScreenIgnore(Context context) {
+        return PreferenceData.APP_FULLSCREEN_IGNORE.getSpecificOverriddenValue(context, (Boolean) PreferenceData.APP_FULLSCREEN_IGNORE.getSpecificValue(context, getPackageName()), getIdentifierArgs());
     }
 
-    public void setColor(Context context, @Nullable Integer color) {
-        PreferenceData.APP_COLOR.setValue(context, color, componentName);
-        this.color = color;
+    @Nullable
+    public Integer getColorCache(Context context, Integer version) {
+        if (version.equals(PreferenceData.APP_COLOR_CACHE_VERSION.getSpecificOverriddenValue(context, null, getIdentifierArgs())))
+            return PreferenceData.APP_COLOR_CACHE.getSpecificOverriddenValue(context, null, getIdentifierArgs());
+        else return null;
     }
 
-    public void setFullScreen(Context context, boolean isFullScreen) {
-        PreferenceData.APP_FULLSCREEN.setValue(context, isFullScreen);
-        this.isFullScreen = isFullScreen;
-    }
-
-    public void setFullScreenIgnore(Context context, boolean isFullScreenIgnore) {
-        PreferenceData.APP_FULLSCREEN_IGNORE.setValue(context, isFullScreenIgnore);
-        this.isFullScreenIgnore = isFullScreenIgnore;
+    public void setColorCache(Context context, int version, int color) {
+        PreferenceData.APP_COLOR_CACHE.setValue(context, color, getIdentifierArgs());
+        PreferenceData.APP_COLOR_CACHE_VERSION.setValue(context, version, getIdentifierArgs());
     }
 
     public void setActivities(List<AppPreferenceData> activities) {

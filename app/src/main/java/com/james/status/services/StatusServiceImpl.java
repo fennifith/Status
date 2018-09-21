@@ -27,6 +27,7 @@ import com.james.status.R;
 import com.james.status.activities.AppSettingActivity;
 import com.james.status.activities.MainActivity;
 import com.james.status.data.AppData;
+import com.james.status.data.AppPreferenceData;
 import com.james.status.data.NotificationData;
 import com.james.status.data.PreferenceData;
 import com.james.status.data.icon.AirplaneModeIconData;
@@ -76,6 +77,7 @@ public class StatusServiceImpl {
 
     private String packageName;
     private AppData.ActivityData activityData;
+    private AppPreferenceData activityPreference;
 
     private Service service;
 
@@ -127,6 +129,9 @@ public class StatusServiceImpl {
                         if (PreferenceData.STATUS_PERSISTENT_NOTIFICATION.getValue(service)) {
                             packageName = intent.getStringExtra(EXTRA_PACKAGE);
                             activityData = intent.getParcelableExtra(EXTRA_ACTIVITY);
+                            if (activityData != null)
+                                activityPreference = new AppPreferenceData(service, activityData.packageName + "/" + activityData.name);
+                            else activityPreference = null;
 
                             startForeground(packageName, activityData);
                         } else service.stopForeground(true);
@@ -272,11 +277,8 @@ public class StatusServiceImpl {
                     @Override
                     public void onGlobalLayout() {
                         if (statusView != null && fullscreenView != null) {
-                            if (activityData != null) {
-                                Boolean shouldIgnore = activityData.getBooleanPreference(service, AppData.PreferenceIdentifier.IGNORE_AUTO_DETECT);
-                                if (shouldIgnore != null && shouldIgnore)
-                                    return;
-                            }
+                            if (activityPreference != null && activityPreference.isFullScreenIgnore(service))
+                                return;
 
                             Point size = new Point();
                             windowManager.getDefaultDisplay().getSize(size);
