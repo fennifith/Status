@@ -78,14 +78,6 @@ public class AppData implements Parcelable {
     }
 
     @ColorInt
-    public int getColor(Context context) {
-        Integer color = getIntegerPreference(context, PreferenceIdentifier.COLOR);
-        if (color == null) color = getDefaultColor(context);
-
-        return color;
-    }
-
-    @ColorInt
     public int getDefaultColor(Context context) {
         if (PreferenceData.STATUS_COLOR_AUTO.getValue(context)) {
             Integer color = ColorUtils.getPrimaryColor(context, getComponentName());
@@ -133,42 +125,8 @@ public class AppData implements Parcelable {
             return null;
     }
 
-    @Nullable
-    public Integer getIntegerPreference(Context context, PreferenceIdentifier identifier) {
-        Integer integer = null;
-        for (ActivityData activity : activities) {
-            Integer activityInteger = activity.getIntegerPreference(context, identifier);
-            if (activityInteger == null || (integer != null && !activityInteger.equals(integer)))
-                return null;
-            else integer = activityInteger;
-        }
-
-        return integer;
-    }
-
-    public void putPreference(Context context, PreferenceIdentifier identifier, boolean object) {
-        for (ActivityData activity : activities) {
-            activity.putPreference(context, identifier, object);
-        }
-    }
-
     public void putSpecificPreference(Context context, PreferenceIdentifier identifier, boolean object) {
         PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(getIdentifierString(identifier), object).apply();
-    }
-
-    public void putPreference(Context context, PreferenceIdentifier identifier, int object) {
-        for (ActivityData activity : activities) {
-            activity.putPreference(context, identifier, object);
-        }
-    }
-
-    public void clearPreferences(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = prefs.edit();
-        for (String key : prefs.getAll().keySet()) {
-            if (key.contains("/" + packageName + "/")) editor.remove(key);
-        }
-        editor.apply();
     }
 
     private String getIdentifierString(PreferenceIdentifier identifier) {
@@ -176,12 +134,7 @@ public class AppData implements Parcelable {
     }
 
     public enum PreferenceIdentifier {
-        NOTIFICATIONS,
-        COLOR,
-        FULLSCREEN,
-        IGNORE_AUTO_DETECT,
-        CACHE_COLOR,
-        CACHE_VERSION
+        NOTIFICATIONS
     }
 
     public static class ActivityData implements Parcelable {
@@ -248,30 +201,6 @@ public class AppData implements Parcelable {
             return new ComponentName(packageName, name != null ? name : packageName);
         }
 
-        @ColorInt
-        public int getColor(Context context) {
-            Integer color = getIntegerPreference(context, PreferenceIdentifier.COLOR);
-
-            Integer cacheVersion = getIntegerPreference(context, AppData.PreferenceIdentifier.CACHE_VERSION);
-            if (cacheVersion != null && cacheVersion == version && color == null)
-                color = getIntegerPreference(context, PreferenceIdentifier.CACHE_COLOR);
-
-            if (color == null) color = getDefaultColor(context);
-
-            return color;
-        }
-
-        @ColorInt
-        public int getDefaultColor(Context context) {
-            if (PreferenceData.STATUS_COLOR_AUTO.getValue(context)) {
-                Integer color = ColorUtils.getPrimaryColor(context, getComponentName());
-                if (color != null)
-                    return color;
-            }
-
-            return PreferenceData.STATUS_COLOR.getValue(context);
-        }
-
         @Nullable
         public Boolean getBooleanPreference(Context context, PreferenceIdentifier identifier) {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -284,28 +213,6 @@ public class AppData implements Parcelable {
             }
             else
                 return null;
-        }
-
-        @Nullable
-        public Integer getIntegerPreference(Context context, PreferenceIdentifier identifier) {
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-            if (prefs.contains(getIdentifierString(identifier))) {
-                try {
-                    return prefs.getInt(getIdentifierString(identifier), 0);
-                } catch (ClassCastException e) {
-                    return null;
-                }
-            }
-            else
-                return null;
-        }
-
-        public void putPreference(Context context, PreferenceIdentifier identifier, boolean object) {
-            PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(getIdentifierString(identifier), object).apply();
-        }
-
-        public void putPreference(Context context, PreferenceIdentifier identifier, int object) {
-            PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(getIdentifierString(identifier), object).apply();
         }
 
         private String getIdentifierString(PreferenceIdentifier identifier) {

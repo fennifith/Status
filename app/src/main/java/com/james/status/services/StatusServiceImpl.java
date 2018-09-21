@@ -191,15 +191,10 @@ public class StatusServiceImpl {
 
         if (PreferenceData.STATUS_COLOR_AUTO.getValue(service)) {
             Intent colorIntent = new Intent(service, AppSettingActivity.class);
-            colorIntent.putExtra(AppSettingActivity.EXTRA_APP, appData);
-            colorIntent.putExtra(AppSettingActivity.EXTRA_ACTIVITY, activityData);
-            colorIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            colorIntent.putExtra(AppSettingActivity.EXTRA_COMPONENT, activityData.packageName + "/" + activityData.name);
+            colorIntent.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
 
-            TaskStackBuilder colorStackBuilder = TaskStackBuilder.create(service);
-            colorStackBuilder.addParentStack(AppSettingActivity.class);
-            colorStackBuilder.addNextIntent(colorIntent);
-
-            builder.addAction(R.drawable.ic_notification_color, service.getString(R.string.action_set_color), colorStackBuilder.getPendingIntent(0, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_CANCEL_CURRENT));
+            builder.addAction(R.drawable.ic_notification_color, service.getString(R.string.action_set_color), PendingIntent.getActivity(service, 0, colorIntent, 0));
         }
 
         boolean isFullscreen = activityPreference != null && activityPreference.isFullScreen(service);
@@ -210,14 +205,10 @@ public class StatusServiceImpl {
         builder.addAction(R.drawable.ic_notification_visible, service.getString(isFullscreen ? R.string.action_show_status : R.string.action_hide_status), PendingIntent.getBroadcast(service, 0, visibleIntent, PendingIntent.FLAG_CANCEL_CURRENT));
 
         Intent settingsIntent = new Intent(service, AppSettingActivity.class);
-        settingsIntent.putExtra(AppSettingActivity.EXTRA_APP, appData);
-        settingsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        settingsIntent.putExtra(AppSettingActivity.EXTRA_COMPONENT, activityData.packageName);
+        settingsIntent.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
 
-        TaskStackBuilder settingsStackBuilder = TaskStackBuilder.create(service);
-        settingsStackBuilder.addParentStack(AppSettingActivity.class);
-        settingsStackBuilder.addNextIntent(settingsIntent);
-
-        builder.addAction(R.drawable.ic_notification_settings, service.getString(R.string.action_app_settings), settingsStackBuilder.getPendingIntent(0, PendingIntent.FLAG_CANCEL_CURRENT));
+        builder.addAction(R.drawable.ic_notification_settings, service.getString(R.string.action_app_settings), PendingIntent.getActivity(service, 0, settingsIntent, 0));
 
         service.startForeground(ID_FOREGROUND, builder.build());
     }
