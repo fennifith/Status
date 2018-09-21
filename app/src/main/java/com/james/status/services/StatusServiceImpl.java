@@ -46,7 +46,7 @@ import com.james.status.data.icon.OrientationIconData;
 import com.james.status.data.icon.RingerIconData;
 import com.james.status.data.icon.TimeIconData;
 import com.james.status.data.icon.WifiIconData;
-import com.james.status.receivers.ActivityVisibilitySettingReceiver;
+import com.james.status.receivers.ActivityFullScreenSettingReceiver;
 import com.james.status.utils.StaticUtils;
 import com.james.status.views.StatusView;
 
@@ -202,12 +202,12 @@ public class StatusServiceImpl {
             builder.addAction(R.drawable.ic_notification_color, service.getString(R.string.action_set_color), colorStackBuilder.getPendingIntent(0, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_CANCEL_CURRENT));
         }
 
-        Boolean isFullscreen = activityData.getBooleanPreference(service, AppData.PreferenceIdentifier.FULLSCREEN);
-        Intent visibleIntent = new Intent(service, ActivityVisibilitySettingReceiver.class);
-        visibleIntent.putExtra(ActivityVisibilitySettingReceiver.EXTRA_ACTIVITY, activityData);
-        visibleIntent.putExtra(ActivityVisibilitySettingReceiver.EXTRA_VISIBILITY, isFullscreen != null && isFullscreen);
+        boolean isFullscreen = activityPreference != null && activityPreference.isFullScreen(service);
+        Intent visibleIntent = new Intent(service, ActivityFullScreenSettingReceiver.class);
+        visibleIntent.putExtra(ActivityFullScreenSettingReceiver.EXTRA_COMPONENT, activityData.packageName + "/" + activityData.name);
+        visibleIntent.putExtra(ActivityFullScreenSettingReceiver.EXTRA_FULLSCREEN, isFullscreen);
 
-        builder.addAction(R.drawable.ic_notification_visible, service.getString(isFullscreen != null && isFullscreen ? R.string.action_show_status : R.string.action_hide_status), PendingIntent.getBroadcast(service, 0, visibleIntent, PendingIntent.FLAG_CANCEL_CURRENT));
+        builder.addAction(R.drawable.ic_notification_visible, service.getString(isFullscreen ? R.string.action_show_status : R.string.action_hide_status), PendingIntent.getBroadcast(service, 0, visibleIntent, PendingIntent.FLAG_CANCEL_CURRENT));
 
         Intent settingsIntent = new Intent(service, AppSettingActivity.class);
         settingsIntent.putExtra(AppSettingActivity.EXTRA_APP, appData);

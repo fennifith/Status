@@ -52,7 +52,7 @@
             android:name=".activities.NotificationCompatActivity"
             android:theme="@style/AppTheme.Transparent" />
 
-        <receiver android:name=".receivers.ActivityVisibilitySettingReceiver" />
+        <receiver android:name=".receivers.ActivityFullScreenSettingReceiver" />
 
         <service android:name=".services.StatusServiceCompat" />
 
