@@ -9,8 +9,8 @@ android {
         minSdkVersion 16
         targetSdkVersion 27
         maxSdkVersion 25
-        versionCode 39
-        versionName "3.8-beta3"
+        versionCode 40
+        versionName "3.8-beta4"
         vectorDrawables.useSupportLibrary = true
         resConfigs "ar", "en", "es", "ko", "zh"
     }
@@ -50,5 +50,4 @@ dependencies {
     implementation 'me.jfenn:attribouter:0.1.2'
     implementation 'com.afollestad:async:0.2.3'
     implementation 'com.google.code.gson:gson:2.8.4'
-
 }

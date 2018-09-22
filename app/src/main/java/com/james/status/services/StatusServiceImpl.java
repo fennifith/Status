@@ -27,6 +27,7 @@ import com.james.status.R;
 import com.james.status.activities.AppSettingActivity;
 import com.james.status.activities.MainActivity;
 import com.james.status.data.AppData;
+import com.james.status.data.AppPreferenceData;
 import com.james.status.data.NotificationData;
 import com.james.status.data.PreferenceData;
 import com.james.status.data.icon.AirplaneModeIconData;
@@ -45,7 +46,7 @@ import com.james.status.data.icon.OrientationIconData;
 import com.james.status.data.icon.RingerIconData;
 import com.james.status.data.icon.TimeIconData;
 import com.james.status.data.icon.WifiIconData;
-import com.james.status.receivers.ActivityVisibilitySettingReceiver;
+import com.james.status.receivers.ActivityFullScreenSettingReceiver;
 import com.james.status.utils.StaticUtils;
 import com.james.status.views.StatusView;
 
@@ -76,6 +77,7 @@ public class StatusServiceImpl {
 
     private String packageName;
     private AppData.ActivityData activityData;
+    private AppPreferenceData activityPreference;
 
     private Service service;
 
@@ -127,6 +129,9 @@ public class StatusServiceImpl {
                         if (PreferenceData.STATUS_PERSISTENT_NOTIFICATION.getValue(service)) {
                             packageName = intent.getStringExtra(EXTRA_PACKAGE);
                             activityData = intent.getParcelableExtra(EXTRA_ACTIVITY);
+                            if (activityData != null)
+                                activityPreference = new AppPreferenceData(service, activityData.packageName + "/" + activityData.name);
+                            else activityPreference = null;
 
                             startForeground(packageName, activityData);
                         } else service.stopForeground(true);
@@ -186,33 +191,24 @@ public class StatusServiceImpl {
 
         if (PreferenceData.STATUS_COLOR_AUTO.getValue(service)) {
             Intent colorIntent = new Intent(service, AppSettingActivity.class);
-            colorIntent.putExtra(AppSettingActivity.EXTRA_APP, appData);
-            colorIntent.putExtra(AppSettingActivity.EXTRA_ACTIVITY, activityData);
-            colorIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            colorIntent.putExtra(AppSettingActivity.EXTRA_COMPONENT, activityData.packageName + "/" + activityData.name);
+            colorIntent.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
 
-            TaskStackBuilder colorStackBuilder = TaskStackBuilder.create(service);
-            colorStackBuilder.addParentStack(AppSettingActivity.class);
-            colorStackBuilder.addNextIntent(colorIntent);
-
-            builder.addAction(R.drawable.ic_notification_color, service.getString(R.string.action_set_color), colorStackBuilder.getPendingIntent(0, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_CANCEL_CURRENT));
+            builder.addAction(R.drawable.ic_notification_color, service.getString(R.string.action_set_color), PendingIntent.getActivity(service, 0, colorIntent, 0));
         }
 
-        Boolean isFullscreen = activityData.getBooleanPreference(service, AppData.PreferenceIdentifier.FULLSCREEN);
-        Intent visibleIntent = new Intent(service, ActivityVisibilitySettingReceiver.class);
-        visibleIntent.putExtra(ActivityVisibilitySettingReceiver.EXTRA_ACTIVITY, activityData);
-        visibleIntent.putExtra(ActivityVisibilitySettingReceiver.EXTRA_VISIBILITY, isFullscreen != null && isFullscreen);
+        boolean isFullscreen = activityPreference != null && activityPreference.isFullScreen(service);
+        Intent visibleIntent = new Intent(service, ActivityFullScreenSettingReceiver.class);
+        visibleIntent.putExtra(ActivityFullScreenSettingReceiver.EXTRA_COMPONENT, activityData.packageName + "/" + activityData.name);
+        visibleIntent.putExtra(ActivityFullScreenSettingReceiver.EXTRA_FULLSCREEN, isFullscreen);
 
-        builder.addAction(R.drawable.ic_notification_visible, service.getString(isFullscreen != null && isFullscreen ? R.string.action_show_status : R.string.action_hide_status), PendingIntent.getBroadcast(service, 0, visibleIntent, PendingIntent.FLAG_CANCEL_CURRENT));
+        builder.addAction(R.drawable.ic_notification_visible, service.getString(isFullscreen ? R.string.action_show_status : R.string.action_hide_status), PendingIntent.getBroadcast(service, 0, visibleIntent, PendingIntent.FLAG_CANCEL_CURRENT));
 
         Intent settingsIntent = new Intent(service, AppSettingActivity.class);
-        settingsIntent.putExtra(AppSettingActivity.EXTRA_APP, appData);
-        settingsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        settingsIntent.putExtra(AppSettingActivity.EXTRA_COMPONENT, activityData.packageName);
+        settingsIntent.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
 
-        TaskStackBuilder settingsStackBuilder = TaskStackBuilder.create(service);
-        settingsStackBuilder.addParentStack(AppSettingActivity.class);
-        settingsStackBuilder.addNextIntent(settingsIntent);
-
-        builder.addAction(R.drawable.ic_notification_settings, service.getString(R.string.action_app_settings), settingsStackBuilder.getPendingIntent(0, PendingIntent.FLAG_CANCEL_CURRENT));
+        builder.addAction(R.drawable.ic_notification_settings, service.getString(R.string.action_app_settings), PendingIntent.getActivity(service, 0, settingsIntent, 0));
 
         service.startForeground(ID_FOREGROUND, builder.build());
     }
@@ -272,11 +268,8 @@ public class StatusServiceImpl {
                     @Override
                     public void onGlobalLayout() {
                         if (statusView != null && fullscreenView != null) {
-                            if (activityData != null) {
-                                Boolean shouldIgnore = activityData.getBooleanPreference(service, AppData.PreferenceIdentifier.IGNORE_AUTO_DETECT);
-                                if (shouldIgnore != null && shouldIgnore)
-                                    return;
-                            }
+                            if (activityPreference != null && activityPreference.isFullScreenIgnore(service))
+                                return;
 
                             Point size = new Point();
                             windowManager.getDefaultDisplay().getSize(size);

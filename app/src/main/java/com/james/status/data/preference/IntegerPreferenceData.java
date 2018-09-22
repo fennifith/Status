@@ -5,8 +5,8 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.view.View;
 
-import com.james.status.dialogs.IntegerPickerDialog;
 import com.james.status.dialogs.PreferenceDialog;
+import com.james.status.dialogs.picker.IntegerPickerDialog;
 
 public class IntegerPreferenceData extends BasePreferenceData<Integer> {
 

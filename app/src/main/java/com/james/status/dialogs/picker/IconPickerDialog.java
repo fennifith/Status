@@ -1,4 +1,4 @@
-package com.james.status.dialogs;
+package com.james.status.dialogs.picker;
 
 import android.Manifest;
 import android.app.Activity;
@@ -18,12 +18,14 @@ import com.james.status.adapters.IconStyleAdapter;
 import com.james.status.data.IconStyleData;
 import com.james.status.data.PreferenceData;
 import com.james.status.data.icon.IconData;
+import com.james.status.dialogs.IconCreatorDialog;
+import com.james.status.dialogs.PreferenceDialog;
 import com.james.status.utils.ImageUtils;
 import com.james.status.utils.StaticUtils;
 
 import java.util.List;
 
-public class IconDialog extends PreferenceDialog<IconStyleData> implements IconStyleAdapter.OnCheckedChangeListener {
+public class IconPickerDialog extends PreferenceDialog<IconStyleData> implements IconStyleAdapter.OnCheckedChangeListener {
 
     private IconData icon;
     private List<IconStyleData> styles;
@@ -32,7 +34,7 @@ public class IconDialog extends PreferenceDialog<IconStyleData> implements IconS
 
     private String title;
 
-    public IconDialog(Context context, IconData icon) {
+    public IconPickerDialog(Context context, IconData icon) {
         super(context, R.style.AppTheme_Dialog_FullScreen);
         this.icon = icon;
         styles = icon.getIconStyles();
@@ -82,7 +84,7 @@ public class IconDialog extends PreferenceDialog<IconStyleData> implements IconS
                             icon.addIconStyle(style);
                             styles = icon.getIconStyles();
 
-                            adapter = new IconStyleAdapter(getContext(), icon, styles, IconDialog.this);
+                            adapter = new IconStyleAdapter(getContext(), icon, styles, IconPickerDialog.this);
                             adapter.setIconStyle(style);
                             setPreference(style);
                             recycler.setAdapter(adapter);

@@ -10,7 +10,7 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.james.status.utils.CanvasRenderTask;
+import com.james.status.utils.tasks.CanvasRenderTask;
 
 public abstract class RenderableView extends View implements CanvasRenderTask.Renderable {
 
@@ -56,6 +56,9 @@ public abstract class RenderableView extends View implements CanvasRenderTask.Re
 
     @Override
     public void onRendered(@Nullable Bitmap bitmap) {
+        if (render != null && render != bitmap)
+            render.recycle();
+
         task = null;
         render = bitmap;
         postInvalidate();

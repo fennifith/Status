@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.james.status.R;
 import com.james.status.Status;
 import com.james.status.data.AppData;
+import com.james.status.data.AppPreferenceData;
 import com.james.status.data.NotificationData;
 import com.james.status.data.PreferenceData;
 import com.james.status.utils.ColorUtils;
@@ -94,7 +95,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
         if (PreferenceData.STATUS_ENABLED.getValue(this)) {
             switch (event.getEventType()) {
                 case AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED:
-                    if (StaticUtils.shouldUseCompatNotifications(this) && !event.getPackageName().toString().matches("com.james.status")) {
+                    if (StaticUtils.shouldUseCompatNotifications(this) && event.getPackageName() != null && !event.getPackageName().toString().matches("com.james.status") && (boolean) PreferenceData.APP_NOTIFICATIONS.getSpecificValue(this, event.getPackageName().toString())) {
                         Parcelable parcelable = event.getParcelableData();
                         if (parcelable instanceof Notification) {
                             NotificationData notification = new NotificationData((Notification) parcelable, event.getPackageName().toString());
@@ -141,7 +142,8 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                             return;
                         }
 
-                        Boolean isFullscreen = activityData.getBooleanPreference(this, AppData.PreferenceIdentifier.FULLSCREEN);
+                        AppPreferenceData preference = new AppPreferenceData(this, activityData.packageName + "/" + activityData.name);
+
                         boolean isHome = false;
 
                         if (packageManager != null) {
@@ -152,17 +154,17 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                             isHome = homeInfo != null && packageName.toString().matches(homeInfo.activityInfo.packageName);
                         }
 
-                        Integer color = activityData.getIntegerPreference(this, AppData.PreferenceIdentifier.COLOR);
+                        Integer color = preference.getColor(this);
                         if (color != null && (!isHome || !(boolean) PreferenceData.STATUS_HOME_TRANSPARENT.getValue(this))) {
-                            setStatusBar(color, null, isFullscreen, false, packageName.toString(), activityData);
+                            setStatusBar(color, null, preference.isFullScreen(this), false, packageName.toString(), activityData);
                             return;
                         } else if (isHome) {
-                            setStatusBar(null, true, isFullscreen, false, packageName.toString(), activityData);
+                            setStatusBar(null, true, preference.isFullScreen(this), false, packageName.toString(), activityData);
                             return;
                         }
 
                         if (!(boolean) PreferenceData.STATUS_COLOR_AUTO.getValue(this)) {
-                            setStatusBar((int) PreferenceData.STATUS_COLOR.getValue(this), null, isFullscreen, false, packageName.toString(), activityData);
+                            setStatusBar((int) PreferenceData.STATUS_COLOR.getValue(this), null, preference.isFullScreen(this), false, packageName.toString(), activityData);
                             return;
                         }
 
@@ -174,25 +176,18 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
 
                         if (packageName.toString().matches("com.james.status")) {
                             //prevents recursive heads up notifications
-                            setStatusBar(ContextCompat.getColor(this, R.color.colorPrimaryDark), null, isFullscreen, false, packageName.toString(), activityData);
+                            setStatusBar(ContextCompat.getColor(this, R.color.colorPrimaryDark), null, preference.isFullScreen(this), false, packageName.toString(), activityData);
                             return;
                         }
 
-                        Integer cacheVersion = activityData.getIntegerPreference(this, AppData.PreferenceIdentifier.CACHE_VERSION);
-                        if (cacheVersion != null && cacheVersion == activityData.version) {
-                            color = activityData.getIntegerPreference(this, AppData.PreferenceIdentifier.CACHE_COLOR);
-                        }
-
+                        color = preference.getColorCache(this, activityData.version);
                         if (color == null) {
                             color = ColorUtils.getPrimaryColor(AccessibilityService.this, new ComponentName(packageName.toString(), className.toString()));
-
-                            if (color != null) {
-                                activityData.putPreference(this, AppData.PreferenceIdentifier.CACHE_COLOR, color);
-                                activityData.putPreference(this, AppData.PreferenceIdentifier.CACHE_VERSION, activityData.version);
-                            }
+                            if (color != null)
+                                preference.setColorCache(this, activityData.version, color);
                         }
 
-                        setStatusBar(color != null ? color : (int) PreferenceData.STATUS_COLOR.getValue(this), null, isFullscreen, false, packageName.toString(), activityData);
+                        setStatusBar(color != null ? color : (int) PreferenceData.STATUS_COLOR.getValue(this), null, preference.isFullScreen(this), false, packageName.toString(), activityData);
                     }
             }
         }

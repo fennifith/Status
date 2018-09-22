@@ -19,11 +19,11 @@ import android.view.View;
 
 import com.james.status.data.PreferenceData;
 import com.james.status.data.icon.IconData;
-import com.james.status.utils.AnimatedColor;
-import com.james.status.utils.AnimatedInteger;
 import com.james.status.utils.ColorUtils;
 import com.james.status.utils.ImageUtils;
 import com.james.status.utils.StaticUtils;
+import com.james.status.utils.anim.AnimatedColor;
+import com.james.status.utils.anim.AnimatedInteger;
 
 import java.util.ArrayList;
 import java.util.Collections;

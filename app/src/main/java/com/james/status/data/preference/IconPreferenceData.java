@@ -9,8 +9,8 @@ import android.view.ViewGroup;
 import com.james.status.R;
 import com.james.status.data.IconStyleData;
 import com.james.status.data.icon.IconData;
-import com.james.status.dialogs.IconDialog;
 import com.james.status.dialogs.PreferenceDialog;
+import com.james.status.dialogs.picker.IconPickerDialog;
 import com.james.status.views.IconStyleImageView;
 
 import java.util.HashMap;
@@ -51,7 +51,7 @@ public class IconPreferenceData extends BasePreferenceData<String> {
 
     @Override
     public void onClick(final View v) {
-        Dialog dialog = new IconDialog(getContext(), iconData).setPreference(iconStyle).setListener(new PreferenceDialog.OnPreferenceListener<IconStyleData>() {
+        Dialog dialog = new IconPickerDialog(getContext(), iconData).setPreference(iconStyle).setListener(new PreferenceDialog.OnPreferenceListener<IconStyleData>() {
             @Override
             public void onPreference(PreferenceDialog dialog, IconStyleData preference) {
                 if (preference != null) {

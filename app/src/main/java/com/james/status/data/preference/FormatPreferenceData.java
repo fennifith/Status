@@ -4,8 +4,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.view.View;
 
-import com.james.status.dialogs.FormatDialog;
 import com.james.status.dialogs.PreferenceDialog;
+import com.james.status.dialogs.picker.FormatPickerDialog;
 
 public class FormatPreferenceData extends BasePreferenceData<String> {
 
@@ -18,7 +18,7 @@ public class FormatPreferenceData extends BasePreferenceData<String> {
 
     @Override
     public void onClick(View v) {
-        Dialog dialog = new FormatDialog(getContext()).setPreference(value).setListener(new PreferenceDialog.OnPreferenceListener<String>() {
+        Dialog dialog = new FormatPickerDialog(getContext()).setPreference(value).setListener(new PreferenceDialog.OnPreferenceListener<String>() {
             @Override
             public void onPreference(PreferenceDialog dialog, String format) {
                 value = format;

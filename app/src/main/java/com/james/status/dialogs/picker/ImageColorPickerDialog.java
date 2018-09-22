@@ -1,4 +1,4 @@
-package com.james.status.dialogs;
+package com.james.status.dialogs.picker;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -7,6 +7,7 @@ import android.support.annotation.ColorInt;
 import android.view.View;
 
 import com.james.status.R;
+import com.james.status.dialogs.PreferenceDialog;
 import com.james.status.views.ColorPickerImageView;
 
 public class ImageColorPickerDialog extends PreferenceDialog<Integer> {

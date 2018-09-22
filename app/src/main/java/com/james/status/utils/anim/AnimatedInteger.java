@@ -1,4 +1,4 @@
-package com.james.status.utils;
+package com.james.status.utils.anim;
 
 public class AnimatedInteger extends AnimatedValue<Integer> {
 
