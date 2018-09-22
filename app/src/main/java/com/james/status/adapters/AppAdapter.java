@@ -38,7 +38,11 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
         Collections.sort(apps, new Comparator<AppPreferenceData>() {
             @Override
             public int compare(AppPreferenceData lhs, AppPreferenceData rhs) {
-                return lhs.getLabel(AppAdapter.this.context).compareToIgnoreCase(rhs.getLabel(AppAdapter.this.context));
+                String label1 = lhs.getLabel(AppAdapter.this.context);
+                String label2 = rhs.getLabel(AppAdapter.this.context);
+                if (label1 != null && label2 != null)
+                    return label1.compareToIgnoreCase(label2);
+                else return 0;
             }
         });
     }
@@ -112,7 +116,11 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
             Collections.sort(apps, new Comparator<AppPreferenceData>() {
                 @Override
                 public int compare(AppPreferenceData lhs, AppPreferenceData rhs) {
-                    return lhs.getLabel(context).compareToIgnoreCase(rhs.getLabel(context));
+                    String label1 = lhs.getLabel(AppAdapter.this.context);
+                    String label2 = rhs.getLabel(AppAdapter.this.context);
+                    if (label1 != null && label2 != null)
+                        return label1.compareToIgnoreCase(label2);
+                    else return 0;
                 }
             });
         } else {
@@ -121,9 +129,14 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.ViewHolder> {
                 public int compare(AppPreferenceData lhs, AppPreferenceData rhs) {
                     int value = 0;
 
-                    value += StringUtils.difference(lhs.getLabel(context).toLowerCase(), string).length();
+                    String label1 = lhs.getLabel(AppAdapter.this.context);
+                    String label2 = rhs.getLabel(AppAdapter.this.context);
+                    if (label1 != null && label2 != null) {
+                        value += StringUtils.difference(label1.toLowerCase(), string).length();
+                        value -= StringUtils.difference(label2.toLowerCase(), string).length();
+                    }
+
                     value += StringUtils.difference(lhs.getComponentName(), string).length();
-                    value -= StringUtils.difference(rhs.getLabel(context).toLowerCase(), string).length();
                     value -= StringUtils.difference(rhs.getComponentName(), string).length();
 
                     return value;
