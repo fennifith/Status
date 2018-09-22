@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.Set;
 
 public enum PreferenceData {
-    LAST_PREF_VERSION(0),
+    PREF_VERSION(0),
     STATUS_ENABLED(false),
     STATUS_NOTIFICATIONS_COMPAT(false),
     //STATUS_NOTIFICATIONS_HEADS_UP(false), TODO: #137
@@ -73,7 +73,7 @@ public enum PreferenceData {
     APP_FULLSCREEN_IGNORE("%1$s/APP_FULLSCREEN_IGNORE", false),
     APP_NOTIFICATIONS("%1$s/APP_NOTIFICATIONS", true);
 
-    public static final int PREF_VERSION = 1;
+    public static final int VERSION = 1;
 
     private String name;
     private Object defaultValue;

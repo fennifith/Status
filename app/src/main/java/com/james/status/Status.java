@@ -30,68 +30,73 @@ public class Status extends Application {
         onColorPickedListeners = new ArrayList<>();
         onIconPreferenceChangedListeners = new ArrayList<>();
 
-        if ((int) PreferenceData.LAST_PREF_VERSION.getValue(this) == 0) {
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-            Map<String, ?> items = prefs.getAll();
-            SharedPreferences.Editor editor = prefs.edit();
-            for (String key : items.keySet()) {
-                if (key.startsWith("COLOR/")) {
-                    String[] packages = key.substring("COLOR/".length()).split("/");
-                    if (packages.length == 2 && prefs.contains("COLOR/" + packages[0] + "/" + packages[1])) {
-                        try {
-                            PreferenceData.APP_COLOR.setValue(this, prefs.getInt(key, 0), packages[0] + "/" + packages[1]);
-                        } catch (Exception ignored) {
-                        }
-                    }
-                } else if (key.startsWith("CACHE_COLOR/")) {
-                    String[] packages = key.substring("CACHE_COLOR/".length()).split("/");
-                    if (packages.length == 2 && prefs.contains("CACHE_COLOR/" + packages[0] + "/" + packages[1])) {
-                        try {
-                            PreferenceData.APP_COLOR_CACHE.setValue(this, prefs.getInt(key, 0), packages[0] + "/" + packages[1]);
-                        } catch (Exception ignored) {
-                        }
-                    }
-                } else if (key.startsWith("CACHE_VERSION/")) {
-                    String[] packages = key.substring("CACHE_VERSION/".length()).split("/");
-                    if (packages.length == 2 && prefs.contains("CACHE_VERSION/" + packages[0] + "/" + packages[1])) {
-                        try {
-                            PreferenceData.APP_COLOR_CACHE_VERSION.setValue(this, prefs.getInt(key, 0), packages[0] + "/" + packages[1]);
-                        } catch (Exception ignored) {
-                        }
-                    }
-                } else if (key.startsWith("FULLSCREEN/")) {
-                    String[] packages = key.substring("FULLSCREEN/".length()).split("/");
-                    if (packages.length == 2 && prefs.contains("FULLSCREEN/" + packages[0] + "/" + packages[1])) {
-                        try {
-                            if (prefs.getBoolean(key, false))
-                                PreferenceData.APP_FULLSCREEN.setValue(this, true, packages[0] + "/" + packages[1]);
-                        } catch (Exception ignored) {
-                        }
-                    }
-                } else if (key.startsWith("IGNORE_AUTO_DETECT/")) {
-                    String[] packages = key.substring("IGNORE_AUTO_DETECT/".length()).split("/");
-                    if (packages.length == 2 && prefs.contains("IGNORE_AUTO_DETECT/" + packages[0] + "/" + packages[1])) {
-                        try {
-                            if (prefs.getBoolean(key, false))
-                                PreferenceData.APP_FULLSCREEN.setValue(this, true, packages[0] + "/" + packages[1]);
-                        } catch (Exception ignored) {
-                        }
-                    }
-                } else if (key.startsWith("NOTIFICATIONS/")) {
-                    String[] packages = key.substring("NOTIFICATIONS/".length()).split("/");
-                    if (packages.length == 2 && prefs.contains("NOTIFICATIONS/" + packages[0] + "/" + packages[1])) {
-                        try {
-                            if (!prefs.getBoolean(key, true))
-                                PreferenceData.APP_NOTIFICATIONS.setValue(this, false, packages[0] + "/" + packages[1]);
-                        } catch (Exception ignored) {
-                        }
-                    }
-                } else continue;
+        if ((int) PreferenceData.PREF_VERSION.getValue(this) == 0) {
+            new Thread() {
+                @Override
+                public void run() {
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(Status.this);
+                    Map<String, ?> items = prefs.getAll();
+                    SharedPreferences.Editor editor = prefs.edit();
+                    for (String key : items.keySet()) {
+                        if (key.startsWith("COLOR/")) {
+                            String[] packages = key.substring("COLOR/".length()).split("/");
+                            if (packages.length == 2 && prefs.contains("COLOR/" + packages[0] + "/" + packages[1])) {
+                                try {
+                                    PreferenceData.APP_COLOR.setValue(Status.this, prefs.getInt(key, 0), packages[0] + "/" + packages[1]);
+                                } catch (Exception ignored) {
+                                }
+                            }
+                        } else if (key.startsWith("CACHE_COLOR/")) {
+                            String[] packages = key.substring("CACHE_COLOR/".length()).split("/");
+                            if (packages.length == 2 && prefs.contains("CACHE_COLOR/" + packages[0] + "/" + packages[1])) {
+                                try {
+                                    PreferenceData.APP_COLOR_CACHE.setValue(Status.this, prefs.getInt(key, 0), packages[0] + "/" + packages[1]);
+                                } catch (Exception ignored) {
+                                }
+                            }
+                        } else if (key.startsWith("CACHE_VERSION/")) {
+                            String[] packages = key.substring("CACHE_VERSION/".length()).split("/");
+                            if (packages.length == 2 && prefs.contains("CACHE_VERSION/" + packages[0] + "/" + packages[1])) {
+                                try {
+                                    PreferenceData.APP_COLOR_CACHE_VERSION.setValue(Status.this, prefs.getInt(key, 0), packages[0] + "/" + packages[1]);
+                                } catch (Exception ignored) {
+                                }
+                            }
+                        } else if (key.startsWith("FULLSCREEN/")) {
+                            String[] packages = key.substring("FULLSCREEN/".length()).split("/");
+                            if (packages.length == 2 && prefs.contains("FULLSCREEN/" + packages[0] + "/" + packages[1])) {
+                                try {
+                                    if (prefs.getBoolean(key, false))
+                                        PreferenceData.APP_FULLSCREEN.setValue(Status.this, true, packages[0] + "/" + packages[1]);
+                                } catch (Exception ignored) {
+                                }
+                            }
+                        } else if (key.startsWith("IGNORE_AUTO_DETECT/")) {
+                            String[] packages = key.substring("IGNORE_AUTO_DETECT/".length()).split("/");
+                            if (packages.length == 2 && prefs.contains("IGNORE_AUTO_DETECT/" + packages[0] + "/" + packages[1])) {
+                                try {
+                                    if (prefs.getBoolean(key, false))
+                                        PreferenceData.APP_FULLSCREEN.setValue(Status.this, true, packages[0] + "/" + packages[1]);
+                                } catch (Exception ignored) {
+                                }
+                            }
+                        } else if (key.startsWith("NOTIFICATIONS/")) {
+                            String[] packages = key.substring("NOTIFICATIONS/".length()).split("/");
+                            if (packages.length == 2 && prefs.contains("NOTIFICATIONS/" + packages[0] + "/" + packages[1])) {
+                                try {
+                                    if (!prefs.getBoolean(key, true))
+                                        PreferenceData.APP_NOTIFICATIONS.setValue(Status.this, false, packages[0] + "/" + packages[1]);
+                                } catch (Exception ignored) {
+                                }
+                            }
+                        } else continue;
 
-                editor.remove(key);
-            }
-            editor.putInt("LAST_PREF_VERSION", PreferenceData.PREF_VERSION);
-            editor.apply();
+                        editor.remove(key);
+                    }
+                    editor.putInt("PREF_VERSION", PreferenceData.VERSION);
+                    editor.apply();
+                }
+            }.start();
         }
     }
 
