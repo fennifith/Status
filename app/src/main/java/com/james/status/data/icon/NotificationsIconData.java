@@ -8,6 +8,11 @@ import android.support.v4.util.ArrayMap;
 
 import com.james.status.R;
 import com.james.status.data.NotificationData;
+import com.james.status.data.PreferenceData;
+import com.james.status.data.preference.AppNotificationsPreferenceData;
+import com.james.status.data.preference.BasePreferenceData;
+
+import java.util.List;
 
 public class NotificationsIconData extends IconData {
 
@@ -46,6 +51,22 @@ public class NotificationsIconData extends IconData {
     @Override
     public String getTitle() {
         return getContext().getString(R.string.icon_notifications);
+    }
+
+    @Override
+    public List<BasePreferenceData> getPreferences() {
+        List<BasePreferenceData> preferences = super.getPreferences();
+
+        preferences.add(new AppNotificationsPreferenceData(
+                getContext(),
+                new BasePreferenceData.Identifier<String>(
+                        PreferenceData.APP_NOTIFICATIONS,
+                        "Blocked Apps",
+                        getIdentifierArgs()
+                )
+        ));
+
+        return preferences;
     }
 
     @Override
