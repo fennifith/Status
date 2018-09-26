@@ -48,7 +48,7 @@ public class FontPreferenceData extends BasePreferenceData<String> {
         AppCompatRadioButton normalButton = (AppCompatRadioButton) LayoutInflater.from(getContext()).inflate(R.layout.item_dialog_radio_button, group, false);
         normalButton.setId(0);
         normalButton.setText(R.string.font_default);
-        normalButton.setChecked(preference.length() == 0);
+        normalButton.setChecked(preference == null || preference.length() == 0);
         group.addView(normalButton);
 
         for (int i = 0; i < items.size(); i++) {
