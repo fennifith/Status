@@ -74,6 +74,9 @@ public class NotificationsIconData extends IconData {
 
         for (int i = 0; i < items; i++) {
             NotificationData notification = notifications.valueAt(i);
+            if (notification == null)
+                continue;
+
             notification.getScale().next(isAnimations);
 
             Bitmap bitmap = notifications.valueAt(i).getIcon(getContext());

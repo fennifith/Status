@@ -129,9 +129,6 @@ public class NotificationData implements Parcelable {
         for (int i = 0; i < actions.length; i++) {
             actions[i] = new ActionData(NotificationCompat.getAction(notification, i), packageName);
         }
-
-        scale = new AnimatedFloat(0);
-        scale.to(1f);
     }
 
     public boolean set(NotificationData notification) {
@@ -308,6 +305,11 @@ public class NotificationData implements Parcelable {
     }
 
     public AnimatedFloat getScale() {
+        if (scale == null) {
+            scale = new AnimatedFloat(0);
+            scale.to(1f);
+        }
+
         return scale;
     }
 
