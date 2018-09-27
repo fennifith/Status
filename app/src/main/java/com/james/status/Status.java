@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.james.status.data.PreferenceData;
 import com.james.status.data.icon.IconData;
@@ -155,8 +154,7 @@ public class Status extends Application {
     }
 
     public static void showDebug(Context context, String message, int length) {
-        if (PreferenceData.STATUS_DEBUG.getValue(context))
-            Toast.makeText(context, message, length).show();
-        else Log.d("Status", message);
+        if (BuildConfig.DEBUG)
+            Log.d("Status", message);
     }
 }

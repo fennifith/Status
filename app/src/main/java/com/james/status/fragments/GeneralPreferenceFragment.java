@@ -341,16 +341,6 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                                 BasePreferenceData.Identifier.SectionIdentifier.OTHER
                         ),
                         null
-                ),
-                new BooleanPreferenceData(
-                        getContext(),
-                        new BasePreferenceData.Identifier<Boolean>(
-                                PreferenceData.STATUS_DEBUG,
-                                getString(R.string.preference_debug),
-                                getString(R.string.preference_debug_desc),
-                                BasePreferenceData.Identifier.SectionIdentifier.OTHER
-                        ),
-                        null
                 )
         ));
 

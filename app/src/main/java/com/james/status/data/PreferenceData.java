@@ -11,7 +11,6 @@ import android.support.annotation.Nullable;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.james.status.BuildConfig;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -44,7 +43,6 @@ public enum PreferenceData {
     STATUS_BURNIN_PROTECTION(false),
     STATUS_SIDE_PADDING(6),
     STATUS_HEIGHT(0),
-    STATUS_DEBUG(BuildConfig.DEBUG),
     ICON_VISIBILITY("%1$s/VISIBILITY", true),
     ICON_POSITION("%1$s/POSITION", 0),
     ICON_GRAVITY("%1$s/GRAVITY", 0),
