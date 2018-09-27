@@ -93,7 +93,7 @@ public class NotificationsIconData extends IconData {
 
         x += padding.val();
 
-        for (int i = 0; i < items; i++) {
+        for (int i = 0; i < items && i < notifications.size(); i++) {
             NotificationData notification = notifications.valueAt(i);
             if (notification == null)
                 continue;
