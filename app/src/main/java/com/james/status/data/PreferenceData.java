@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -69,7 +70,8 @@ public enum PreferenceData {
     APP_COLOR_CACHE_VERSION("%1$s/APP_COLOR_CACHE_VERSION", 0),
     APP_FULLSCREEN("%1$s/APP_FULLSCREEN", false),
     APP_FULLSCREEN_IGNORE("%1$s/APP_FULLSCREEN_IGNORE", false),
-    APP_NOTIFICATIONS("%1$s/APP_NOTIFICATIONS", true);
+    APP_NOTIFICATIONS("%1$s/APP_NOTIFICATIONS", true),
+    APP_NOTIFICATIONS_MIN_PRIORITY(NotificationCompat.PRIORITY_LOW);
 
     public static final int VERSION = 1;
 

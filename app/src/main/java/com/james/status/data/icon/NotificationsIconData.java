@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.util.ArrayMap;
 
 import com.james.status.R;
@@ -11,6 +12,7 @@ import com.james.status.data.NotificationData;
 import com.james.status.data.PreferenceData;
 import com.james.status.data.preference.AppNotificationsPreferenceData;
 import com.james.status.data.preference.BasePreferenceData;
+import com.james.status.data.preference.IntegerPreferenceData;
 
 import java.util.List;
 
@@ -64,6 +66,19 @@ public class NotificationsIconData extends IconData {
                         "Blocked Apps",
                         getIdentifierArgs()
                 )
+        ));
+
+        preferences.add(new IntegerPreferenceData(
+                getContext(),
+                new BasePreferenceData.Identifier<Integer>(
+                        PreferenceData.APP_NOTIFICATIONS_MIN_PRIORITY,
+                        "Minimum Priority Level",
+                        getIdentifierArgs()
+                ),
+                null,
+                NotificationCompat.PRIORITY_MIN,
+                NotificationCompat.PRIORITY_MAX,
+                null
         ));
 
         return preferences;
@@ -136,6 +151,9 @@ public class NotificationsIconData extends IconData {
     }
 
     private void addNotification(String key, NotificationData notification) {
+        if (notification.priority < (int) PreferenceData.APP_NOTIFICATIONS_MIN_PRIORITY.getValue(getContext()))
+            return;
+
         for (int i = 0; i < notifications.size(); i++) {
             NotificationData notification2 = notifications.valueAt(i);
             if (notification2 != null && (notification.getKey().equals(notification2.getKey()) || notification.equals(notification2) || (notification.group != null && notification2.group != null && notification.group.equals(notification2.group)))) {
