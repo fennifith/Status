@@ -4,10 +4,18 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.util.ArrayMap;
 
 import com.james.status.R;
 import com.james.status.data.NotificationData;
+import com.james.status.data.PreferenceData;
+import com.james.status.data.preference.AppNotificationsPreferenceData;
+import com.james.status.data.preference.BasePreferenceData;
+import com.james.status.data.preference.BooleanPreferenceData;
+import com.james.status.data.preference.IntegerPreferenceData;
+
+import java.util.List;
 
 public class NotificationsIconData extends IconData {
 
@@ -49,6 +57,45 @@ public class NotificationsIconData extends IconData {
     }
 
     @Override
+    public List<BasePreferenceData> getPreferences() {
+        List<BasePreferenceData> preferences = super.getPreferences();
+
+        preferences.add(new AppNotificationsPreferenceData(
+                getContext(),
+                new BasePreferenceData.Identifier<String>(
+                        PreferenceData.APP_NOTIFICATIONS,
+                        getContext().getString(R.string.preference_blocked_apps),
+                        getIdentifierArgs()
+                )
+        ));
+
+        preferences.add(new BooleanPreferenceData(
+                getContext(),
+                new BasePreferenceData.Identifier<Boolean>(
+                        PreferenceData.APP_NOTIFICATIONS_IGNORE_ONGOING,
+                        getContext().getString(R.string.preference_ignore_persistent_notifications),
+                        getIdentifierArgs()
+                ),
+                null
+        ));
+
+        preferences.add(new IntegerPreferenceData(
+                getContext(),
+                new BasePreferenceData.Identifier<Integer>(
+                        PreferenceData.APP_NOTIFICATIONS_MIN_PRIORITY,
+                        getContext().getString(R.string.preference_min_priority),
+                        getIdentifierArgs()
+                ),
+                null,
+                NotificationCompat.PRIORITY_MIN,
+                NotificationCompat.PRIORITY_MAX,
+                null
+        ));
+
+        return preferences;
+    }
+
+    @Override
     public void register() {
         super.register();
         notifications.clear();
@@ -72,8 +119,11 @@ public class NotificationsIconData extends IconData {
 
         x += padding.val();
 
-        for (int i = 0; i < items; i++) {
+        for (int i = 0; i < items && i < notifications.size(); i++) {
             NotificationData notification = notifications.valueAt(i);
+            if (notification == null)
+                continue;
+
             notification.getScale().next(isAnimations);
 
             Bitmap bitmap = notifications.valueAt(i).getIcon(getContext());
@@ -112,6 +162,11 @@ public class NotificationsIconData extends IconData {
     }
 
     private void addNotification(String key, NotificationData notification) {
+        if (notification.priority < (int) PreferenceData.APP_NOTIFICATIONS_MIN_PRIORITY.getValue(getContext()))
+            return;
+        if (notification.isOngoing() && (boolean) PreferenceData.APP_NOTIFICATIONS_IGNORE_ONGOING.getValue(getContext()))
+            return;
+
         for (int i = 0; i < notifications.size(); i++) {
             NotificationData notification2 = notifications.valueAt(i);
             if (notification2 != null && (notification.getKey().equals(notification2.getKey()) || notification.equals(notification2) || (notification.group != null && notification2.group != null && notification.group.equals(notification2.group)))) {

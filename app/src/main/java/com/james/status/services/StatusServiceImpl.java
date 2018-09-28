@@ -6,8 +6,6 @@ import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
@@ -73,7 +71,6 @@ public class StatusServiceImpl {
     private View fullscreenView;
 
     private WindowManager windowManager;
-    private PackageManager packageManager;
 
     private String packageName;
     private AppData.ActivityData activityData;
@@ -87,7 +84,6 @@ public class StatusServiceImpl {
 
     public void onCreate() {
         windowManager = (WindowManager) service.getSystemService(Context.WINDOW_SERVICE);
-        packageManager = service.getPackageManager();
 
         if (PreferenceData.STATUS_ENABLED.getValue(service))
             setUp(false);
@@ -165,15 +161,6 @@ public class StatusServiceImpl {
     }
 
     private void startForeground(String packageName, AppData.ActivityData activityData) {
-        AppData appData;
-        try {
-            ApplicationInfo applicationInfo = packageManager.getApplicationInfo(packageName, PackageManager.GET_META_DATA);
-            PackageInfo packageInfo = packageManager.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES);
-            appData = new AppData(packageManager, applicationInfo, packageInfo);
-        } catch (PackageManager.NameNotFoundException e) {
-            return;
-        }
-
         Intent contentIntent = new Intent(service, MainActivity.class);
         contentIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
@@ -194,7 +181,7 @@ public class StatusServiceImpl {
             colorIntent.putExtra(AppSettingActivity.EXTRA_COMPONENT, activityData.packageName + "/" + activityData.name);
             colorIntent.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
 
-            builder.addAction(R.drawable.ic_notification_color, service.getString(R.string.action_set_color), PendingIntent.getActivity(service, 0, colorIntent, 0));
+            builder.addAction(R.drawable.ic_notification_color, service.getString(R.string.action_set_color), PendingIntent.getActivity(service, 0, colorIntent, PendingIntent.FLAG_CANCEL_CURRENT));
         }
 
         boolean isFullscreen = activityPreference != null && activityPreference.isFullScreen(service);
@@ -208,7 +195,7 @@ public class StatusServiceImpl {
         settingsIntent.putExtra(AppSettingActivity.EXTRA_COMPONENT, activityData.packageName);
         settingsIntent.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
 
-        builder.addAction(R.drawable.ic_notification_settings, service.getString(R.string.action_app_settings), PendingIntent.getActivity(service, 0, settingsIntent, 0));
+        builder.addAction(R.drawable.ic_notification_settings, service.getString(R.string.action_app_settings), PendingIntent.getActivity(service, 0, settingsIntent, PendingIntent.FLAG_CANCEL_CURRENT));
 
         service.startForeground(ID_FOREGROUND, builder.build());
     }

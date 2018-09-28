@@ -8,10 +8,10 @@ import android.os.Build;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.james.status.BuildConfig;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.Set;
 
 public enum PreferenceData {
-    LAST_PREF_VERSION(0),
+    PREF_VERSION(0),
     STATUS_ENABLED(false),
     STATUS_NOTIFICATIONS_COMPAT(false),
     //STATUS_NOTIFICATIONS_HEADS_UP(false), TODO: #137
@@ -44,7 +44,6 @@ public enum PreferenceData {
     STATUS_BURNIN_PROTECTION(false),
     STATUS_SIDE_PADDING(6),
     STATUS_HEIGHT(0),
-    STATUS_DEBUG(BuildConfig.DEBUG),
     ICON_VISIBILITY("%1$s/VISIBILITY", true),
     ICON_POSITION("%1$s/POSITION", 0),
     ICON_GRAVITY("%1$s/GRAVITY", 0),
@@ -71,9 +70,11 @@ public enum PreferenceData {
     APP_COLOR_CACHE_VERSION("%1$s/APP_COLOR_CACHE_VERSION", 0),
     APP_FULLSCREEN("%1$s/APP_FULLSCREEN", false),
     APP_FULLSCREEN_IGNORE("%1$s/APP_FULLSCREEN_IGNORE", false),
-    APP_NOTIFICATIONS("%1$s/APP_NOTIFICATIONS", true);
+    APP_NOTIFICATIONS("%1$s/APP_NOTIFICATIONS", true),
+    APP_NOTIFICATIONS_MIN_PRIORITY(NotificationCompat.PRIORITY_LOW),
+    APP_NOTIFICATIONS_IGNORE_ONGOING(false);
 
-    public static final int PREF_VERSION = 1;
+    public static final int VERSION = 1;
 
     private String name;
     private Object defaultValue;

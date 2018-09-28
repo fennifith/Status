@@ -1,7 +1,6 @@
 package com.james.status.services;
 
 import android.annotation.TargetApi;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -54,20 +53,6 @@ public class StatusService extends NotificationListenerService {
     public void onDestroy() {
         impl.onDestroy();
         super.onDestroy();
-    }
-
-    public void tryReconnectService() {
-        toggleNotificationListenerService();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-            requestRebind(new ComponentName(getApplicationContext(), StatusService.class));
-    }
-
-    private void toggleNotificationListenerService() {
-        PackageManager pm = getPackageManager();
-        pm.setComponentEnabledSetting(new ComponentName(this, StatusService.class),
-                PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
-        pm.setComponentEnabledSetting(new ComponentName(this, StatusService.class),
-                PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
     }
 
     @Override

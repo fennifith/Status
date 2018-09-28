@@ -367,6 +367,9 @@
     <string name="tutorial_missing_permissions_desc">It appears that some of the permissions required by Status have not been granted. Without these permissions, some functionality may work incorrectly or be disabled. If you have already granted all the permissions and think that there may be an error, you can disable permission checking in the \'other\' section of the settings menu.</string>
     <string name="preference_ignore_permission_checking">Ignore Permission Checking</string>
     <string name="preference_ignore_permission_checking_desc">Only enable this if you are sure that all permissions have been granted and you know what you are doing! This can cause significant problems if used incorrectly.</string>
+    <string name="preference_blocked_apps">Blocked Apps</string>
+    <string name="preference_min_priority">Minimum Priority Level</string>
+    <string name="preference_ignore_persistent_notifications">Ignore Persistent Notifications</string>
     <string name="msg_show_individual_screens">Show %1$d individual screens…</string>
     <string name="action_gplus">Google+</string>
     <string name="action_dribbble">Dribbble</string>
