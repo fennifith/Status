@@ -105,8 +105,8 @@ public class NotificationsIconData extends IconData {
     @Override
     public boolean needsDraw() {
         boolean needsDraw = false;
-        for (int i = 0; i < notifications.size(); i++)
-            needsDraw = needsDraw || !notifications.valueAt(i).getScale().isTarget();
+        for (int i = 0; i < notifications.size() && !needsDraw; i++)
+            needsDraw = !notifications.valueAt(i).getScale().isTarget();
 
         return needsDraw || super.needsDraw();
     }
