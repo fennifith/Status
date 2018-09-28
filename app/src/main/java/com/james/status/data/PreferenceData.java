@@ -71,7 +71,8 @@ public enum PreferenceData {
     APP_FULLSCREEN("%1$s/APP_FULLSCREEN", false),
     APP_FULLSCREEN_IGNORE("%1$s/APP_FULLSCREEN_IGNORE", false),
     APP_NOTIFICATIONS("%1$s/APP_NOTIFICATIONS", true),
-    APP_NOTIFICATIONS_MIN_PRIORITY(NotificationCompat.PRIORITY_LOW);
+    APP_NOTIFICATIONS_MIN_PRIORITY(NotificationCompat.PRIORITY_LOW),
+    APP_NOTIFICATIONS_IGNORE_ONGOING(false);
 
     public static final int VERSION = 1;
 

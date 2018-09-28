@@ -29,7 +29,7 @@ public class NotificationData implements Parcelable {
 
     public String category, title, subtitle, packageName, group, key, tag = "";
     public int priority, id, iconRes, color = Color.BLACK;
-    private boolean isAlert;
+    private boolean isAlert, isOngoing;
     private Bitmap icon, scaledIcon;
     private Bitmap largeIcon;
     private Icon unloadedIcon, unloadedLargeIcon;
@@ -43,6 +43,7 @@ public class NotificationData implements Parcelable {
     public NotificationData(StatusBarNotification sbn, String key) {
         this.key = key;
         init(sbn.getNotification(), sbn.getId(), sbn.getPackageName());
+        isOngoing = sbn.isOngoing();
     }
 
     public NotificationData(Notification notification, String packageName) {
@@ -191,6 +192,10 @@ public class NotificationData implements Parcelable {
             return new NotificationData[size];
         }
     };
+
+    public boolean isOngoing() {
+        return isOngoing;
+    }
 
     public Bitmap getIcon(float height) {
         if (icon.getHeight() == Math.round(height))

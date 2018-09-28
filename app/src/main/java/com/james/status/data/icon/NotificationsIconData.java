@@ -12,6 +12,7 @@ import com.james.status.data.NotificationData;
 import com.james.status.data.PreferenceData;
 import com.james.status.data.preference.AppNotificationsPreferenceData;
 import com.james.status.data.preference.BasePreferenceData;
+import com.james.status.data.preference.BooleanPreferenceData;
 import com.james.status.data.preference.IntegerPreferenceData;
 
 import java.util.List;
@@ -78,6 +79,16 @@ public class NotificationsIconData extends IconData {
                 null,
                 NotificationCompat.PRIORITY_MIN,
                 NotificationCompat.PRIORITY_MAX,
+                null
+        ));
+
+        preferences.add(new BooleanPreferenceData(
+                getContext(),
+                new BasePreferenceData.Identifier<Boolean>(
+                        PreferenceData.APP_NOTIFICATIONS_IGNORE_ONGOING,
+                        "Ignore Persistent Notifications",
+                        getIdentifierArgs()
+                ),
                 null
         ));
 
@@ -152,6 +163,8 @@ public class NotificationsIconData extends IconData {
 
     private void addNotification(String key, NotificationData notification) {
         if (notification.priority < (int) PreferenceData.APP_NOTIFICATIONS_MIN_PRIORITY.getValue(getContext()))
+            return;
+        if (notification.isOngoing() && (boolean) PreferenceData.APP_NOTIFICATIONS_IGNORE_ONGOING.getValue(getContext()))
             return;
 
         for (int i = 0; i < notifications.size(); i++) {
