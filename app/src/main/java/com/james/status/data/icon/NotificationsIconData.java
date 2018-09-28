@@ -64,31 +64,31 @@ public class NotificationsIconData extends IconData {
                 getContext(),
                 new BasePreferenceData.Identifier<String>(
                         PreferenceData.APP_NOTIFICATIONS,
-                        "Blocked Apps",
+                        getContext().getString(R.string.preference_blocked_apps),
                         getIdentifierArgs()
                 )
-        ));
-
-        preferences.add(new IntegerPreferenceData(
-                getContext(),
-                new BasePreferenceData.Identifier<Integer>(
-                        PreferenceData.APP_NOTIFICATIONS_MIN_PRIORITY,
-                        "Minimum Priority Level",
-                        getIdentifierArgs()
-                ),
-                null,
-                NotificationCompat.PRIORITY_MIN,
-                NotificationCompat.PRIORITY_MAX,
-                null
         ));
 
         preferences.add(new BooleanPreferenceData(
                 getContext(),
                 new BasePreferenceData.Identifier<Boolean>(
                         PreferenceData.APP_NOTIFICATIONS_IGNORE_ONGOING,
-                        "Ignore Persistent Notifications",
+                        getContext().getString(R.string.preference_ignore_persistent_notifications),
                         getIdentifierArgs()
                 ),
+                null
+        ));
+
+        preferences.add(new IntegerPreferenceData(
+                getContext(),
+                new BasePreferenceData.Identifier<Integer>(
+                        PreferenceData.APP_NOTIFICATIONS_MIN_PRIORITY,
+                        getContext().getString(R.string.preference_min_priority),
+                        getIdentifierArgs()
+                ),
+                null,
+                NotificationCompat.PRIORITY_MIN,
+                NotificationCompat.PRIORITY_MAX,
                 null
         ));
 

@@ -398,6 +398,9 @@
     <string name="preference_default_color_icon_dark">Default (Dark) Icon Color</string>
     <string name="preference_default_color_text_dark">Default (Dark) Text Color</string>
     <string name="preference_transparent_mode_desc">Enables the alpha/transparency sliders for the background color-related settings. Keep in mind that the original status bar will be visible behind this one; the only time this option might be useful is if you disable all status bar icons using SystemUI tuner and turn off \"Resource-Based Colors\".</string>
+    <string name="preference_blocked_apps">Blocked Apps</string>
+    <string name="preference_min_priority">Minimum Priority Level</string>
+    <string name="preference_ignore_persistent_notifications">Ignore Persistent Notifications</string>
 
     <string-array name="faq">
         <item>
