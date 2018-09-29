@@ -6,11 +6,12 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.AsyncTask;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 
 import com.james.status.utils.tasks.CanvasRenderTask;
+
+import androidx.annotation.Nullable;
 
 public abstract class RenderableView extends View implements CanvasRenderTask.Renderable {
 

@@ -3,8 +3,6 @@ package com.james.status.data.preference;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Typeface;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.AppCompatRadioButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RadioButton;
@@ -17,6 +15,9 @@ import com.james.status.utils.StaticUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatRadioButton;
 
 public class FontPreferenceData extends BasePreferenceData<String> {
 

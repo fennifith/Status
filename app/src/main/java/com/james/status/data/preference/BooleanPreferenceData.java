@@ -1,12 +1,13 @@
 package com.james.status.data.preference;
 
 import android.content.Context;
-import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 
 import com.james.status.R;
+
+import androidx.appcompat.widget.SwitchCompat;
 
 public class BooleanPreferenceData extends BasePreferenceData<Boolean> {
 

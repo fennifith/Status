@@ -9,8 +9,6 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.SystemClock;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 
 import com.james.status.R;
 import com.james.status.data.IconStyleData;
@@ -19,6 +17,9 @@ import com.james.status.receivers.IconUpdateReceiver;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
 public class GpsIconData extends IconData<GpsIconData.GpsReceiver> {
 

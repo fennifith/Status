@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.support.annotation.Nullable;
 
 import com.james.status.R;
 import com.james.status.data.preference.BasePreferenceData;
@@ -14,6 +13,8 @@ import com.james.status.data.preference.ColorPreferenceData;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.annotation.Nullable;
 
 public class AppPreferenceData {
 

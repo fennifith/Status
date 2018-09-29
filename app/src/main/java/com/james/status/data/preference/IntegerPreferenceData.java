@@ -2,11 +2,12 @@ package com.james.status.data.preference;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.support.annotation.Nullable;
 import android.view.View;
 
 import com.james.status.dialogs.PreferenceDialog;
 import com.james.status.dialogs.picker.IntegerPickerDialog;
+
+import androidx.annotation.Nullable;
 
 public class IntegerPreferenceData extends BasePreferenceData<Integer> {
 
