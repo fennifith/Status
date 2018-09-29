@@ -8,12 +8,13 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.ColorInt;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.ViewTreeObserver;
 
 import com.james.status.utils.ColorUtils;
+
+import androidx.annotation.ColorInt;
 
 public class ColorPickerImageView extends CustomImageView {
 
