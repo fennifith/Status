@@ -54,7 +54,7 @@
     <string name="error_name_exists">عنصر مع هذا الاسم موجود مسبقا.</string>
     <string name="error_missing_icons">يفتقد أيقونة واحدة أوكثر من أيقونة</string>
     <string name="err_battery_already_ignored">تم تجاهل تحسينات البطارية بالفعل! يمكنك المتابعة إلى الخطوة التالية.</string>
-    <string name="msg_notification_switch_enable">الرجاء تمكين التبديل بجوار \ "حالة الخدمة"\</string>
+    <string name="msg_notification_switch_enable">الرجاء تمكين التبديل بجوار \"حالة الخدمة"\</string>
     <string name="msg_battery_optimizations_switch_enable">قم بتشغيل التبديل إلى جانب \"حالة \". قد تحتاج إلى قم بالتمرير لأسفل … الكثير..</string>
     <string name="msg_accessibility_switch_enable">يرجى تشغيل الخدمة بعنوان \"حالة الخدمة \". قد تحتاج إلى التمرير لأسفل حتى تصبح مرئية.</string>
     <string name="msg_missing_storage_permission">يرجى منح إذن الوصول إلى وحدة التخزين الخارجية لاستخدام هذه الوظيفة.</string>
@@ -106,7 +106,7 @@
     <string name="preference_bar_color_auto_desc">اختيارات في شريط اللون من الحالية التطبيق. قد يتسبب هذا في انخفاض كبير في الأداء اعتمادا على الجهاز.</string>
     <string name="preference_bar_color_chooser">افتراضي لحالة الشريط الألوان</string>
     <string name="preference_app_colors">الشاشة محددة الألوان</string>
-    <string name="preference_app_colors_desc">تعيين لون شريط الحالة لاستخدام على معين الشاشة. سيؤدي ذلك إلى تجاوز أي خيارات الألوان وفرت \ 'التلقائي شريط تلوين \' تمكين خيار.</string>
+    <string name="preference_app_colors_desc">تعيين لون شريط الحالة لاستخدام على معين الشاشة. سيؤدي ذلك إلى تجاوز أي خيارات الألوان وفرت \'التلقائي شريط تلوين \' تمكين خيار.</string>
     <string name="preference_transparent_home">الشفافية على الشاشة الرئيسية</string>
     <string name="preference_transparent_home_desc">هذا الخيار مجموعات شريط الحالة \'s الخلفية كما الحالية خلفية عندما الشاشة الرئيسية يتم عرضها. هذا الإعداد سوف لا تعمل بشكل صحيح على العيش خلفيات أو إذا كان لديك الشاشة الرئيسية \'s التمرير خلفية تمكين خيار.</string>
     <string name="preference_dark_icons">أيقونة الألوان المتناقضة</string>
@@ -167,12 +167,12 @@
     <string name="preference_burnin_protection">تشغيل في الحماية</string>
     <string name="preference_burnin_protection_desc">يمنع حالة من التسبب في حرق الإضافية على بعض الشاشات التي تتحرك الرموز حول كل اثنين ثواني.</string>
     <string name="preference_prevent_icon_overlap">منع أيقونة التداخل</string>
-    <string name="preference_prevent_icon_overlap_desc">يمنع أيقونة \ "أقسام \" من تداخل بعضها البعض عندما هناك عدد كبير جدا من أيقونات التي تظهر في آن واحد. هذا الإعداد سيؤدي استنزاف البطارية مع عدد كبير جدا من تحديثات (مشغل الموسيقى الإخطارات يمكن ولا سيما فرض ضرائب، لا سيما إذا كانت تحديث مرة واحدة كل ثانية)، لذا كن حذرا مع ذلك.</string>
+    <string name="preference_prevent_icon_overlap_desc">يمنع أيقونة \"أقسام \" من تداخل بعضها البعض عندما هناك عدد كبير جدا من أيقونات التي تظهر في آن واحد. هذا الإعداد سيؤدي استنزاف البطارية مع عدد كبير جدا من تحديثات (مشغل الموسيقى الإخطارات يمكن ولا سيما فرض ضرائب، لا سيما إذا كانت تحديث مرة واحدة كل ثانية)، لذا كن حذرا مع ذلك.</string>
     <string name="preference_text_color">ألوان النص</string>
     <string name="preference_height">حالة شريط الطول</string>
     <string name="preference_height_desc">هذا الإعداد سيغير ارتفاع شريط الحالة، ولكن ليس المحتوى تحت ذلك! إعداد هذا 0سيسبب حالة استخدام الافتراضي الارتفاع حددها النظام.</string>
     <string name="preference_bump_mode">Bump Mode</string>
-    <string name="preference_bump_mode_desc">ينشأ وهمية (وحقا مثير) \ "كاميرا الأنماط \" في جميع أنحاء مركز الانحياز عن طريق العناصر الموجودة في شريط الحالة. من فضلك لا أي وقت مضى تمكين هذا الخيار.</string>
+    <string name="preference_bump_mode_desc">ينشأ وهمية (وحقا مثير) \"كاميرا الأنماط \" في جميع أنحاء مركز الانحياز عن طريق العناصر الموجودة في شريط الحالة. من فضلك لا أي وقت مضى تمكين هذا الخيار.</string>
     <string name="preference_text_effect">نمط النص</string>
     <string name="preference_transparent_mode">وضع الشفاف</string>
 
@@ -246,7 +246,7 @@
     <string name="notification_color">ضبط محدد ألوان الشاشة</string>
     <string name="notification_color_desc">تتعذر الحالة على العثور عن الألوان المستخدمة في هذا التطبيق، لقد تم الرجوع إلى اللون الافتراضي. يمكنك تحديد اللون بإستخدام النقر على هذا الإشعار.</string>
 
-    <string name="unit_seconds">" ثواني"</string>
+    <string name="unit_seconds"> ثواني</string>
 
     <string name="icon_style_android">أندرويد</string>
     <string name="icon_style_default">إفتراضي</string>
@@ -297,9 +297,9 @@
     <string name="tutorial_donate_desc">حالة مفتوح المصدر وحرية لاستخدام دون أي إعلانات أو المدفوعة الميزات. من أجل دعم وضع والتطبيقات الأخرى مثل ذلك، يرجى النظر في اتخاذ التبرع.</string>
 
     <string name="tutorial_missing_permissions">مهمات الأذونات</string>
-    <string name="tutorial_missing_permissions_desc">يبدو أن بعض من الأذونات المطلوبة من قبل وضع لم يتم منح. بدون هذه الأذونات، بعض وظائف قد العمل بشكل غير صحيح أو يتم تعطيل. إذا كنت قد منح جميع الأذونات والتفكير التي قد تكون هناك خطأ، يمكنك تعطيل إذن فحص في \ 'أخرى \' قسم إعدادات القائمة.</string>
+    <string name="tutorial_missing_permissions_desc">يبدو أن بعض من الأذونات المطلوبة من قبل وضع لم يتم منح. بدون هذه الأذونات، بعض وظائف قد العمل بشكل غير صحيح أو يتم تعطيل. إذا كنت قد منح جميع الأذونات والتفكير التي قد تكون هناك خطأ، يمكنك تعطيل إذن فحص في \'أخرى \' قسم إعدادات القائمة.</string>
     <string name="tutorial_too_many_icons">Running Out Of Space?</string>
-    <string name="tutorial_too_many_icons_desc">ويبدو أن هناك الكثير من أيقونة في شريط الحالة وأنه لا يملك فرض لعرض كل منهم. لمنعهم من كونها قطع، هل يمكن أن تمكين \ "منع التداخل \" الخيار في إعدادات أو زيادة المساحة المتوفرة عن طريق الحد من تداخل و أيقونة النطاق.</string>
+    <string name="tutorial_too_many_icons_desc">ويبدو أن هناك الكثير من أيقونة في شريط الحالة وأنه لا يملك فرض لعرض كل منهم. لمنعهم من كونها قطع، هل يمكن أن تمكين \"منع التداخل \" الخيار في إعدادات أو زيادة المساحة المتوفرة عن طريق الحد من تداخل و أيقونة النطاق.</string>
 
     <string name="red">أحمر</string>
     <string name="green">أخضر</string>
@@ -352,7 +352,7 @@
     <string name="google_icons_desc">ما يمثل أكثر من الأيقونات في التطبيق، تصميم قوقل لديها قاعدة بيانات واسعة من الأيقونات للاختيار من بينها.</string>
 
     <string name="md_icons">أيقونات التصميم ماتريال</string>
-    <string name="md_icons_desc">الذي أدلى به العديد من مختلف المساهمين، هذه المجموعة من الأيقونات يحتوي على موارد مفيدة غير متوفر من جوجل \ 's الموقع</string>
+    <string name="md_icons_desc">الذي أدلى به العديد من مختلف المساهمين، هذه المجموعة من الأيقونات يحتوي على موارد مفيدة غير متوفر من جوجل \'s الموقع</string>
 
     <string name="icons8_icons_desc">57,700 المجانية شقة الرموز في أي شكل، حجم ولون في 20ثواني.</string>
 
