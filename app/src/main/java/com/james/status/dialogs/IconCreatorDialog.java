@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v7.app.AppCompatDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -21,6 +20,8 @@ import com.james.status.R;
 import com.james.status.Status;
 import com.james.status.activities.ImagePickerActivity;
 import com.james.status.data.IconStyleData;
+
+import androidx.appcompat.app.AppCompatDialog;
 
 public class IconCreatorDialog extends AppCompatDialog {
 
@@ -71,7 +72,7 @@ public class IconCreatorDialog extends AppCompatDialog {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_icon_creator);
 
-        editText = (EditText) findViewById(R.id.name);
+        editText = findViewById(R.id.name);
         if (name != null) editText.setText(name);
         editText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -94,7 +95,7 @@ public class IconCreatorDialog extends AppCompatDialog {
             }
         });
 
-        LinearLayout layout = (LinearLayout) findViewById(R.id.layout);
+        LinearLayout layout = findViewById(R.id.layout);
         for (int i = 0; i < size; i++) {
             final View v = LayoutInflater.from(getContext()).inflate(R.layout.item_icon_create, null);
             ((TextView) v.findViewById(R.id.number)).setText(iconNames[i]);

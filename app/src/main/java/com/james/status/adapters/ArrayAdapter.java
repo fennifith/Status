@@ -1,9 +1,6 @@
 package com.james.status.adapters;
 
 import android.content.Context;
-import android.support.annotation.ArrayRes;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +12,10 @@ import com.james.status.R;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import androidx.annotation.ArrayRes;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class ArrayAdapter extends RecyclerView.Adapter<ArrayAdapter.ViewHolder> {
 

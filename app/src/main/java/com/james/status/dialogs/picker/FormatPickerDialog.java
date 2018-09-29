@@ -2,7 +2,6 @@ package com.james.status.dialogs.picker;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.StringRes;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -11,6 +10,8 @@ import android.widget.TextView;
 
 import com.james.status.R;
 import com.james.status.dialogs.PreferenceDialog;
+
+import androidx.annotation.StringRes;
 
 public class FormatPickerDialog extends PreferenceDialog<String> {
 
@@ -26,7 +27,7 @@ public class FormatPickerDialog extends PreferenceDialog<String> {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_format);
 
-        editText = (EditText) findViewById(R.id.editText);
+        editText = findViewById(R.id.editText);
 
         editText.setText(getPreference());
         editText.addTextChangedListener(new TextWatcher() {

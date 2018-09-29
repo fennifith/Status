@@ -2,7 +2,6 @@ package com.james.status.dialogs;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -14,6 +13,8 @@ import com.james.status.data.PreferenceData;
 
 import java.io.File;
 import java.util.List;
+
+import androidx.appcompat.app.AppCompatDialog;
 
 public class BackupCreatorDialog extends AppCompatDialog implements View.OnClickListener {
 
@@ -35,7 +36,7 @@ public class BackupCreatorDialog extends AppCompatDialog implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_backup_creator);
 
-        editText = (EditText) findViewById(R.id.name);
+        editText = findViewById(R.id.name);
         if (file != null)
             editText.setText(file.getName().substring(0, file.getName().length() - 4));
         else {
@@ -77,7 +78,7 @@ public class BackupCreatorDialog extends AppCompatDialog implements View.OnClick
             }
         });
 
-        TextView delete = (TextView) findViewById(R.id.delete);
+        TextView delete = findViewById(R.id.delete);
         delete.setText(file.exists() ? R.string.action_delete : R.string.action_cancel);
         delete.setOnClickListener(this);
 
@@ -85,7 +86,7 @@ public class BackupCreatorDialog extends AppCompatDialog implements View.OnClick
             findViewById(R.id.restore).setOnClickListener(this);
         else findViewById(R.id.restore).setVisibility(View.GONE);
 
-        TextView save = (TextView) findViewById(R.id.save);
+        TextView save = findViewById(R.id.save);
         save.setText(file.exists() ? R.string.action_save_backup : R.string.action_create_backup);
         save.setOnClickListener(this);
     }

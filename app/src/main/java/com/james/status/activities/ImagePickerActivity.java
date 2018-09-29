@@ -3,14 +3,15 @@ package com.james.status.activities;
 import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.james.status.R;
 import com.james.status.Status;
 import com.james.status.utils.StaticUtils;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class ImagePickerActivity extends AppCompatActivity {
 

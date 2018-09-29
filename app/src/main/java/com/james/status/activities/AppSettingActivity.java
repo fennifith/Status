@@ -2,11 +2,12 @@ package com.james.status.activities;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 
 import com.james.status.data.AppPreferenceData;
 import com.james.status.dialogs.preference.AppPreferenceDialog;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class AppSettingActivity extends AppCompatActivity {
 

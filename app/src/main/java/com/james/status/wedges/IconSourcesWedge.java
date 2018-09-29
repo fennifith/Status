@@ -2,8 +2,6 @@ package com.james.status.wedges;
 
 import android.content.Context;
 import android.content.res.XmlResourceParser;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.james.status.R;
@@ -11,6 +9,8 @@ import com.james.status.R;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import me.jfenn.attribouter.adapters.InfoAdapter;
 import me.jfenn.attribouter.wedges.Wedge;
 

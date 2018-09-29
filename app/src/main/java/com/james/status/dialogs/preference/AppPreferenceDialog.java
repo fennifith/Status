@@ -3,15 +3,11 @@ package com.james.status.dialogs.preference;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.v7.app.AppCompatDialog;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.james.status.R;
 import com.james.status.adapters.AppAdapter;
 import com.james.status.adapters.PreferenceAdapter;
@@ -21,6 +17,11 @@ import com.james.status.utils.tasks.ActivitiesGetterTask;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import androidx.appcompat.app.AppCompatDialog;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class AppPreferenceDialog extends AppCompatDialog implements ActivitiesGetterTask.OnGottenListener {
 

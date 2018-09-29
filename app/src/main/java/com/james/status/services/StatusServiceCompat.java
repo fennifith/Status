@@ -4,9 +4,10 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
 
 import com.james.status.data.NotificationData;
+
+import androidx.annotation.Nullable;
 
 public class StatusServiceCompat extends Service {
 

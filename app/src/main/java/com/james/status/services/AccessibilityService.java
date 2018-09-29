@@ -13,9 +13,6 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Parcelable;
-import android.support.annotation.ColorInt;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.Toast;
 
@@ -31,6 +28,10 @@ import com.james.status.utils.StaticUtils;
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 public class AccessibilityService extends android.accessibilityservice.AccessibilityService {
 

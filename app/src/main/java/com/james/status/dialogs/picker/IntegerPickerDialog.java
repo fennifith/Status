@@ -2,13 +2,14 @@ package com.james.status.dialogs.picker;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.TextView;
 
 import com.james.status.R;
 import com.james.status.dialogs.PreferenceDialog;
 import com.james.status.utils.WhileHeldListener;
+
+import androidx.annotation.Nullable;
 
 public class IntegerPickerDialog extends PreferenceDialog<Integer> {
 
@@ -29,7 +30,7 @@ public class IntegerPickerDialog extends PreferenceDialog<Integer> {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_integer_picker);
 
-        scale = (TextView) findViewById(R.id.scale);
+        scale = findViewById(R.id.scale);
 
         Integer preference = getPreference();
         if (preference == null) {

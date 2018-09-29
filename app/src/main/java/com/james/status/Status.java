@@ -3,7 +3,6 @@ package com.james.status;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.james.status.data.PreferenceData;
@@ -12,6 +11,8 @@ import com.james.status.utils.tasks.PreferenceUpdateTask;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.annotation.Nullable;
 
 public class Status extends Application {
 

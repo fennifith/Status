@@ -6,10 +6,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Toast;
 
@@ -24,6 +20,11 @@ import com.james.status.utils.ImageUtils;
 import com.james.status.utils.StaticUtils;
 
 import java.util.List;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class IconPickerDialog extends PreferenceDialog<IconStyleData> implements IconStyleAdapter.OnCheckedChangeListener {
 
@@ -45,7 +46,7 @@ public class IconPickerDialog extends PreferenceDialog<IconStyleData> implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_icon_picker);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         if (title != null) toolbar.setTitle(title);
 
         Drawable back = ImageUtils.getVectorDrawable(getContext(), R.drawable.ic_back);
@@ -58,7 +59,7 @@ public class IconPickerDialog extends PreferenceDialog<IconStyleData> implements
             }
         });
 
-        recycler = (RecyclerView) findViewById(R.id.recycler);
+        recycler = findViewById(R.id.recycler);
         recycler.setLayoutManager(new GridLayoutManager(getContext(), 1));
 
         adapter = new IconStyleAdapter(getContext(), icon, styles, this);

@@ -2,18 +2,19 @@ package com.james.status.dialogs.preference;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.v7.app.AppCompatDialog;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.james.status.R;
 import com.james.status.Status;
 import com.james.status.adapters.PreferenceAdapter;
 import com.james.status.data.icon.IconData;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatDialog;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class IconPreferenceDialog extends AppCompatDialog implements Status.OnIconPreferenceChangedListener, DialogInterface.OnDismissListener {
 

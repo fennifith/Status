@@ -6,7 +6,6 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
-import android.support.v4.app.NotificationCompat;
 
 import com.james.status.data.NotificationData;
 import com.james.status.data.PreferenceData;
@@ -16,6 +15,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import androidx.core.app.NotificationCompat;
 
 @TargetApi(18)
 public class StatusService extends NotificationListenerService {

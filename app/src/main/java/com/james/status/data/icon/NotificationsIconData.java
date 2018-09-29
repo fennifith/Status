@@ -4,8 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.util.ArrayMap;
 
 import com.james.status.R;
 import com.james.status.data.NotificationData;
@@ -16,6 +14,9 @@ import com.james.status.data.preference.BooleanPreferenceData;
 import com.james.status.data.preference.IntegerPreferenceData;
 
 import java.util.List;
+
+import androidx.collection.ArrayMap;
+import androidx.core.app.NotificationCompat;
 
 public class NotificationsIconData extends IconData {
 

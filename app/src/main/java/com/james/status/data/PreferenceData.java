@@ -7,8 +7,6 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -19,6 +17,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
+
+import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 
 public enum PreferenceData {
     PREF_VERSION(0),

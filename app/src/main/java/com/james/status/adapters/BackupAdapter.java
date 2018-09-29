@@ -1,7 +1,6 @@
 package com.james.status.adapters;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +11,8 @@ import com.james.status.dialogs.BackupCreatorDialog;
 
 import java.io.File;
 import java.util.List;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 public class BackupAdapter extends RecyclerView.Adapter<BackupAdapter.ViewHolder> {
 

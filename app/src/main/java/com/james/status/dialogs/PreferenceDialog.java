@@ -2,14 +2,14 @@ package com.james.status.dialogs;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.support.v7.app.AppCompatDialog;
 
 import com.james.status.R;
+
+import androidx.appcompat.app.AppCompatDialog;
 
 public class PreferenceDialog<T> extends AppCompatDialog {
 
     private T preference, defaultPreference;
-    private Object tag;
     private OnPreferenceListener<T> listener;
 
     public PreferenceDialog(Context context) {
@@ -60,15 +60,6 @@ public class PreferenceDialog<T> extends AppCompatDialog {
 
     public T getDefaultPreference() {
         return defaultPreference;
-    }
-
-    public PreferenceDialog<T> setTag(Object tag) {
-        this.tag = tag;
-        return this;
-    }
-
-    public Object getTag() {
-        return tag;
     }
 
     public PreferenceDialog<T> setListener(OnPreferenceListener<T> listener) {

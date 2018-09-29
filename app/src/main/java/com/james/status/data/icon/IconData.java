@@ -13,9 +13,6 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.preference.PreferenceManager;
-import android.support.annotation.ColorInt;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.Nullable;
 
 import com.james.status.R;
 import com.james.status.Status;
@@ -38,6 +35,10 @@ import com.james.status.utils.anim.AnimatedInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.LayoutRes;
+import androidx.annotation.Nullable;
 
 public abstract class IconData<T extends IconUpdateReceiver> {
 

@@ -3,9 +3,10 @@ package com.james.status.utils.tasks;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.os.AsyncTask;
-import android.support.annotation.Nullable;
 
 import java.lang.ref.WeakReference;
+
+import androidx.annotation.Nullable;
 
 public class CanvasRenderTask extends AsyncTask<Integer, Void, Bitmap> {
 

@@ -2,8 +2,6 @@ package com.james.status.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.v7.widget.AppCompatRadioButton;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +15,9 @@ import com.james.status.dialogs.IconCreatorDialog;
 import com.james.status.views.CustomImageView;
 
 import java.util.List;
+
+import androidx.appcompat.widget.AppCompatRadioButton;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class IconStyleAdapter extends RecyclerView.Adapter<IconStyleAdapter.ViewHolder> {
 

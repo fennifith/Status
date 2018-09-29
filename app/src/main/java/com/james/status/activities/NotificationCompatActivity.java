@@ -2,12 +2,13 @@ package com.james.status.activities;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.FrameLayout;
 
 import com.james.status.dialogs.CompatibilityNotificationDialog;
 import com.james.status.services.StatusServiceImpl;
 import com.james.status.utils.StaticUtils;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class NotificationCompatActivity extends AppCompatActivity {
 

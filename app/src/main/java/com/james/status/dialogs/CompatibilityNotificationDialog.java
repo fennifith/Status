@@ -3,14 +3,15 @@ package com.james.status.dialogs;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AppCompatDialog;
-import android.support.v7.widget.SwitchCompat;
 import android.view.View;
 import android.widget.CompoundButton;
 
 import com.james.status.R;
 import com.james.status.data.PreferenceData;
 import com.james.status.utils.StaticUtils;
+
+import androidx.appcompat.app.AppCompatDialog;
+import androidx.appcompat.widget.SwitchCompat;
 
 public class CompatibilityNotificationDialog extends AppCompatDialog {
 
@@ -27,7 +28,7 @@ public class CompatibilityNotificationDialog extends AppCompatDialog {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_notification_compatibility);
 
-        enabledSwitchView = (SwitchCompat) findViewById(R.id.enabledSwitch);
+        enabledSwitchView = findViewById(R.id.enabledSwitch);
 
         enabledSwitchView.setChecked(isEnabled);
         enabledSwitchView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

@@ -1,7 +1,6 @@
 package com.james.status.adapters;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -9,6 +8,8 @@ import com.james.status.data.PreferenceData;
 import com.james.status.data.preference.BasePreferenceData;
 
 import java.util.List;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 public class PreferenceAdapter extends RecyclerView.Adapter<BasePreferenceData.ViewHolder> {
 

@@ -1,6 +1,6 @@
 package com.james.status.utils.anim;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 public abstract class AnimatedValue<T> {
 

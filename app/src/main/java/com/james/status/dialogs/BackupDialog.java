@@ -3,9 +3,6 @@ package com.james.status.dialogs;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatDialog;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.james.status.R;
@@ -16,6 +13,10 @@ import com.james.status.utils.StaticUtils;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.appcompat.app.AppCompatDialog;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class BackupDialog extends AppCompatDialog implements BackupCreatorDialog.OnBackupChangedListener, DialogInterface.OnDismissListener {
 
@@ -38,7 +39,7 @@ public class BackupDialog extends AppCompatDialog implements BackupCreatorDialog
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_backup);
 
-        recyclerView = (RecyclerView) findViewById(R.id.recycler);
+        recyclerView = findViewById(R.id.recycler);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
         recyclerView.setAdapter(new BackupAdapter(getContext(), files, this));
 
