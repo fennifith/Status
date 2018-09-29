@@ -36,7 +36,7 @@
                 android:textColor="@color/textColorSecondary"
                 android:textSize="14sp" />
 
-            <android.support.v7.widget.SwitchCompat
+            <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/enabledSwitch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

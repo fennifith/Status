@@ -12,7 +12,7 @@
         android:paddingRight="12dp"
         android:paddingTop="16dp">
 
-        <android.support.v7.widget.SwitchCompat
+        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

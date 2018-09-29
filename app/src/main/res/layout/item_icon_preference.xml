@@ -19,7 +19,7 @@
         android:alpha="0.25"
         app:srcCompat="@drawable/ic_drag_handle" />
 
-    <android.support.v7.widget.SwitchCompat
+    <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/iconSwitch"
         android:layout_width="0dp"
         android:layout_weight="1"
