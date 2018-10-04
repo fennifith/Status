@@ -1,4 +1,4 @@
-## [onTaskRemoved](../app/src/main/java/com/james/status/services/StatusServiceImpl.java#L206)
+## [onTaskRemoved](https://github.com/TheAndroidMaster/Status/blob/master/app/src/main/java/com/james/status/services/StatusServiceImpl.java#L206)
 
 **Type:** `public` `void`
 
@@ -10,7 +10,7 @@ I can't remember why this is here or what it does, but it seems important.
 |-----|-----|
 |rootIntent|a... root intent, possibly part of a plant  |
 
-## [setUp](../app/src/main/java/com/james/status/services/StatusServiceImpl.java#L224)
+## [setUp](https://github.com/TheAndroidMaster/Status/blob/master/app/src/main/java/com/james/status/services/StatusServiceImpl.java#L224)
 
 **Type:** `public` `void`
 

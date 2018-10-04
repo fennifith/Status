@@ -1,4 +1,4 @@
-## [updateStatusService](../app/src/main/java/com/james/status/utils/StaticUtils.java#L167)
+## [updateStatusService](https://github.com/TheAndroidMaster/Status/blob/master/app/src/main/java/com/james/status/utils/StaticUtils.java#L167)
 
 **Type:** `public` `static` `void`
 

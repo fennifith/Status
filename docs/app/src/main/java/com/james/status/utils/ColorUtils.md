@@ -1,4 +1,4 @@
-## [getDifference](../app/src/main/java/com/james/status/utils/ColorUtils.java#L230)
+## [getDifference](https://github.com/TheAndroidMaster/Status/blob/master/app/src/main/java/com/james/status/utils/ColorUtils.java#L230)
 
 **Type:** `public` `static` `double`
 
