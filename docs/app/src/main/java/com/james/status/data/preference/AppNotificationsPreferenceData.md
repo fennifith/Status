@@ -1,4 +1,4 @@
-## [List](https://github.com/TheAndroidMaster/Status/blob/master/app/src/main/java/com/james/status/data/preference/AppNotificationsPreferenceData.java#L34)
+## [ListgetApps](https://github.com/TheAndroidMaster/Status/blob/master/app/src/main/java/com/james/status/data/preference/AppNotificationsPreferenceData.java#L34)
 
 **Type:** `public`
 

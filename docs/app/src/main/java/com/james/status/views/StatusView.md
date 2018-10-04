@@ -6,7 +6,9 @@ True if ".register()" has been called on all of the icons
 
 
 
-## [public](https://github.com/TheAndroidMaster/Status/blob/master/app/src/main/java/com/james/status/views/StatusView.java#L171)
+## [sendMessage](https://github.com/TheAndroidMaster/Status/blob/master/app/src/main/java/com/james/status/views/StatusView.java#L171)
+
+**Type:** `public` `void`
 
 Vaguely hacky method of sending notifications to the NotificationIconData class. 
 This may be used for other things in the future. 
