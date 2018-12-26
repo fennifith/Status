@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <about>
 
-    <me.jfenn.attribouter.wedges.AppWedge repo="TheAndroidMaster/Status" />
+    <me.jfenn.attribouter.wedges.AppWedge repo="fennifith/Status" />
 
-    <com.james.status.wedges.CabbageContributorsWedge repo="TheAndroidMaster/Status">
+    <com.james.status.wedges.CabbageContributorsWedge repo="fennifith/Status">
 
         <me.jfenn.attribouter.wedges.ContributorWedge
             name="James Fenn"
             avatar="https://avatars3.githubusercontent.com/u/13000407"
             bio="@string/james_desc"
-            login="TheAndroidMaster"
+            login="fennifith"
             position="1"
             task="^Developer">
 
