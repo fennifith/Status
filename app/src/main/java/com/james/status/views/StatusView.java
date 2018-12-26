@@ -20,8 +20,6 @@ import com.james.status.data.icon.IconData;
 import com.james.status.utils.ColorUtils;
 import com.james.status.utils.ImageUtils;
 import com.james.status.utils.StaticUtils;
-import com.james.status.utils.anim.AnimatedColor;
-import com.james.status.utils.anim.AnimatedInteger;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,6 +28,9 @@ import java.util.List;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.Nullable;
+import me.jfenn.androidutils.DimenUtils;
+import me.jfenn.androidutils.anim.AnimatedColor;
+import me.jfenn.androidutils.anim.AnimatedInteger;
 
 public class StatusView extends View implements IconData.ReDrawListener {
 
@@ -136,7 +137,7 @@ public class StatusView extends View implements IconData.ReDrawListener {
         backgroundColor.setDefault((int) PreferenceData.STATUS_COLOR.getValue(getContext()));
         isTransparentHome = PreferenceData.STATUS_HOME_TRANSPARENT.getValue(getContext());
 
-        int sidePaddingInt = (int) StaticUtils.getPixelsFromDp((int) PreferenceData.STATUS_SIDE_PADDING.getValue(getContext()));
+        int sidePaddingInt = DimenUtils.dpToPx((int) PreferenceData.STATUS_SIDE_PADDING.getValue(getContext()));
         if (sidePadding == null)
             sidePadding = new AnimatedInteger(sidePaddingInt);
         else sidePadding.to(sidePaddingInt);
@@ -354,7 +355,7 @@ public class StatusView extends View implements IconData.ReDrawListener {
                 }
             }
 
-            backgroundImage = ImageUtils.cropBitmapToBar(getContext(), ImageUtils.drawableToBitmap(backgroundDrawable));
+            backgroundImage = ImageUtils.cropBitmapToBar(getContext(), me.jfenn.androidutils.ImageUtils.drawableToBitmap(backgroundDrawable));
         }
 
         if (backgroundImage != null) {

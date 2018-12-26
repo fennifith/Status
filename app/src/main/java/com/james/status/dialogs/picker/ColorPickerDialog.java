@@ -22,7 +22,6 @@ import com.james.status.R;
 import com.james.status.Status;
 import com.james.status.activities.ImagePickerActivity;
 import com.james.status.dialogs.PreferenceDialog;
-import com.james.status.utils.ColorUtils;
 import com.james.status.utils.StaticUtils;
 import com.james.status.views.CircleColorView;
 import com.james.status.views.ColorView;
@@ -34,6 +33,7 @@ import java.util.List;
 import androidx.annotation.ColorInt;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatSeekBar;
+import me.jfenn.androidutils.ColorUtils;
 
 public class ColorPickerDialog extends PreferenceDialog<Integer> implements Status.OnActivityResultListener {
 

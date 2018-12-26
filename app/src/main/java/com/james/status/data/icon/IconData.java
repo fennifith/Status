@@ -26,11 +26,7 @@ import com.james.status.data.preference.IconPreferenceData;
 import com.james.status.data.preference.IntegerPreferenceData;
 import com.james.status.data.preference.ListPreferenceData;
 import com.james.status.receivers.IconUpdateReceiver;
-import com.james.status.utils.ColorUtils;
 import com.james.status.utils.StaticUtils;
-import com.james.status.utils.anim.AnimatedColor;
-import com.james.status.utils.anim.AnimatedFloat;
-import com.james.status.utils.anim.AnimatedInteger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,6 +35,11 @@ import java.util.List;
 import androidx.annotation.ColorInt;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.Nullable;
+import me.jfenn.androidutils.ColorUtils;
+import me.jfenn.androidutils.DimenUtils;
+import me.jfenn.androidutils.anim.AnimatedColor;
+import me.jfenn.androidutils.anim.AnimatedFloat;
+import me.jfenn.androidutils.anim.AnimatedInteger;
 
 public abstract class IconData<T extends IconUpdateReceiver> {
 
@@ -119,13 +120,13 @@ public abstract class IconData<T extends IconUpdateReceiver> {
         defaultTextDarkColor = (int) PreferenceData.ICON_TEXT_COLOR_DARK.getSpecificOverriddenValue(getContext(),
                 PreferenceData.STATUS_DARK_ICON_TEXT_COLOR.getValue(getContext()), getIdentifierArgs());
 
-        iconSize.setDefault((int) StaticUtils.getPixelsFromDp((int) PreferenceData.ICON_ICON_SCALE.getSpecificValue(getContext(), getIdentifierArgs())));
+        iconSize.setDefault(DimenUtils.dpToPx((int) PreferenceData.ICON_ICON_SCALE.getSpecificValue(getContext(), getIdentifierArgs())));
         iconOffsetX.to((int) PreferenceData.ICON_ICON_OFFSET_X.getSpecificValue(getContext(), getIdentifierArgs()));
         iconOffsetY.to((int) PreferenceData.ICON_ICON_OFFSET_Y.getSpecificValue(getContext(), getIdentifierArgs()));
-        textSize.setDefault((float) StaticUtils.getPixelsFromSp(getContext(), (float) (int) PreferenceData.ICON_TEXT_SIZE.getSpecificValue(getContext(), getIdentifierArgs())));
+        textSize.setDefault((float) DimenUtils.spToPx((float) (int) PreferenceData.ICON_TEXT_SIZE.getSpecificValue(getContext(), getIdentifierArgs())));
         textOffsetX.to((int) PreferenceData.ICON_TEXT_OFFSET_X.getSpecificValue(getContext(), getIdentifierArgs()));
         textOffsetY.to((int) PreferenceData.ICON_TEXT_OFFSET_Y.getSpecificValue(getContext(), getIdentifierArgs()));
-        padding.to((int) StaticUtils.getPixelsFromDp((int) PreferenceData.ICON_ICON_PADDING.getSpecificValue(getContext(), getIdentifierArgs())));
+        padding.to(DimenUtils.dpToPx((int) PreferenceData.ICON_ICON_PADDING.getSpecificValue(getContext(), getIdentifierArgs())));
 
         backgroundColor = PreferenceData.STATUS_COLOR.getValue(getContext());
 

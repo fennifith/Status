@@ -7,11 +7,10 @@ import android.util.AttributeSet;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
-import com.james.status.utils.ImageUtils;
-
 import androidx.annotation.ColorInt;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
+import me.jfenn.androidutils.ImageUtils;
 
 public class CustomImageView extends AppCompatImageView {
 

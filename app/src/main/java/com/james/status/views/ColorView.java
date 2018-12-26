@@ -6,9 +6,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 
-import com.james.status.utils.StaticUtils;
-
 import androidx.annotation.ColorInt;
+import me.jfenn.androidutils.DimenUtils;
 
 public class ColorView extends RenderableView {
 
@@ -33,7 +32,7 @@ public class ColorView extends RenderableView {
     }
 
     void setUp() {
-        outlineSize = StaticUtils.getPixelsFromDp(2);
+        outlineSize = DimenUtils.dpToPx(2);
 
         tilePaint = new Paint();
         tilePaint.setAntiAlias(true);

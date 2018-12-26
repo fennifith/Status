@@ -10,7 +10,6 @@ import android.widget.RadioGroup;
 import android.widget.ScrollView;
 
 import com.james.status.R;
-import com.james.status.utils.StaticUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,6 +17,7 @@ import java.util.List;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatRadioButton;
+import me.jfenn.androidutils.DimenUtils;
 
 public class FontPreferenceData extends BasePreferenceData<String> {
 
@@ -43,7 +43,7 @@ public class FontPreferenceData extends BasePreferenceData<String> {
         ScrollView scrollView = new ScrollView(getContext());
 
         RadioGroup group = new RadioGroup(getContext());
-        int vPadding = (int) StaticUtils.getPixelsFromDp(12);
+        int vPadding = DimenUtils.dpToPx(12);
         group.setPadding(0, vPadding, 0, vPadding);
 
         AppCompatRadioButton normalButton = (AppCompatRadioButton) LayoutInflater.from(getContext()).inflate(R.layout.item_dialog_radio_button, group, false);

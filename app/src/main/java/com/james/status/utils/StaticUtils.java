@@ -8,13 +8,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.os.Build;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
-import android.util.TypedValue;
 
 import com.james.status.BuildConfig;
 import com.james.status.activities.StartActivity;
@@ -51,24 +49,6 @@ public class StaticUtils {
         int shown = prefs.getInt("tutorial" + tutorialName, 0);
         prefs.edit().putInt("tutorial" + tutorialName, shown + 1).apply();
         return limit == shown;
-    }
-
-    public static int getNavigationBarHeight(Context context) {
-        int resId = context.getResources().getIdentifier("navigation_bar_height", "dimen", "android");
-        if (resId > 0) return context.getResources().getDimensionPixelSize(resId);
-        else return 0;
-    }
-
-    public static float getPixelsFromDp(int dp) {
-        return dp * Resources.getSystem().getDisplayMetrics().density;
-    }
-
-    public static float getDpFromPixels(int px) {
-        return px / Resources.getSystem().getDisplayMetrics().density;
-    }
-
-    public static int getPixelsFromSp(Context context, float sp) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, context.getResources().getDisplayMetrics());
     }
 
     public static int getBluetoothState(Context context) {

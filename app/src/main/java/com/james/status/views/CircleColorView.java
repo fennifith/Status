@@ -7,9 +7,8 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
 
-import com.james.status.utils.ColorUtils;
-
 import androidx.annotation.ColorInt;
+import me.jfenn.androidutils.ColorUtils;
 
 public class CircleColorView extends ColorView {
 

@@ -12,9 +12,8 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.ViewTreeObserver;
 
-import com.james.status.utils.ColorUtils;
-
 import androidx.annotation.ColorInt;
+import me.jfenn.androidutils.ColorUtils;
 
 public class ColorPickerImageView extends CustomImageView {
 

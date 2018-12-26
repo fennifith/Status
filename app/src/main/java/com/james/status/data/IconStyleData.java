@@ -10,7 +10,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.james.status.utils.ImageUtils;
 import com.james.status.utils.StaticUtils;
 
 import java.util.Arrays;
@@ -21,6 +20,7 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
+import me.jfenn.androidutils.ImageUtils;
 
 public class IconStyleData implements Parcelable {
 

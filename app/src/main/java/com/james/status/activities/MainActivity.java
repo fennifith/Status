@@ -48,6 +48,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.MenuItemCompat;
 import androidx.core.view.ViewCompat;
 import androidx.viewpager.widget.ViewPager;
+import me.jfenn.androidutils.DimenUtils;
 import me.jfenn.attribouter.Attribouter;
 
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, CompoundButton.OnCheckedChangeListener {
@@ -103,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             }
         });
 
-        ViewCompat.setElevation(bottomSheet, StaticUtils.getPixelsFromDp(10));
+        ViewCompat.setElevation(bottomSheet, DimenUtils.dpToPx(10));
 
         behavior = BottomSheetBehavior.from(bottomSheet);
         behavior.setState(BottomSheetBehavior.STATE_HIDDEN);

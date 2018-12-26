@@ -19,12 +19,11 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.service.notification.StatusBarNotification;
 
-import com.james.status.utils.ImageUtils;
-import com.james.status.utils.anim.AnimatedFloat;
-
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.res.ResourcesCompat;
+import me.jfenn.androidutils.ImageUtils;
+import me.jfenn.androidutils.anim.AnimatedFloat;
 
 public class NotificationData implements Parcelable {
 
