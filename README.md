@@ -36,7 +36,7 @@ Alternatively, you can download the latest APK from [the GitHub releases](../../
 
 ## Contributing
 ### Issues
-Okay, there aren't really any guidelines over issue formatting provided that you don't create issues that already exist, test the app throughly before creating an issue (ex: try clearing the app data), and don't create issues like "It's pointless, just use root". You're not helping.
+Okay, there aren't really any guidelines over issue formatting provided that you don't create issues that already exist and test the app thoroughly before creating an issue (ex: try clearing the app data).
 
 ### Pull Requests
 Contributions are accepted. See [CONTRIBUTING.md](./.github/CONTRIBUTING.md) for more information.

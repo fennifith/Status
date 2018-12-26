@@ -8,6 +8,6 @@ I am using the `develop` branch for all changes that won't be immediately availa
 
 ## Build Instructions
 
-This project has certian icon sets and fonts missing from the open source repository, as they are under a different license. This will not affect how you compile the project, as I am using a somewhat hacky method of getting the resource ids for these items from strings at runtime. Everything else should work as normal.
+This project has certain icon sets and fonts missing from the open source repository, as they are under a different license. This will not affect how you compile the project, as I am using a somewhat hacky method of getting the resource ids for these items from strings at runtime. Everything else should work as normal.
 
 To build the project from the command line, see [Build Your App from the Command Line](https://developer.android.com/studio/build/building-cmdline) (android docs).
