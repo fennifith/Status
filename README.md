@@ -1,3 +1,15 @@
+> **A message from the idiot that wrote this program:**
+> 
+> Status has not been abandoned, but is now incompatible with a growing range of devices due to a variety of problems detailed in [issue #87](https://github.com/TheAndroidMaster/Status/issues/87). Unfortunately, there is nothing that I or any other developer can do to prevent this. If the Play Store says that your device is incompatible, then there is nothing that I can do to help you other than point you to one of the links below about why it will not function.
+> 
+> https://www.androidpolice.com/2017/04/10/android-o-feature-spotlight-apps-can-no-longer-draw-top-system-ui/
+> https://www.xda-developers.com/android-o-is-breaking-apps-that-overlay-on-top-of-the-status-bar/
+> https://issuetracker.google.com/issues/36574245
+> 
+> Status will continue to receive support for devices below Android Oreo for as long as it remains in the interest of the community.
+
+## About
+
 Status is a status bar replacement that draws an overlay on top of the system-generated status bar. This means that the actual status bar is only hidden under the replacement; touch gestures are not overridden, and the standard notification panel is still shown. It needs a lot of permissions in order to obtain the information needed to display in the status bar. These are listed below.
 
 [![Build Status](https://travis-ci.com/fennifith/Status.svg)](https://travis-ci.com/fennifith/Status)
