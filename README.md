@@ -1,5 +1,7 @@
 Status is a status bar replacement that draws an overlay on top of the system-generated status bar. This means that the actual status bar is only hidden under the replacement; touch gestures are not overridden, and the standard notification panel is still shown. It needs a lot of permissions in order to obtain the information needed to display in the status bar. These are listed below.
 
+[![Discord](https://img.shields.io/discord/514625116706177035.svg)](https://discord.gg/ugwZR7V)
+
 Special thanks to the contributors that have helped to design the app, fix issues, and translate it to different languages:
 - [Anas Khan](https://twitter.com/MAKTHG): designed the app icon & helped with UI
 - [Vukašin Anđelković](https://dribbble.com/zavukodlak): made a couple status bar icons
@@ -8,6 +10,16 @@ Special thanks to the contributors that have helped to design the app, fix issue
 - [Kim Inseop](https://github.com/opnay): Korean translations
 - Majida Whale: Chinese translations
 - [Marwan ALsidi](https://github.com/Alsidi-Group): Arabic translations
+
+## Installation
+
+The app is published on Google Play:
+
+[<img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png"
+    alt="Get it on Google Play"
+    height="80">](https://play.google.com/store/apps/details?id=com.james.status)
+
+Alternatively, you can download the latest APK from [the GitHub releases](../../releases/).
 
 ## Permissions
 - Accessibility Service: used to attempt to get the status bar color of the current app if the 'status bar coloring' preference is enabled.
