@@ -13,6 +13,7 @@
 Status is a status bar replacement that draws an overlay on top of the system-generated status bar. This means that the actual status bar is only hidden under the replacement; touch gestures are not overridden, and the standard notification panel is still shown. It needs a lot of permissions in order to obtain the information needed to display in the status bar. These are listed below.
 
 [![Build Status](https://travis-ci.com/fennifith/Status.svg)](https://travis-ci.com/fennifith/Status)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/4f0694753964424b82ccb3544d24df2a)](https://www.codacy.com/app/fennifith/Status?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=fennifith/Status&amp;utm_campaign=Badge_Grade)
 [![Discord](https://img.shields.io/discord/514625116706177035.svg)](https://discord.gg/ugwZR7V)
 
 Special thanks to the contributors that have helped to design the app, fix issues, and translate it to different languages:
