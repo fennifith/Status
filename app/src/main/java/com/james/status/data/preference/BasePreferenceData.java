@@ -36,11 +36,25 @@ public class BasePreferenceData<T> implements View.OnClickListener {
         this.listener = listener;
     }
 
+    /**
+     * Specifies an interface to use to determine whether the preference should
+     * be visible in the settings or not.
+     *
+     * @param visibility An interface invoked to determine whether the
+     *                   preference should be visible under a set of
+     *                   conditions.
+     * @return "this", for method chaining.
+     */
     public BasePreferenceData withVisibility(VisibilityInterface visibility) {
         this.visibility = visibility;
         return this;
     }
 
+    /**
+     * Determine whether the preference should be visible.
+     *
+     * @return True if the preference is visible in the settings.
+     */
     public boolean isVisible() {
         if (visibility != null) {
             Object value = visibility.getValue();
@@ -48,11 +62,28 @@ public class BasePreferenceData<T> implements View.OnClickListener {
         } else return true;
     }
 
+    /**
+     * Obtain the "preference" that this setting is dependent on, assuming that
+     * this preference's visibility is based on the value of another setting.
+     *
+     * If this preference doesn't have a "visibility" interface, this will return
+     * null. It might return null anyway, who knows.
+     *
+     * @return A PreferenceData that this setting is dependent on. Or null.
+     */
     @Nullable
     public PreferenceData getVisibilityDependent() {
         return visibility != null ? visibility.getDependent() : null;
     }
 
+    /**
+     * Set whether this preference could use "null" as a value. In other words, if
+     * a nonexistent preference should be interpreted differently from simply
+     * returning the default value.
+     *
+     * @param isNullable            Whether the preference's value can be null.
+     * @return                      "this", for method chaining.
+     */
     public BasePreferenceData withNullable(boolean isNullable) {
         if (isNullable)
             return withNullValue(null);
@@ -63,28 +94,62 @@ public class BasePreferenceData<T> implements View.OnClickListener {
         }
     }
 
+    /**
+     * Set a value of the preference that is equivalent to "null". For example,
+     * an invalid integer value may be treated separately from the actual preference.
+     * Ex: the height of an object, or "0" to disable the object entirely.
+     *
+     * @param nullValue             The value that should be treated as "null".
+     * @return                      "this", for method chaining.
+     */
     public BasePreferenceData withNullValue(T nullValue) {
         isNullable = true;
         this.nullValue = nullValue;
         return this;
     }
 
+    /**
+     * Determine whether the preference can contain a null value.
+     *
+     * @return True if the preference can contain a null value.
+     */
     public boolean isNullable() {
         return isNullable;
     }
 
+    /**
+     * Obtain the value of the preference to be interpreted as "null". If a value
+     * has not been set, this just returns null. Fair enough.
+     *
+     * @return The value of the preference to be interpreted
+     *                              as "null" Might just be null.
+     */
+    @Nullable
     public T getNullValue() {
         return nullValue;
     }
 
+    /**
+     * Get the current application context.
+     *
+     * @return The current application context.
+     */
     public Context getContext() {
         return context;
     }
 
+    /**
+     * Get the identifier of the preference. I'm not sure why this
+     * is a separate class, it's mostly for search indexing and stuff.
+     * I think I was intending to separate it from the PreferenceData
+     * classes to index things other than settings as well, but never
+     * got around to it.
+     *
+     * @return A redundant Identifier class containing... an identifier.
+     */
     public Identifier<T> getIdentifier() {
         return identifier;
     }
-
     public ViewHolder getViewHolder(LayoutInflater inflater, ViewGroup parent) {
         return new ViewHolder(inflater.inflate(R.layout.item_preference_text, parent, false));
     }
@@ -139,6 +204,11 @@ public class BasePreferenceData<T> implements View.OnClickListener {
         holder.v.setOnClickListener(this);
     }
 
+    /**
+     * Notify all observers that the preference has been changed.
+     *
+     * @param preference            The new value of the preference.
+     */
     public void onPreferenceChange(T preference) {
         if (listener != null) listener.onPreferenceChange(preference);
     }

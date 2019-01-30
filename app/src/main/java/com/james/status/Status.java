@@ -17,7 +17,6 @@ import androidx.annotation.Nullable;
 public class Status extends Application {
 
     private List<OnActivityResultListener> onActivityResultListeners;
-    private List<OnColorPickedListener> onColorPickedListeners;
     private List<OnIconPreferenceChangedListener> onIconPreferenceChangedListeners;
 
     @Override
@@ -25,7 +24,6 @@ public class Status extends Application {
         super.onCreate();
 
         onActivityResultListeners = new ArrayList<>();
-        onColorPickedListeners = new ArrayList<>();
         onIconPreferenceChangedListeners = new ArrayList<>();
 
         if (PreferenceData.VERSION != (Integer) PreferenceData.PREF_VERSION.getValue(this))
@@ -36,20 +34,12 @@ public class Status extends Application {
         onActivityResultListeners.add(listener);
     }
 
-    public void addListener(OnColorPickedListener listener) {
-        onColorPickedListeners.add(listener);
-    }
-
     public void addListener(OnIconPreferenceChangedListener listener) {
         onIconPreferenceChangedListeners.add(listener);
     }
 
     public void removeListener(OnActivityResultListener listener) {
         onActivityResultListeners.remove(listener);
-    }
-
-    public void removeListener(OnColorPickedListener listener) {
-        onColorPickedListeners.remove(listener);
     }
 
     public void removeListener(OnIconPreferenceChangedListener listener) {
@@ -59,12 +49,6 @@ public class Status extends Application {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         for (OnActivityResultListener listener : onActivityResultListeners) {
             listener.onActivityResult(requestCode, resultCode, data);
-        }
-    }
-
-    public void onColor(@Nullable Integer color) {
-        for (OnColorPickedListener listener : onColorPickedListeners) {
-            listener.onColorPicked(color);
         }
     }
 

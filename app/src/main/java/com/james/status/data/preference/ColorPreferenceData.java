@@ -8,9 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.james.status.R;
-import com.james.status.dialogs.PreferenceDialog;
-import com.james.status.dialogs.picker.ColorPickerDialog;
 import com.james.status.views.ColorView;
+
+import me.jfenn.colorpickerdialog.dialogs.ColorPickerDialog;
 
 public class ColorPreferenceData extends BasePreferenceData<Integer> {
 
@@ -48,28 +48,18 @@ public class ColorPreferenceData extends BasePreferenceData<Integer> {
 
     @Override
     public void onClick(final View v) {
-        ColorPickerDialog dialog = new ColorPickerDialog(getContext()).withAlpha(isAlpha());
+        ColorPickerDialog dialog = new ColorPickerDialog(getContext()).withAlphaEnabled(isAlpha())
+                .withColor(value != null && !value.equals(getNullValue()) ? value : Color.BLACK)
+                .withListener(new ColorPickerDialog.OnColorPickedListener() {
+                    @Override
+                    public void onColorPicked(ColorPickerDialog colorPickerDialog, int i) {
+                        value = i;
+                        onBindViewHolder(new ViewHolder(v), -1);
 
-        dialog.setPreference(value != null && !value.equals(getNullValue()) ? value : Color.BLACK);
-
-        Integer defaultValue = getIdentifier().getPreference().getDefaultValue();
-        if (defaultValue != null)
-            dialog.setDefaultPreference(defaultValue);
-
-        dialog.setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
-            @Override
-            public void onPreference(PreferenceDialog dialog, Integer color) {
-                value = color;
-                onBindViewHolder(new ViewHolder(v), -1);
-
-                getIdentifier().setPreferenceValue(getContext(), color);
-                onPreferenceChange(color);
-            }
-
-            @Override
-            public void onCancel(PreferenceDialog dialog) {
-            }
-        });
+                        getIdentifier().setPreferenceValue(getContext(), i);
+                        onPreferenceChange(i);
+                    }
+                });
 
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
