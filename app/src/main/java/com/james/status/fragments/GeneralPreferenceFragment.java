@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.james.status.R;
 import com.james.status.adapters.PreferenceSectionAdapter;
@@ -342,6 +343,21 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                                 BasePreferenceData.Identifier.SectionIdentifier.OTHER
                         ),
                         null
+                ),
+                new BooleanPreferenceData(
+                        getContext(),
+                        new BasePreferenceData.Identifier<Boolean>(
+                                PreferenceData.PREF_DARK_THEME,
+                                getString(R.string.preference_ui_dark_theme),
+                                getString(R.string.preference_ui_dark_theme_desc),
+                                BasePreferenceData.Identifier.SectionIdentifier.OTHER
+                        ),
+                        new BasePreferenceData.OnPreferenceChangeListener<Boolean>() {
+                            @Override
+                            public void onPreferenceChange(Boolean preference) {
+                                Toast.makeText(getContext(), R.string.msg_restart_for_changes, Toast.LENGTH_SHORT).show();
+                            }
+                        }
                 )
         ));
 

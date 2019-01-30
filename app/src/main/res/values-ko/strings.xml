@@ -496,5 +496,9 @@
     <!-- untranslated strings -->
     <string name="james_desc">Android developer and professional cabbage eater.</string>
     <string name="anas_desc">Better known as the Oreo lord, this guy can add more butter to buttery interfaces.</string>
+    <string name="preference_ui_dark_theme">UI Dark Theme</string>
+    <string name="preference_ui_dark_theme_desc">A dark theme for Status\'s settings UI to make it a little easier on the eyes.</string>
+    <string name="msg_restart_for_changes">Restart the app to apply the changes.</string>
+    <string name="icons8_icons">Icons8</string>
 
 </resources>

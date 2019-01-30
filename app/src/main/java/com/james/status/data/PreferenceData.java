@@ -23,6 +23,7 @@ import androidx.core.app.NotificationCompat;
 
 public enum PreferenceData {
     PREF_VERSION(0),
+    PREF_DARK_THEME(false),
     STATUS_ENABLED(false),
     STATUS_NOTIFICATIONS_COMPAT(false),
     //STATUS_NOTIFICATIONS_HEADS_UP(false), TODO: #137

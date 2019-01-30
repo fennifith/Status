@@ -8,12 +8,12 @@
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary">
+        android:background="?attr/colorPrimary">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:contentScrim="@color/colorPrimary"
+            app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|enterAlways"
             app:titleEnabled="false">
 
@@ -46,8 +46,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:background="@null"
-            app:tabSelectedTextColor="@color/textColorPrimary"
-            app:tabTextColor="@color/textColorSecondary" />
+            app:tabSelectedTextColor="?android:textColorPrimary"
+            app:tabTextColor="?android:textColorSecondary" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -72,7 +72,7 @@
         android:id="@+id/bottomSheet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
+        android:background="?attr/colorPrimary"
         android:orientation="vertical"
         app:behavior_hideable="true"
         app:behavior_peekHeight="64dp"

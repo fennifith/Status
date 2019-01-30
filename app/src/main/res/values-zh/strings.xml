@@ -401,6 +401,12 @@
     <string name="preference_text_font">Text Font</string>
     <string name="preference_default_color_icon_dark">Default (Dark) Icon Color</string>
     <string name="preference_default_color_text_dark">Default (Dark) Text Color</string>
+    <string name="alpha">Alpha</string>
+    <string name="dialog_preference_fullscreen">Fullscreen</string>
+    <string name="dialog_preference_fullscreen_ignore">Ignore Auto-Detection</string>
+    <string name="preference_ui_dark_theme">UI Dark Theme</string>
+    <string name="preference_ui_dark_theme_desc">A dark theme for Status\'s settings UI to make it a little easier on the eyes.</string>
+    <string name="msg_restart_for_changes">Restart the app to apply the changes.</string>
     <string-array name="faq">
         <item>
             <b>Why can\'t the status bar be transparent?</b>
