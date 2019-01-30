@@ -14,7 +14,7 @@ Status is a status bar replacement that draws an overlay on top of the system-ge
 
 [![Build Status](https://travis-ci.com/fennifith/Status.svg)](https://travis-ci.com/fennifith/Status)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/4f0694753964424b82ccb3544d24df2a)](https://www.codacy.com/app/fennifith/Status?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=fennifith/Status&amp;utm_campaign=Badge_Grade)
-[![Discord](https://img.shields.io/discord/514625116706177035.svg)](https://discord.gg/ugwZR7V)
+[![Discord](https://img.shields.io/discord/514625116706177035.svg?logo=discord&colorB=7289da)](https://discord.gg/ugwZR7V)
 
 Special thanks to the contributors that have helped to design the app, fix issues, and translate it to different languages:
 - [Anas Khan](https://twitter.com/MAKTHG): designed the app icon & helped with UI
