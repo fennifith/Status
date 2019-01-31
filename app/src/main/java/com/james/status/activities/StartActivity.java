@@ -1,5 +1,6 @@
 package com.james.status.activities;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.ComponentName;
 import android.content.DialogInterface;
@@ -27,6 +28,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import me.drozdzynski.library.steppers.SteppersItem;
 import me.drozdzynski.library.steppers.SteppersView;
@@ -221,8 +223,21 @@ public class StartActivity extends AppCompatActivity {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivityForResult(new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS), REQUEST_OPTIMIZATION);
-                    Toast.makeText(getContext(), R.string.msg_battery_optimizations_switch_enable, Toast.LENGTH_LONG).show();
+                    if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS) == PackageManager.PERMISSION_GRANTED) {
+                        // This intent launches the "evil dialog of misleading and restrictive user freedom", according
+                        // to Google Play's policy, but there shouldn't actually be anything wrong with it. The policy
+                        // states that this is only acceptable if battery optimization affects the "core functionality" of
+                        // the app in question, which... it does. However, it seems their moderators have decided otherwise,
+                        // as the update that I pushed containing this intent was taken down. Which is why the permission to use
+                        // this intent is now only granted in the OSS product flavor. :(
+
+                        Intent intent = new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+                        intent.setData(Uri.parse("package:" + getContext().getApplicationContext().getPackageName()));
+                        startActivityForResult(intent, REQUEST_OPTIMIZATION);
+                    } else {
+                        startActivityForResult(new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS), REQUEST_OPTIMIZATION);
+                        Toast.makeText(getContext(), R.string.msg_battery_optimizations_switch_enable, Toast.LENGTH_LONG).show();
+                    }
                 }
             });
 

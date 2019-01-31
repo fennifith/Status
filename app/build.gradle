@@ -22,6 +22,22 @@ android {
         }
     }
 
+    /**
+     * This is used to circumvent some of Google Play's restrictions
+     * and allow assets under a different license to exist only in
+     * the Google Play apks without interfering with the OSS version.
+     */
+    flavorDimensions "distribution"
+    productFlavors {
+        gplay {
+            dimension "distribution"
+        }
+
+        oss {
+            dimension "distribution"
+        }
+    }
+
     lintOptions {
         abortOnError false
     }
