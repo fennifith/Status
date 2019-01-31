@@ -355,7 +355,11 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                         new BasePreferenceData.OnPreferenceChangeListener<Boolean>() {
                             @Override
                             public void onPreferenceChange(Boolean preference) {
-                                Toast.makeText(getContext(), R.string.msg_restart_for_changes, Toast.LENGTH_SHORT).show();
+                                Activity activity = getActivity();
+                                if (activity != null)
+                                    activity.recreate();
+                                else
+                                    Toast.makeText(getContext(), R.string.msg_restart_for_changes, Toast.LENGTH_SHORT).show();
                             }
                         }
                 )
