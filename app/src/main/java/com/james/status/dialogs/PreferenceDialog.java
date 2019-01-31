@@ -3,17 +3,13 @@ package com.james.status.dialogs;
 import android.content.Context;
 import android.content.DialogInterface;
 
-import com.james.status.R;
-
-import androidx.appcompat.app.AppCompatDialog;
-
-public class PreferenceDialog<T> extends AppCompatDialog {
+public class PreferenceDialog<T> extends ThemedCompatDialog {
 
     private T preference, defaultPreference;
     private OnPreferenceListener<T> listener;
 
     public PreferenceDialog(Context context) {
-        super(context, R.style.AppTheme_Dialog);
+        super(context);
 
         setOnDismissListener(new OnDismissListener() {
             @Override
@@ -23,8 +19,8 @@ public class PreferenceDialog<T> extends AppCompatDialog {
         });
     }
 
-    public PreferenceDialog(Context context, int theme) {
-        super(context, theme);
+    public PreferenceDialog(Context context, Type type) {
+        super(context, type);
 
         setOnDismissListener(new OnDismissListener() {
             @Override

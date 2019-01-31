@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         status = (Status) getApplicationContext();
-        setTheme(status.getActivityTheme());
+        setTheme(PreferenceData.PREF_DARK_THEME.getValue(this) ? R.style.AppTheme_Dark : R.style.AppTheme);
         setContentView(R.layout.activity_main);
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));

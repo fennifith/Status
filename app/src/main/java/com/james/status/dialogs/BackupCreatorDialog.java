@@ -14,9 +14,7 @@ import com.james.status.data.PreferenceData;
 import java.io.File;
 import java.util.List;
 
-import androidx.appcompat.app.AppCompatDialog;
-
-public class BackupCreatorDialog extends AppCompatDialog implements View.OnClickListener {
+public class BackupCreatorDialog extends ThemedCompatDialog implements View.OnClickListener {
 
     private OnBackupChangedListener listener;
     private List<File> files;
@@ -25,7 +23,7 @@ public class BackupCreatorDialog extends AppCompatDialog implements View.OnClick
     private EditText editText;
 
     public BackupCreatorDialog(Context context, List<File> files, File file) {
-        super(context, R.style.AppTheme_Dialog);
+        super(context);
         setTitle(file != null ? R.string.preference_backups : R.string.action_new_backup);
         this.files = files;
         this.file = file;

@@ -16,12 +16,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatDialog;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class AppChooserDialog extends AppCompatDialog implements PackagesGetterTask.OnGottenListener {
+public class AppChooserDialog extends ThemedCompatDialog implements PackagesGetterTask.OnGottenListener {
 
     private RecyclerView recycler;
     private ProgressBar progress;
@@ -31,7 +30,7 @@ public class AppChooserDialog extends AppCompatDialog implements PackagesGetterT
     private List<AppPreferenceData> packages;
 
     public AppChooserDialog(Context context) {
-        super(context, R.style.AppTheme_Dialog_BottomSheet);
+        super(context, Type.BOTTOM_SHEET);
     }
 
     public AppChooserDialog(Context context, List<AppPreferenceData> packages) {

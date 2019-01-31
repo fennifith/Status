@@ -10,16 +10,15 @@ import com.james.status.R;
 import com.james.status.data.PreferenceData;
 import com.james.status.utils.StaticUtils;
 
-import androidx.appcompat.app.AppCompatDialog;
 import androidx.appcompat.widget.SwitchCompat;
 
-public class CompatibilityNotificationDialog extends AppCompatDialog {
+public class CompatibilityNotificationDialog extends ThemedCompatDialog {
 
     private SwitchCompat enabledSwitchView;
     private boolean isEnabled;
 
     public CompatibilityNotificationDialog(Context context) {
-        super(context, R.style.AppTheme_Dialog_FullScreen);
+        super(context, Type.FULLSCREEN);
         isEnabled = StaticUtils.shouldUseCompatNotifications(getContext());
     }
 

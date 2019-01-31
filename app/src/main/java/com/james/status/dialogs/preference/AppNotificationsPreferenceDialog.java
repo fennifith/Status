@@ -10,6 +10,7 @@ import com.james.status.R;
 import com.james.status.adapters.AppNotificationsAdapter;
 import com.james.status.data.AppPreferenceData;
 import com.james.status.data.preference.AppNotificationsPreferenceData;
+import com.james.status.dialogs.ThemedCompatDialog;
 import com.james.status.utils.tasks.PackagesGetterTask;
 
 import java.util.ArrayList;
@@ -17,12 +18,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatDialog;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class AppNotificationsPreferenceDialog extends AppCompatDialog implements PackagesGetterTask.OnGottenListener {
+public class AppNotificationsPreferenceDialog extends ThemedCompatDialog implements PackagesGetterTask.OnGottenListener {
 
     private RecyclerView recycler;
     private ProgressBar progress;
@@ -32,7 +32,7 @@ public class AppNotificationsPreferenceDialog extends AppCompatDialog implements
     private AppNotificationsPreferenceData preference;
 
     public AppNotificationsPreferenceDialog(AppNotificationsPreferenceData preference) {
-        super(preference.getContext(), R.style.AppTheme_Dialog_BottomSheet);
+        super(preference.getContext(), Type.BOTTOM_SHEET);
         this.preference = preference;
         packages = preference.getApps();
     }

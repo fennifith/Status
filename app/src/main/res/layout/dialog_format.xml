@@ -16,7 +16,7 @@
             android:id="@+id/editText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/textColorPrimary"
+            android:textColor="?android:textColorPrimary"
             android:textSize="16sp" />
 
         <TextView
@@ -24,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/hint_format"
-            android:textColor="@color/textColorSecondary"
+            android:textColor="?android:textColorSecondary"
             android:textSize="14sp" />
 
     </LinearLayout>
@@ -48,7 +48,7 @@
             android:paddingTop="8dp"
             android:text="@string/action_cancel"
             android:textAllCaps="true"
-            android:textColor="@color/colorAccent"
+            android:textColor="?attr/colorAccent"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -63,7 +63,7 @@
             android:paddingTop="8dp"
             android:text="@string/action_ok"
             android:textAllCaps="true"
-            android:textColor="@color/colorAccent"
+            android:textColor="?attr/colorAccent"
             android:textSize="16sp"
             android:textStyle="bold" />
 

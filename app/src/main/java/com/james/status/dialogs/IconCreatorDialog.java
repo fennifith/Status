@@ -21,9 +21,7 @@ import com.james.status.Status;
 import com.james.status.activities.ImagePickerActivity;
 import com.james.status.data.IconStyleData;
 
-import androidx.appcompat.app.AppCompatDialog;
-
-public class IconCreatorDialog extends AppCompatDialog {
+public class IconCreatorDialog extends ThemedCompatDialog {
 
     private Status status;
     private OnIconStyleListener listener;
@@ -38,7 +36,7 @@ public class IconCreatorDialog extends AppCompatDialog {
     private EditText editText;
 
     public IconCreatorDialog(Context context, int size, String[] names, String[] iconNames) {
-        super(context, R.style.AppTheme_Dialog);
+        super(context);
         setTitle(R.string.action_create_style);
         isCreate = true;
 
@@ -52,7 +50,7 @@ public class IconCreatorDialog extends AppCompatDialog {
     }
 
     public IconCreatorDialog(Context context, IconStyleData style, String[] names, String[] iconNames) {
-        super(context, R.style.AppTheme_Dialog);
+        super(context);
         setTitle(R.string.action_edit_style);
 
         status = (Status) context.getApplicationContext();

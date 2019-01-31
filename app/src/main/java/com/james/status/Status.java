@@ -30,12 +30,6 @@ public class Status extends Application {
             new PreferenceUpdateTask(this).execute();
     }
 
-    public int getActivityTheme() {
-        if (PreferenceData.PREF_DARK_THEME.getValue(this))
-            return R.style.AppTheme_Dark;
-        else return R.style.AppTheme;
-    }
-
     public void addListener(OnActivityResultListener listener) {
         onActivityResultListeners.add(listener);
     }

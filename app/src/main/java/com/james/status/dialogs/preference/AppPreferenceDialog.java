@@ -11,6 +11,7 @@ import com.james.status.R;
 import com.james.status.adapters.AppAdapter;
 import com.james.status.adapters.PreferenceAdapter;
 import com.james.status.data.AppPreferenceData;
+import com.james.status.dialogs.ThemedCompatDialog;
 import com.james.status.utils.tasks.ActivitiesGetterTask;
 
 import java.util.ArrayList;
@@ -18,12 +19,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatDialog;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class AppPreferenceDialog extends AppCompatDialog implements ActivitiesGetterTask.OnGottenListener {
+public class AppPreferenceDialog extends ThemedCompatDialog implements ActivitiesGetterTask.OnGottenListener {
 
     private RecyclerView recycler;
     private ProgressBar progress;
@@ -33,7 +33,7 @@ public class AppPreferenceDialog extends AppCompatDialog implements ActivitiesGe
     private AppPreferenceData app;
 
     public AppPreferenceDialog(Context context, AppPreferenceData app) {
-        super(context, R.style.AppTheme_Dialog_BottomSheet);
+        super(context, Type.BOTTOM_SHEET);
         this.app = app;
         activities = app.getActivities();
     }

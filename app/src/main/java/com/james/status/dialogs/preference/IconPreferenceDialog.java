@@ -10,13 +10,13 @@ import com.james.status.R;
 import com.james.status.Status;
 import com.james.status.adapters.PreferenceAdapter;
 import com.james.status.data.icon.IconData;
+import com.james.status.dialogs.ThemedCompatDialog;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class IconPreferenceDialog extends AppCompatDialog implements Status.OnIconPreferenceChangedListener, DialogInterface.OnDismissListener {
+public class IconPreferenceDialog extends ThemedCompatDialog implements Status.OnIconPreferenceChangedListener, DialogInterface.OnDismissListener {
 
     private Status status;
     private IconData icon;
@@ -24,7 +24,7 @@ public class IconPreferenceDialog extends AppCompatDialog implements Status.OnIc
     private RecyclerView recyclerView;
 
     public IconPreferenceDialog(@NonNull IconData icon) {
-        super(icon.getContext(), R.style.AppTheme_Dialog_BottomSheet);
+        super(icon.getContext(), Type.BOTTOM_SHEET);
         status = (Status) icon.getContext().getApplicationContext();
         this.icon = icon;
     }

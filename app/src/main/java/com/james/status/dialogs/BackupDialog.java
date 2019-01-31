@@ -14,11 +14,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.appcompat.app.AppCompatDialog;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class BackupDialog extends AppCompatDialog implements BackupCreatorDialog.OnBackupChangedListener, DialogInterface.OnDismissListener {
+public class BackupDialog extends ThemedCompatDialog implements BackupCreatorDialog.OnBackupChangedListener, DialogInterface.OnDismissListener {
 
     private Activity activity;
     private List<File> files;
@@ -26,7 +25,7 @@ public class BackupDialog extends AppCompatDialog implements BackupCreatorDialog
     private boolean isSettingsChanged;
 
     public BackupDialog(Activity activity) {
-        super(activity, R.style.AppTheme_Dialog);
+        super(activity);
         this.activity = activity;
 
         setTitle(R.string.preference_backups);

@@ -36,7 +36,7 @@ public class IconPickerDialog extends PreferenceDialog<IconStyleData> implements
     private String title;
 
     public IconPickerDialog(Context context, IconData icon) {
-        super(context, R.style.AppTheme_Dialog_FullScreen);
+        super(context, Type.FULLSCREEN);
         this.icon = icon;
         styles = icon.getIconStyles();
     }
