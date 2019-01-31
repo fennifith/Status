@@ -105,6 +105,13 @@ public class GpsIconData extends IconData<GpsIconData.GpsReceiver> {
                                 getContext(),
                                 "ic_gps_satellite_outline_searching",
                                 "ic_gps_satellite_outline_fixed"
+                        ),
+                        IconStyleData.fromResource(
+                                getContext().getString(R.string.icon_style_pin),
+                                IconStyleData.TYPE_VECTOR,
+                                getContext(),
+                                "ic_gps_pin_searching",
+                                "ic_gps_pin_fixed"
                         )
                 )
         );
