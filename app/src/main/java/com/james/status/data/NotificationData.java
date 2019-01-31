@@ -54,6 +54,16 @@ public class NotificationData implements Parcelable {
         init(notification, id, packageName);
     }
 
+    /**
+     * Instantiate the NotificationData from whatever information there is.
+     *
+     * @param notification The Notification that was sent.
+     * @param id           An "id" that may or may not be tied to the
+     *                     notification - who knows.
+     * @param packageName  The package name that the notification _might_
+     *                     have been from - we're only guessing here, after
+     *                     all.
+     */
     private void init(Notification notification, int id, String packageName) {
         category = NotificationCompat.getCategory(notification);
         title = getTitle(notification);
@@ -132,6 +142,16 @@ public class NotificationData implements Parcelable {
         }
     }
 
+    /**
+     * Change the attributes of this NotificationData to match those of
+     * another newly received notification. This should only be called
+     * when we are _sure_ that the two notifications are, er, the same.
+     *
+     * @param notification              The new notification, that is,
+     *                                  the new version of the notification
+     *                                  that this notification is.
+     * @return True if anything changed.
+     */
     public boolean set(NotificationData notification) {
         boolean isChange = false;
 
@@ -197,6 +217,16 @@ public class NotificationData implements Parcelable {
         return isOngoing;
     }
 
+    /**
+     * Get an icon bitmap with a specified height. If the current
+     * bitmap matches the height, great! if not, it's scaled to
+     * match it (and a reference to the scaled version is kept
+     * as "cache").
+     *
+     * @param height            The height to generate a bitmap at.
+     * @return The created bitmap, or null if things
+     *                          went wrong.
+     */
     public Bitmap getIcon(float height) {
         if (icon.getHeight() == Math.round(height))
             return icon;
@@ -207,6 +237,13 @@ public class NotificationData implements Parcelable {
         return scaledIcon;
     }
 
+    /**
+     * Get a full res icon of the notification.
+     *
+     * @param context           The current application context.
+     * @return The created bitmap, or null if
+     *                          things went wrong.
+     */
     @Nullable
     public Bitmap getIcon(Context context) {
         if (icon == null) {

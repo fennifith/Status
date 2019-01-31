@@ -27,14 +27,32 @@ public class AppPreferenceData {
         this.componentName = componentName;
     }
 
+    /**
+     * Obtain the component name of the preference; "package.name/package.name.Component" if
+     * the preference is for a specific activity, just "package.name" if not.
+     *
+     * @return A string containing the entire component name of
+     * the app.
+     */
     public String getComponentName() {
         return componentName;
     }
 
+    /**
+     * Obtain the package name of the preference.
+     *
+     * @return A string containing the package name of the app.
+     */
     public String getPackageName() {
         return componentName.split("/")[0];
     }
 
+    /**
+     * Get the component name of the preference. If the preference is not an activity,
+     * this will be null.
+     *
+     * @return A string containing the component name of the app.
+     */
     @Nullable
     public String getName() {
         String[] arr = componentName.split("/");
@@ -43,11 +61,23 @@ public class AppPreferenceData {
         else return null;
     }
 
+    /**
+     * Get all of the activities declared by the application. If the preference is not an
+     * application, this will be null.
+     *
+     * @return A list of data classes representing activities declared
+     *                              by the application.
+     */
     @Nullable
     public List<AppPreferenceData> getActivities() {
         return activities;
     }
 
+    /**
+     * Get the name of the activity. If the preference is not an activity, this will be null.
+     *
+     * @return The name of the activity.
+     */
     @Nullable
     public String getActivityName() {
         String[] arr = componentName.split("/");
@@ -56,10 +86,22 @@ public class AppPreferenceData {
         else return null;
     }
 
+    /**
+     * Determine whether the preference is for an activity.
+     *
+     * @return True if the preference is for a specific activity.
+     */
     public boolean isActivity() {
         return componentName.contains("/");
     }
 
+    /**
+     * Obtain the label of the activity / application.
+     *
+     * @param context               The current app context.
+     * @return The string label declared by the application or
+     *                              component that this preference is for.
+     */
     @Nullable
     public String getLabel(Context context) {
         if (label != null)
