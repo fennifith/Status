@@ -37,7 +37,7 @@
                 <com.james.status.views.SquareImageView
                     android:layout_width="24dp"
                     android:layout_height="wrap_content"
-                    android:tint="@color/colorAccent"
+                    android:tint="?attr/colorAccent"
                     android:tintMode="src_in"
                     app:srcCompat="@drawable/ic_people" />
 
@@ -50,7 +50,7 @@
                     android:paddingTop="16dp"
                     android:text="@string/action_community"
                     android:textAllCaps="true"
-                    android:textColor="@color/colorAccent"
+                    android:textColor="?attr/colorAccent"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 

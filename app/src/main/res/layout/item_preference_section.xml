@@ -21,7 +21,7 @@
             android:layout_marginRight="12dp"
             android:layout_marginTop="12dp"
             android:textAllCaps="true"
-            android:textColor="@color/colorAccent"
+            android:textColor="?attr/colorAccent"
             android:textSize="14sp"
             android:textStyle="bold" />
 

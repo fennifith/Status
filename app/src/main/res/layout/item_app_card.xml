@@ -34,7 +34,7 @@
             android:lines="1"
             android:maxLines="1"
             android:singleLine="true"
-            android:textColor="@color/textColorPrimary"
+            android:textColor="?android:textColorPrimary"
             android:textSize="16sp"
             tools:text="App Name" />
 
@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="start"
             android:singleLine="true"
-            android:textColor="@color/textColorSecondary"
+            android:textColor="?android:textColorSecondary"
             android:textSize="14sp"
             tools:text="com.app.package" />
 
@@ -55,7 +55,7 @@
         android:layout_height="42dp"
         android:alpha="0.5"
         android:scaleType="centerInside"
-        android:tint="@android:color/black"
+        android:tint="?android:textColorPrimary"
         app:srcCompat="@drawable/ic_settings" />
 
     <com.james.status.views.SquareImageView
@@ -65,7 +65,7 @@
         android:alpha="0.5"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:scaleType="centerInside"
-        android:tint="@android:color/black"
+        android:tint="?android:textColorPrimary"
         app:srcCompat="@drawable/ic_chevron_right" />
 
 </LinearLayout>
