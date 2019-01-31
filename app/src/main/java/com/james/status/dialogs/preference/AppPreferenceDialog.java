@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.james.status.R;
+import com.james.status.Status;
 import com.james.status.adapters.AppAdapter;
 import com.james.status.adapters.PreferenceAdapter;
 import com.james.status.data.AppPreferenceData;
@@ -33,7 +34,7 @@ public class AppPreferenceDialog extends ThemedCompatDialog implements Activitie
     private AppPreferenceData app;
 
     public AppPreferenceDialog(Context context, AppPreferenceData app) {
-        super(context, Type.BOTTOM_SHEET);
+        super(context, Status.Theme.DIALOG_BOTTOM_SHEET);
         this.app = app;
         activities = app.getActivities();
     }

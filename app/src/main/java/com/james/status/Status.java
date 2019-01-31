@@ -13,8 +13,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.StyleRes;
 
 public class Status extends Application {
+
+    public enum Theme {
+        ACTIVITY_NORMAL(R.style.AppTheme, R.style.AppTheme_Dark),
+        ACTIVITY_SPLASH(R.style.AppTheme_Splash, R.style.AppTheme_Dark_Splash),
+        DIALOG_NORMAL(R.style.AppTheme_Dialog, R.style.AppTheme_Dark_Dialog),
+        DIALOG_FULL_SCREEN(R.style.AppTheme_Dialog_FullScreen, R.style.AppTheme_Dark_Dialog_FullScreen),
+        DIALOG_BOTTOM_SHEET(R.style.AppTheme_Dialog_BottomSheet, R.style.AppTheme_Dark_Dialog_BottomSheet);
+
+        private int lightTheme, darkTheme;
+
+        Theme(@StyleRes int lightTheme, @StyleRes int darkTheme) {
+            this.lightTheme = lightTheme;
+            this.darkTheme = darkTheme;
+        }
+
+        @StyleRes
+        public int getTheme(Context context) {
+            return PreferenceData.PREF_DARK_THEME.getValue(context) ? darkTheme : lightTheme;
+        }
+    }
 
     private List<OnActivityResultListener> onActivityResultListeners;
     private List<OnIconPreferenceChangedListener> onIconPreferenceChangedListeners;

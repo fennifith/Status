@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.james.status.R;
+import com.james.status.Status;
 import com.james.status.adapters.AppNotificationsAdapter;
 import com.james.status.data.AppPreferenceData;
 import com.james.status.data.preference.AppNotificationsPreferenceData;
@@ -32,7 +33,7 @@ public class AppNotificationsPreferenceDialog extends ThemedCompatDialog impleme
     private AppNotificationsPreferenceData preference;
 
     public AppNotificationsPreferenceDialog(AppNotificationsPreferenceData preference) {
-        super(preference.getContext(), Type.BOTTOM_SHEET);
+        super(preference.getContext(), Status.Theme.DIALOG_BOTTOM_SHEET);
         this.preference = preference;
         packages = preference.getApps();
     }

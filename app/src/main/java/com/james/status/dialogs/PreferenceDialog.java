@@ -3,6 +3,8 @@ package com.james.status.dialogs;
 import android.content.Context;
 import android.content.DialogInterface;
 
+import com.james.status.Status;
+
 public class PreferenceDialog<T> extends ThemedCompatDialog {
 
     private T preference, defaultPreference;
@@ -19,8 +21,8 @@ public class PreferenceDialog<T> extends ThemedCompatDialog {
         });
     }
 
-    public PreferenceDialog(Context context, Type type) {
-        super(context, type);
+    public PreferenceDialog(Context context, Status.Theme theme) {
+        super(context, theme);
 
         setOnDismissListener(new OnDismissListener() {
             @Override

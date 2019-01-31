@@ -7,6 +7,7 @@ import android.widget.ProgressBar;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.james.status.R;
+import com.james.status.Status;
 import com.james.status.adapters.AppAdapter;
 import com.james.status.data.AppPreferenceData;
 import com.james.status.utils.tasks.PackagesGetterTask;
@@ -30,7 +31,7 @@ public class AppChooserDialog extends ThemedCompatDialog implements PackagesGett
     private List<AppPreferenceData> packages;
 
     public AppChooserDialog(Context context) {
-        super(context, Type.BOTTOM_SHEET);
+        super(context, Status.Theme.DIALOG_BOTTOM_SHEET);
     }
 
     public AppChooserDialog(Context context, List<AppPreferenceData> packages) {

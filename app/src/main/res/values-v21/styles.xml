@@ -1,12 +1,35 @@
 <resources>
 
-    <style name="AppTheme.Splash" parent="Theme.AppCompat.NoActionBar">
-        <item name="colorPrimary">#F5F5F5</item>
-        <item name="colorPrimaryDark">#E0E0E0</item>
+    <style name="AppTheme.Splash" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorPrimaryDark</item>
-        <item name="android:navigationBarColor">#E0E0E0</item>
+        <item name="android:navigationBarColor">@color/colorPrimaryDark</item>
 
         <item name="android:windowBackground">@drawable/splash</item>
+
+        <item name="android:textColorPrimary">@color/textColorPrimary</item>
+        <item name="android:textColorSecondary">@color/textColorSecondary</item>
+        <item name="android:textColorTertiary">@color/textColorTertiary</item>
+        <item name="android:textColorPrimaryInverse">@color/textColorPrimaryInverse</item>
+        <item name="android:textColorSecondaryInverse">@color/textColorSecondaryInverse</item>
+        <item name="android:textColorTertiaryInverse">@color/textColorTertiaryInverse</item>
+    </style>
+
+    <style name="AppTheme.Dark.Splash" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorDarkPrimary</item>
+        <item name="colorPrimaryDark">@color/colorDarkPrimaryDark</item>
+        <item name="colorAccent">@color/colorDarkPrimaryDark</item>
+        <item name="android:navigationBarColor">@color/colorDarkPrimaryDark</item>
+
+        <item name="android:windowBackground">@drawable/splash_dark</item>
+
+        <item name="android:textColorPrimary">@color/textColorPrimaryInverse</item>
+        <item name="android:textColorSecondary">@color/textColorSecondaryInverse</item>
+        <item name="android:textColorTertiary">@color/textColorTertiaryInverse</item>
+        <item name="android:textColorPrimaryInverse">@color/textColorPrimary</item>
+        <item name="android:textColorSecondaryInverse">@color/textColorSecondary</item>
+        <item name="android:textColorTertiaryInverse">@color/textColorTertiary</item>
     </style>
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">

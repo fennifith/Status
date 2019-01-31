@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.james.status.R;
+import com.james.status.Status;
 import com.james.status.data.PreferenceData;
 import com.james.status.services.StatusServiceImpl;
 import com.james.status.utils.StaticUtils;
@@ -41,6 +42,7 @@ public class StartActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(Status.Theme.ACTIVITY_SPLASH.getTheme(this));
         setContentView(R.layout.activity_start);
 
         SteppersView steppersView = findViewById(R.id.steppersView);

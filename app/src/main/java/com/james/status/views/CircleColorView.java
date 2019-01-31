@@ -7,6 +7,8 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
 
+import com.james.status.data.PreferenceData;
+
 import androidx.annotation.ColorInt;
 import me.jfenn.androidutils.ColorUtils;
 
@@ -40,7 +42,10 @@ public class CircleColorView extends ColorView {
 
     @Override
     public void setColor(@ColorInt int color) {
-        outlinePaint.setColor(ColorUtils.isColorDark(color) ? Color.TRANSPARENT : Color.BLACK);
+        if (PreferenceData.PREF_DARK_THEME.getValue(getContext()))
+            outlinePaint.setColor(ColorUtils.isColorDark(color) ? Color.WHITE : Color.TRANSPARENT);
+        else outlinePaint.setColor(ColorUtils.isColorDark(color) ? Color.TRANSPARENT : Color.BLACK);
+
         super.setColor(color);
     }
 

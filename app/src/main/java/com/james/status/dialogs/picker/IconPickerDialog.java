@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.james.status.R;
+import com.james.status.Status;
 import com.james.status.adapters.IconStyleAdapter;
 import com.james.status.data.IconStyleData;
 import com.james.status.data.PreferenceData;
@@ -36,7 +37,7 @@ public class IconPickerDialog extends PreferenceDialog<IconStyleData> implements
     private String title;
 
     public IconPickerDialog(Context context, IconData icon) {
-        super(context, Type.FULLSCREEN);
+        super(context, Status.Theme.DIALOG_FULL_SCREEN);
         this.icon = icon;
         styles = icon.getIconStyles();
     }

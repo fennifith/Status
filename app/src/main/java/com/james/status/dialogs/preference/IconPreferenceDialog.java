@@ -24,7 +24,7 @@ public class IconPreferenceDialog extends ThemedCompatDialog implements Status.O
     private RecyclerView recyclerView;
 
     public IconPreferenceDialog(@NonNull IconData icon) {
-        super(icon.getContext(), Type.BOTTOM_SHEET);
+        super(icon.getContext(), Status.Theme.DIALOG_BOTTOM_SHEET);
         status = (Status) icon.getContext().getApplicationContext();
         this.icon = icon;
     }

@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.CompoundButton;
 
 import com.james.status.R;
+import com.james.status.Status;
 import com.james.status.data.PreferenceData;
 import com.james.status.utils.StaticUtils;
 
@@ -18,7 +19,7 @@ public class CompatibilityNotificationDialog extends ThemedCompatDialog {
     private boolean isEnabled;
 
     public CompatibilityNotificationDialog(Context context) {
-        super(context, Type.FULLSCREEN);
+        super(context, Status.Theme.DIALOG_FULL_SCREEN);
         isEnabled = StaticUtils.shouldUseCompatNotifications(getContext());
     }
 
