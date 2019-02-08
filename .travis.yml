@@ -15,6 +15,7 @@ before_install:
 script:
   - ./gradlew build
 before_deploy:
+  - mkdir .scripts && :
   - wget "https://gist.githubusercontent.com/fennifith/4221a79ec5f39c21085fec4c41d7d160/raw/bintray.json"
   - wget "https://gist.githubusercontent.com/fennifith/4221a79ec5f39c21085fec4c41d7d160/raw/gen-bintray-descriptor.sh" -o ./.scripts/gen-bintray-desc.sh
   - chmod +x .scripts/gen-bintray-desc.sh && ./.scripts/gen-bintray-desc.sh
