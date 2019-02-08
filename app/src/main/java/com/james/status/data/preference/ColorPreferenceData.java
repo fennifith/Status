@@ -1,16 +1,20 @@
 package com.james.status.data.preference;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.james.status.R;
+import com.james.status.utils.StaticUtils;
 import com.james.status.views.ColorView;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import me.jfenn.colorpickerdialog.dialogs.ColorPickerDialog;
+import me.jfenn.colorpickerdialog.interfaces.OnColorPickedListener;
+import me.jfenn.colorpickerdialog.views.picker.ImagePickerView;
 
 public class ColorPreferenceData extends BasePreferenceData<Integer> {
 
@@ -48,27 +52,25 @@ public class ColorPreferenceData extends BasePreferenceData<Integer> {
 
     @Override
     public void onClick(final View v) {
-        ColorPickerDialog dialog = new ColorPickerDialog(getContext()).withAlphaEnabled(isAlpha())
+        ColorPickerDialog dialog = new ColorPickerDialog()
+                .withTitle(getIdentifier().getTitle())
+                .withAlphaEnabled(isAlpha())
                 .withColor(value != null && !value.equals(getNullValue()) ? value : Color.BLACK)
-                .withListener(new ColorPickerDialog.OnColorPickedListener() {
+                .withPresets()
+                .withPicker(ImagePickerView.class)
+                .withListener(new OnColorPickedListener<ColorPickerDialog>() {
                     @Override
-                    public void onColorPicked(ColorPickerDialog colorPickerDialog, int i) {
-                        value = i;
-                        onBindViewHolder(new ViewHolder(v), -1);
+                    public void onColorPicked(@Nullable ColorPickerDialog pickerView, int color) {
+                        value = color;
+                        getIdentifier().setPreferenceValue(getContext(), color);
+                        onPreferenceChange(color);
 
-                        getIdentifier().setPreferenceValue(getContext(), i);
-                        onPreferenceChange(i);
+                        onBindViewHolder(new ViewHolder(v), -1);
                     }
                 });
 
-        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                onBindViewHolder(new ViewHolder(v), -1);
-            }
-        });
-
-        dialog.setTitle(getIdentifier().getTitle());
-        dialog.show();
+        AppCompatActivity activity = StaticUtils.getActivity(getContext());
+        if (activity != null)
+            dialog.show(activity.getSupportFragmentManager(), "colorPickerDialog");
     }
 }

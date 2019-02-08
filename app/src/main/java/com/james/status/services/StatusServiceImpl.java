@@ -182,7 +182,7 @@ public class StatusServiceImpl {
             colorIntent.putExtra(AppSettingActivity.EXTRA_COMPONENT, activityData.packageName + "/" + activityData.name);
             colorIntent.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
 
-            builder.addAction(R.drawable.ic_notification_color, service.getString(R.string.action_set_color), PendingIntent.getActivity(service, 0, colorIntent, PendingIntent.FLAG_CANCEL_CURRENT));
+            builder.addAction(R.drawable.ic_notification_color, service.getString(R.string.action_set_color), PendingIntent.getActivity(service, 1, colorIntent, PendingIntent.FLAG_CANCEL_CURRENT));
         }
 
         boolean isFullscreen = activityPreference != null && activityPreference.isFullScreen(service);

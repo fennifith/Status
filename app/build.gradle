@@ -56,6 +56,7 @@ dependencies {
     implementation 'com.afollestad:async:0.2.3'
     implementation 'com.google.code.gson:gson:2.8.4'
     implementation 'me.jfenn:Attribouter:0.1.5'
-    implementation 'me.jfenn:ColorPickerDialog:0.1.0'
+    implementation 'me.jfenn.ColorPickerDialog:base:0.2.1'
+    implementation 'me.jfenn.ColorPickerDialog:imagepicker:0.2.1'
     implementation 'me.jfenn:AndroidUtils:0.0.1'
 }

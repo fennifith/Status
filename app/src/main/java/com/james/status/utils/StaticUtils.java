@@ -5,6 +5,7 @@ import android.app.ActivityManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -24,11 +25,24 @@ import com.james.status.services.StatusServiceImpl;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 
 public class StaticUtils {
+
+    @Nullable
+    public static AppCompatActivity getActivity(@Nullable Context context) {
+        while (context instanceof ContextWrapper) {
+            if (context instanceof AppCompatActivity)
+                return (AppCompatActivity) context;
+            else context = ((ContextWrapper) context).getBaseContext();
+        }
+
+        return null;
+    }
 
     public static int getStatusBarHeight(Context context) {
         int height = PreferenceData.STATUS_HEIGHT.getValue(context);
