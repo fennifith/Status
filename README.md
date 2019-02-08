@@ -27,11 +27,14 @@ Special thanks to the contributors that have helped to design the app, fix issue
 
 ## Installation
 
-The app is published on Google Play:
+The app is available from both Google Play and F-Droid. However, because of Google Play's policies regarding certain app permissions and battery optimization, some features may not be included in the Google Play version of the app.
 
 [<img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png"
     alt="Get it on Google Play"
     height="80">](https://play.google.com/store/apps/details?id=com.james.status)
+[<img src="https://f-droid.org/badge/get-it-on.png"
+      alt="Get it on F-Droid"
+      height="80">](https://f-droid.org/en/packages/com.james.status/)
 
 Alternatively, you can download the latest APK from [the GitHub releases](../../releases/).
 
