@@ -521,5 +521,6 @@
     <string name="msg_restart_for_changes">Restart the app to apply the changes.</string>
     <string name="icons8_icons">Icons8</string>
     <string name="icon_style_pin">Pin</string>
+    <string name="icon_style_earbuds">Earbuds</string>
 
 </resources>

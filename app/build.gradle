@@ -15,6 +15,39 @@ android {
         resConfigs "ar", "en", "es", "ko", "zh"
     }
 
+    sourceSets {
+        main {
+            res {
+                srcDirs = [
+                        'src/main/res-google',
+                        'src/main/res-icons8',
+                        'src/main/res-materialdesignicons',
+                        'src/main/res-status',
+                        'src/main/res'
+                ]
+            }
+            assets {
+                srcDirs = [
+                        'src/main/assets/audiowide/assets',
+                        'src/main/assets/blackopsone/assets',
+                        'src/main/assets/hennypenny/assets',
+                        'src/main/assets/iceland/assets',
+                        'src/main/assets/megrim/assets',
+                        'src/main/assets/monoton/assets',
+                        'src/main/assets/newrocker/assets',
+                        'src/main/assets/nosifer/assets',
+                        'src/main/assets/permanentmarker/assets',
+                        'src/main/assets/playball/assets',
+                        'src/main/assets/roboto/assets',
+                        'src/main/assets/vt323/assets',
+                        'src/main/assets/wallpoet/assets'
+                ]
+
+                filter.exclude 'LICENSE'
+            }
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
