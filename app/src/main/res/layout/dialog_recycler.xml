@@ -5,7 +5,7 @@
     android:minHeight="400dp"
     android:minWidth="300dp">
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -32,7 +32,7 @@
             android:paddingTop="8dp"
             android:text="@string/action_dismiss"
             android:textAllCaps="true"
-            android:textColor="@color/colorAccent"
+            android:textColor="?attr/colorAccent"
             android:textSize="16sp"
             android:textStyle="bold" />
 

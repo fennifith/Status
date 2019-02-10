@@ -15,11 +15,11 @@
         android:layout_width="42dp"
         android:layout_height="42dp"
         android:scaleType="center"
-        android:tint="@android:color/black"
+        android:tint="?android:textColorPrimary"
         android:alpha="0.25"
         app:srcCompat="@drawable/ic_drag_handle" />
 
-    <android.support.v7.widget.SwitchCompat
+    <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/iconSwitch"
         android:layout_width="0dp"
         android:layout_weight="1"
@@ -31,7 +31,7 @@
         android:paddingRight="4dp"
         android:singleLine="true"
         android:textAllCaps="true"
-        android:textColor="@color/textColorPrimary"
+        android:textColor="?android:textColorPrimary"
         android:textSize="14sp"
         android:textStyle="bold"
         tools:text="Icon Name"
@@ -41,7 +41,7 @@
         android:layout_width="42dp"
         android:layout_height="42dp"
         android:scaleType="center"
-        android:tint="@android:color/black"
+        android:tint="?android:textColorPrimary"
         android:alpha="0.5"
         app:srcCompat="@drawable/ic_settings" />
 

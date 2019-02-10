@@ -1,3 +1,19 @@
+/*
+ *    Copyright 2019 James Fenn
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
 package com.james.status.dialogs;
 
 import android.content.Context;
@@ -6,7 +22,6 @@ import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v7.app.AppCompatDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -22,7 +37,7 @@ import com.james.status.Status;
 import com.james.status.activities.ImagePickerActivity;
 import com.james.status.data.IconStyleData;
 
-public class IconCreatorDialog extends AppCompatDialog {
+public class IconCreatorDialog extends ThemedCompatDialog {
 
     private Status status;
     private OnIconStyleListener listener;
@@ -37,7 +52,7 @@ public class IconCreatorDialog extends AppCompatDialog {
     private EditText editText;
 
     public IconCreatorDialog(Context context, int size, String[] names, String[] iconNames) {
-        super(context, R.style.AppTheme_Dialog);
+        super(context);
         setTitle(R.string.action_create_style);
         isCreate = true;
 
@@ -51,7 +66,7 @@ public class IconCreatorDialog extends AppCompatDialog {
     }
 
     public IconCreatorDialog(Context context, IconStyleData style, String[] names, String[] iconNames) {
-        super(context, R.style.AppTheme_Dialog);
+        super(context);
         setTitle(R.string.action_edit_style);
 
         status = (Status) context.getApplicationContext();
@@ -71,7 +86,7 @@ public class IconCreatorDialog extends AppCompatDialog {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_icon_creator);
 
-        editText = (EditText) findViewById(R.id.name);
+        editText = findViewById(R.id.name);
         if (name != null) editText.setText(name);
         editText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -94,7 +109,7 @@ public class IconCreatorDialog extends AppCompatDialog {
             }
         });
 
-        LinearLayout layout = (LinearLayout) findViewById(R.id.layout);
+        LinearLayout layout = findViewById(R.id.layout);
         for (int i = 0; i < size; i++) {
             final View v = LayoutInflater.from(getContext()).inflate(R.layout.item_icon_create, null);
             ((TextView) v.findViewById(R.id.number)).setText(iconNames[i]);

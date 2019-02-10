@@ -252,10 +252,9 @@
     <string name="about_icons">Fuente de iconos</string>
     <string name="about_icons_desc">Obviamente, sería difícil crear los más de 100 iconos que usa esta aplicación, así que esta aplicación usa iconos de distintas fuentes.</string>
 
-    <string name="google_icons">Google Design</string>
     <string name="google_icons_desc">La mayoría de iconos pertenecen a Google Design, que contiene una gran base de datos de iconos entre los que elegir.</string>
 
-    <string name="md_icons">Iconos de estilo Material Design</string>
+    <!--<string name="md_icons">Iconos de estilo Material Design</string>-->
     <string name="md_icons_desc">Están creados por distintos colaborades, esta colección de iconos contiene varios recursos que no están disponibles en Google Design.</string>
 
     <string-array name="libraries">
@@ -288,7 +287,7 @@
     <string name="msg_accessibility_switch_enable">Activa el servicio llamado \"servicio de Status\". Puede que tengas que deslizar hacia abajo hasta que aparezca.</string>
     <string name="preference_side_padding">Relleno lateral</string>
     <string name="preference_side_padding_desc">Útil para evitar que los iconos se corten a los lados de la pantalla en dipositivos con bordes curvos.</string>
-    <string name="preference_text_color">Color de texto</string>
+    <string name="preference_default_color_text">Color de texto</string>
     <string name="preference_height">Altura de la barra de Status</string>
     <string name="preference_height_desc">Esta configuración cambiará la altura de la barra de Status, pero no su contenido. Al establecer esto en 0, Status usará la altura por defecto del sistema.</string>
     <string name="preference_bump_mode">Modo distorsión</string>
@@ -354,6 +353,8 @@
     <string name="step_continue">Continue</string>
     <string name="step_finish">Finish</string>
     <string name="step_cancel">Cancel</string>
+    <string name="icon_style_pin">Pin</string>
+    <string name="icon_style_earbuds">Earbuds</string>
     <string name="step_skip">Skip</string>
     <string name="service_desc_short">Status uses this accessibility service to detect screen updates and notifications on older devices.</string>
     <string name="service_desc_long"><![CDATA[Status allows users to customize their status bar for better readability, aesthetic, or functionality, allowing them easier and faster use of their devices. \n\nStatus requires this accessibility service to detect the current app that is displaying on the screen in order to adapt to its color scheme and layout. It also uses this service to listen for notifications on older devices that do not have the NotificationListenerService API.]]></string>
@@ -381,10 +382,20 @@
     <string name="section_icons">Icons</string>
     <string name="section_animations">Animations</string>
     <string name="section_notifications">Notifications</string>
+    <string name="preference_icon_color_light">Icon Color (Light)</string>
+    <string name="preference_icon_color_dark">Icon Color (Dark)</string>
+    <string name="preference_text_color_light">Text Color (Light)</string>
+    <string name="preference_text_color_dark">Text Color (Dark)</string>
     <string name="section_other">Other</string>
     <string name="preference_text_font">Text Font</string>
     <string name="preference_default_color_icon_dark">Default (Dark) Icon Color</string>
     <string name="preference_default_color_text_dark">Default (Dark) Text Color</string>
+    <string name="alpha">Alpha</string>
+    <string name="dialog_preference_fullscreen">Fullscreen</string>
+    <string name="dialog_preference_fullscreen_ignore">Ignore Auto-Detection</string>
+    <string name="preference_ui_dark_theme">UI Dark Theme</string>
+    <string name="preference_ui_dark_theme_desc">A dark theme for Status\'s settings UI to make it a little easier on the eyes.</string>
+    <string name="msg_restart_for_changes">Restart the app to apply the changes.</string>
     <string-array name="faq">
         <item>
             <b>Why can\'t the status bar be transparent?</b>

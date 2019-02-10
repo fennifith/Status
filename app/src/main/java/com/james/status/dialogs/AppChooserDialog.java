@@ -1,17 +1,29 @@
+/*
+ *    Copyright 2019 James Fenn
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
 package com.james.status.dialogs;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.v7.app.AppCompatDialog;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.james.status.R;
+import com.james.status.Status;
 import com.james.status.adapters.AppAdapter;
 import com.james.status.data.AppPreferenceData;
 import com.james.status.utils.tasks.PackagesGetterTask;
@@ -20,7 +32,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class AppChooserDialog extends AppCompatDialog implements PackagesGetterTask.OnGottenListener {
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+public class AppChooserDialog extends ThemedCompatDialog implements PackagesGetterTask.OnGottenListener {
 
     private RecyclerView recycler;
     private ProgressBar progress;
@@ -30,7 +47,7 @@ public class AppChooserDialog extends AppCompatDialog implements PackagesGetterT
     private List<AppPreferenceData> packages;
 
     public AppChooserDialog(Context context) {
-        super(context, R.style.AppTheme_Dialog_BottomSheet);
+        super(context, Status.Theme.DIALOG_BOTTOM_SHEET);
     }
 
     public AppChooserDialog(Context context, List<AppPreferenceData> packages) {

@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <about>
 
-    <me.jfenn.attribouter.wedges.AppWedge repo="TheAndroidMaster/Status" />
+    <me.jfenn.attribouter.wedges.AppWedge repo="fennifith/Status" />
 
-    <com.james.status.wedges.CabbageContributorsWedge repo="TheAndroidMaster/Status">
+    <com.james.status.wedges.CabbageContributorsWedge repo="fennifith/Status">
 
         <me.jfenn.attribouter.wedges.ContributorWedge
             name="James Fenn"
             avatar="https://avatars3.githubusercontent.com/u/13000407"
             bio="@string/james_desc"
-            login="TheAndroidMaster"
+            login="fennifith"
             position="1"
             task="^Developer">
 
             <me.jfenn.attribouter.wedges.link.LinkWedge
                 name="Twitter"
-                icon="@drawable/ic_twitter"
+                icon="@drawable/ic_mdi_twitter"
                 url="https://jfenn.me/links/twitter" />
 
         </me.jfenn.attribouter.wedges.ContributorWedge>
@@ -29,17 +29,17 @@
 
             <me.jfenn.attribouter.wedges.link.LinkWedge
                 name="Twitter"
-                icon="@drawable/ic_twitter"
+                icon="@drawable/ic_mdi_twitter"
                 url="https://twitter.com/MAKTHG" />
 
             <me.jfenn.attribouter.wedges.link.LinkWedge
                 name="Google Plus"
-                icon="@drawable/ic_gplus"
+                icon="@drawable/ic_mdi_gplus"
                 url="https://plus.google.com/101325935187431392674" />
 
             <me.jfenn.attribouter.wedges.link.LinkWedge
                 name="Dribbble"
-                icon="@drawable/ic_dribbble"
+                icon="@drawable/ic_mdi_dribbble"
                 url="https://dribbble.com/AnasKhan" />
 
         </me.jfenn.attribouter.wedges.ContributorWedge>
@@ -54,17 +54,17 @@
 
             <me.jfenn.attribouter.wedges.link.LinkWedge
                 name="Twitter"
-                icon="@drawable/ic_twitter"
+                icon="@drawable/ic_mdi_twitter"
                 url="https://twitter.com/MAKTHG" />
 
             <me.jfenn.attribouter.wedges.link.LinkWedge
                 name="Google Play"
-                icon="@drawable/ic_gplay"
+                icon="@drawable/ic_mdi_gplay"
                 url="https://play.google.com/store/apps/dev?id=6941105890231522296" />
 
             <me.jfenn.attribouter.wedges.link.LinkWedge
                 name="Dribbble"
-                icon="@drawable/ic_dribbble"
+                icon="@drawable/ic_mdi_dribbble"
                 url="https://dribbble.com/zavukodlak" />
 
         </me.jfenn.attribouter.wedges.ContributorWedge>
@@ -78,7 +78,7 @@
 
             <me.jfenn.attribouter.wedges.link.LinkWedge
                 name="Google Plus"
-                icon="@drawable/ic_gplus"
+                icon="@drawable/ic_mdi_gplus"
                 url="https://plus.google.com/109414818005290076221" />
 
         </me.jfenn.attribouter.wedges.ContributorWedge>

@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center_vertical"
-        android:textColor="@color/textColorPrimary" />
+        android:textColor="?android:textColorPrimary" />
 
     <com.james.status.views.SquareImageView
         android:id="@+id/image"
@@ -21,7 +21,7 @@
         android:layout_height="24dp"
         android:layout_gravity="center_vertical"
         android:scaleType="centerInside"
-        android:tint="@android:color/black"
+        android:tint="?android:textColorPrimary"
         app:srcCompat="@drawable/ic_add_box" />
 
 </LinearLayout>

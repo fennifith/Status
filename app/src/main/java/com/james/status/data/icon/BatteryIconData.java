@@ -1,3 +1,19 @@
+/*
+ *    Copyright 2019 James Fenn
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
 package com.james.status.data.icon;
 
 import android.content.Context;
@@ -93,45 +109,43 @@ public class BatteryIconData extends IconData {
                                 R.drawable.ic_battery_charging_90,
                                 R.drawable.ic_battery_charging_full
                         ),
-                        IconStyleData.fromResource(
+                        new IconStyleData(
                                 getContext().getString(R.string.icon_style_outline),
                                 IconStyleData.TYPE_VECTOR,
-                                getContext(),
-                                "ic_battery_outline_alert",
-                                "ic_battery_outline_20",
-                                "ic_battery_outline_30",
-                                "ic_battery_outline_50",
-                                "ic_battery_outline_60",
-                                "ic_battery_outline_80",
-                                "ic_battery_outline_90",
-                                "ic_battery_outline_full",
-                                "ic_battery_outline_charging_20",
-                                "ic_battery_outline_charging_30",
-                                "ic_battery_outline_charging_50",
-                                "ic_battery_outline_charging_60",
-                                "ic_battery_outline_charging_80",
-                                "ic_battery_outline_charging_90",
-                                "ic_battery_outline_charging_full"
+                                R.drawable.ic_battery_outline_alert,
+                                R.drawable.ic_battery_outline_20,
+                                R.drawable.ic_battery_outline_30,
+                                R.drawable.ic_battery_outline_50,
+                                R.drawable.ic_battery_outline_60,
+                                R.drawable.ic_battery_outline_80,
+                                R.drawable.ic_battery_outline_90,
+                                R.drawable.ic_battery_outline_full,
+                                R.drawable.ic_battery_outline_charging_20,
+                                R.drawable.ic_battery_outline_charging_30,
+                                R.drawable.ic_battery_outline_charging_50,
+                                R.drawable.ic_battery_outline_charging_60,
+                                R.drawable.ic_battery_outline_charging_80,
+                                R.drawable.ic_battery_outline_charging_90,
+                                R.drawable.ic_battery_outline_charging_full
                         ),
-                        IconStyleData.fromResource(
+                        new IconStyleData(
                                 getContext().getString(R.string.icon_style_sideways),
                                 IconStyleData.TYPE_VECTOR,
-                                getContext(),
-                                "ic_battery_sideways_alert",
-                                "ic_battery_sideways_20",
-                                "ic_battery_sideways_40",
-                                "ic_battery_sideways_40",
-                                "ic_battery_sideways_60",
-                                "ic_battery_sideways_60",
-                                "ic_battery_sideways_80",
-                                "ic_battery_sideways_full",
-                                "ic_battery_sideways_charging",
-                                "ic_battery_sideways_charging",
-                                "ic_battery_sideways_charging",
-                                "ic_battery_sideways_charging",
-                                "ic_battery_sideways_charging",
-                                "ic_battery_sideways_charging",
-                                "ic_battery_sideways_full"
+                                R.drawable.ic_icons8_battery_sideways_alert,
+                                R.drawable.ic_icons8_battery_sideways_20,
+                                R.drawable.ic_icons8_battery_sideways_40,
+                                R.drawable.ic_icons8_battery_sideways_40,
+                                R.drawable.ic_icons8_battery_sideways_60,
+                                R.drawable.ic_icons8_battery_sideways_60,
+                                R.drawable.ic_icons8_battery_sideways_80,
+                                R.drawable.ic_icons8_battery_sideways_full,
+                                R.drawable.ic_icons8_battery_sideways_charging,
+                                R.drawable.ic_icons8_battery_sideways_charging,
+                                R.drawable.ic_icons8_battery_sideways_charging,
+                                R.drawable.ic_icons8_battery_sideways_charging,
+                                R.drawable.ic_icons8_battery_sideways_charging,
+                                R.drawable.ic_icons8_battery_sideways_charging,
+                                R.drawable.ic_icons8_battery_sideways_full
                         ),
                         new IconStyleData(
                                 getContext().getString(R.string.icon_style_stock),

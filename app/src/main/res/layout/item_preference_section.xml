@@ -21,11 +21,11 @@
             android:layout_marginRight="12dp"
             android:layout_marginTop="12dp"
             android:textAllCaps="true"
-            android:textColor="@color/colorAccent"
+            android:textColor="?attr/colorAccent"
             android:textSize="14sp"
             android:textStyle="bold" />
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

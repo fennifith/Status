@@ -1,3 +1,19 @@
+/*
+ *    Copyright 2019 James Fenn
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
 package com.james.status.data.icon;
 
 import android.Manifest;
@@ -76,15 +92,23 @@ public class WifiIconData extends IconData<WifiIconData.WifiReceiver> {
                                 R.drawable.ic_wifi_3,
                                 R.drawable.ic_wifi_4
                         ),
-                        IconStyleData.fromResource(
+                        new IconStyleData(
                                 getContext().getString(R.string.icon_style_radial),
                                 IconStyleData.TYPE_VECTOR,
-                                getContext(),
-                                "ic_wifi_radial_0",
-                                "ic_wifi_radial_1",
-                                "ic_wifi_radial_2",
-                                "ic_wifi_radial_3",
-                                "ic_wifi_radial_4"
+                                R.drawable.ic_mdi_wifi_radial_0,
+                                R.drawable.ic_mdi_wifi_radial_1,
+                                R.drawable.ic_mdi_wifi_radial_2,
+                                R.drawable.ic_mdi_wifi_radial_3,
+                                R.drawable.ic_mdi_wifi_radial_4
+                        ),
+                        new IconStyleData(
+                                getContext().getString(R.string.icon_style_outline),
+                                IconStyleData.TYPE_VECTOR,
+                                R.drawable.ic_mdi_wifi_outline_0,
+                                R.drawable.ic_mdi_wifi_outline_1,
+                                R.drawable.ic_mdi_wifi_outline_2,
+                                R.drawable.ic_mdi_wifi_outline_3,
+                                R.drawable.ic_mdi_wifi_outline_4
                         ),
                         new IconStyleData(
                                 getContext().getString(R.string.icon_style_triangle),

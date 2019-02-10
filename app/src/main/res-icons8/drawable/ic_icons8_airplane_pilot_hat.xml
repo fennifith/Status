@@ -1,0 +1,25 @@
+<!--
+  ~    Copyright 2019 James Fenn
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24.0"
+    android:viewportHeight="24.0">
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M 12 4 C 6.699219 4 2 8.605469 2 11.40625 C 2 12.90625 3.199219 13.8125 5 14.3125 L 5 16 C 5 18.300781 8 20 12 20 C 16 20 19 18.300781 19 16 L 19 14.3125 C 20.800781 13.8125 22 12.90625 22 11.40625 C 22 8.605469 17.300781 4 12 4 Z M 12 6 C 16.601563 6 20 10.105469 20 11.40625 C 20 11.707031 19.292969 12.289063 17.09375 12.6875 C 15.394531 12.386719 13.101563 12 12 12 C 10.898438 12 8.605469 12.386719 6.90625 12.6875 C 4.707031 12.289063 4 11.707031 4 11.40625 C 4 10.105469 7.398438 6 12 6 Z M 9.8125 8.03125 C 8.742188 8.140625 8 9 8 9 C 11 9 11 10 11 10 C 11 10.601563 11.398438 11 12 11 C 12.601563 11 13 10.601563 13 10 C 13 10 13 9 16 9 C 16 9 14.101563 6.800781 12 9 C 11.210938 8.175781 10.453125 7.96875 9.8125 8.03125 Z M 12 15 C 13.101563 15 15.300781 15.394531 17 15.59375 L 17 16 C 17 16.800781 15.101563 18 12 18 C 8.898438 18 7 16.800781 7 16 L 7 15.59375 C 8.699219 15.292969 10.898438 15 12 15 Z" />
+</vector>

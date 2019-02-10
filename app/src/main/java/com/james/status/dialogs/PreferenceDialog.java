@@ -1,19 +1,33 @@
+/*
+ *    Copyright 2019 James Fenn
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
 package com.james.status.dialogs;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.support.v7.app.AppCompatDialog;
 
-import com.james.status.R;
+import com.james.status.Status;
 
-public class PreferenceDialog<T> extends AppCompatDialog {
+public class PreferenceDialog<T> extends ThemedCompatDialog {
 
     private T preference, defaultPreference;
-    private Object tag;
     private OnPreferenceListener<T> listener;
 
     public PreferenceDialog(Context context) {
-        super(context, R.style.AppTheme_Dialog);
+        super(context);
 
         setOnDismissListener(new OnDismissListener() {
             @Override
@@ -23,7 +37,7 @@ public class PreferenceDialog<T> extends AppCompatDialog {
         });
     }
 
-    public PreferenceDialog(Context context, int theme) {
+    public PreferenceDialog(Context context, Status.Theme theme) {
         super(context, theme);
 
         setOnDismissListener(new OnDismissListener() {
@@ -60,15 +74,6 @@ public class PreferenceDialog<T> extends AppCompatDialog {
 
     public T getDefaultPreference() {
         return defaultPreference;
-    }
-
-    public PreferenceDialog<T> setTag(Object tag) {
-        this.tag = tag;
-        return this;
-    }
-
-    public Object getTag() {
-        return tag;
     }
 
     public PreferenceDialog<T> setListener(OnPreferenceListener<T> listener) {

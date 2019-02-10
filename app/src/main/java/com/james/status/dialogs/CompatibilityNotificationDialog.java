@@ -1,24 +1,41 @@
+/*
+ *    Copyright 2019 James Fenn
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
 package com.james.status.dialogs;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AppCompatDialog;
-import android.support.v7.widget.SwitchCompat;
 import android.view.View;
 import android.widget.CompoundButton;
 
 import com.james.status.R;
+import com.james.status.Status;
 import com.james.status.data.PreferenceData;
 import com.james.status.utils.StaticUtils;
 
-public class CompatibilityNotificationDialog extends AppCompatDialog {
+import androidx.appcompat.widget.SwitchCompat;
+
+public class CompatibilityNotificationDialog extends ThemedCompatDialog {
 
     private SwitchCompat enabledSwitchView;
     private boolean isEnabled;
 
     public CompatibilityNotificationDialog(Context context) {
-        super(context, R.style.AppTheme_Dialog_FullScreen);
+        super(context, Status.Theme.DIALOG_FULL_SCREEN);
         isEnabled = StaticUtils.shouldUseCompatNotifications(getContext());
     }
 
@@ -27,7 +44,7 @@ public class CompatibilityNotificationDialog extends AppCompatDialog {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_notification_compatibility);
 
-        enabledSwitchView = (SwitchCompat) findViewById(R.id.enabledSwitch);
+        enabledSwitchView = findViewById(R.id.enabledSwitch);
 
         enabledSwitchView.setChecked(isEnabled);
         enabledSwitchView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

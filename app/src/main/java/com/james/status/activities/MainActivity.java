@@ -1,3 +1,19 @@
+/*
+ *    Copyright 2019 James Fenn
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
 package com.james.status.activities;
 
 import android.content.BroadcastReceiver;
@@ -9,22 +25,6 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.TabLayout;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v4.view.ViewCompat;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
-import android.support.v7.widget.SwitchCompat;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,6 +32,10 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
 import com.james.status.R;
 import com.james.status.Status;
 import com.james.status.adapters.SimplePagerAdapter;
@@ -48,6 +52,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.MenuItemCompat;
+import androidx.core.view.ViewCompat;
+import androidx.viewpager.widget.ViewPager;
+import me.jfenn.androidutils.DimenUtils;
 import me.jfenn.attribouter.Attribouter;
 
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, CompoundButton.OnCheckedChangeListener {
@@ -78,10 +95,10 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(Status.Theme.ACTIVITY_NORMAL.getTheme(this));
         setContentView(R.layout.activity_main);
 
         status = (Status) getApplicationContext();
-
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
         appbar = findViewById(R.id.appbar);
@@ -103,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             }
         });
 
-        ViewCompat.setElevation(bottomSheet, StaticUtils.getPixelsFromDp(10));
+        ViewCompat.setElevation(bottomSheet, DimenUtils.dpToPx(10));
 
         behavior = BottomSheetBehavior.from(bottomSheet);
         behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
@@ -315,12 +332,14 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 editor.apply();
                 break;
             case R.id.action_about:
-                Attribouter attribouter = Attribouter.from(this);
-                int githubAuthKey = getResources().getIdentifier("githubAuthKey", "string", getPackageName());
-                if (githubAuthKey != 0)
-                    attribouter = attribouter.withGitHubToken(getString(githubAuthKey));
+                Intent intent = new Intent(this, AttribouterActivity.class);
 
-                attribouter.show();
+                int githubAuthKey = getResources().getIdentifier("githubAuthKey", "string", getPackageName());
+                if (githubAuthKey != 0) {
+                    intent.putExtra(Attribouter.EXTRA_GITHUB_OAUTH_TOKEN, getString(githubAuthKey));
+                }
+
+                startActivity(intent);
                 break;
             case R.id.action_reset:
                 if (adapter.getItem(viewPager.getCurrentItem()) instanceof AppPreferenceFragment)

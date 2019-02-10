@@ -1,3 +1,19 @@
+/*
+ *    Copyright 2019 James Fenn
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
 package com.james.status.data;
 
 import android.content.Context;
@@ -7,8 +23,6 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -20,8 +34,12 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 
+import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+
 public enum PreferenceData {
     PREF_VERSION(0),
+    PREF_DARK_THEME(false),
     STATUS_ENABLED(false),
     STATUS_NOTIFICATIONS_COMPAT(false),
     //STATUS_NOTIFICATIONS_HEADS_UP(false), TODO: #137

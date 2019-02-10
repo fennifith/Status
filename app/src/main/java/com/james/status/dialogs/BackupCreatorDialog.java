@@ -1,8 +1,23 @@
+/*
+ *    Copyright 2019 James Fenn
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
 package com.james.status.dialogs;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -15,7 +30,7 @@ import com.james.status.data.PreferenceData;
 import java.io.File;
 import java.util.List;
 
-public class BackupCreatorDialog extends AppCompatDialog implements View.OnClickListener {
+public class BackupCreatorDialog extends ThemedCompatDialog implements View.OnClickListener {
 
     private OnBackupChangedListener listener;
     private List<File> files;
@@ -24,7 +39,7 @@ public class BackupCreatorDialog extends AppCompatDialog implements View.OnClick
     private EditText editText;
 
     public BackupCreatorDialog(Context context, List<File> files, File file) {
-        super(context, R.style.AppTheme_Dialog);
+        super(context);
         setTitle(file != null ? R.string.preference_backups : R.string.action_new_backup);
         this.files = files;
         this.file = file;
@@ -35,7 +50,7 @@ public class BackupCreatorDialog extends AppCompatDialog implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_backup_creator);
 
-        editText = (EditText) findViewById(R.id.name);
+        editText = findViewById(R.id.name);
         if (file != null)
             editText.setText(file.getName().substring(0, file.getName().length() - 4));
         else {
@@ -77,7 +92,7 @@ public class BackupCreatorDialog extends AppCompatDialog implements View.OnClick
             }
         });
 
-        TextView delete = (TextView) findViewById(R.id.delete);
+        TextView delete = findViewById(R.id.delete);
         delete.setText(file.exists() ? R.string.action_delete : R.string.action_cancel);
         delete.setOnClickListener(this);
 
@@ -85,7 +100,7 @@ public class BackupCreatorDialog extends AppCompatDialog implements View.OnClick
             findViewById(R.id.restore).setOnClickListener(this);
         else findViewById(R.id.restore).setVisibility(View.GONE);
 
-        TextView save = (TextView) findViewById(R.id.save);
+        TextView save = findViewById(R.id.save);
         save.setText(file.exists() ? R.string.action_save_backup : R.string.action_create_backup);
         save.setOnClickListener(this);
     }

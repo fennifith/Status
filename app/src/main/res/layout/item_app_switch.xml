@@ -33,7 +33,7 @@
             android:lines="1"
             android:maxLines="1"
             android:singleLine="true"
-            android:textColor="@color/textColorPrimary"
+            android:textColor="?android:textColorPrimary"
             android:textSize="16sp"
             tools:text="App Name" />
 
@@ -43,13 +43,13 @@
             android:layout_height="wrap_content"
             android:ellipsize="start"
             android:singleLine="true"
-            android:textColor="@color/textColorSecondary"
+            android:textColor="?android:textColorSecondary"
             android:textSize="14sp"
             tools:text="com.app.package" />
 
     </LinearLayout>
 
-    <android.support.v7.widget.SwitchCompat
+    <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/enabledSwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />

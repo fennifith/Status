@@ -1,3 +1,19 @@
+/*
+ *    Copyright 2019 James Fenn
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
 package com.james.status.data.icon;
 
 import android.app.AlarmManager;
@@ -82,11 +98,10 @@ public class AlarmIconData extends IconData<AlarmIconData.AlarmReceiver> {
                                 IconStyleData.TYPE_VECTOR,
                                 R.drawable.ic_alarm_clear
                         ),
-                        IconStyleData.fromResource(
+                        new IconStyleData(
                                 getContext().getString(R.string.icon_style_bell),
                                 IconStyleData.TYPE_VECTOR,
-                                getContext(),
-                                "ic_alarm_bell"
+                                R.drawable.ic_mdi_alarm_bell
                         ),
                         new IconStyleData(
                                 getContext().getString(R.string.icon_style_school),

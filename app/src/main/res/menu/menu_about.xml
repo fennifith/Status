@@ -5,7 +5,7 @@
     <item
         android:id="@+id/action_github"
         android:title="@string/action_github"
-        android:icon="@drawable/ic_github"
+        android:icon="@drawable/ic_mdi_github"
         app:showAsAction="ifRoom" />
 
 </menu>

@@ -1,18 +1,51 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion '27.0.3'
+    compileSdkVersion 28
+    buildToolsVersion '28.0.3'
 
     defaultConfig {
         applicationId "com.james.status"
         minSdkVersion 16
-        targetSdkVersion 27
+        targetSdkVersion 28
         maxSdkVersion 25
-        versionCode 41
-        versionName "3.8-beta5"
+        versionCode 42
+        versionName "3.8-beta6"
         vectorDrawables.useSupportLibrary = true
         resConfigs "ar", "en", "es", "ko", "zh"
+    }
+
+    sourceSets {
+        main {
+            res {
+                srcDirs = [
+                        'src/main/res-google',
+                        'src/main/res-icons8',
+                        'src/main/res-materialdesignicons',
+                        'src/main/res-status',
+                        'src/main/res'
+                ]
+            }
+            assets {
+                srcDirs = [
+                        'src/main/assets/audiowide/assets',
+                        'src/main/assets/blackopsone/assets',
+                        'src/main/assets/hennypenny/assets',
+                        'src/main/assets/iceland/assets',
+                        'src/main/assets/megrim/assets',
+                        'src/main/assets/monoton/assets',
+                        'src/main/assets/newrocker/assets',
+                        'src/main/assets/nosifer/assets',
+                        'src/main/assets/permanentmarker/assets',
+                        'src/main/assets/playball/assets',
+                        'src/main/assets/roboto/assets',
+                        'src/main/assets/vt323/assets',
+                        'src/main/assets/wallpoet/assets'
+                ]
+
+                filter.exclude 'LICENSE'
+            }
+        }
     }
 
     buildTypes {
@@ -22,32 +55,42 @@ android {
         }
     }
 
+    /**
+     * This is used to circumvent some of Google Play's restrictions
+     * and allow assets under a different license to exist only in
+     * the Google Play apks without interfering with the OSS version.
+     */
+    flavorDimensions "distribution"
+    productFlavors {
+        gplay {
+            dimension "distribution"
+        }
+
+        oss {
+            dimension "distribution"
+        }
+    }
+
     lintOptions {
         abortOnError false
     }
 }
 
-configurations.all {
-    resolutionStrategy {
-        force 'com.android.support:design:27.1.1'
-        force 'com.android.support:support-compat:27.1.1'
-        force 'com.android.support:support-core-ui:27.1.1'
-        force 'com.android.support:support-core-utils:27.1.1'
-        force 'com.android.support:support-fragment:27.1.1'
-    }
-}
-
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support:design:27.1.1'
-    implementation 'com.android.support:palette-v7:27.1.1'
-    implementation 'com.android.support:cardview-v7:27.1.1'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.palette:palette:1.0.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
 
     implementation 'com.github.bumptech.glide:glide:4.7.1'
-    implementation 'me.drozdzynski.library.steppers:steppers:1.0.0'
+    implementation 'com.github.drozdzynski:Steppers:90411a5'
     implementation 'james.signalstrengths:signalstrengths:0.0.4'
-    implementation 'me.jfenn:attribouter:0.1.2'
     implementation 'com.afollestad:async:0.2.3'
     implementation 'com.google.code.gson:gson:2.8.4'
+    implementation 'me.jfenn:Attribouter:0.1.5'
+    implementation 'me.jfenn.ColorPickerDialog:base:0.2.1'
+    implementation 'me.jfenn.ColorPickerDialog:imagepicker:0.2.1'
+    implementation 'me.jfenn:AndroidUtils:0.0.1'
 }

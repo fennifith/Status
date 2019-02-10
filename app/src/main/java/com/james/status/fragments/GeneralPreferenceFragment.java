@@ -1,3 +1,19 @@
+/*
+ *    Copyright 2019 James Fenn
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
 package com.james.status.fragments;
 
 import android.Manifest;
@@ -6,12 +22,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.james.status.R;
 import com.james.status.adapters.PreferenceSectionAdapter;
@@ -27,6 +41,10 @@ import com.james.status.utils.StaticUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class GeneralPreferenceFragment extends SimpleFragment {
 
@@ -341,6 +359,25 @@ public class GeneralPreferenceFragment extends SimpleFragment {
                                 BasePreferenceData.Identifier.SectionIdentifier.OTHER
                         ),
                         null
+                ),
+                new BooleanPreferenceData(
+                        getContext(),
+                        new BasePreferenceData.Identifier<Boolean>(
+                                PreferenceData.PREF_DARK_THEME,
+                                getString(R.string.preference_ui_dark_theme),
+                                getString(R.string.preference_ui_dark_theme_desc),
+                                BasePreferenceData.Identifier.SectionIdentifier.OTHER
+                        ),
+                        new BasePreferenceData.OnPreferenceChangeListener<Boolean>() {
+                            @Override
+                            public void onPreferenceChange(Boolean preference) {
+                                Activity activity = getActivity();
+                                if (activity != null)
+                                    activity.recreate();
+                                else
+                                    Toast.makeText(getContext(), R.string.msg_restart_for_changes, Toast.LENGTH_SHORT).show();
+                            }
+                        }
                 )
         ));
 

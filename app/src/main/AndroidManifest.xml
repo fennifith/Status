@@ -15,6 +15,7 @@
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 
     <application
         android:name=".Status"
@@ -55,6 +56,8 @@
         <activity
             android:name=".activities.NotificationCompatActivity"
             android:theme="@style/AppTheme.Transparent" />
+
+        <activity android:name=".activities.AttribouterActivity" />
 
         <receiver android:name=".receivers.ActivityFullScreenSettingReceiver" />
 

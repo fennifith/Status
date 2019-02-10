@@ -156,7 +156,7 @@
     <string name="preference_backups_desc">允许你备份或还原 Status 的所有设置为文本文件。</string>
     <string name="preference_burnin_protection">烧屏保护</string>
     <string name="preference_burnin_protection_desc">通过每两秒移动图标以防止 Status 在一些屏幕上发生"烧屏"情况。</string>
-    <string name="preference_text_color">文本颜色</string>
+    <string name="preference_default_color_text">文本颜色</string>
     <string name="preference_height">状态栏高度</string>
     <string name="preference_height_desc">这个设置会变更状态栏的高度，但不是内容下面的高度！将这个设置为 0 将导致 Status 使用系统定义的默认高度。</string>
     <string name="preference_bump_mode">碰撞模式</string>
@@ -328,10 +328,8 @@
     <string name="about_icons">Icon Sources</string>
     <string name="about_icons_desc">Obviously, it would be hard to make over 100 icons used in this app by myself, so (as well as the ones by the people above) the app uses icons from a few different sources.</string>
 
-    <string name="google_icons">Google Design</string>
     <string name="google_icons_desc">Accounting for most of the icons in the app, Google Design has a large database of icons to choose from.</string>
 
-    <string name="md_icons">Material Design Icons</string>
     <string name="md_icons_desc">Made by many various contributors, this collection of icons contains useful resources unavailable from Google\'s site.</string>
 
     <string name="icons8_icons_desc">57,700 free flat icons in any format, size and color in 20 seconds.</string>
@@ -401,6 +399,18 @@
     <string name="preference_text_font">Text Font</string>
     <string name="preference_default_color_icon_dark">Default (Dark) Icon Color</string>
     <string name="preference_default_color_text_dark">Default (Dark) Text Color</string>
+    <string name="preference_icon_color_light">Icon Color (Light)</string>
+    <string name="preference_icon_color_dark">Icon Color (Dark)</string>
+    <string name="preference_text_color_light">Text Color (Light)</string>
+    <string name="preference_text_color_dark">Text Color (Dark)</string>
+    <string name="icon_style_pin">Pin</string>
+    <string name="icon_style_earbuds">Earbuds</string>
+    <string name="alpha">Alpha</string>
+    <string name="dialog_preference_fullscreen">Fullscreen</string>
+    <string name="dialog_preference_fullscreen_ignore">Ignore Auto-Detection</string>
+    <string name="preference_ui_dark_theme">UI Dark Theme</string>
+    <string name="preference_ui_dark_theme_desc">A dark theme for Status\'s settings UI to make it a little easier on the eyes.</string>
+    <string name="msg_restart_for_changes">Restart the app to apply the changes.</string>
     <string-array name="faq">
         <item>
             <b>Why can\'t the status bar be transparent?</b>

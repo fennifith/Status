@@ -5,7 +5,7 @@
     android:minWidth="300dp"
     android:orientation="vertical">
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -35,7 +35,7 @@
             android:paddingTop="8dp"
             android:text="@string/action_cancel"
             android:textAllCaps="true"
-            android:textColor="@color/colorAccent"
+            android:textColor="?attr/colorAccent"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -50,7 +50,7 @@
             android:paddingTop="8dp"
             android:text="@string/action_ok"
             android:textAllCaps="true"
-            android:textColor="@color/colorAccent"
+            android:textColor="?attr/colorAccent"
             android:textSize="16sp"
             android:textStyle="bold" />
 

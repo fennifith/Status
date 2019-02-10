@@ -1,3 +1,19 @@
+/*
+ *    Copyright 2019 James Fenn
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
 package com.james.status.data.icon;
 
 import android.Manifest;
@@ -56,23 +72,20 @@ public class AirplaneModeIconData extends IconData<AirplaneModeIconData.Airplane
                                 IconStyleData.TYPE_VECTOR,
                                 R.drawable.ic_airplane
                         ),
-                        IconStyleData.fromResource(
+                        new IconStyleData(
                                 getContext().getString(R.string.icon_style_front),
                                 IconStyleData.TYPE_VECTOR,
-                                getContext(),
-                                "ic_airplane_front"
+                                R.drawable.ic_icons8_airplane_front
                         ),
-                        IconStyleData.fromResource(
+                        new IconStyleData(
                                 getContext().getString(R.string.icon_style_propeller),
                                 IconStyleData.TYPE_VECTOR,
-                                getContext(),
-                                "ic_airplane_propeller"
+                                R.drawable.ic_icons8_airplane_propeller
                         ),
-                        IconStyleData.fromResource(
+                        new IconStyleData(
                                 getContext().getString(R.string.icon_style_pilot_hat),
                                 IconStyleData.TYPE_VECTOR,
-                                getContext(),
-                                "ic_airplane_pilot_hat"
+                                R.drawable.ic_icons8_airplane_pilot_hat
                         ),
                         new IconStyleData(
                                 getContext().getString(R.string.icon_style_balloon),

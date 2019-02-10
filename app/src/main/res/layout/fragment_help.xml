@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v4.widget.NestedScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -14,7 +14,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -37,7 +37,7 @@
                 <com.james.status.views.SquareImageView
                     android:layout_width="24dp"
                     android:layout_height="wrap_content"
-                    android:tint="@color/colorAccent"
+                    android:tint="?attr/colorAccent"
                     android:tintMode="src_in"
                     app:srcCompat="@drawable/ic_people" />
 
@@ -50,7 +50,7 @@
                     android:paddingTop="16dp"
                     android:text="@string/action_community"
                     android:textAllCaps="true"
-                    android:textColor="@color/colorAccent"
+                    android:textColor="?attr/colorAccent"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -58,6 +58,6 @@
 
         </LinearLayout>
 
-    </android.support.v4.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </FrameLayout>

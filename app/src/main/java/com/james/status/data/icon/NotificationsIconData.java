@@ -1,11 +1,25 @@
+/*
+ *    Copyright 2019 James Fenn
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
 package com.james.status.data.icon;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.util.ArrayMap;
 
 import com.james.status.R;
 import com.james.status.data.NotificationData;
@@ -16,6 +30,9 @@ import com.james.status.data.preference.BooleanPreferenceData;
 import com.james.status.data.preference.IntegerPreferenceData;
 
 import java.util.List;
+
+import androidx.collection.ArrayMap;
+import androidx.core.app.NotificationCompat;
 
 public class NotificationsIconData extends IconData {
 
@@ -105,8 +122,8 @@ public class NotificationsIconData extends IconData {
     @Override
     public boolean needsDraw() {
         boolean needsDraw = false;
-        for (int i = 0; i < notifications.size(); i++)
-            needsDraw = needsDraw || !notifications.valueAt(i).getScale().isTarget();
+        for (int i = 0; i < notifications.size() && !needsDraw; i++)
+            needsDraw = !notifications.valueAt(i).getScale().isTarget();
 
         return needsDraw || super.needsDraw();
     }

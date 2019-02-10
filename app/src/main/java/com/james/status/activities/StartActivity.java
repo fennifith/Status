@@ -1,5 +1,22 @@
+/*
+ *    Copyright 2019 James Fenn
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
 package com.james.status.activities;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.ComponentName;
 import android.content.DialogInterface;
@@ -9,11 +26,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,12 +33,19 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.james.status.R;
+import com.james.status.Status;
 import com.james.status.data.PreferenceData;
 import com.james.status.services.StatusServiceImpl;
 import com.james.status.utils.StaticUtils;
 
 import java.util.ArrayList;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import me.drozdzynski.library.steppers.SteppersItem;
 import me.drozdzynski.library.steppers.SteppersView;
 import me.drozdzynski.library.steppers.interfaces.OnCancelAction;
@@ -41,6 +60,7 @@ public class StartActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(Status.Theme.ACTIVITY_NORMAL.getTheme(this));
         setContentView(R.layout.activity_start);
 
         SteppersView steppersView = findViewById(R.id.steppersView);
@@ -219,8 +239,21 @@ public class StartActivity extends AppCompatActivity {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivityForResult(new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS), REQUEST_OPTIMIZATION);
-                    Toast.makeText(getContext(), R.string.msg_battery_optimizations_switch_enable, Toast.LENGTH_LONG).show();
+                    if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS) == PackageManager.PERMISSION_GRANTED) {
+                        // This intent launches the "evil dialog of misleading and restrictive user freedom", according
+                        // to Google Play's policy, but there shouldn't actually be anything wrong with it. The policy
+                        // states that this is only acceptable if battery optimization affects the "core functionality" of
+                        // the app in question, which... it does. However, it seems their moderators have decided otherwise,
+                        // as the update that I pushed containing this intent was taken down. Which is why the permission to use
+                        // this intent is now only granted in the OSS product flavor. :(
+
+                        Intent intent = new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+                        intent.setData(Uri.parse("package:" + getContext().getApplicationContext().getPackageName()));
+                        startActivityForResult(intent, REQUEST_OPTIMIZATION);
+                    } else {
+                        startActivityForResult(new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS), REQUEST_OPTIMIZATION);
+                        Toast.makeText(getContext(), R.string.msg_battery_optimizations_switch_enable, Toast.LENGTH_LONG).show();
+                    }
                 }
             });
 

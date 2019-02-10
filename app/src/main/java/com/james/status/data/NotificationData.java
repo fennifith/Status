@@ -1,3 +1,19 @@
+/*
+ *    Copyright 2019 James Fenn
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
 package com.james.status.data;
 
 import android.annotation.TargetApi;
@@ -18,12 +34,12 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.service.notification.StatusBarNotification;
-import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.res.ResourcesCompat;
 
-import com.james.status.utils.ImageUtils;
-import com.james.status.utils.anim.AnimatedFloat;
+import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+import androidx.core.content.res.ResourcesCompat;
+import me.jfenn.androidutils.ImageUtils;
+import me.jfenn.androidutils.anim.AnimatedFloat;
 
 public class NotificationData implements Parcelable {
 
@@ -54,6 +70,16 @@ public class NotificationData implements Parcelable {
         init(notification, id, packageName);
     }
 
+    /**
+     * Instantiate the NotificationData from whatever information there is.
+     *
+     * @param notification The Notification that was sent.
+     * @param id           An "id" that may or may not be tied to the
+     *                     notification - who knows.
+     * @param packageName  The package name that the notification _might_
+     *                     have been from - we're only guessing here, after
+     *                     all.
+     */
     private void init(Notification notification, int id, String packageName) {
         category = NotificationCompat.getCategory(notification);
         title = getTitle(notification);
@@ -132,6 +158,16 @@ public class NotificationData implements Parcelable {
         }
     }
 
+    /**
+     * Change the attributes of this NotificationData to match those of
+     * another newly received notification. This should only be called
+     * when we are _sure_ that the two notifications are, er, the same.
+     *
+     * @param notification              The new notification, that is,
+     *                                  the new version of the notification
+     *                                  that this notification is.
+     * @return True if anything changed.
+     */
     public boolean set(NotificationData notification) {
         boolean isChange = false;
 
@@ -197,6 +233,16 @@ public class NotificationData implements Parcelable {
         return isOngoing;
     }
 
+    /**
+     * Get an icon bitmap with a specified height. If the current
+     * bitmap matches the height, great! if not, it's scaled to
+     * match it (and a reference to the scaled version is kept
+     * as "cache").
+     *
+     * @param height            The height to generate a bitmap at.
+     * @return The created bitmap, or null if things
+     *                          went wrong.
+     */
     public Bitmap getIcon(float height) {
         if (icon.getHeight() == Math.round(height))
             return icon;
@@ -207,6 +253,13 @@ public class NotificationData implements Parcelable {
         return scaledIcon;
     }
 
+    /**
+     * Get a full res icon of the notification.
+     *
+     * @param context           The current application context.
+     * @return The created bitmap, or null if
+     *                          things went wrong.
+     */
     @Nullable
     public Bitmap getIcon(Context context) {
         if (icon == null) {

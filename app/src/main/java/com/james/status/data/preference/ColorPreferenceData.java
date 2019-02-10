@@ -1,16 +1,36 @@
+/*
+ *    Copyright 2019 James Fenn
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
 package com.james.status.data.preference;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.james.status.R;
-import com.james.status.dialogs.PreferenceDialog;
-import com.james.status.dialogs.picker.ColorPickerDialog;
+import com.james.status.utils.StaticUtils;
 import com.james.status.views.ColorView;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import me.jfenn.colorpickerdialog.dialogs.ColorPickerDialog;
+import me.jfenn.colorpickerdialog.interfaces.OnColorPickedListener;
+import me.jfenn.colorpickerdialog.views.picker.ImagePickerView;
 
 public class ColorPreferenceData extends BasePreferenceData<Integer> {
 
@@ -48,37 +68,25 @@ public class ColorPreferenceData extends BasePreferenceData<Integer> {
 
     @Override
     public void onClick(final View v) {
-        ColorPickerDialog dialog = new ColorPickerDialog(getContext()).withAlpha(isAlpha());
+        ColorPickerDialog dialog = new ColorPickerDialog()
+                .withTitle(getIdentifier().getTitle())
+                .withAlphaEnabled(isAlpha())
+                .withColor(value != null && !value.equals(getNullValue()) ? value : Color.BLACK)
+                .withPresets()
+                .withPicker(ImagePickerView.class)
+                .withListener(new OnColorPickedListener<ColorPickerDialog>() {
+                    @Override
+                    public void onColorPicked(@Nullable ColorPickerDialog pickerView, int color) {
+                        value = color;
+                        getIdentifier().setPreferenceValue(getContext(), color);
+                        onPreferenceChange(color);
 
-        dialog.setPreference(value != null && !value.equals(getNullValue()) ? value : Color.BLACK);
+                        onBindViewHolder(new ViewHolder(v), -1);
+                    }
+                });
 
-        Integer defaultValue = getIdentifier().getPreference().getDefaultValue();
-        if (defaultValue != null)
-            dialog.setDefaultPreference(defaultValue);
-
-        dialog.setListener(new PreferenceDialog.OnPreferenceListener<Integer>() {
-            @Override
-            public void onPreference(PreferenceDialog dialog, Integer color) {
-                value = color;
-                onBindViewHolder(new ViewHolder(v), -1);
-
-                getIdentifier().setPreferenceValue(getContext(), color);
-                onPreferenceChange(color);
-            }
-
-            @Override
-            public void onCancel(PreferenceDialog dialog) {
-            }
-        });
-
-        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                onBindViewHolder(new ViewHolder(v), -1);
-            }
-        });
-
-        dialog.setTitle(getIdentifier().getTitle());
-        dialog.show();
+        AppCompatActivity activity = StaticUtils.getActivity(getContext());
+        if (activity != null)
+            dialog.show(activity.getSupportFragmentManager(), "colorPickerDialog");
     }
 }
