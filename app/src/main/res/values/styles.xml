@@ -129,4 +129,11 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <!-- override for drozdzynski/Steppers to ensure compatibility with the dark theme -->
+    <style name="LabelActive">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">?android:textColorPrimary</item>
+    </style>
+
 </resources>

@@ -60,7 +60,7 @@ public class StartActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(Status.Theme.ACTIVITY_SPLASH.getTheme(this));
+        setTheme(Status.Theme.ACTIVITY_NORMAL.getTheme(this));
         setContentView(R.layout.activity_start);
 
         SteppersView steppersView = findViewById(R.id.steppersView);
