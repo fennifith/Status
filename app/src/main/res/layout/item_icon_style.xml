@@ -5,24 +5,52 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="48dp">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/left_guideline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/divider_guideline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent=".40" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/right_guideline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="1" />
 
         <include
+            android:id="@+id/radioButton"
             layout="@layout/item_radio_button"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent" />
-
-        <HorizontalScrollView
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:gravity="center_vertical"
+            app:layout_constraintLeft_toRightOf="@id/left_guideline"
+            app:layout_constraintRight_toLeftOf="@id/divider_guideline" />
+
+        <HorizontalScrollView
+            android:id="@+id/horizontalScrollView"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:fadingEdge="horizontal"
             android:fadingEdgeLength="8dp"
             android:requiresFadingEdge="horizontal"
-            android:scrollbars="horizontal">
+            android:scrollbars="horizontal"
+            app:layout_constraintLeft_toRightOf="@id/divider_guideline"
+            app:layout_constraintRight_toLeftOf="@id/right_guideline">
 
             <LinearLayout
                 android:id="@+id/icons"
@@ -36,7 +64,7 @@
 
         </HorizontalScrollView>
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -50,10 +78,10 @@
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
             android:orientation="horizontal"
-            android:paddingBottom="12dp"
             android:paddingLeft="16dp"
-            android:paddingRight="16dp"
             android:paddingTop="12dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="12dp"
             android:visibility="gone">
 
             <com.james.status.views.SquareImageView
