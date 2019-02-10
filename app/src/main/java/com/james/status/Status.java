@@ -36,6 +36,7 @@ public class Status extends Application {
     public enum Theme {
         ACTIVITY_NORMAL(R.style.AppTheme, R.style.AppTheme_Dark),
         ACTIVITY_SPLASH(R.style.AppTheme_Splash, R.style.AppTheme_Dark_Splash),
+        ACTIVITY_ATTRIBOUTER(R.style.AttribouterTheme, R.style.AttribouterTheme_Dark),
         DIALOG_NORMAL(R.style.AppTheme_Dialog, R.style.AppTheme_Dark_Dialog),
         DIALOG_FULL_SCREEN(R.style.AppTheme_Dialog_FullScreen, R.style.AppTheme_Dark_Dialog_FullScreen),
         DIALOG_BOTTOM_SHEET(R.style.AppTheme_Dialog_BottomSheet, R.style.AppTheme_Dark_Dialog_BottomSheet);

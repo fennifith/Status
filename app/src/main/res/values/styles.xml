@@ -115,6 +115,8 @@
         <item name="android:windowAnimationStyle">@style/FadeAnimation</item>
     </style>
 
+    <style name="AttribouterTheme.Dark" parent="Theme.AppCompat.NoActionBar" />
+
     <style name="FadeAnimation">
         <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
         <item name="android:windowExitAnimation">@android:anim/fade_out</item>

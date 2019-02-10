@@ -332,12 +332,14 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 editor.apply();
                 break;
             case R.id.action_about:
-                Attribouter attribouter = Attribouter.from(this);
-                int githubAuthKey = getResources().getIdentifier("githubAuthKey", "string", getPackageName());
-                if (githubAuthKey != 0)
-                    attribouter = attribouter.withGitHubToken(getString(githubAuthKey));
+                Intent intent = new Intent(this, AttribouterActivity.class);
 
-                attribouter.show();
+                int githubAuthKey = getResources().getIdentifier("githubAuthKey", "string", getPackageName());
+                if (githubAuthKey != 0) {
+                    intent.putExtra(Attribouter.EXTRA_GITHUB_OAUTH_TOKEN, getString(githubAuthKey));
+                }
+
+                startActivity(intent);
                 break;
             case R.id.action_reset:
                 if (adapter.getItem(viewPager.getCurrentItem()) instanceof AppPreferenceFragment)
