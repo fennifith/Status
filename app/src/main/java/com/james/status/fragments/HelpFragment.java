@@ -33,7 +33,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class HelpFragment extends SimpleFragment {
 
-    private static final String COMMUNITY_URL = "https://plus.google.com/communities/100021389226995148571";
+    private static final String COMMUNITY_URL = "https://discord.gg/ugwZR7V";
 
     private ArrayAdapter adapter;
 
