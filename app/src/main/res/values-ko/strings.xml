@@ -500,5 +500,7 @@
     <string name="preference_ui_dark_theme_desc">A dark theme for Status\'s settings UI to make it a little easier on the eyes.</string>
     <string name="msg_restart_for_changes">Restart the app to apply the changes.</string>
     <string name="icons8_icons">Icons8</string>
+    <string name="icon_style_pin">Pin</string>
+    <string name="icon_style_earbuds">Earbuds</string>
 
 </resources>
