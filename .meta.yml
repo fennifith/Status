@@ -1,1 +1,3 @@
 icon: "app/src/main/res/mipmap-xxxhdpi/ic_launcher_web.png"
+googleplay: "https://play.google.com/store/apps/details?id=com.james.status"
+package: "com.james.status"
