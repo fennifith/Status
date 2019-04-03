@@ -65,7 +65,6 @@ import androidx.core.view.MenuItemCompat;
 import androidx.core.view.ViewCompat;
 import androidx.viewpager.widget.ViewPager;
 import me.jfenn.androidutils.DimenUtils;
-import me.jfenn.attribouter.Attribouter;
 
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, CompoundButton.OnCheckedChangeListener {
 
@@ -332,14 +331,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 editor.apply();
                 break;
             case R.id.action_about:
-                Intent intent = new Intent(this, AttribouterActivity.class);
-
-                int githubAuthKey = getResources().getIdentifier("githubAuthKey", "string", getPackageName());
-                if (githubAuthKey != 0) {
-                    intent.putExtra(Attribouter.EXTRA_GITHUB_OAUTH_TOKEN, getString(githubAuthKey));
-                }
-
-                startActivity(intent);
+                startActivity(new Intent(this, AttribouterActivity.class));
                 break;
             case R.id.action_reset:
                 if (adapter.getItem(viewPager.getCurrentItem()) instanceof AppPreferenceFragment)

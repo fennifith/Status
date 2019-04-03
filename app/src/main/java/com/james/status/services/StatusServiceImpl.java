@@ -237,6 +237,18 @@ public class StatusServiceImpl {
     }
 
     /**
+     * Decides which overlay type Status should use
+     * on a specific device.
+     *
+     * @return The overlay type for Status to use.
+     */
+    public int getOverlayType() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+                ? WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+                : WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY;
+    }
+
+    /**
      * Initializes the StatusView if it doesn't exist yet, sets listeners,
      * applies any changes to preferences/icons
      *
@@ -251,7 +263,12 @@ public class StatusServiceImpl {
 
             statusView = new StatusView(service);
 
-            WindowManager.LayoutParams params = new WindowManager.LayoutParams(WindowManager.LayoutParams.MATCH_PARENT, StaticUtils.getStatusBarHeight(service), WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN, PixelFormat.TRANSLUCENT);
+            WindowManager.LayoutParams params = new WindowManager.LayoutParams(
+                    WindowManager.LayoutParams.MATCH_PARENT, StaticUtils.getStatusBarHeight(service),
+                    getOverlayType(),
+                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
+                    PixelFormat.TRANSLUCENT);
+
             params.gravity = Gravity.TOP;
 
             windowManager.addView(statusView, params);
@@ -262,7 +279,11 @@ public class StatusServiceImpl {
 
         if (!shouldKeepOld) {
             if (fullscreenView == null || fullscreenView.getParent() == null) {
-                WindowManager.LayoutParams params = new WindowManager.LayoutParams(1, WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, PixelFormat.TRANSPARENT);
+                WindowManager.LayoutParams params = new WindowManager.LayoutParams(1, WindowManager.LayoutParams.MATCH_PARENT,
+                        getOverlayType(),
+                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                        PixelFormat.TRANSPARENT);
+
                 params.gravity = Gravity.START | Gravity.TOP;
                 fullscreenView = new View(service);
 
