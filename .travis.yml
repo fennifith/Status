@@ -12,6 +12,7 @@ jdk:
   - oraclejdk8
 before_install:
   - openssl aes-256-cbc -K $encrypted_88ddc75bcd79_key -iv $encrypted_88ddc75bcd79_iv -in secrets.tar.enc -out secrets.tar -d
+  - tar -xvf secrets.tar --overwrite
   - chmod +x gradlew
 script:
   - ./gradlew build
