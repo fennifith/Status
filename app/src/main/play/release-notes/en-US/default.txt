@@ -1,2 +1,3 @@
 - performance improvements
 - various bug fixes
+- app-specific icon / text color settings
