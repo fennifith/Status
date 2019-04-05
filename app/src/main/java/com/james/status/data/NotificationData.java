@@ -243,8 +243,9 @@ public class NotificationData implements Parcelable {
      * @return The created bitmap, or null if things
      *                          went wrong.
      */
+    @Nullable
     public Bitmap getIcon(float height) {
-        if (icon.getHeight() == Math.round(height))
+        if (icon != null && icon.getHeight() == Math.round(height))
             return icon;
 
         if (icon != null && (scaledIcon == null || scaledIcon.getHeight() != Math.round(height)))

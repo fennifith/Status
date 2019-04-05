@@ -161,10 +161,12 @@ public class NotificationsIconData extends IconData {
                 if (iconSize.isTarget() && iconSize.val() != bitmap.getHeight() && notification.getScale().isTarget() && notification.getScale().val() == 1f)
                     bitmap = notification.getIcon(iconSize.val());
 
-                Matrix matrix = new Matrix();
-                matrix.postScale(scaledIconSize / bitmap.getHeight(), scaledIconSize / bitmap.getHeight());
-                matrix.postTranslate(x + ((scaledIconSize - bitmap.getWidth()) / 2), ((float) canvas.getHeight() - scaledIconSize) / 2);
-                canvas.drawBitmap(bitmap, matrix, iconPaint);
+                if (bitmap != null) {
+                    Matrix matrix = new Matrix();
+                    matrix.postScale(scaledIconSize / bitmap.getHeight(), scaledIconSize / bitmap.getHeight());
+                    matrix.postTranslate(x + ((scaledIconSize - bitmap.getWidth()) / 2), ((float) canvas.getHeight() - scaledIconSize) / 2);
+                    canvas.drawBitmap(bitmap, matrix, iconPaint);
+                }
 
                 x += scaledIconSize + padding.val();
             }
