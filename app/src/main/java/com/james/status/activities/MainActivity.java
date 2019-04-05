@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
@@ -237,7 +238,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                         .setCancelable(false)
                         .setNegativeButton(android.R.string.cancel, (dialog, which) -> dialog.dismiss())
                         .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                            InfoUtils.launchSupportAction(MainActivity.this);
+                            MainActivity.this.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(InfoUtils.SUPPORT_URL)));
                             dialog.dismiss();
                         })
                         .show();

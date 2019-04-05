@@ -20,8 +20,4 @@ public class InfoUtils {
 
     public static final String SUPPORT_URL = "https://play.google.com/store/apps/details?id=james.donate";
 
-    public static void launchSupportAction(Context context) {
-        context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(SUPPORT_URL)));
-    }
-
 }

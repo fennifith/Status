@@ -16,16 +16,8 @@
 
 package com.james.status.utils;
 
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-
 public class InfoUtils {
 
     public static final String SUPPORT_URL = "https://liberapay.com/fennifith/";
-
-    public static void launchSupportAction(Context context) {
-        context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(SUPPORT_URL)));
-    }
 
 }
