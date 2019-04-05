@@ -37,6 +37,8 @@ import me.jfenn.attribouter.wedges.ContributorsWedge;
 
 public class CabbageContributorsWedge extends ContributorsWedge {
 
+    private static final String CABBAGE_URL = "https://jfenn.me/images/headers/cabbage.jpg";
+
     public CabbageContributorsWedge(XmlResourceParser parser) throws XmlPullParserException, IOException {
         super(parser);
     }
@@ -46,7 +48,7 @@ public class CabbageContributorsWedge extends ContributorsWedge {
         super.bind(context, viewHolder);
         viewHolder.itemView.findViewById(R.id.first).setOnLongClickListener(v -> {
             v.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
-            Glide.with(v.getContext()).load("https://jfenn.me/images/headers/cabbage.jpg").into(new SimpleTarget<Drawable>() {
+            Glide.with(v.getContext()).load(CABBAGE_URL).into(new SimpleTarget<Drawable>() {
                 @Override
                 public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
                     ImageView imageView = viewHolder.itemView.findViewById(R.id.firstImage);
