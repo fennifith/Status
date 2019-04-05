@@ -58,14 +58,11 @@ public class IconStyleImageView extends SquareImageView {
 
                         ValueAnimator animator = ValueAnimator.ofFloat(1f, 0f, 1f);
                         animator.setDuration(500);
-                        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                            @Override
-                            public void onAnimationUpdate(ValueAnimator animator) {
-                                float alpha = (float) animator.getAnimatedValue();
-                                setAlpha(alpha);
-                                if (alpha == 0)
-                                    setImageDrawable(drawable, Color.BLACK);
-                            }
+                        animator.addUpdateListener(animator1 -> {
+                            float alpha = (float) animator1.getAnimatedValue();
+                            setAlpha(alpha);
+                            if (alpha == 0)
+                                setImageDrawable(drawable, Color.BLACK);
                         });
                         animator.start();
                     }

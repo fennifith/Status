@@ -115,12 +115,9 @@ public class TimeIconData extends IconData<TimeIconData.TimeReceiver> {
                         getContext().getString(R.string.preference_time_format),
                         getIdentifierArgs()
                 ),
-                new BasePreferenceData.OnPreferenceChangeListener<String>() {
-                    @Override
-                    public void onPreferenceChange(String preference) {
-                        format = preference;
-                        StaticUtils.updateStatusService(getContext(), true);
-                    }
+                preference -> {
+                    format = preference;
+                    StaticUtils.updateStatusService(getContext(), true);
                 }
         ));
 

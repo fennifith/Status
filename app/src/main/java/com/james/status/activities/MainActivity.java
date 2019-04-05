@@ -18,11 +18,9 @@ package com.james.status.activities;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
@@ -46,6 +44,7 @@ import com.james.status.fragments.GeneralPreferenceFragment;
 import com.james.status.fragments.HelpFragment;
 import com.james.status.fragments.IconPreferenceFragment;
 import com.james.status.services.StatusServiceImpl;
+import com.james.status.utils.InfoUtils;
 import com.james.status.utils.StaticUtils;
 
 import java.util.ArrayList;
@@ -59,7 +58,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.SwitchCompat;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.MenuItemCompat;
 import androidx.core.view.ViewCompat;
@@ -98,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         setContentView(R.layout.activity_main);
 
         status = (Status) getApplicationContext();
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        setSupportActionBar(findViewById(R.id.toolbar));
 
         appbar = findViewById(R.id.appbar);
         tabLayout = findViewById(R.id.tabLayout);
@@ -111,12 +109,9 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         icon = findViewById(R.id.tutorialIcon);
         fab = findViewById(R.id.fab);
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (adapter.getItem(viewPager.getCurrentItem()) instanceof AppPreferenceFragment)
-                    ((AppPreferenceFragment) adapter.getItem(viewPager.getCurrentItem())).showDialog();
-            }
+        fab.setOnClickListener(v -> {
+            if (adapter.getItem(viewPager.getCurrentItem()) instanceof AppPreferenceFragment)
+                ((AppPreferenceFragment) adapter.getItem(viewPager.getCurrentItem())).showDialog();
         });
 
         ViewCompat.setElevation(bottomSheet, DimenUtils.dpToPx(10));
@@ -141,35 +136,24 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             }
         });
 
-        bottomSheet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (behavior.getState() == BottomSheetBehavior.STATE_COLLAPSED)
-                    behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                else if (behavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
-                    OnTutorialClickListener listener = (OnTutorialClickListener) v.getTag();
-                    if (listener != null)
-                        listener.onClick();
-
-                    if (behavior.isHideable())
-                        behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-                }
-            }
-        });
-
-        expand.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        bottomSheet.setOnClickListener(v -> {
+            if (behavior.getState() == BottomSheetBehavior.STATE_COLLAPSED)
                 behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            else if (behavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+                OnTutorialClickListener listener = (OnTutorialClickListener) v.getTag();
+                if (listener != null)
+                    listener.onClick();
+
+                if (behavior.isHideable())
+                    behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
             }
         });
 
-        appbar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if (verticalOffset != 0 && behavior != null && behavior.getState() == BottomSheetBehavior.STATE_EXPANDED)
-                    behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-            }
+        expand.setOnClickListener(v -> behavior.setState(BottomSheetBehavior.STATE_EXPANDED));
+
+        appbar.addOnOffsetChangedListener((appBarLayout, verticalOffset) -> {
+            if (verticalOffset != 0 && behavior != null && behavior.getState() == BottomSheetBehavior.STATE_EXPANDED)
+                behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         });
 
         service.setChecked((boolean) PreferenceData.STATUS_ENABLED.getValue(this) && StaticUtils.isStatusServiceRunning(this));
@@ -226,55 +210,35 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
         if (behavior.getState() == BottomSheetBehavior.STATE_HIDDEN) {
             if (!StaticUtils.isStatusServiceRunning(this) && StaticUtils.shouldShowTutorial(this, "enable")) {
-                setTutorial(R.string.tutorial_enable, R.string.tutorial_enable_desc, new OnTutorialClickListener() {
-                    @Override
-                    public void onClick() {
-                        if (service != null) service.setChecked(true);
-                    }
+                setTutorial(R.string.tutorial_enable, R.string.tutorial_enable_desc, () -> {
+                    if (service != null) service.setChecked(true);
                 }, false);
             } else if (!StaticUtils.isAllPermissionsGranted(this)) {
-                setTutorial(R.string.tutorial_missing_permissions, R.string.tutorial_missing_permissions_desc, new OnTutorialClickListener() {
-                    @Override
-                    public void onClick() {
-                        List<String> permissions = new ArrayList<>();
-                        for (IconData icon : StatusServiceImpl.getIcons(MainActivity.this)) {
-                            permissions.addAll(Arrays.asList(icon.getPermissions()));
-                        }
-
-                        StaticUtils.requestPermissions(MainActivity.this, permissions.toArray(new String[permissions.size()]));
+                setTutorial(R.string.tutorial_missing_permissions, R.string.tutorial_missing_permissions_desc, () -> {
+                    List<String> permissions = new ArrayList<>();
+                    for (IconData icon : StatusServiceImpl.getIcons(MainActivity.this)) {
+                        permissions.addAll(Arrays.asList(icon.getPermissions()));
                     }
+
+                    StaticUtils.requestPermissions(MainActivity.this, permissions.toArray(new String[permissions.size()]));
                 }, true);
             } else if (searchView != null && StaticUtils.shouldShowTutorial(MainActivity.this, "search", 1)) {
-                setTutorial(R.string.tutorial_search, R.string.tutorial_search_desc, new OnTutorialClickListener() {
-                    @Override
-                    public void onClick() {
-                        if (searchView != null) searchView.setIconified(false);
-                    }
+                setTutorial(R.string.tutorial_search, R.string.tutorial_search_desc, () -> {
+                    if (searchView != null) searchView.setIconified(false);
                 }, false);
             } else if (tabLayout != null && viewPager != null && viewPager.getCurrentItem() != 3 && StaticUtils.shouldShowTutorial(MainActivity.this, "faqs", 2)) {
-                setTutorial(R.string.tutorial_help, R.string.tutorial_help_desc, new OnTutorialClickListener() {
-                    @Override
-                    public void onClick() {
-                        if (viewPager != null) viewPager.setCurrentItem(3);
-                    }
+                setTutorial(R.string.tutorial_help, R.string.tutorial_help_desc, () -> {
+                    if (viewPager != null) viewPager.setCurrentItem(3);
                 }, false);
             } else if (StaticUtils.shouldShowTutorial(MainActivity.this, "donate", 3)) {
                 new AlertDialog.Builder(this)
                         .setTitle(R.string.tutorial_donate)
                         .setMessage(R.string.tutorial_donate_desc)
                         .setCancelable(false)
-                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
-                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=james.donate")));
-                                dialog.dismiss();
-                            }
+                        .setNegativeButton(android.R.string.cancel, (dialog, which) -> dialog.dismiss())
+                        .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                            InfoUtils.launchSupportAction(MainActivity.this);
+                            dialog.dismiss();
                         })
                         .show();
             }
@@ -304,12 +268,9 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             }
         });
 
-        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-                adapter.filter(viewPager.getCurrentItem(), null);
-                return false;
-            }
+        searchView.setOnCloseListener(() -> {
+            adapter.filter(viewPager.getCurrentItem(), null);
+            return false;
         });
 
         return super.onCreateOptionsMenu(menu);

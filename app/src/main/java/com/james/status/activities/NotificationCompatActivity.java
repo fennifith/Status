@@ -16,7 +16,6 @@
 
 package com.james.status.activities;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.widget.FrameLayout;
 
@@ -35,17 +34,14 @@ public class NotificationCompatActivity extends AppCompatActivity {
         StatusServiceImpl.stop(this);
 
         CompatibilityNotificationDialog dialog = new CompatibilityNotificationDialog(this);
-        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                StatusServiceImpl.stop(NotificationCompatActivity.this);
-                if (StaticUtils.shouldUseCompatNotifications(NotificationCompatActivity.this)) {
-                    setResult(RESULT_OK);
-                    finish();
-                } else {
-                    setResult(RESULT_CANCELED);
-                    finish();
-                }
+        dialog.setOnDismissListener(dialog1 -> {
+            StatusServiceImpl.stop(NotificationCompatActivity.this);
+            if (StaticUtils.shouldUseCompatNotifications(NotificationCompatActivity.this)) {
+                setResult(RESULT_OK);
+                finish();
+            } else {
+                setResult(RESULT_CANCELED);
+                finish();
             }
         });
         dialog.show();

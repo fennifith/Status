@@ -19,8 +19,6 @@ package com.james.status.dialogs;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.View;
-import android.widget.CompoundButton;
 
 import com.james.status.R;
 import com.james.status.Status;
@@ -47,33 +45,17 @@ public class CompatibilityNotificationDialog extends ThemedCompatDialog {
         enabledSwitchView = findViewById(R.id.enabledSwitch);
 
         enabledSwitchView.setChecked(isEnabled);
-        enabledSwitchView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                isEnabled = isChecked;
-            }
-        });
+        enabledSwitchView.setOnCheckedChangeListener((buttonView, isChecked) -> isEnabled = isChecked);
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (enabledSwitchView != null) enabledSwitchView.setEnabled(true);
-            }
+        new Handler().postDelayed(() -> {
+            if (enabledSwitchView != null) enabledSwitchView.setEnabled(true);
         }, 5000);
 
-        findViewById(R.id.confirm).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PreferenceData.STATUS_NOTIFICATIONS_COMPAT.setValue(getContext(), isEnabled);
-                dismiss();
-            }
+        findViewById(R.id.confirm).setOnClickListener(v -> {
+            PreferenceData.STATUS_NOTIFICATIONS_COMPAT.setValue(getContext(), isEnabled);
+            dismiss();
         });
 
-        findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
+        findViewById(R.id.cancel).setOnClickListener(v -> dismiss());
     }
 }

@@ -17,7 +17,6 @@
 package com.james.status.fragments;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -99,41 +98,33 @@ public class AppPreferenceFragment extends SimpleFragment {
     }
 
     public void reset() {
-        new AlertDialog.Builder(getContext()).setTitle(R.string.reset_all).setMessage(R.string.reset_apps_confirm).setPositiveButton(R.string.action_ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-                Map<String, ?> prefs = preferences.getAll();
-                SharedPreferences.Editor editor = preferences.edit();
-                for (String key : prefs.keySet()) {
-                    for (String pref : new String[]{"/APP_COLOR", "/APP_FULLSCREEN", "/APP_FULLSCREEN_IGNORE"}) {
-                        if (key.endsWith(pref))
-                            editor.remove(key);
+        new AlertDialog.Builder(getContext())
+                .setTitle(R.string.reset_all)
+                .setMessage(R.string.reset_apps_confirm)
+                .setPositiveButton(R.string.action_ok, (dialogInterface, i) -> {
+                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+                    Map<String, ?> prefs = preferences.getAll();
+                    SharedPreferences.Editor editor = preferences.edit();
+                    for (String key : prefs.keySet()) {
+                        for (String pref : new String[]{"/APP_COLOR", "/APP_FULLSCREEN", "/APP_FULLSCREEN_IGNORE"}) {
+                            if (key.endsWith(pref))
+                                editor.remove(key);
+                        }
                     }
-                }
 
-                editor.apply();
-                updateItems();
-                dialogInterface.dismiss();
-            }
-        }).setNegativeButton(R.string.action_cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-            }
-        }).show();
+                    editor.apply();
+                    updateItems();
+                    dialogInterface.dismiss();
+                }).setNegativeButton(R.string.action_cancel, (dialogInterface, i) -> dialogInterface.dismiss()).show();
     }
 
     public void showDialog() {
         AppChooserDialog dialog = new AppChooserDialog(getContext(), allApps);
-        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                if (dialog instanceof AppChooserDialog)
-                    allApps = ((AppChooserDialog) dialog).getPackages();
-                if (recycler != null)
-                    updateItems();
-            }
+        dialog.setOnDismissListener(dialog1 -> {
+            if (dialog1 instanceof AppChooserDialog)
+                allApps = ((AppChooserDialog) dialog1).getPackages();
+            if (recycler != null)
+                updateItems();
         });
 
         dialog.show();

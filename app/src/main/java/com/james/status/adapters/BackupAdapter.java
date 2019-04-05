@@ -53,13 +53,10 @@ public class BackupAdapter extends RecyclerView.Adapter<BackupAdapter.ViewHolder
         holder.title.setText(file.getName().substring(0, file.getName().length() - 4));
         holder.subtitle.setVisibility(View.GONE);
 
-        holder.v.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                BackupCreatorDialog dialog = new BackupCreatorDialog(context, files, files.get(holder.getAdapterPosition()));
-                dialog.setListener(listener);
-                dialog.show();
-            }
+        holder.v.setOnClickListener(v -> {
+            BackupCreatorDialog dialog = new BackupCreatorDialog(context, files, files.get(holder.getAdapterPosition()));
+            dialog.setListener(listener);
+            dialog.show();
         });
     }
 

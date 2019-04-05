@@ -593,12 +593,9 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                             getContext().getString(R.string.preference_show_drawable),
                             getIdentifierArgs()
                     ),
-                    new BasePreferenceData.OnPreferenceChangeListener<Boolean>() {
-                        @Override
-                        public void onPreferenceChange(Boolean preference) {
-                            StaticUtils.updateStatusService(getContext(), true);
-                            ((Status) getContext().getApplicationContext()).onIconPreferenceChanged(IconData.this);
-                        }
+                    preference -> {
+                        StaticUtils.updateStatusService(getContext(), true);
+                        ((Status) getContext().getApplicationContext()).onIconPreferenceChanged(IconData.this);
                     }
             ));
         }
@@ -611,12 +608,9 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                             getContext().getString(R.string.preference_show_text),
                             getIdentifierArgs()
                     ),
-                    new BasePreferenceData.OnPreferenceChangeListener<Boolean>() {
-                        @Override
-                        public void onPreferenceChange(Boolean preference) {
-                            StaticUtils.updateStatusService(getContext(), true);
-                            ((Status) getContext().getApplicationContext()).onIconPreferenceChanged(IconData.this);
-                        }
+                    preference -> {
+                        StaticUtils.updateStatusService(getContext(), true);
+                        ((Status) getContext().getApplicationContext()).onIconPreferenceChanged(IconData.this);
                     }
             ));
         }
@@ -630,12 +624,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                                 getDefaultGravity(),
                                 getIdentifierArgs()
                         ),
-                        new BasePreferenceData.OnPreferenceChangeListener<Integer>() {
-                            @Override
-                            public void onPreferenceChange(Integer preference) {
-                                StaticUtils.updateStatusService(getContext(), true);
-                            }
-                        },
+                        preference -> StaticUtils.updateStatusService(getContext(), true),
                         new ListPreferenceData.ListPreference(
                                 getContext().getString(R.string.gravity_left),
                                 LEFT_GRAVITY
@@ -659,12 +648,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                         getContext().getString(R.string.unit_dp),
                         null,
                         null,
-                        new BasePreferenceData.OnPreferenceChangeListener<Integer>() {
-                            @Override
-                            public void onPreferenceChange(Integer preference) {
-                                StaticUtils.updateStatusService(getContext(), true);
-                            }
-                        }
+                        preference -> StaticUtils.updateStatusService(getContext(), true)
                 )
         ));
 
@@ -677,18 +661,8 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                             null,
                             getIdentifierArgs()
                     ),
-                    new BasePreferenceData.OnPreferenceChangeListener<Integer>() {
-                        @Override
-                        public void onPreferenceChange(Integer preference) {
-                            StaticUtils.updateStatusService(getContext(), true);
-                        }
-                    }
-            ).withAlpha(new BasePreferenceData.ValueGetter<Boolean>() {
-                @Override
-                public Boolean get() {
-                    return true;
-                }
-            }).withNullable(true));
+                    preference -> StaticUtils.updateStatusService(getContext(), true)
+            ).withAlpha(() -> true).withNullable(true));
 
             preferences.add(new ColorPreferenceData(
                     getContext(),
@@ -698,18 +672,8 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                             null,
                             getIdentifierArgs()
                     ),
-                    new BasePreferenceData.OnPreferenceChangeListener<Integer>() {
-                        @Override
-                        public void onPreferenceChange(Integer preference) {
-                            StaticUtils.updateStatusService(getContext(), true);
-                        }
-                    }
-            ).withAlpha(new BasePreferenceData.ValueGetter<Boolean>() {
-                @Override
-                public Boolean get() {
-                    return true;
-                }
-            }).withNullable(true));
+                    preference -> StaticUtils.updateStatusService(getContext(), true)
+            ).withAlpha(() -> true).withNullable(true));
 
             preferences.add(new IntegerPreferenceData(
                     getContext(),
@@ -721,12 +685,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                     getContext().getString(R.string.unit_dp),
                     0,
                     null,
-                    new BasePreferenceData.OnPreferenceChangeListener<Integer>() {
-                        @Override
-                        public void onPreferenceChange(Integer preference) {
-                            StaticUtils.updateStatusService(getContext(), true);
-                        }
-                    }
+                    preference -> StaticUtils.updateStatusService(getContext(), true)
             ));
         }
 
@@ -741,12 +700,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                     getContext().getString(R.string.unit_sp),
                     0,
                     null,
-                    new BasePreferenceData.OnPreferenceChangeListener<Integer>() {
-                        @Override
-                        public void onPreferenceChange(Integer preference) {
-                            StaticUtils.updateStatusService(getContext(), true);
-                        }
-                    }
+                    preference -> StaticUtils.updateStatusService(getContext(), true)
             ));
 
             preferences.add(new ColorPreferenceData(
@@ -757,18 +711,8 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                             null,
                             getIdentifierArgs()
                     ),
-                    new BasePreferenceData.OnPreferenceChangeListener<Integer>() {
-                        @Override
-                        public void onPreferenceChange(Integer preference) {
-                            StaticUtils.updateStatusService(getContext(), true);
-                        }
-                    }
-            ).withAlpha(new BasePreferenceData.ValueGetter<Boolean>() {
-                @Override
-                public Boolean get() {
-                    return true;
-                }
-            }).withNullable(true));
+                    preference -> StaticUtils.updateStatusService(getContext(), true)
+            ).withAlpha(() -> true).withNullable(true));
 
             preferences.add(new ColorPreferenceData(
                     getContext(),
@@ -778,18 +722,8 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                             null,
                             getIdentifierArgs()
                     ),
-                    new BasePreferenceData.OnPreferenceChangeListener<Integer>() {
-                        @Override
-                        public void onPreferenceChange(Integer preference) {
-                            StaticUtils.updateStatusService(getContext(), true);
-                        }
-                    }
-            ).withAlpha(new BasePreferenceData.ValueGetter<Boolean>() {
-                @Override
-                public Boolean get() {
-                    return true;
-                }
-            }).withNullable(true));
+                    preference -> StaticUtils.updateStatusService(getContext(), true)
+            ).withAlpha(() -> true).withNullable(true));
 
             preferences.add(new FontPreferenceData(
                     getContext(),
@@ -798,12 +732,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                             getContext().getString(R.string.preference_text_font),
                             getIdentifierArgs()
                     ),
-                    new BasePreferenceData.OnPreferenceChangeListener<String>() {
-                        @Override
-                        public void onPreferenceChange(String preference) {
-                            StaticUtils.updateStatusService(getContext(), true);
-                        }
-                    },
+                    preference -> StaticUtils.updateStatusService(getContext(), true),
                     "Audiowide.ttf",
                     "BlackOpsOne.ttf",
                     "HennyPenny.ttf",
@@ -829,12 +758,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                             getContext().getString(R.string.preference_text_effect),
                             getIdentifierArgs()
                     ),
-                    new BasePreferenceData.OnPreferenceChangeListener<Integer>() {
-                        @Override
-                        public void onPreferenceChange(Integer preference) {
-                            StaticUtils.updateStatusService(getContext(), true);
-                        }
-                    },
+                    preference -> StaticUtils.updateStatusService(getContext(), true),
                     new ListPreferenceData.ListPreference(getContext().getString(R.string.text_effect_none), Typeface.NORMAL),
                     new ListPreferenceData.ListPreference(getContext().getString(R.string.text_effect_bold), Typeface.BOLD),
                     new ListPreferenceData.ListPreference(getContext().getString(R.string.text_effect_italic), Typeface.ITALIC),
@@ -851,12 +775,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                     "px",
                     -100,
                     100,
-                    new BasePreferenceData.OnPreferenceChangeListener<Integer>() {
-                        @Override
-                        public void onPreferenceChange(Integer preference) {
-                            StaticUtils.updateStatusService(getContext(), true);
-                        }
-                    }
+                    preference -> StaticUtils.updateStatusService(getContext(), true)
             ));
 
             preferences.add(new IntegerPreferenceData(
@@ -869,12 +788,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                     "px",
                     -100,
                     100,
-                    new BasePreferenceData.OnPreferenceChangeListener<Integer>() {
-                        @Override
-                        public void onPreferenceChange(Integer preference) {
-                            StaticUtils.updateStatusService(getContext(), true);
-                        }
-                    }
+                    preference -> StaticUtils.updateStatusService(getContext(), true)
             ));
         }
 
@@ -887,12 +801,9 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                             getIdentifierArgs()
                     ),
                     this,
-                    new BasePreferenceData.OnPreferenceChangeListener<IconStyleData>() {
-                        @Override
-                        public void onPreferenceChange(IconStyleData preference) {
-                            style = preference;
-                            StaticUtils.updateStatusService(getContext(), true);
-                        }
+                    preference -> {
+                        style = preference;
+                        StaticUtils.updateStatusService(getContext(), true);
                     }
             ));
 
@@ -906,12 +817,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                     "px",
                     -100,
                     100,
-                    new BasePreferenceData.OnPreferenceChangeListener<Integer>() {
-                        @Override
-                        public void onPreferenceChange(Integer preference) {
-                            StaticUtils.updateStatusService(getContext(), true);
-                        }
-                    }
+                    preference -> StaticUtils.updateStatusService(getContext(), true)
             ));
 
             preferences.add(new IntegerPreferenceData(
@@ -924,12 +830,7 @@ public abstract class IconData<T extends IconUpdateReceiver> {
                     "px",
                     -100,
                     100,
-                    new BasePreferenceData.OnPreferenceChangeListener<Integer>() {
-                        @Override
-                        public void onPreferenceChange(Integer preference) {
-                            StaticUtils.updateStatusService(getContext(), true);
-                        }
-                    }
+                    preference -> StaticUtils.updateStatusService(getContext(), true)
             ));
         }
 

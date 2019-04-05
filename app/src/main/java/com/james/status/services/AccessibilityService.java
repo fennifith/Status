@@ -255,14 +255,11 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
         private VolumeReceiver(AccessibilityService service) {
             reference = new SoftReference<>(service);
             handler = new Handler();
-            runnable = new Runnable() {
-                @Override
-                public void run() {
-                    AccessibilityService service = reference.get();
-                    if (service != null) {
-                        Status.showDebug(service, "Volume callback called", Toast.LENGTH_SHORT);
-                        service.setStatusBar(null, false, null, false, null, null);
-                    }
+            runnable = () -> {
+                AccessibilityService service1 = reference.get();
+                if (service1 != null) {
+                    Status.showDebug(service1, "Volume callback called", Toast.LENGTH_SHORT);
+                    service1.setStatusBar(null, false, null, false, null, null);
                 }
             };
         }

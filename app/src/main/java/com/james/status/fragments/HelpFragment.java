@@ -50,12 +50,7 @@ public class HelpFragment extends SimpleFragment {
         adapter = new ArrayAdapter(getContext(), R.array.faq);
         recycler.setAdapter(adapter);
 
-        v.findViewById(R.id.community).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(COMMUNITY_URL)));
-            }
-        });
+        v.findViewById(R.id.community).setOnClickListener(v1 -> startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(COMMUNITY_URL))));
 
         return v;
     }

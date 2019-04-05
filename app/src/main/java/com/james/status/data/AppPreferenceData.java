@@ -184,18 +184,8 @@ public class AppPreferenceData {
                         null,
                         getIdentifierArgs()
                 ),
-                new BasePreferenceData.OnPreferenceChangeListener<Integer>() {
-                    @Override
-                    public void onPreferenceChange(Integer preference) {
-
-                    }
-                }
-        ).withAlpha(new BasePreferenceData.ValueGetter<Boolean>() {
-            @Override
-            public Boolean get() {
-                return PreferenceData.STATUS_TRANSPARENT_MODE.getValue(context);
-            }
-        }).withNullable(true));
+                preference -> { }
+        ).withAlpha(() -> PreferenceData.STATUS_TRANSPARENT_MODE.getValue(context)).withNullable(true));
 
         preferences.add(new BooleanPreferenceData(
                 context,
@@ -204,12 +194,9 @@ public class AppPreferenceData {
                         context.getString(R.string.dialog_preference_fullscreen),
                         getIdentifierArgs()
                 ),
-                new BasePreferenceData.OnPreferenceChangeListener<Boolean>() {
-                    @Override
-                    public void onPreferenceChange(Boolean preference) {
-                        if (preference.equals(PreferenceData.APP_FULLSCREEN.getDefaultValue()))
-                            PreferenceData.APP_FULLSCREEN.setValue(context, null, getIdentifierArgs());
-                    }
+                preference -> {
+                    if (preference.equals(PreferenceData.APP_FULLSCREEN.getDefaultValue()))
+                        PreferenceData.APP_FULLSCREEN.setValue(context, null, getIdentifierArgs());
                 }
         ));
 
@@ -220,12 +207,9 @@ public class AppPreferenceData {
                         context.getString(R.string.dialog_preference_fullscreen_ignore),
                         getIdentifierArgs()
                 ),
-                new BasePreferenceData.OnPreferenceChangeListener<Boolean>() {
-                    @Override
-                    public void onPreferenceChange(Boolean preference) {
-                        if (preference.equals(PreferenceData.APP_FULLSCREEN_IGNORE.getDefaultValue()))
-                            PreferenceData.APP_FULLSCREEN_IGNORE.setValue(context, null, getIdentifierArgs());
-                    }
+                preference -> {
+                    if (preference.equals(PreferenceData.APP_FULLSCREEN_IGNORE.getDefaultValue()))
+                        PreferenceData.APP_FULLSCREEN_IGNORE.setValue(context, null, getIdentifierArgs());
                 }
         ));
 

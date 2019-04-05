@@ -176,42 +176,33 @@ public class IconCreatorDialog extends ThemedCompatDialog {
             layout.addView(v);
         }
 
-        findViewById(R.id.confirm).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (name != null && paths != null) {
-                    for (String path : paths) {
-                        if (path == null) {
-                            Toast.makeText(getContext(), R.string.error_missing_icons, Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                    }
-
-                    if (listener != null) listener.onIconStyle(new IconStyleData(name, paths));
-                    if (isShowing()) dismiss(false);
-                } else {
-                    if (name == null)
-                        editText.setError(getContext().getString(R.string.error_no_text_name));
-                    else
+        findViewById(R.id.confirm).setOnClickListener(view -> {
+            if (name != null && paths != null) {
+                for (String path : paths) {
+                    if (path == null) {
                         Toast.makeText(getContext(), R.string.error_missing_icons, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                 }
+
+                if (listener != null) listener.onIconStyle(new IconStyleData(name, paths));
+                if (isShowing()) dismiss(false);
+            } else {
+                if (name == null)
+                    editText.setError(getContext().getString(R.string.error_no_text_name));
+                else
+                    Toast.makeText(getContext(), R.string.error_missing_icons, Toast.LENGTH_SHORT).show();
             }
         });
 
         View delete = findViewById(R.id.delete);
         delete.setVisibility(isCreate ? View.GONE : View.VISIBLE);
-        delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isShowing()) dismiss(false);
-            }
+        delete.setOnClickListener(v -> {
+            if (isShowing()) dismiss(false);
         });
 
-        findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (isShowing()) dismiss();
-            }
+        findViewById(R.id.cancel).setOnClickListener(view -> {
+            if (isShowing()) dismiss();
         });
     }
 

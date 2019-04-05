@@ -24,7 +24,6 @@ import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.afollestad.async.Action;
@@ -35,7 +34,6 @@ import com.james.status.utils.StringUtils;
 import com.james.status.views.CustomImageView;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -54,15 +52,12 @@ public class AppNotificationsAdapter extends RecyclerView.Adapter<AppNotificatio
         packageManager = context.getPackageManager();
 
         this.apps = apps;
-        Collections.sort(apps, new Comparator<AppPreferenceData>() {
-            @Override
-            public int compare(AppPreferenceData lhs, AppPreferenceData rhs) {
-                String label1 = lhs.getLabel(AppNotificationsAdapter.this.context);
-                String label2 = rhs.getLabel(AppNotificationsAdapter.this.context);
-                if (label1 != null && label2 != null)
-                    return label1.compareToIgnoreCase(label2);
-                else return 0;
-            }
+        Collections.sort(apps, (lhs, rhs) -> {
+            String label1 = lhs.getLabel(AppNotificationsAdapter.this.context);
+            String label2 = rhs.getLabel(AppNotificationsAdapter.this.context);
+            if (label1 != null && label2 != null)
+                return label1.compareToIgnoreCase(label2);
+            else return 0;
         });
     }
 
@@ -109,22 +104,14 @@ public class AppNotificationsAdapter extends RecyclerView.Adapter<AppNotificatio
             }
         }.execute();
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                holder.enabledSwitch.toggle();
-            }
-        });
+        holder.itemView.setOnClickListener(v -> holder.enabledSwitch.toggle());
 
         holder.enabledSwitch.setOnCheckedChangeListener(null);
         holder.enabledSwitch.setChecked((boolean) PreferenceData.APP_NOTIFICATIONS.getSpecificValue(context, apps.get(position).getPackageName()));
-        holder.enabledSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                AppPreferenceData app = getApp(holder.getAdapterPosition());
-                if (app != null)
-                    PreferenceData.APP_NOTIFICATIONS.setValue(context, isChecked, app.getPackageName());
-            }
+        holder.enabledSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            AppPreferenceData app1 = getApp(holder.getAdapterPosition());
+            if (app1 != null)
+                PreferenceData.APP_NOTIFICATIONS.setValue(context, isChecked, app1.getPackageName());
         });
     }
 
@@ -141,34 +128,28 @@ public class AppNotificationsAdapter extends RecyclerView.Adapter<AppNotificatio
 
     public void filter(@Nullable final String string) {
         if (string == null || string.length() < 1) {
-            Collections.sort(apps, new Comparator<AppPreferenceData>() {
-                @Override
-                public int compare(AppPreferenceData lhs, AppPreferenceData rhs) {
-                    String label1 = lhs.getLabel(AppNotificationsAdapter.this.context);
-                    String label2 = rhs.getLabel(AppNotificationsAdapter.this.context);
-                    if (label1 != null && label2 != null)
-                        return label1.compareToIgnoreCase(label2);
-                    else return 0;
-                }
+            Collections.sort(apps, (lhs, rhs) -> {
+                String label1 = lhs.getLabel(AppNotificationsAdapter.this.context);
+                String label2 = rhs.getLabel(AppNotificationsAdapter.this.context);
+                if (label1 != null && label2 != null)
+                    return label1.compareToIgnoreCase(label2);
+                else return 0;
             });
         } else {
-            Collections.sort(apps, new Comparator<AppPreferenceData>() {
-                @Override
-                public int compare(AppPreferenceData lhs, AppPreferenceData rhs) {
-                    int value = 0;
+            Collections.sort(apps, (lhs, rhs) -> {
+                int value = 0;
 
-                    String label1 = lhs.getLabel(AppNotificationsAdapter.this.context);
-                    String label2 = rhs.getLabel(AppNotificationsAdapter.this.context);
-                    if (label1 != null && label2 != null) {
-                        value += StringUtils.difference(label1.toLowerCase(), string).length();
-                        value -= StringUtils.difference(label2.toLowerCase(), string).length();
-                    }
-
-                    value += StringUtils.difference(lhs.getComponentName(), string).length();
-                    value -= StringUtils.difference(rhs.getComponentName(), string).length();
-
-                    return value;
+                String label1 = lhs.getLabel(AppNotificationsAdapter.this.context);
+                String label2 = rhs.getLabel(AppNotificationsAdapter.this.context);
+                if (label1 != null && label2 != null) {
+                    value += StringUtils.difference(label1.toLowerCase(), string).length();
+                    value -= StringUtils.difference(label2.toLowerCase(), string).length();
                 }
+
+                value += StringUtils.difference(lhs.getComponentName(), string).length();
+                value -= StringUtils.difference(rhs.getComponentName(), string).length();
+
+                return value;
             });
         }
 

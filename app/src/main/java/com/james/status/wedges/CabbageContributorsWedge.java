@@ -20,7 +20,6 @@ import android.content.Context;
 import android.content.res.XmlResourceParser;
 import android.graphics.drawable.Drawable;
 import android.view.HapticFeedbackConstants;
-import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -45,21 +44,18 @@ public class CabbageContributorsWedge extends ContributorsWedge {
     @Override
     public void bind(Context context, final ViewHolder viewHolder) {
         super.bind(context, viewHolder);
-        viewHolder.itemView.findViewById(R.id.first).setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                v.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
-                Glide.with(v.getContext()).load("https://jfenn.me/images/headers/cabbage.jpg").into(new SimpleTarget<Drawable>() {
-                    @Override
-                    public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                        ImageView imageView = viewHolder.itemView.findViewById(R.id.firstImage);
-                        if (imageView != null)
-                            imageView.setImageDrawable(resource);
-                    }
-                });
+        viewHolder.itemView.findViewById(R.id.first).setOnLongClickListener(v -> {
+            v.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+            Glide.with(v.getContext()).load("https://jfenn.me/images/headers/cabbage.jpg").into(new SimpleTarget<Drawable>() {
+                @Override
+                public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                    ImageView imageView = viewHolder.itemView.findViewById(R.id.firstImage);
+                    if (imageView != null)
+                        imageView.setImageDrawable(resource);
+                }
+            });
 
-                return false;
-            }
+            return false;
         });
     }
 }

@@ -34,12 +34,9 @@ public class SplashActivity extends AppCompatActivity {
         setTheme(Status.Theme.ACTIVITY_SPLASH.getTheme(this));
         setContentView(R.layout.activity_splash);
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                startActivity(new Intent(SplashActivity.this, MainActivity.class));
-                finish();
-            }
+        new Handler().postDelayed(() -> {
+            startActivity(new Intent(SplashActivity.this, MainActivity.class));
+            finish();
         }, 1500);
     }
 }

@@ -26,10 +26,8 @@ import com.james.status.R;
 import com.james.status.utils.StaticUtils;
 import com.james.status.views.ColorView;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import me.jfenn.colorpickerdialog.dialogs.ColorPickerDialog;
-import me.jfenn.colorpickerdialog.interfaces.OnColorPickedListener;
 import me.jfenn.colorpickerdialog.views.picker.ImagePickerView;
 
 public class ColorPreferenceData extends BasePreferenceData<Integer> {
@@ -74,15 +72,12 @@ public class ColorPreferenceData extends BasePreferenceData<Integer> {
                 .withColor(value != null && !value.equals(getNullValue()) ? value : Color.BLACK)
                 .withPresets()
                 .withPicker(ImagePickerView.class)
-                .withListener(new OnColorPickedListener<ColorPickerDialog>() {
-                    @Override
-                    public void onColorPicked(@Nullable ColorPickerDialog pickerView, int color) {
-                        value = color;
-                        getIdentifier().setPreferenceValue(getContext(), color);
-                        onPreferenceChange(color);
+                .withListener((pickerView, color) -> {
+                    value = color;
+                    getIdentifier().setPreferenceValue(getContext(), color);
+                    onPreferenceChange(color);
 
-                        onBindViewHolder(new ViewHolder(v), -1);
-                    }
+                    onBindViewHolder(new ViewHolder(v), -1);
                 });
 
         AppCompatActivity activity = StaticUtils.getActivity(getContext());

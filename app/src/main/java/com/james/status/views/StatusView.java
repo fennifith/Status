@@ -290,12 +290,9 @@ public class StatusView extends View implements IconData.ReDrawListener {
         if (isAnimations) {
             ValueAnimator animator = ValueAnimator.ofFloat(getY(), visible ? 0 : -StaticUtils.getStatusBarHeight(getContext()));
             animator.setDuration(150);
-            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    setY((float) valueAnimator.getAnimatedValue());
-                    setAlpha(visible ? valueAnimator.getAnimatedFraction() : 1 - valueAnimator.getAnimatedFraction());
-                }
+            animator.addUpdateListener(valueAnimator -> {
+                setY((float) valueAnimator.getAnimatedValue());
+                setAlpha(visible ? valueAnimator.getAnimatedFraction() : 1 - valueAnimator.getAnimatedFraction());
             });
             animator.addListener(new Animator.AnimatorListener() {
                 @Override

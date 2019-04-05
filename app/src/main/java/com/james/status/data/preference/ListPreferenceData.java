@@ -17,7 +17,6 @@
 package com.james.status.data.preference;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.view.View;
@@ -62,30 +61,17 @@ public class ListPreferenceData extends BasePreferenceData<Integer> {
 
         new AlertDialog.Builder(getContext())
                 .setTitle(getIdentifier().getTitle())
-                .setSingleChoiceItems(array, items.indexOf(selectedPreference), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        selectedPreference = items.get(which);
-                    }
-                })
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (selectedPreference != null) {
-                            ListPreferenceData.this.preference = selectedPreference.id;
+                .setSingleChoiceItems(array, items.indexOf(selectedPreference), (dialog, which) -> selectedPreference = items.get(which))
+                .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                    if (selectedPreference != null) {
+                        ListPreferenceData.this.preference = selectedPreference.id;
 
-                            getIdentifier().setPreferenceValue(getContext(), selectedPreference.id);
-                            onPreferenceChange(selectedPreference.id);
-                            selectedPreference = null;
-                        }
-                    }
-                })
-                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                        getIdentifier().setPreferenceValue(getContext(), selectedPreference.id);
+                        onPreferenceChange(selectedPreference.id);
                         selectedPreference = null;
                     }
                 })
+                .setNegativeButton(android.R.string.cancel, (dialog, which) -> selectedPreference = null)
                 .create()
                 .show();
     }

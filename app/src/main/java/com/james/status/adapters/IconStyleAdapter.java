@@ -83,36 +83,30 @@ public class IconStyleAdapter extends RecyclerView.Adapter<IconStyleAdapter.View
 
         if (style.type == IconStyleData.TYPE_FILE) {
             holder.edit.setVisibility(View.VISIBLE);
-            holder.edit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int position = holder.getAdapterPosition();
-                    if (position < 0 || position >= styles.size()) return;
+            holder.edit.setOnClickListener(view -> {
+                int position1 = holder.getAdapterPosition();
+                if (position1 < 0 || position1 >= styles.size()) return;
 
-                    IconStyleData style = styles.get(position);
-                    icon.removeIconStyle(style);
-                    styles.remove(position);
-                    if (styles.size() > 0) setIconStyle(styles.get(0));
-                    else notifyDataSetChanged();
+                IconStyleData style1 = styles.get(position1);
+                icon.removeIconStyle(style1);
+                styles.remove(position1);
+                if (styles.size() > 0) setIconStyle(styles.get(0));
+                else notifyDataSetChanged();
 
-                    new IconCreatorDialog(context, style, (String[]) PreferenceData.ICON_ICON_STYLE_NAMES.getSpecificValue(context, icon.getIdentifierArgs()), icon.getIconNames()).setListener(new IconCreatorDialog.OnIconStyleListener() {
-                        @Override
-                        public void onIconStyle(IconStyleData style) {
-                            icon.addIconStyle(style);
-                            styles = icon.getIconStyles();
-                            setIconStyle(style);
-                        }
-                    }).show();
-                }
+                new IconCreatorDialog(context, style1, (String[]) PreferenceData.ICON_ICON_STYLE_NAMES.getSpecificValue(context, icon.getIdentifierArgs()), icon.getIconNames()).setListener(new IconCreatorDialog.OnIconStyleListener() {
+                    @Override
+                    public void onIconStyle(IconStyleData style1) {
+                        icon.addIconStyle(style1);
+                        styles = icon.getIconStyles();
+                        setIconStyle(style1);
+                    }
+                }).show();
             });
         } else holder.edit.setVisibility(View.GONE);
 
-        holder.v.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int position = holder.getAdapterPosition();
-                if (position >= 0 && position < styles.size()) setIconStyle(styles.get(position));
-            }
+        holder.v.setOnClickListener(view -> {
+            int position12 = holder.getAdapterPosition();
+            if (position12 >= 0 && position12 < styles.size()) setIconStyle(styles.get(position12));
         });
 
         holder.v.setAlpha(0);

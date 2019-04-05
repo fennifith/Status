@@ -96,32 +96,23 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.ViewHolder> {
             }
         });
 
-        holder.dragView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN)
-                    helper.startDrag(holder);
-
-                return false;
-            }
-        });
-
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                v.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+        holder.dragView.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN)
                 helper.startDrag(holder);
-                return false;
-            }
+
+            return false;
         });
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                IconData icon = getIcon(holder.getAdapterPosition());
-                if (icon != null)
-                    new IconPreferenceDialog(icon).show();
-            }
+        holder.itemView.setOnLongClickListener(v -> {
+            v.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+            helper.startDrag(holder);
+            return false;
+        });
+
+        holder.itemView.setOnClickListener(v -> {
+            IconData icon1 = getIcon(holder.getAdapterPosition());
+            if (icon1 != null)
+                new IconPreferenceDialog(icon1).show();
         });
     }
 

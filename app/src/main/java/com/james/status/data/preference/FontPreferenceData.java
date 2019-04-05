@@ -17,7 +17,6 @@
 package com.james.status.data.preference;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -84,15 +83,12 @@ public class FontPreferenceData extends BasePreferenceData<String> {
             group.addView(button);
         }
 
-        group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                for (int i = 0; i < group.getChildCount(); i++) {
-                    RadioButton child = (RadioButton) group.getChildAt(i);
-                    child.setChecked(child.getId() == checkedId);
-                    if (child.getId() == checkedId)
-                        selectedPreference = (String) child.getTag();
-                }
+        group.setOnCheckedChangeListener((group1, checkedId) -> {
+            for (int i = 0; i < group1.getChildCount(); i++) {
+                RadioButton child = (RadioButton) group1.getChildAt(i);
+                child.setChecked(child.getId() == checkedId);
+                if (child.getId() == checkedId)
+                    selectedPreference = (String) child.getTag();
             }
         });
 
@@ -101,22 +97,14 @@ public class FontPreferenceData extends BasePreferenceData<String> {
         new AlertDialog.Builder(getContext())
                 .setTitle(getIdentifier().getTitle())
                 .setView(scrollView)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        FontPreferenceData.this.preference = selectedPreference;
+                .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                    FontPreferenceData.this.preference = selectedPreference;
 
-                        getIdentifier().setPreferenceValue(getContext(), selectedPreference);
-                        onPreferenceChange(selectedPreference);
-                        selectedPreference = null;
-                    }
+                    getIdentifier().setPreferenceValue(getContext(), selectedPreference);
+                    onPreferenceChange(selectedPreference);
+                    selectedPreference = null;
                 })
-                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        selectedPreference = null;
-                    }
-                })
+                .setNegativeButton(android.R.string.cancel, (dialog, which) -> selectedPreference = null)
                 .show();
     }
 }

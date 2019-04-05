@@ -84,21 +84,21 @@ public class IconPickerDialog extends PreferenceDialog<IconStyleData> implements
 
         recycler.setAdapter(adapter);
 
-        findViewById(R.id.add).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
-                if (!StaticUtils.isPermissionsGranted(getContext(), permissions)) {
-                    if (getOwnerActivity() != null)
-                        StaticUtils.requestPermissions(getOwnerActivity(), permissions);
-                    else if (getContext() instanceof Activity)
-                        StaticUtils.requestPermissions((Activity) getContext(), permissions);
-                    else
-                        Toast.makeText(getContext(), R.string.msg_missing_storage_permission, Toast.LENGTH_SHORT).show();
-                } else {
-                    new IconCreatorDialog(getContext(), styles.get(0).getSize(), (String[]) PreferenceData.ICON_ICON_STYLE_NAMES.getSpecificValue(getContext(), icon.getIdentifierArgs()), icon.getIconNames()).setListener(new IconCreatorDialog.OnIconStyleListener() {
-                        @Override
-                        public void onIconStyle(IconStyleData style) {
+        findViewById(R.id.add).setOnClickListener(view -> {
+            String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+            if (!StaticUtils.isPermissionsGranted(getContext(), permissions)) {
+                if (getOwnerActivity() != null)
+                    StaticUtils.requestPermissions(getOwnerActivity(), permissions);
+                else if (getContext() instanceof Activity)
+                    StaticUtils.requestPermissions((Activity) getContext(), permissions);
+                else
+                    Toast.makeText(getContext(), R.string.msg_missing_storage_permission, Toast.LENGTH_SHORT).show();
+            } else {
+                new IconCreatorDialog(
+                        getContext(),
+                        styles.get(0).getSize(),
+                        (String[]) PreferenceData.ICON_ICON_STYLE_NAMES.getSpecificValue(getContext(), icon.getIdentifierArgs()),
+                        icon.getIconNames()).setListener(style -> {
                             icon.addIconStyle(style);
                             styles = icon.getIconStyles();
 
@@ -106,25 +106,14 @@ public class IconPickerDialog extends PreferenceDialog<IconStyleData> implements
                             adapter.setIconStyle(style);
                             setPreference(style);
                             recycler.setAdapter(adapter);
-                        }
-                    }).show();
-                }
+                        })
+                        .show();
             }
         });
 
-        findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                cancel();
-            }
-        });
+        findViewById(R.id.cancel).setOnClickListener(view -> cancel());
 
-        findViewById(R.id.confirm).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                confirm();
-            }
-        });
+        findViewById(R.id.confirm).setOnClickListener(view -> confirm());
     }
 
     @Override

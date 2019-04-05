@@ -19,7 +19,6 @@ package com.james.status.dialogs;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.view.View;
 
 import com.james.status.R;
 import com.james.status.adapters.BackupAdapter;
@@ -58,21 +57,13 @@ public class BackupDialog extends ThemedCompatDialog implements BackupCreatorDia
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
         recyclerView.setAdapter(new BackupAdapter(getContext(), files, this));
 
-        findViewById(R.id.newBackup).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                BackupCreatorDialog dialog = new BackupCreatorDialog(getContext(), files, null);
-                dialog.setListener(BackupDialog.this);
-                dialog.show();
-            }
+        findViewById(R.id.newBackup).setOnClickListener(v -> {
+            BackupCreatorDialog dialog = new BackupCreatorDialog(getContext(), files, null);
+            dialog.setListener(BackupDialog.this);
+            dialog.show();
         });
 
-        findViewById(R.id.dismiss).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
+        findViewById(R.id.dismiss).setOnClickListener(v -> dismiss());
     }
 
     @Override

@@ -54,11 +54,8 @@ public class SimplePagerAdapter extends FragmentStatePagerAdapter {
             }
         });
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (fragments.length > 0) fragments[0].onSelect();
-            }
+        new Handler().postDelayed(() -> {
+            if (fragments.length > 0) fragments[0].onSelect();
         }, 500);
     }
 

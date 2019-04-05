@@ -20,7 +20,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.james.status.R;
@@ -198,21 +197,18 @@ public class BasePreferenceData<T> implements View.OnClickListener {
 
                     checkBox.setOnCheckedChangeListener(null);
                     checkBox.setChecked(isNonNull);
-                    checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                            if (title != null)
-                                title.animate().alpha(isChecked ? 1 : 0.5f).start();
+                    checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                        if (title != null)
+                            title.animate().alpha(isChecked ? 1 : 0.5f).start();
 
-                            if (isChecked)
-                                onClick(holder.itemView);
-                            else {
-                                identifier.setPreferenceValue(getContext(), null);
-                                onPreferenceChange(null);
-                            }
-
-                            onBindViewHolder(holder, -1);
+                        if (isChecked)
+                            onClick(holder.itemView);
+                        else {
+                            identifier.setPreferenceValue(getContext(), null);
+                            onPreferenceChange(null);
                         }
+
+                        onBindViewHolder(holder, -1);
                     });
                 }
             }
