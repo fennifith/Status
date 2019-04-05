@@ -33,6 +33,7 @@ import java.util.List;
 
 import androidx.collection.ArrayMap;
 import androidx.core.app.NotificationCompat;
+import me.jfenn.androidutils.anim.AnimatedFloat;
 
 public class NotificationsIconData extends IconData {
 
@@ -122,8 +123,17 @@ public class NotificationsIconData extends IconData {
     @Override
     public boolean needsDraw() {
         boolean needsDraw = false;
-        for (int i = 0; i < notifications.size() && !needsDraw; i++)
-            needsDraw = !notifications.valueAt(i).getScale().isTarget();
+        for (int i = 0; notifications != null && i < notifications.size() && !needsDraw; i++) {
+            NotificationData notification = notifications.valueAt(i);
+            if (notification == null)
+                continue;
+
+            AnimatedFloat scale = notification.getScale();
+            if (scale == null)
+                continue;
+
+            needsDraw = !scale.isTarget();
+        }
 
         return needsDraw || super.needsDraw();
     }
