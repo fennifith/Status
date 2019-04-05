@@ -396,6 +396,8 @@
     <string name="preference_ui_dark_theme">UI Dark Theme</string>
     <string name="preference_ui_dark_theme_desc">A dark theme for Status\'s settings UI to make it a little easier on the eyes.</string>
     <string name="msg_restart_for_changes">Restart the app to apply the changes.</string>
+    <string name="preference_color_icon">Icon Color</string>
+    <string name="preference_color_text">Text Color</string>
     <string-array name="faq">
         <item>
             <b>Why can\'t the status bar be transparent?</b>

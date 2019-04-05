@@ -369,6 +369,8 @@
     <string name="step_finish">Finish</string>
     <string name="step_cancel">Cancel</string>
     <string name="step_skip">Skip</string>
+    <string name="preference_color_icon">Icon Color</string>
+    <string name="preference_color_text">Text Color</string>
     <string name="service_desc_short">Status uses this accessibility service to detect screen updates and notifications on older devices.</string>
     <string name="service_desc_long"><![CDATA[Status allows users to customize their status bar for better readability, aesthetic, or functionality, allowing them easier and faster use of their devices. \n\nStatus requires this accessibility service to detect the current app that is displaying on the screen in order to adapt to its color scheme and layout. It also uses this service to listen for notifications on older devices that do not have the NotificationListenerService API.]]></string>
     <string name="majida_desc">Created Chinese translations for this app.</string>

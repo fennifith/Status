@@ -139,12 +139,21 @@ public class StatusServiceImpl {
                     statusView.setFullscreen(intent.getBooleanExtra(EXTRA_IS_FULLSCREEN, isFullscreen()));
 
                     if (intent.hasExtra(EXTRA_PACKAGE) && intent.hasExtra(EXTRA_ACTIVITY)) {
+                        AppPreferenceData preference = null;
+
+                        packageName = intent.getStringExtra(EXTRA_PACKAGE);
+                        activityData = intent.getParcelableExtra(EXTRA_ACTIVITY);
+
+                        if (activityData != null) {
+                            preference = new AppPreferenceData(activityData.packageName + "/" + activityData.name);
+                            statusView.setIconColor(preference.getIconColor(service));
+                            statusView.setTextColor(preference.getTextColor(service));
+                        }
+
                         if (PreferenceData.STATUS_PERSISTENT_NOTIFICATION.getValue(service)) {
                             packageName = intent.getStringExtra(EXTRA_PACKAGE);
                             activityData = intent.getParcelableExtra(EXTRA_ACTIVITY);
-                            if (activityData != null)
-                                activityPreference = new AppPreferenceData(service, activityData.packageName + "/" + activityData.name);
-                            else activityPreference = null;
+                            activityPreference = preference;
 
                             startForeground(packageName, activityData);
                         } else service.stopForeground(true);

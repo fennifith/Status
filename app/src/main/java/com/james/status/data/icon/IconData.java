@@ -412,6 +412,32 @@ public abstract class IconData<T extends IconUpdateReceiver> {
         requestReDraw();
     }
 
+    /**
+     * Sets the icon color manually.
+     *
+     * @param iconColor the color to use to draw the icon
+     */
+    public void setIconColor(@ColorInt @Nullable Integer iconColor) {
+        if (iconColor != null)
+            this.iconColor.to(iconColor);
+        //else this.iconColor.toDefault();
+
+        requestReDraw();
+    }
+
+    /**
+     * Sets the text color manually.
+     *
+     * @param textColor the color to use to draw the text
+     */
+    public void setTextColor(@ColorInt @Nullable Integer textColor) {
+        if (textColor != null)
+            this.textColor.to(textColor);
+        //else this.textColor.toDefault();
+
+        requestReDraw();
+    }
+
     public AnimatedColor getIconColor() {
         return iconColor;
     }

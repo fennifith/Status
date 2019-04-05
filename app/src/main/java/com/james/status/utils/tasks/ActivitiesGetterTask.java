@@ -49,7 +49,7 @@ public class ActivitiesGetterTask extends AsyncTask<String, Integer, AppPreferen
                         AppPreferenceData[] preferences = new AppPreferenceData[activities.length];
                         Thread.sleep(100);
                         for (int i = 0; i < activities.length; i++) {
-                            preferences[i] = new AppPreferenceData(context, objects[0] + "/" + activities[i].name);
+                            preferences[i] = new AppPreferenceData(objects[0] + "/" + activities[i].name);
                             publishProgress(i + 1, (int) (activities.length * 1.3));
                             Thread.sleep(5);
                         }

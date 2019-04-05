@@ -159,7 +159,7 @@ public class AccessibilityService extends android.accessibilityservice.Accessibi
                             return;
                         }
 
-                        AppPreferenceData preference = new AppPreferenceData(this, activityData.packageName + "/" + activityData.name);
+                        AppPreferenceData preference = new AppPreferenceData(activityData.packageName + "/" + activityData.name);
 
                         boolean isHome = false;
 

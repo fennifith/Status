@@ -413,6 +413,8 @@
     <string name="preference_text_color_dark">Text Color (Dark)</string>
     <string name="icon_style_pin">Pin</string>
     <string name="icon_style_earbuds">Earbuds</string>
+    <string name="preference_color_icon">Icon Color</string>
+    <string name="preference_color_text">Text Color</string>
 
     <string-array name="faq">
         <item>

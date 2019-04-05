@@ -72,7 +72,7 @@ public class AppPreferenceFragment extends SimpleFragment {
                 Map<String, AppPreferenceData> apps = new HashMap<>();
                 Map<String, ?> prefs = PreferenceManager.getDefaultSharedPreferences(getContext()).getAll();
                 for (String key : prefs.keySet()) {
-                    for (String pref : new String[]{"/APP_COLOR", "/APP_FULLSCREEN", "/APP_FULLSCREEN_IGNORE"}) {
+                    for (String pref : new String[]{"/APP_COLOR", "/APP_ICON_COLOR", "/APP_TEXT_COLOR", "/APP_FULLSCREEN", "/APP_FULLSCREEN_IGNORE"}) {
                         if (key.endsWith(pref)) {
                             String component = key.substring(0, key.length() - pref.length()).split("/")[0];
                             try {
@@ -84,7 +84,7 @@ public class AppPreferenceFragment extends SimpleFragment {
                             }
 
                             if (!apps.containsKey(component))
-                                apps.put(component, new AppPreferenceData(getContext(), component));
+                                apps.put(component, new AppPreferenceData(component));
                         }
                     }
                 }
@@ -106,7 +106,7 @@ public class AppPreferenceFragment extends SimpleFragment {
                     Map<String, ?> prefs = preferences.getAll();
                     SharedPreferences.Editor editor = preferences.edit();
                     for (String key : prefs.keySet()) {
-                        for (String pref : new String[]{"/APP_COLOR", "/APP_FULLSCREEN", "/APP_FULLSCREEN_IGNORE"}) {
+                        for (String pref : new String[]{"/APP_COLOR", "/APP_ICON_COLOR", "/APP_TEXT_COLOR", "/APP_FULLSCREEN", "/APP_FULLSCREEN_IGNORE"}) {
                             if (key.endsWith(pref))
                                 editor.remove(key);
                         }

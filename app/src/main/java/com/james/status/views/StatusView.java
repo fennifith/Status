@@ -39,7 +39,6 @@ import com.james.status.utils.StaticUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import androidx.annotation.ColorInt;
@@ -210,12 +209,7 @@ public class StatusView extends View implements IconData.ReDrawListener {
                 PreferenceData.ICON_POSITION.setValue(getContext(), icons.indexOf(icon), icon.getIdentifierArgs());
         }
 
-        Collections.sort(icons, new Comparator<IconData>() {
-            @Override
-            public int compare(IconData lhs, IconData rhs) {
-                return lhs.getPosition() - rhs.getPosition();
-            }
-        });
+        Collections.sort(icons, (lhs, rhs) -> lhs.getPosition() - rhs.getPosition());
 
         for (IconData icon : icons) {
             if (!icon.isVisible())
@@ -321,6 +315,11 @@ public class StatusView extends View implements IconData.ReDrawListener {
         }
     }
 
+    /**
+     * Set the color of the status bar to be drawn in the background.
+     *
+     * @param color a valid color int
+     */
     public void setColor(@ColorInt int color) {
         backgroundColor.to(Color.argb(PreferenceData.STATUS_TRANSPARENT_MODE.getValue(getContext()) ? Color.alpha(color) : 255,
                 Color.red(color), Color.green(color), Color.blue(color)));
@@ -329,6 +328,30 @@ public class StatusView extends View implements IconData.ReDrawListener {
         needsBackgroundImageDraw = false;
         for (IconData icon : icons)
             icon.setBackgroundColor(color);
+
+        postInvalidate();
+    }
+
+    /**
+     * Set the color of the icons on the status bar.
+     *
+     * @param color a valid color int
+     */
+    public void setIconColor(@ColorInt @Nullable Integer color) {
+        for (IconData icon : icons)
+            icon.setIconColor(color);
+
+        postInvalidate();
+    }
+
+    /**
+     * Set the color of text drawn on the status bar.
+     *
+     * @param color a valid color int
+     */
+    public void setTextColor(@ColorInt @Nullable Integer color) {
+        for (IconData icon : icons)
+            icon.setTextColor(color);
 
         postInvalidate();
     }

@@ -39,7 +39,7 @@ public class AppPreferenceData {
 
     private List<AppPreferenceData> activities;
 
-    public AppPreferenceData(Context context, String componentName) {
+    public AppPreferenceData(String componentName) {
         this.componentName = componentName;
     }
 
@@ -148,6 +148,16 @@ public class AppPreferenceData {
         return PreferenceData.APP_COLOR.getSpecificOverriddenValue(context, (Integer) PreferenceData.APP_COLOR.getSpecificOverriddenValue(context, null, getPackageName()), getIdentifierArgs());
     }
 
+    @Nullable
+    public Integer getIconColor(Context context) {
+        return PreferenceData.APP_ICON_COLOR.getSpecificOverriddenValue(context, (Integer) PreferenceData.APP_ICON_COLOR.getSpecificOverriddenValue(context, null, getPackageName()), getIdentifierArgs());
+    }
+
+    @Nullable
+    public Integer getTextColor(Context context) {
+        return PreferenceData.APP_TEXT_COLOR.getSpecificOverriddenValue(context, (Integer) PreferenceData.APP_TEXT_COLOR.getSpecificOverriddenValue(context, null, getPackageName()), getIdentifierArgs());
+    }
+
     public boolean isFullScreen(Context context) {
         return PreferenceData.APP_FULLSCREEN.getSpecificOverriddenValue(context, (Boolean) PreferenceData.APP_FULLSCREEN.getSpecificValue(context, getPackageName()), getIdentifierArgs());
     }
@@ -181,6 +191,28 @@ public class AppPreferenceData {
                 new BasePreferenceData.Identifier<Integer>(
                         PreferenceData.APP_COLOR,
                         context.getString(R.string.preference_status_color),
+                        null,
+                        getIdentifierArgs()
+                ),
+                preference -> { }
+        ).withAlpha(() -> PreferenceData.STATUS_TRANSPARENT_MODE.getValue(context)).withNullable(true));
+
+        preferences.add(new ColorPreferenceData(
+                context,
+                new BasePreferenceData.Identifier<Integer>(
+                        PreferenceData.APP_ICON_COLOR,
+                        context.getString(R.string.preference_color_icon),
+                        null,
+                        getIdentifierArgs()
+                ),
+                preference -> { }
+        ).withAlpha(() -> PreferenceData.STATUS_TRANSPARENT_MODE.getValue(context)).withNullable(true));
+
+        preferences.add(new ColorPreferenceData(
+                context,
+                new BasePreferenceData.Identifier<Integer>(
+                        PreferenceData.APP_TEXT_COLOR,
+                        context.getString(R.string.preference_color_text),
                         null,
                         getIdentifierArgs()
                 ),

@@ -153,6 +153,8 @@
     <string name="preference_notification_icon_size">Notification Icon Size</string>
     <string name="preference_time_format">Time Format</string>
     <string name="preference_heads_up_layout">Heads Up Notification Style</string>
+    <string name="preference_color_icon">Icon Color</string>
+    <string name="preference_color_text">Text Color</string>
     <string name="preference_default_color_icon">Default Icon Color</string>
     <string name="preference_default_color_text">Default Text Color</string>
     <string name="preference_default_color_icon_dark">Default (Dark) Icon Color</string>

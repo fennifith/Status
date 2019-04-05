@@ -49,7 +49,7 @@ public class PackagesGetterTask extends AsyncTask<Object, Integer, AppPreference
                     AppPreferenceData[] preferences = new AppPreferenceData[packages.size()];
                     Thread.sleep(100);
                     for (int i = 0; i < packages.size(); i++) {
-                        preferences[i] = new AppPreferenceData(context, packages.get(i).packageName);
+                        preferences[i] = new AppPreferenceData(packages.get(i).packageName);
                         publishProgress(i + 1, (int) (packages.size() * 1.3));
                         Thread.sleep(5);
                     }

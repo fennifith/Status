@@ -31,7 +31,7 @@ public class AppSettingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        AppPreferenceDialog dialog = new AppPreferenceDialog(this, new AppPreferenceData(this, getIntent().getStringExtra(EXTRA_COMPONENT)));
+        AppPreferenceDialog dialog = new AppPreferenceDialog(this, new AppPreferenceData(getIntent().getStringExtra(EXTRA_COMPONENT)));
         dialog.setOnDismissListener(obj -> finish());
         dialog.show();
     }
