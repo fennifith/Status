@@ -28,11 +28,14 @@ public abstract class SimpleFragment extends Fragment {
     public abstract void filter(@Nullable String filter);
 
     public void onSelect() {
+        // called when a fragment is visible
     }
 
     public void onEnterScroll(float offset) {
+        // called when the fragment is being entered
     }
 
     public void onExitScroll(float offset) {
+        // called when the fragment is being exited
     }
 }

@@ -33,14 +33,18 @@ import com.james.status.dialogs.preference.AppPreferenceDialog
 import com.james.status.utils.StringUtils
 import com.james.status.views.CustomImageView
 
+/**
+ * An adapter used to show multiple app / activity items so
+ * that the user can choose one to change the settings for.
+ */
 class AppAdapter(private val context: Context, private val apps: MutableList<AppPreferenceData>) : RecyclerView.Adapter<AppAdapter.ViewHolder>() {
 
     private val packageManager: PackageManager = context.packageManager
 
     init {
         apps.sortWith(Comparator { lhs, rhs ->
-            val label1 = lhs.getLabel(this@AppAdapter.context)
-            val label2 = rhs.getLabel(this@AppAdapter.context)
+            val label1 = lhs.getLabel(this.context)
+            val label2 = rhs.getLabel(this.context)
 
             if (label1 != null && label2 != null)
                 label1.compareTo(label2, ignoreCase = true)
@@ -101,11 +105,17 @@ class AppAdapter(private val context: Context, private val apps: MutableList<App
         return apps.size
     }
 
+    /**
+     * Filter the items in the list by a a specified
+     * string. Passing `null` to this method should
+     * reset the filter and display all items in their
+     * original order.
+     */
     fun filter(string: String?) {
         if (string == null || string.isEmpty()) {
             apps.sortWith(Comparator { lhs, rhs ->
-                val label1 = lhs.getLabel(this@AppAdapter.context)
-                val label2 = rhs.getLabel(this@AppAdapter.context)
+                val label1 = lhs.getLabel(this.context)
+                val label2 = rhs.getLabel(this.context)
 
                 if (label1 != null && label2 != null)
                    label1.compareTo(label2, ignoreCase = true)
@@ -115,8 +125,8 @@ class AppAdapter(private val context: Context, private val apps: MutableList<App
             apps.sortWith(Comparator { lhs, rhs ->
                 var value = 0
 
-                val label1 = lhs.getLabel(this@AppAdapter.context)
-                val label2 = rhs.getLabel(this@AppAdapter.context)
+                val label1 = lhs.getLabel(this.context)
+                val label2 = rhs.getLabel(this.context)
                 if (label1 != null && label2 != null) {
                     value += StringUtils.difference(label1.toLowerCase(), string).length
                     value -= StringUtils.difference(label2.toLowerCase(), string).length
@@ -132,6 +142,10 @@ class AppAdapter(private val context: Context, private val apps: MutableList<App
         notifyDataSetChanged()
     }
 
+    /**
+     * Class to hold the views for a particular list
+     * item.
+     */
     class ViewHolder(internal var v: View) : RecyclerView.ViewHolder(v) {
         internal var name: TextView = v.findViewById(R.id.appName)
         internal var packageName: TextView = v.findViewById(R.id.appPackage)
