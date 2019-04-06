@@ -23,6 +23,7 @@ import android.util.Log;
 
 import com.james.status.data.PreferenceData;
 import com.james.status.data.icon.IconData;
+import com.james.status.utils.DebugUtils;
 import com.james.status.utils.tasks.PreferenceUpdateTask;
 
 import java.util.ArrayList;
@@ -60,6 +61,7 @@ public class Status extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        DebugUtils.setup(this);
 
         onActivityResultListeners = new ArrayList<>();
         onIconPreferenceChangedListeners = new ArrayList<>();
