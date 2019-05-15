@@ -26,11 +26,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.afollestad.async.Action
 import com.james.status.R
 import com.james.status.data.AppPreferenceData
 import com.james.status.dialogs.preference.AppPreferenceDialog
 import com.james.status.utils.StringUtils
+import com.james.status.utils.tasks.AppIconGetterTask
 import com.james.status.views.CustomImageView
 
 /**
@@ -64,27 +64,17 @@ class AppAdapter(private val context: Context, private val apps: MutableList<App
 
         holder.icon.setImageDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        object : Action<Drawable>() {
-            override fun id(): String = "appIcon"
-
-            @Throws(InterruptedException::class)
-            override fun run(): Drawable? {
-                getApp(holder.adapterPosition)?.let {
-                    try {
-                        return packageManager.getApplicationIcon(it.packageName)
-                    } catch (ignored: PackageManager.NameNotFoundException) {
-                    }
-                }
-
-                return null
-            }
-
-            override fun done(result: Drawable?) {
-                result?.let {
-                    holder.icon.setImageDrawable(it)
+        val iconTask = AppIconGetterTask(packageManager, object : AppIconGetterTask.OnGottenListener {
+            override fun onGotten(drawable: Drawable?) {
+                drawable?.let {
+                    holder.icon.setImageDrawable(it);
                 }
             }
-        }.execute()
+        })
+
+        getApp(holder.adapterPosition)?.let {
+            iconTask.execute(it)
+        }
 
         holder.itemView.setOnClickListener { v ->
             getApp(holder.adapterPosition)?.let {

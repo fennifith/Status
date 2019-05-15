@@ -26,11 +26,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.afollestad.async.Action;
 import com.james.status.R;
 import com.james.status.data.AppPreferenceData;
 import com.james.status.data.PreferenceData;
 import com.james.status.utils.StringUtils;
+import com.james.status.utils.tasks.AppIconGetterTask;
 import com.james.status.views.CustomImageView;
 
 import java.util.Collections;
@@ -76,33 +76,8 @@ public class AppNotificationsAdapter extends RecyclerView.Adapter<AppNotificatio
 
         holder.icon.setImageDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        new Action<Drawable>() {
-            @NonNull
-            @Override
-            public String id() {
-                return "appIcon";
-            }
-
-            @Nullable
-            @Override
-            protected Drawable run() throws InterruptedException {
-                AppPreferenceData app = getApp(holder.getAdapterPosition());
-                if (app != null) {
-                    try {
-                        return packageManager.getApplicationIcon(app.getPackageName());
-                    } catch (PackageManager.NameNotFoundException ignored) {
-                    }
-                }
-
-                return null;
-            }
-
-            @Override
-            protected void done(@Nullable Drawable result) {
-                if (result != null)
-                    holder.icon.setImageDrawable(result);
-            }
-        }.execute();
+        AppIconGetterTask task = new AppIconGetterTask(packageManager, drawable -> holder.icon.setImageDrawable(drawable));
+        task.execute(app);
 
         holder.itemView.setOnClickListener(v -> holder.enabledSwitch.toggle());
 
